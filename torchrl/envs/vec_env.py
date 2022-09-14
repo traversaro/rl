@@ -22,7 +22,7 @@ from torchrl.data import TensorDict, TensorSpec, CompositeSpec
 from torchrl.data.tensordict.tensordict import TensorDictBase, LazyStackedTensorDict
 from torchrl.data.utils import CloudpickleWrapper, DEVICE_TYPING
 from torchrl.envs.common import EnvBase
-from torchrl.envs.env_creator import get_env_metadata
+from torchrl.envs.env_creator import get_env_metadata, EnvCreator
 
 __all__ = ["SerialEnv", "ParallelEnv"]
 
@@ -683,8 +683,8 @@ class ParallelEnv(_BatchedEnv):
             # No certainty which module multiprocessing_context is
             channel1, channel2 = ctx.Pipe()
             env_fun = self.create_env_fn[idx]
-            if env_fun.__class__.__name__ != "EnvCreator":
-                env_fun = CloudpickleWrapper(env_fun)
+            if not isinstance(env_fun, EnvCreator):
+                env_fun = EnvCreator(env_fun)
 
             w = mp.Process(
                 target=_run_worker_pipe_shared_mem,
