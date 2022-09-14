@@ -20,7 +20,7 @@ from torch import multiprocessing as mp
 from torchrl import _check_for_faulty_process
 from torchrl.data import TensorDict, TensorSpec, CompositeSpec
 from torchrl.data.tensordict.tensordict import TensorDictBase, LazyStackedTensorDict
-from torchrl.data.utils import CloudpickleWrapper, DEVICE_TYPING
+from torchrl.data.utils import DEVICE_TYPING
 from torchrl.envs.common import EnvBase
 from torchrl.envs.env_creator import get_env_metadata, EnvCreator
 
