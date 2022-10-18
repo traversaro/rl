@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DQNLoss &mdash; torchrl main documentation</title>
+  <title>td_lambda_return_estimate &mdash; torchrl main documentation</title>
   
 
   
@@ -33,8 +33,8 @@
   <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="DistributionalDQNLoss" href="torchrl.objectives.DistributionalDQNLoss.html" />
-    <link rel="prev" title="torchrl.objectives package" href="../objectives.html" />
+    <link rel="next" title="td_lambda_advantage_estimate" href="torchrl.objectives.value.functional.td_lambda_advantage_estimate.html" />
+    <link rel="prev" title="vec_td_lambda_advantage_estimate" href="torchrl.objectives.value.functional.vec_td_lambda_advantage_estimate.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -288,13 +288,13 @@
         
           <li><a href="../objectives.html">torchrl.objectives package</a> &gt;</li>
         
-      <li>DQNLoss</li>
+      <li>td_lambda_return_estimate</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="../../_sources/reference/generated/torchrl.objectives.DQNLoss.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl.objectives.value.functional.td_lambda_return_estimate.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -320,50 +320,58 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <div class="section" id="dqnloss">
-<h1>DQNLoss<a class="headerlink" href="#dqnloss" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="td-lambda-return-estimate">
+<h1>td_lambda_return_estimate<a class="headerlink" href="#td-lambda-return-estimate" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="torchrl.objectives.DQNLoss">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.objectives.</span></code><code class="sig-name descname"><span class="pre">DQNLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'l2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'td_error'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/dqn.html#DQNLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DQNLoss" title="Permalink to this definition">¶</a></dt>
-<dd><p>The DQN Loss class.
-:type value_network: <code class="xref py py-class docutils literal notranslate"><span class="pre">QValueActor</span></code>
-:param value_network: a Q value operator.
-:type value_network: ProbabilisticTDModule
-:type gamma: <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>
-:param gamma: a discount factor for return computation.
-:type gamma: scalar
-:type loss_function: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
-:param loss_function: loss function for the value discrepancy. Can be one of “l1”, “l2” or “smooth_l1”.
-:type loss_function: str
-:type delay_value: <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>
-:param delay_value: whether to duplicate the value network into a new target value network to</p>
-<blockquote>
-<div><p>create a double DQN. Default is <cite>False</cite>.</p>
-</div></blockquote>
-<dl class="field-list simple">
-</dl>
-<dl class="py method">
-<dt id="torchrl.objectives.DQNLoss.forward">
-<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensordict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/dqn.html#DQNLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DQNLoss.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the DQN loss given a tensordict sampled from the replay buffer.
-This function will also write a “td_error” key that can be used by prioritized replay buffers to assign</p>
-<blockquote>
-<div><p>a priority to items in the tensordict.</p>
-</div></blockquote>
+<dt id="torchrl.objectives.value.functional.td_lambda_return_estimate">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.objectives.value.functional.</span></code><code class="sig-name descname"><span class="pre">td_lambda_return_estimate</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmbda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_state_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reward</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">done</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rolling_gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/value/functional.html#td_lambda_return_estimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.value.functional.td_lambda_return_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>TD(lambda) return estimate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>input_tensordict</strong> (<em>TensorDictBase</em>) – a tensordict with keys [“done”, “reward”, “action”] and the in_keys of
-the value network.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> (<em>scalar</em>) – exponential mean discount.</p></li>
+<li><p><strong>lmbda</strong> (<em>scalar</em>) – trajectory discount.</p></li>
+<li><p><strong>next_state_value</strong> (<em>Tensor</em>) – value function result with new_state input.
+must be a [Batch x TimeSteps x 1] or [Batch x TimeSteps] tensor</p></li>
+<li><p><strong>reward</strong> (<em>Tensor</em>) – reward of taking actions in the environment.
+must be a [Batch x TimeSteps x 1] or [Batch x TimeSteps] tensor</p></li>
+<li><p><strong>done</strong> (<em>Tensor</em>) – boolean flag for end of episode.</p></li>
+<li><p><strong>rolling_gamma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – <p>if True, it is assumed that each gamma
+if a gamma tensor is tied to a single event:</p>
+<blockquote>
+<div><p>gamma = [g1, g2, g3, g4]
+value = [v1, v2, v3, v4]
+return = [</p>
+<blockquote>
+<div><p>v1 + g1 v2 + g1 g2 v3 + g1 g2 g3 v4,
+v2 + g2 v3 + g2 g3 v4,
+v3 + g3 v4,
+v4,</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>if False, it is assumed that each gamma is tied to the upcoming
+trajectory:</p>
+<blockquote>
+<div><p>gamma = [g1, g2, g3, g4]
+value = [v1, v2, v3, v4]
+return = [</p>
+<blockquote>
+<div><p>v1 + g1 v2 + g1**2 v3 + g**3 v4,
+v2 + g2 v3 + g2**2 v4,
+v3 + g3 v4,
+v4,</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>Default is True.</p>
+</p></li>
+</ul>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorDict</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a tensor containing the DQN loss.</p>
+<dd class="field-even"><p><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
 </dd>
 </dl>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -376,10 +384,10 @@ the value network.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.objectives.DistributionalDQNLoss.html" class="btn btn-neutral float-right" title="DistributionalDQNLoss" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.objectives.value.functional.td_lambda_advantage_estimate.html" class="btn btn-neutral float-right" title="td_lambda_advantage_estimate" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="../objectives.html" class="btn btn-neutral" title="torchrl.objectives package" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torchrl.objectives.value.functional.vec_td_lambda_advantage_estimate.html" class="btn btn-neutral" title="vec_td_lambda_advantage_estimate" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -411,7 +419,7 @@ the value network.</p>
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">DQNLoss</a></li>
+<li><a class="reference internal" href="#">td_lambda_return_estimate</a></li>
 </ul>
 
             </div>

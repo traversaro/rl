@@ -330,8 +330,8 @@
 <span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">ReplayBuffer</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.common</span> <span class="kn">import</span> <span class="n">EnvBase</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictModuleWrapper</span><span class="p">,</span> <span class="n">reset_noise</span>
-<span class="kn">from</span> <span class="nn">torchrl.objectives.costs.common</span> <span class="kn">import</span> <span class="n">LossModule</span>
-<span class="kn">from</span> <span class="nn">torchrl.objectives.costs.utils</span> <span class="kn">import</span> <span class="n">TargetNetUpdater</span>
+<span class="kn">from</span> <span class="nn">torchrl.objectives.common</span> <span class="kn">import</span> <span class="n">LossModule</span>
+<span class="kn">from</span> <span class="nn">torchrl.objectives.utils</span> <span class="kn">import</span> <span class="n">TargetNetUpdater</span>
 <span class="kn">from</span> <span class="nn">torchrl.trainers.loggers</span> <span class="kn">import</span> <span class="n">Logger</span>
 <span class="kn">from</span> <span class="nn">torchrl.trainers.trainers</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Trainer</span><span class="p">,</span>
@@ -431,8 +431,8 @@
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import TensorDictReplayBuffer</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.envs.libs.gym import GymEnv</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import TensorDictModuleWrapper, TensorDictModule, ValueOperator, EGreedyWrapper</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.objectives.costs.common import LossModule</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.objectives.costs.utils import TargetNetUpdater</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.objectives.common import LossModule</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.objectives.utils import TargetNetUpdater</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.objectives import DDPGLoss</span>
 <span class="sd">        &gt;&gt;&gt; env_maker = EnvCreator(lambda: GymEnv(&quot;Pendulum-v0&quot;))</span>
 <span class="sd">        &gt;&gt;&gt; env_proof = env_maker()</span>
