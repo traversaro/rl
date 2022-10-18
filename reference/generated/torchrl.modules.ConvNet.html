@@ -37,15 +37,6 @@
     <link rel="prev" title="MLP" href="torchrl.modules.MLP.html" />
   <!-- Google Analytics -->
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-117752657-2');
-    </script>
-  
   <!-- End Google Analytics -->
   
 
@@ -101,7 +92,7 @@
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="active docs-active">
+          <li>
             <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
               <a class="resource-option with-down-orange-arrow">
                 Docs
@@ -324,7 +315,7 @@
 <h1>ConvNet<a class="headerlink" href="#convnet" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="torchrl.modules.ConvNet">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">ConvNet</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_features=None</span></em>, <em class="sig-param"><span class="pre">depth=None</span></em>, <em class="sig-param"><span class="pre">num_cells=None</span></em>, <em class="sig-param"><span class="pre">kernel_sizes=3</span></em>, <em class="sig-param"><span class="pre">strides=1</span></em>, <em class="sig-param"><span class="pre">paddings=0</span></em>, <em class="sig-param"><span class="pre">activation_class=&lt;class</span> <span class="pre">'torch.nn.modules.activation.ELU'&gt;</span></em>, <em class="sig-param"><span class="pre">activation_kwargs=None</span></em>, <em class="sig-param"><span class="pre">norm_class=None</span></em>, <em class="sig-param"><span class="pre">norm_kwargs=None</span></em>, <em class="sig-param"><span class="pre">bias_last_layer=True</span></em>, <em class="sig-param"><span class="pre">aggregator_class=&lt;class</span> <span class="pre">'torchrl.modules.models.utils.SquashDims'&gt;</span></em>, <em class="sig-param"><span class="pre">aggregator_kwargs=None</span></em>, <em class="sig-param"><span class="pre">squeeze_output=False</span></em>, <em class="sig-param"><span class="pre">device=None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/models/models.html#ConvNet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.ConvNet" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">ConvNet</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_features:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">depth:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">num_cells:</span> <span class="pre">Optional[Union[Sequence,</span> <span class="pre">int]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">kernel_sizes:</span> <span class="pre">Union[Sequence[Union[int,</span> <span class="pre">Sequence[int]]],</span> <span class="pre">int]</span> <span class="pre">=</span> <span class="pre">3,</span> <span class="pre">strides:</span> <span class="pre">Union[Sequence,</span> <span class="pre">int]</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">paddings:</span> <span class="pre">Union[Sequence,</span> <span class="pre">int]</span> <span class="pre">=</span> <span class="pre">0,</span> <span class="pre">activation_class:</span> <span class="pre">Type[torch.nn.modules.module.Module]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torch.nn.modules.activation.ELU'&gt;,</span> <span class="pre">activation_kwargs:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">norm_class:</span> <span class="pre">Optional[Type[torch.nn.modules.module.Module]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">norm_kwargs:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">bias_last_layer:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">aggregator_class:</span> <span class="pre">Optional[Type[torch.nn.modules.module.Module]]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torchrl.modules.models.utils.SquashDims'&gt;,</span> <span class="pre">aggregator_kwargs:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">squeeze_output:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">device:</span> <span class="pre">Optional[Union[torch.device,</span> <span class="pre">str,</span> <span class="pre">int]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ConvNet" title="Permalink to this definition">¶</a></dt>
 <dd><p>A convolutional neural network.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -628,7 +619,7 @@ default: True.</p></li>
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="resources-mobile-menu-title" class="active">
+          <li class="resources-mobile-menu-title">
             Docs
           </li>
 

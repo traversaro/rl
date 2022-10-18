@@ -37,15 +37,6 @@
     <link rel="prev" title="DistributionalQValueHook" href="torchrl.modules.tensordict_module.actors.DistributionalQValueHook.html" />
   <!-- Google Analytics -->
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-117752657-2');
-    </script>
-  
   <!-- End Google Analytics -->
   
 
@@ -101,7 +92,7 @@
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="active docs-active">
+          <li>
             <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
               <a class="resource-option with-down-orange-arrow">
                 Docs
@@ -324,7 +315,7 @@
 <h1>MLP<a class="headerlink" href="#mlp" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="torchrl.modules.MLP">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">MLP</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_features=None</span></em>, <em class="sig-param"><span class="pre">out_features=None</span></em>, <em class="sig-param"><span class="pre">depth=None</span></em>, <em class="sig-param"><span class="pre">num_cells=None</span></em>, <em class="sig-param"><span class="pre">activation_class=&lt;class</span> <span class="pre">'torch.nn.modules.activation.Tanh'&gt;</span></em>, <em class="sig-param"><span class="pre">activation_kwargs=None</span></em>, <em class="sig-param"><span class="pre">norm_class=None</span></em>, <em class="sig-param"><span class="pre">norm_kwargs=None</span></em>, <em class="sig-param"><span class="pre">bias_last_layer=True</span></em>, <em class="sig-param"><span class="pre">single_bias_last_layer=False</span></em>, <em class="sig-param"><span class="pre">layer_class=&lt;class</span> <span class="pre">'torch.nn.modules.linear.Linear'&gt;</span></em>, <em class="sig-param"><span class="pre">layer_kwargs=None</span></em>, <em class="sig-param"><span class="pre">activate_last_layer=False</span></em>, <em class="sig-param"><span class="pre">device=None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/models/models.html#MLP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.MLP" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">MLP</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_features:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">out_features:</span> <span class="pre">Optional[Union[int</span></em>, <em class="sig-param"><span class="pre">Sequence[int]]]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">depth:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">num_cells:</span> <span class="pre">Optional[Union[Sequence</span></em>, <em class="sig-param"><span class="pre">int]]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">activation_class:</span> <span class="pre">Type[torch.nn.modules.module.Module]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torch.nn.modules.activation.Tanh'&gt;</span></em>, <em class="sig-param"><span class="pre">activation_kwargs:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">norm_class:</span> <span class="pre">Optional[Type[torch.nn.modules.module.Module]]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">norm_kwargs:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">bias_last_layer:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></em>, <em class="sig-param"><span class="pre">single_bias_last_layer:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">layer_class:</span> <span class="pre">Type[torch.nn.modules.module.Module]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torch.nn.modules.linear.Linear'&gt;</span></em>, <em class="sig-param"><span class="pre">layer_kwargs:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">activate_last_layer:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">device:</span> <span class="pre">Optional[Union[torch.device</span></em>, <em class="sig-param"><span class="pre">str</span></em>, <em class="sig-param"><span class="pre">int]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.MLP" title="Permalink to this definition">¶</a></dt>
 <dd><p>A multi-layer perceptron.
 If MLP receives more than one input, it concatenates them all along the last dimension before passing the
 resulting tensor through the network. This is aimed at allowing for a seamless interface with calls of the type of</p>
@@ -443,7 +434,7 @@ default: False.</p></li>
 </div>
 <dl class="py method">
 <dt id="torchrl.modules.MLP.forward">
-<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">inputs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/models/models.html#MLP.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.MLP.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">inputs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><a class="headerlink" href="#torchrl.modules.MLP.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -453,11 +444,6 @@ this function, one should call the <code class="xref py py-class docutils litera
 instead of this since the former takes care of running the
 registered hooks while the latter silently ignores them.</p>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tensor</span></code></a></p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -679,7 +665,7 @@ registered hooks while the latter silently ignores them.</p>
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="resources-mobile-menu-title" class="active">
+          <li class="resources-mobile-menu-title">
             Docs
           </li>
 

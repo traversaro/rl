@@ -37,15 +37,6 @@
     <link rel="prev" title="DistributionalDQNLoss" href="torchrl.objectives.DistributionalDQNLoss.html" />
   <!-- Google Analytics -->
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-117752657-2');
-    </script>
-  
   <!-- End Google Analytics -->
   
 
@@ -101,7 +92,7 @@
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="active docs-active">
+          <li>
             <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
               <a class="resource-option with-down-orange-arrow">
                 Docs
@@ -324,15 +315,12 @@
 <h1>DDPGLoss<a class="headerlink" href="#ddpgloss" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="torchrl.objectives.DDPGLoss">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.objectives.</span></code><code class="sig-name descname"><span class="pre">DDPGLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_network</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'l2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_actor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/ddpg.html#DDPGLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DDPGLoss" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.objectives.</span></code><code class="sig-name descname"><span class="pre">DDPGLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor_network</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.modules.tensordict_module.common.TensorDictModule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_network</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.modules.tensordict_module.common.TensorDictModule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'l2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_actor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.objectives.DDPGLoss" title="Permalink to this definition">¶</a></dt>
 <dd><p>The DDPG Loss class.
-:type actor_network: <code class="xref py py-class docutils literal notranslate"><span class="pre">TensorDictModule</span></code>
 :param actor_network: a policy operator.
 :type actor_network: TensorDictModule
-:type value_network: <code class="xref py py-class docutils literal notranslate"><span class="pre">TensorDictModule</span></code>
 :param value_network: a Q value operator.
 :type value_network: TensorDictModule
-:type gamma: <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>
 :param gamma: a discount factor for return computation.
 :type gamma: scalar
 :param device: a device where the losses will be computed, if it can’t be found</p>
@@ -352,7 +340,7 @@ data collection. Default is <cite>False</cite>.</p></li>
 </dl>
 <dl class="py method">
 <dt id="torchrl.objectives.DDPGLoss.forward">
-<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensordict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/ddpg.html#DDPGLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DDPGLoss.forward" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDict</span><a class="headerlink" href="#torchrl.objectives.DDPGLoss.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the DDPG losses given a tensordict sampled from the replay buffer.
 This function will also write a “td_error” key that can be used by prioritized replay buffers to assign</p>
 <blockquote>
@@ -363,11 +351,8 @@ This function will also write a “td_error” key that can be used by prioritiz
 <dd class="field-odd"><p><strong>input_tensordict</strong> (<em>TensorDictBase</em>) – a tensordict with keys [“done”, “reward”] and the in_keys of the actor
 and value networks.</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorDict</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a tuple of 2 tensors containing the DDPG loss.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tuple of 2 tensors containing the DDPG loss.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -591,7 +576,7 @@ and value networks.</p>
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="resources-mobile-menu-title" class="active">
+          <li class="resources-mobile-menu-title">
             Docs
           </li>
 

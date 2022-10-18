@@ -37,15 +37,6 @@
     <link rel="prev" title="make_redq_loss" href="torchrl.trainers.helpers.make_redq_loss.html" />
   <!-- Google Analytics -->
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-117752657-2');
-    </script>
-  
   <!-- End Google Analytics -->
   
 
@@ -101,7 +92,7 @@
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="active docs-active">
+          <li>
             <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
               <a class="resource-option with-down-orange-arrow">
                 Docs
@@ -324,7 +315,7 @@
 <h1>make_dqn_actor<a class="headerlink" href="#make-dqn-actor" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="torchrl.trainers.helpers.make_dqn_actor">
-<code class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></code><code class="sig-name descname"><span class="pre">make_dqn_actor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proof_environment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/trainers/helpers/models.html#make_dqn_actor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.trainers.helpers.make_dqn_actor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></code><code class="sig-name descname"><span class="pre">make_dqn_actor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proof_environment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.envs.common.EnvBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v1.12)"><span class="pre">torch.device</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.modules.tensordict_module.actors.Actor</span><a class="headerlink" href="#torchrl.trainers.helpers.make_dqn_actor" title="Permalink to this definition">¶</a></dt>
 <dd><p>DQN constructor helper function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -334,11 +325,8 @@
 <li><p><strong>device</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v1.12)"><em>torch.device</em></a>) – device on which the model must be cast</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Actor</span></code></p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A DQN policy operator.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A DQN policy operator.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -594,7 +582,7 @@
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="resources-mobile-menu-title" class="active">
+          <li class="resources-mobile-menu-title">
             Docs
           </li>
 

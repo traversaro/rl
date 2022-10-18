@@ -37,15 +37,6 @@
     <link rel="prev" title="make_replay_buffer" href="torchrl.trainers.helpers.make_replay_buffer.html" />
   <!-- Google Analytics -->
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-117752657-2');
-    </script>
-  
   <!-- End Google Analytics -->
   
 
@@ -101,7 +92,7 @@
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="active docs-active">
+          <li>
             <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
               <a class="resource-option with-down-orange-arrow">
                 Docs
@@ -324,7 +315,7 @@
 <h1>correct_for_frame_skip<a class="headerlink" href="#correct-for-frame-skip" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
 <dt id="torchrl.trainers.helpers.correct_for_frame_skip">
-<code class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></code><code class="sig-name descname"><span class="pre">correct_for_frame_skip</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/trainers/helpers/envs.html#correct_for_frame_skip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.trainers.helpers.correct_for_frame_skip" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></code><code class="sig-name descname"><span class="pre">correct_for_frame_skip</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">DictConfig</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">DictConfig</span><a class="headerlink" href="#torchrl.trainers.helpers.correct_for_frame_skip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Correct the arguments for the input frame_skip, by dividing all the arguments that reflect a count of frames by the
 frame_skip.
 This is aimed at avoiding unknowingly over-sampling from the environment, i.e. targetting a total number of frames
@@ -335,11 +326,8 @@ of 1M but actually collecting frame_skip * 1M frames.</p>
 “max_frames_per_traj”, “total_frames”, “frames_per_batch”, “record_frames”, “annealing_frames”,
 “init_random_frames”, “init_env_steps”</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>DictConfig</p>
-</dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>the input DictConfig, modified in-place.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the input DictConfig, modified in-place.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -561,7 +549,7 @@ of 1M but actually collecting frame_skip * 1M frames.</p>
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="resources-mobile-menu-title" class="active">
+          <li class="resources-mobile-menu-title">
             Docs
           </li>
 

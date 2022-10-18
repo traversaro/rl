@@ -37,15 +37,6 @@
     <link rel="prev" title="DistributionalQValueActor" href="torchrl.modules.DistributionalQValueActor.html" />
   <!-- Google Analytics -->
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-117752657-2');
-    </script>
-  
   <!-- End Google Analytics -->
   
 
@@ -101,7 +92,7 @@
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="active docs-active">
+          <li>
             <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
               <a class="resource-option with-down-orange-arrow">
                 Docs
@@ -324,7 +315,7 @@
 <h1>ActorValueOperator<a class="headerlink" href="#actorvalueoperator" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="torchrl.modules.ActorValueOperator">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">ActorValueOperator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">common_operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy_operator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_operator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/tensordict_module/actors.html#ActorValueOperator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.ActorValueOperator" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">ActorValueOperator</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">common_operator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.modules.tensordict_module.common.TensorDictModule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy_operator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.modules.tensordict_module.common.TensorDictModule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_operator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.modules.tensordict_module.common.TensorDictModule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ActorValueOperator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Actor-value operator.</p>
 <p>This class wraps together an actor and a value model that share a common observation embedding network:</p>
 <a class="reference internal image-reference" href="../../_images/aafig-ff3deef7e41b32870a006c6e3bbb625746fb60fb.svg"><img alt="../../_images/aafig-ff3deef7e41b32870a006c6e3bbb625746fb60fb.svg" height="274.8" src="../../_images/aafig-ff3deef7e41b32870a006c6e3bbb625746fb60fb.svg" width="426.0" /></a>
@@ -409,24 +400,14 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 </div>
 <dl class="py method">
 <dt id="torchrl.modules.ActorValueOperator.get_policy_operator">
-<code class="sig-name descname"><span class="pre">get_policy_operator</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/tensordict_module/actors.html#ActorValueOperator.get_policy_operator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.ActorValueOperator.get_policy_operator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_policy_operator</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.modules.tensordict_module.sequence.TensorDictSequential</span><a class="headerlink" href="#torchrl.modules.ActorValueOperator.get_policy_operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a stand-alone policy operator that maps an observation to an action.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorDictSequential</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.modules.ActorValueOperator.get_value_operator">
-<code class="sig-name descname"><span class="pre">get_value_operator</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/tensordict_module/actors.html#ActorValueOperator.get_value_operator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.ActorValueOperator.get_value_operator" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_value_operator</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.modules.tensordict_module.sequence.TensorDictSequential</span><a class="headerlink" href="#torchrl.modules.ActorValueOperator.get_value_operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a stand-alone value network operator that maps an observation to a value estimate.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorDictSequential</span></code></p>
-</dd>
-</dl>
 </dd></dl>
 
 </dd></dl>
@@ -648,7 +629,7 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="resources-mobile-menu-title" class="active">
+          <li class="resources-mobile-menu-title">
             Docs
           </li>
 

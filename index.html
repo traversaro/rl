@@ -36,15 +36,6 @@
     <link rel="next" title="API Reference" href="reference/index.html" />
   <!-- Google Analytics -->
   
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-117752657-2');
-    </script>
-  
   <!-- End Google Analytics -->
   
 
@@ -100,7 +91,7 @@
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="active docs-active">
+          <li>
             <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
               <a class="resource-option with-down-orange-arrow">
                 Docs
@@ -322,13 +313,13 @@
 The code is aimed at supporting research in RL. Most of it is written in python in a highly modular way, such that researchers can easily swap components, transform them or write new ones with little effort.</p>
 <p>This repo attempts to align with the existing pytorch ecosystem libraries in that it has a “dataset pillar”
 <a class="reference internal" href="reference/envs.html"><span class="doc">(environments)</span></a>,
-<a class="reference internal" href="reference/envs.html#transforms"><span class="std std-ref">transforms</span></a>,
+<span class="xref std std-ref">transforms</span>,
 <a class="reference internal" href="reference/modules.html"><span class="doc">models</span></a>,
 data utilities (e.g. collectors and containers), etc.
 TorchRL aims at having as few dependencies as possible (python standard library, numpy and pytorch).
 Common environment libraries (e.g. OpenAI gym) are only optional.</p>
 <p>On the low-level end, torchrl comes with a set of highly re-usable functionals
-for <a class="reference internal" href="reference/objectives.html"><span class="doc">cost functions</span></a>, <a class="reference internal" href="reference/objectives.html#returns"><span class="std std-ref">returns</span></a> and data processing.</p>
+for <a class="reference internal" href="reference/objectives.html"><span class="doc">cost functions</span></a>, <span class="xref std std-ref">returns</span> and data processing.</p>
 <p>TorchRL aims at a high modularity and good runtime performance.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
@@ -607,7 +598,7 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
             <a href="https://pytorch.org/tutorials">Tutorials</a>
           </li>
 
-          <li class="resources-mobile-menu-title" class="active">
+          <li class="resources-mobile-menu-title">
             Docs
           </li>
 
