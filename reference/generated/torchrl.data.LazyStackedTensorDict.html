@@ -385,7 +385,7 @@ them in a new tensordict.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fn</strong> (<em>Callable</em>) – function to be applied to the tensors in the
 tensordict.</p></li>
-<li><p><strong>batch_size</strong> (<em>sequence of python:int</em><em>, </em><em>optional</em>) – if provided,
+<li><p><strong>batch_size</strong> (<em>sequence of int</em><em>, </em><em>optional</em>) – if provided,
 the resulting TensorDict will have the desired batch_size.
 The <cite>batch_size</cite> argument should match the batch_size after
 the transformation.</p></li>
@@ -795,7 +795,7 @@ be stored.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*dims_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the new ordering of the batch dims of the tensordict. Alternatively,
 a single iterable of integers can be provided.</p></li>
-<li><p><strong>dims</strong> (<em>list of python:int</em>) – alternative way of calling permute(…).</p></li>
+<li><p><strong>dims</strong> (<em>list of int</em>) – alternative way of calling permute(…).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

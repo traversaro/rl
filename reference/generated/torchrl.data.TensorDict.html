@@ -366,12 +366,12 @@ value)</cite>, <cite>td.rename_key(old_name, new_name)</cite>, etc.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>source</strong> (<a class="reference internal" href="#torchrl.data.TensorDict" title="torchrl.data.TensorDict"><em>TensorDict</em></a><em> or </em><em>dictionary</em>) – a data source. If empty, the
 tensordict can be populated subsequently.</p></li>
-<li><p><strong>batch_size</strong> (<em>iterable of python:int</em><em>, </em><em>optional</em>) – a batch size for the
+<li><p><strong>batch_size</strong> (<em>iterable of int</em><em>, </em><em>optional</em>) – a batch size for the
 tensordict. The batch size is immutable and can only be modified
 by calling operations that create a new TensorDict. Unless the
 source is another TensorDict, the batch_size argument must be
 provided as it won’t be inferred from the data.</p></li>
-<li><p><strong>device</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v1.12)"><em>torch.device</em></a><em> or </em><em>compatible python:type</em><em>, </em><em>optional</em>) – a device for the
+<li><p><strong>device</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v1.12)"><em>torch.device</em></a><em> or </em><em>compatible type</em><em>, </em><em>optional</em>) – a device for the
 TensorDict.</p></li>
 </ul>
 </dd>
@@ -436,7 +436,7 @@ them in a new tensordict.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fn</strong> (<em>Callable</em>) – function to be applied to the tensors in the
 tensordict.</p></li>
-<li><p><strong>batch_size</strong> (<em>sequence of python:int</em><em>, </em><em>optional</em>) – if provided,
+<li><p><strong>batch_size</strong> (<em>sequence of int</em><em>, </em><em>optional</em>) – if provided,
 the resulting TensorDict will have the desired batch_size.
 The <cite>batch_size</cite> argument should match the batch_size after
 the transformation.</p></li>
@@ -831,7 +831,7 @@ be stored.</p></li>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*dims_list</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – the new ordering of the batch dims of the tensordict. Alternatively,
 a single iterable of integers can be provided.</p></li>
-<li><p><strong>dims</strong> (<em>list of python:int</em>) – alternative way of calling permute(…).</p></li>
+<li><p><strong>dims</strong> (<em>list of int</em>) – alternative way of calling permute(…).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
