@@ -336,8 +336,7 @@ DdpgMlpQNet).</p></li>
 <p>For more details on DDPG, refer to “CONTINUOUS CONTROL WITH DEEP REINFORCEMENT LEARNING”,
 <a class="reference external" href="https://arxiv.org/pdf/1509.02971.pdf">https://arxiv.org/pdf/1509.02971.pdf</a>.</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.trainers.helpers.envs</span> <span class="kn">import</span> <span class="n">parser_env_args</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.trainers.helpers.models</span> <span class="kn">import</span> <span class="n">make_ddpg_actor</span><span class="p">,</span> <span class="n">parser_model_args_continuous</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.trainers.helpers.models</span> <span class="kn">import</span> <span class="n">make_ddpg_actor</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymEnv</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="n">CatTensors</span><span class="p">,</span> <span class="n">TransformedEnv</span><span class="p">,</span> <span class="n">DoubleToFloat</span><span class="p">,</span> <span class="n">Compose</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">hydra</span>

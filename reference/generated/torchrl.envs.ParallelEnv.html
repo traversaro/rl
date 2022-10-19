@@ -316,10 +316,10 @@
 <dl class="py class">
 <dt id="torchrl.envs.ParallelEnv">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></code><code class="sig-name descname"><span class="pre">ParallelEnv</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_inplace_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_batch_locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.ParallelEnv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates one environment per process.
-TensorDicts are passed via shared memory or memory map.</p>
-<p>Batched environments allow the user to query an arbitrary method / attribute of the environment running remotely.
-Those queries will return a list of length equal to the number of workers containing the
+<dd><p>Creates one environment per process.</p>
+<p>TensorDicts are passed via shared memory or memory map.</p>
+<p>Batched environments allow the user to query an arbitrary method / attribute of the environment running remotely.</p>
+<p>Those queries will return a list of length equal to the number of workers containing the
 values resulting from those queries.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">ParallelEnv</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">my_env_fun</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">custom_attribute_list</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">custom_attribute</span>
@@ -342,9 +342,9 @@ Providing the env_input_keys permit to select which keys to update after the pol
 drastically decrease the IO burden when the tensordict is placed in shared memory / memory map.
 env_input_keys will typically contain “action” and if this list is not provided this object
 will look for corresponding keys. When working with stateless models, it is important to include the
-state to be read by the environment. If none is provided, _BatchedEnv will use the <cite>EnvBase.input_spec</cite>
+state to be read by the environment. If none is provided, _BatchedEnv will use the <code class="xref py py-obj docutils literal notranslate"><span class="pre">EnvBase.input_spec</span></code>
 keys as indicators of the keys to be sent to the env.</p></li>
-<li><p><strong>pin_memory</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True and device is “cpu”, calls <cite>pin_memory</cite> on the tensordicts when created.</p></li>
+<li><p><strong>pin_memory</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True and device is “cpu”, calls <code class="xref py py-obj docutils literal notranslate"><span class="pre">pin_memory</span></code> on the tensordicts when created.</p></li>
 <li><p><strong>selected_keys</strong> (<em>list of str</em><em>, </em><em>optional</em>) – keys that have to be returned by the environment.
 When creating a batch of environment, it might be the case that only some of the keys are to be returned.
 For instance, if the environment returns ‘next_pixels’ and ‘next_vector’, the user might only
@@ -359,15 +359,15 @@ default = None (False if single task);</p></li>
 <li><p><strong>shared_memory</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether or not the returned tensordict will be placed in shared memory;</p></li>
 <li><p><strong>memmap</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether or not the returned tensordict will be placed in memory map.</p></li>
 <li><p><strong>policy_proof</strong> (<em>callable</em><em>, </em><em>optional</em>) – if provided, it’ll be used to get the list of
-tensors to return through the <cite>step()</cite> and <cite>reset()</cite> methods, such as <cite>“hidden”</cite> etc.</p></li>
+tensors to return through the <a class="reference internal" href="#torchrl.envs.ParallelEnv.step" title="torchrl.envs.ParallelEnv.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step()</span></code></a> and <a class="reference internal" href="#torchrl.envs.ParallelEnv.reset" title="torchrl.envs.ParallelEnv.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset()</span></code></a> methods, such as <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;hidden&quot;</span></code> etc.</p></li>
 <li><p><strong>device</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v1.12)"><em>torch.device</em></a>) – for consistency, this argument is kept. However this
 argument should not be passed, as the device will be inferred from the environments.
 It is assumed that all environments will run on the same device as a common shared
 tensordict will be used to pass data from process to process. The device can be
-changed after instantiation using <cite>env.to(device)</cite>.</p></li>
+changed after instantiation using <code class="xref py py-obj docutils literal notranslate"><span class="pre">env.to(device)</span></code>.</p></li>
 <li><p><strong>allow_step_when_done</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, batched environments can
 execute steps after a done state is encountered.
-Defaults to <cite>False</cite>.</p></li>
+Defaults to <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -432,8 +432,8 @@ as well as self. Typical use includes initializing the parameters of a model
 <dl class="py method">
 <dt id="torchrl.envs.ParallelEnv.batch_locked">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">batch_locked</span></code><a class="headerlink" href="#torchrl.envs.ParallelEnv.batch_locked" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether the environnement can be used with a batch size different from the one it was initialized with or not.
-If True, the env needs to be used with a tensordict having the same batch size as the env.
+<dd><p>Whether the environnement can be used with a batch size different from the one it was initialized with or not.</p>
+<p>If True, the env needs to be used with a tensordict having the same batch size as the env.
 batch_locked is an immutable property.</p>
 </dd></dl>
 
@@ -584,8 +584,7 @@ strings are acceptable.</p>
 <dl class="py method">
 <dt id="torchrl.envs.ParallelEnv.fake_tensordict">
 <code class="sig-name descname"><span class="pre">fake_tensordict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.envs.ParallelEnv.fake_tensordict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a fake tensordict with key-value pairs that match in shape, device
-and dtype what can be expected during an environment rollout.</p>
+<dd><p>Returns a fake tensordict with key-value pairs that match in shape, device and dtype what can be expected during an environment rollout.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1224,15 +1223,15 @@ parameters in this module. Default: <code class="docutils literal notranslate"><
 <dl class="py method">
 <dt id="torchrl.envs.ParallelEnv.reset">
 <code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">execute_step</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.envs.ParallelEnv.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resets the environment.
-As for step and _step, only the private method <cite>_reset</cite> should be overwritten by EnvBase subclasses.</p>
+<dd><p>Resets the environment.</p>
+<p>As for step and _step, only the private method <code class="xref py py-obj docutils literal notranslate"><span class="pre">_reset</span></code> should be overwritten by EnvBase subclasses.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tensordict</strong> (<em>TensorDictBase</em><em>, </em><em>optional</em>) – tensordict to be used to contain the resulting new observation.
 In some cases, this input can also be used to pass argument to the reset function.</p></li>
-<li><p><strong>execute_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, a <cite>step_mdp</cite> is executed on the output TensorDict,
-hereby removing the <cite>“next_”</cite> prefixes from the keys.</p></li>
+<li><p><strong>execute_step</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, a <code class="xref py py-obj docutils literal notranslate"><span class="pre">step_mdp</span></code> is executed on the output TensorDict,
+hereby removing the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;next_&quot;</span></code> prefixes from the keys.</p></li>
 <li><p><strong>kwargs</strong> (<em>optional</em>) – other arguments to be passed to the native
 reset function.</p></li>
 </ul>
@@ -1255,14 +1254,14 @@ returns done=True.</p>
 <li><p><strong>max_steps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – maximum number of steps to be executed. The actual number of steps can be smaller if
 the environment reaches a done state before max_steps have been executed.</p></li>
 <li><p><strong>policy</strong> (<em>callable</em><em>, </em><em>optional</em>) – callable to be called to compute the desired action. If no policy is provided,
-actions will be called using <cite>env.rand_step()</cite>
+actions will be called using <code class="xref py py-obj docutils literal notranslate"><span class="pre">env.rand_step()</span></code>
 default = None</p></li>
 <li><p><strong>callback</strong> (<em>callable</em><em>, </em><em>optional</em>) – function to be called at each iteration with the given TensorDict.</p></li>
 <li><p><strong>auto_reset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, resets automatically the environment
 if it is in a done state when the rollout is initiated.
-Default is <cite>True</cite>.</p></li>
+Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>.</p></li>
 <li><p><strong>auto_cast_to_device</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the device of the tensordict is automatically cast to the
-policy device before the policy is used. Default is <cite>False</cite>.</p></li>
+policy device before the policy is used. Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
 <li><p><strong>break_when_any_done</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – breaks if any of the done state is True. Default is True.</p></li>
 <li><p><strong>return_contiguous</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if False, a LazyStackedTensorDict will be returned. Default is True.</p></li>
 <li><p><strong>tensordict</strong> (<a class="reference internal" href="torchrl.data.TensorDict.html#torchrl.data.TensorDict" title="torchrl.data.TensorDict"><em>TensorDict</em></a><em>, </em><em>optional</em>) – if auto_reset is False, an initial
@@ -1298,16 +1297,16 @@ found within the <cite>state_dict</cite>. Implement this function and a correspo
 <dl class="py method">
 <dt id="torchrl.envs.ParallelEnv.specs">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">specs</span></code><a class="headerlink" href="#torchrl.envs.ParallelEnv.specs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a Specs container where all the environment specs are contained.
-This feature allows one to create an environment, retrieve all of the specs in a single data container and then
+<dd><p>Returns a Specs container where all the environment specs are contained.</p>
+<p>This feature allows one to create an environment, retrieve all of the specs in a single data container and then
 erase the environment from the workspace.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.envs.ParallelEnv.step">
 <code class="sig-name descname"><span class="pre">step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.envs.ParallelEnv.step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Makes a step in the environment.
-Step accepts a single argument, tensordict, which usually carries an ‘action’ key which indicates the action
+<dd><p>Makes a step in the environment.</p>
+<p>Step accepts a single argument, tensordict, which usually carries an ‘action’ key which indicates the action
 to be taken.
 Step will call an out-place private method, _step, which is the method to be re-written by EnvBase subclasses.</p>
 <dl class="field-list simple">

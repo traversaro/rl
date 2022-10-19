@@ -316,8 +316,8 @@
 <dl class="py class">
 <dt id="torchrl.objectives.DistributionalDQNLoss">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.objectives.</span></code><code class="sig-name descname"><span class="pre">DistributionalDQNLoss</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_network</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.modules.tensordict_module.actors.DistributionalQValueActor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'td_error'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.objectives.DistributionalDQNLoss" title="Permalink to this definition">¶</a></dt>
-<dd><p>A distributional DQN loss class.
-Distributional DQN uses a value network that outputs a distribution of
+<dd><p>A distributional DQN loss class.</p>
+<p>Distributional DQN uses a value network that outputs a distribution of
 values over a discrete support of discounted returns (unlike regular DQN
 where the value network outputs a single point prediction of the
 disctounted return).</p>
@@ -337,9 +337,8 @@ value operator.</p></li>
 <dl class="py method">
 <dt id="torchrl.objectives.DistributionalDQNLoss.forward">
 <code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDict</span><a class="headerlink" href="#torchrl.objectives.DistributionalDQNLoss.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>It is designed to read an input TensorDict and return another tensordict
-with loss keys named “loss*”.
-Splitting the loss in its component can then be used by the trainer to log the various loss values throughout
+<dd><p>It is designed to read an input TensorDict and return another tensordict with loss keys named “loss*”.</p>
+<p>Splitting the loss in its component can then be used by the trainer to log the various loss values throughout
 training. Other scalars present in the output tensordict will be logged too.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

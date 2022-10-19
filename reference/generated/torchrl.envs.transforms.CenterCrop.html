@@ -316,7 +316,7 @@
 <dl class="py class">
 <dt id="torchrl.envs.transforms.CenterCrop">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></code><code class="sig-name descname"><span class="pre">CenterCrop</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.transforms.CenterCrop" title="Permalink to this definition">¶</a></dt>
-<dd><p>Crops the center of an image</p>
+<dd><p>Crops the center of an image.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -328,8 +328,7 @@
 <dl class="py method">
 <dt id="torchrl.envs.transforms.CenterCrop.transform_observation_spec">
 <code class="sig-name descname"><span class="pre">transform_observation_spec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation_spec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensor_specs.TensorSpec</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensor_specs.TensorSpec</span><a class="headerlink" href="#torchrl.envs.transforms.CenterCrop.transform_observation_spec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transforms the observation spec such that the resulting spec
-matches transform mapping.</p>
+<dd><p>Transforms the observation spec such that the resulting spec matches transform mapping.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>observation_spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – spec before the transform</p>

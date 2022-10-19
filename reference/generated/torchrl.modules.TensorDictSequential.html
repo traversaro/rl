@@ -316,25 +316,25 @@
 <dl class="py class">
 <dt id="torchrl.modules.TensorDictSequential">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">TensorDictSequential</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">modules</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.modules.tensordict_module.common.TensorDictModule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial_tolerant</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.TensorDictSequential" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sequence of TDModules.
-Similarly to <cite>nn.Sequence</cite> which passes a tensor through a chain of mappings that read and write a single tensor
+<dd><p>A sequence of TensorDictModules.</p>
+<p>Similarly to <code class="xref py py-obj docutils literal notranslate"><span class="pre">nn.Sequence</span></code> which passes a tensor through a chain of mappings that read and write a single tensor
 each, this module will read and write over a tensordict by querying each of the input modules.
-When calling a <cite>TDSequence</cite> instance with a functional module, it is expected that the parameter lists (and
+When calling a <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDictSequencial</span></code> instance with a functional module, it is expected that the parameter lists (and
 buffers) will be concatenated in a single list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>modules</strong> (<em>iterable of TDModules</em>) – ordered sequence of TDModule instances to be run sequentially.</p></li>
+<li><p><strong>modules</strong> (<em>iterable of TensorDictModules</em>) – ordered sequence of TensorDictModule instances to be run sequentially.</p></li>
 <li><p><strong>partial_tolerant</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the input tensordict can miss some of the input keys.
 If so, the only module that will be executed are those who can be executed given the keys that
 are present.
-Also, if the input tensordict is a lazy stack of tensordicts AND if partial_tolerant is <cite>True</cite> AND if the
+Also, if the input tensordict is a lazy stack of tensordicts AND if partial_tolerant is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> AND if the
 stack does not have the required keys, then TensorDictSequential will scan through the sub-tensordicts
 looking for those that have the required keys, if any.</p></li>
 </ul>
 </dd>
 </dl>
-<p>TDSequence supports functional, modular and vmap coding:
+<p>TensorDictSequence supports functional, modular and vmap coding:
 .. rubric:: Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module</span> <span class="kn">import</span> <span class="n">ProbabilisticTensorDictModule</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">TensorDict</span><span class="p">,</span> <span class="n">NdUnboundedContinuousTensorSpec</span>
@@ -426,8 +426,8 @@ registered hooks while the latter silently ignores them.</p>
 <dl class="py method">
 <dt id="torchrl.modules.TensorDictSequential.make_functional_with_buffers">
 <code class="sig-name descname"><span class="pre">make_functional_with_buffers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">native</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.TensorDictSequential.make_functional_with_buffers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transforms a stateful module in a functional module and returns its parameters and buffers.
-Unlike functorch.make_functional_with_buffers, this method supports lazy modules.</p>
+<dd><p>Transforms a stateful module in a functional module and returns its parameters and buffers.</p>
+<p>Unlike functorch.make_functional_with_buffers, this method supports lazy modules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -474,8 +474,7 @@ Defaults to True</p></li>
 <dl class="py method">
 <dt id="torchrl.modules.TensorDictSequential.select_subsequence">
 <code class="sig-name descname"><span class="pre">select_subsequence</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_keys</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_keys</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Iterable</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference internal" href="#torchrl.modules.TensorDictSequential" title="torchrl.modules.TensorDictSequential"><span class="pre">TensorDictSequential</span></a><a class="headerlink" href="#torchrl.modules.TensorDictSequential.select_subsequence" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a new TensorDictSequential with only the modules that are necessary to compute
-the given output keys with the given input keys.</p>
+<dd><p>Returns a new TensorDictSequential with only the modules that are necessary to compute the given output keys with the given input keys.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

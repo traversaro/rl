@@ -316,7 +316,18 @@
 <dl class="py function">
 <dt id="torchrl.trainers.helpers.make_collector_onpolicy">
 <code class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></code><code class="sig-name descname"><span class="pre">make_collector_onpolicy</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">make_env</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">torchrl.envs.common.EnvBase</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actor_model_explore</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">torchrl.modules.tensordict_module.common.TensorDictModuleWrapper</span><span class="p"><span class="pre">,</span> </span><span class="pre">torchrl.modules.tensordict_module.probabilistic.ProbabilisticTensorDictModule</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">make_env_kwargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.collectors.collectors._DataCollector</span><a class="headerlink" href="#torchrl.trainers.helpers.make_collector_onpolicy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Makes a collector in on-policy settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>make_env</strong> (<em>Callable</em>) – environment creator</p></li>
+<li><p><strong>actor_model_explore</strong> (<a class="reference internal" href="torchrl.modules.TensorDictModule.html#torchrl.modules.TensorDictModule" title="torchrl.modules.TensorDictModule"><em>TensorDictModule</em></a>) – Model instance used for evaluation and exploration update</p></li>
+<li><p><strong>cfg</strong> (<em>DictConfig</em>) – config for creating collector object</p></li>
+<li><p><strong>make_env_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – kwargs for the env creator</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 

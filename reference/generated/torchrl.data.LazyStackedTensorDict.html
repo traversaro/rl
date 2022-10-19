@@ -378,8 +378,7 @@ the tensordict shape.</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.apply">
 <code class="sig-name descname"><span class="pre">apply</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.apply" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies a callable to all values stored in the tensordict and sets
-them in a new tensordict.</p>
+<dd><p>Applies a callable to all values stored in the tensordict and sets them in a new tensordict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -387,7 +386,7 @@ them in a new tensordict.</p>
 tensordict.</p></li>
 <li><p><strong>batch_size</strong> (<em>sequence of int</em><em>, </em><em>optional</em>) – if provided,
 the resulting TensorDict will have the desired batch_size.
-The <cite>batch_size</cite> argument should match the batch_size after
+The <a class="reference internal" href="#torchrl.data.LazyStackedTensorDict.batch_size" title="torchrl.data.LazyStackedTensorDict.batch_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">batch_size</span></code></a> argument should match the batch_size after
 the transformation.</p></li>
 <li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, changes are made in-place.
 Default is False.</p></li>
@@ -402,8 +401,7 @@ Default is False.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.apply_">
 <code class="sig-name descname"><span class="pre">apply_</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.apply_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies a callable to all values stored in the tensordict and
-re-writes them in-place.</p>
+<dd><p>Applies a callable to all values stored in the tensordict and re-writes them in-place.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>fn</strong> (<em>Callable</em>) – function to be applied to the tensors in the
@@ -429,8 +427,8 @@ tensordict.</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.batch_size">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">batch_size</span></code><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.batch_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shape of (or batch_size) of a TensorDict.
-The shape of a tensordict corresponds to the common N first
+<dd><p>Shape of (or batch_size) of a TensorDict.</p>
+<p>The shape of a tensordict corresponds to the common N first
 dimensions of the tensors it contains, where N is an arbitrary
 number. The TensorDict shape is controlled by the user upon
 initialization (i.e. it is not inferred from the tensor shapes) and
@@ -445,8 +443,8 @@ it should not be changed dynamically.</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.chunk">
 <code class="sig-name descname"><span class="pre">chunk</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chunks</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">…</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.chunk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attempts to split a tendordict into the specified number of
-chunks. Each chunk is a view of the input tensordict.</p>
+<dd><p>Splits a tendordict into the specified number of chunks, if possible.</p>
+<p>Each chunk is a view of the input tensordict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -473,27 +471,25 @@ TensorDict will be copied too. Default is <cite>True</cite>.</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.contiguous">
 <code class="sig-name descname"><span class="pre">contiguous</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.contiguous" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns:
-a new tensordict of the same type with contiguous values (
-or self if values are already contiguous).</p>
+<dd><p>Returns a new tensordict of the same type with contiguous values (or self if values are already contiguous).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.copy_">
 <code class="sig-name descname"><span class="pre">copy_</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.copy_" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <cite>TensorDictBase.update_</cite>.</p>
+<dd><p>See <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDictBase.update_</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.copy_at_">
 <code class="sig-name descname"><span class="pre">copy_at_</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">…</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.copy_at_" title="Permalink to this definition">¶</a></dt>
-<dd><p>See <cite>TensorDictBase.update_at_</cite>.</p>
+<dd><p>See <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDictBase.update_at_</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.cpu">
 <code class="sig-name descname"><span class="pre">cpu</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.cpu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Casts a tensordict to cpu (if not already on cpu).</p>
+<dd><p>Casts a tensordict to CPU.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -541,7 +537,8 @@ or self if values are already contiguous).</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.device">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">device</span></code><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.device" title="Permalink to this definition">¶</a></dt>
-<dd><p>Device of a TensorDict. If the TensorDict has a specified device, all
+<dd><p>Device of a TensorDict.</p>
+<p>If the TensorDict has a specified device, all
 tensors of a tensordict must live on the same device. If the TensorDict device
 is None, then different values can be located on different devices.</p>
 <dl class="field-list simple">
@@ -561,9 +558,9 @@ are placed, or None if TensorDict does not have a device.</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.expand">
 <code class="sig-name descname"><span class="pre">expand</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.expand" title="Permalink to this definition">¶</a></dt>
-<dd><p>Expands each tensors of the tensordict according to
-<cite>tensor.expand(*shape, *tensor.shape)</cite>
-Supports iterables to specify the shape</p>
+<dd><p>Expands each tensors of the tensordict according to the torch.expand function.</p>
+<p>In practice, this amends to: <code class="xref py py-obj docutils literal notranslate"><span class="pre">tensor.expand(*shape,</span> <span class="pre">*tensor.shape)</span></code>.</p>
+<p>Supports iterables to specify the shape</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">td</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
 <span class="gp">... </span>    <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">)},</span> <span class="n">batch_size</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
@@ -633,8 +630,7 @@ not present in the tensordict.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.is_contiguous">
 <code class="sig-name descname"><span class="pre">is_contiguous</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.is_contiguous" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns:
-boolean indicating if all the tensors are contiguous.</p>
+<dd><p>Returns a boolean indicating if all the tensors are contiguous.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -672,8 +668,8 @@ Default is True</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.items_meta">
 <code class="sig-name descname"><span class="pre">items_meta</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">make_unset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">torchrl.data.tensordict.metatensor.MetaTensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.items_meta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a generator of key-value pairs for the tensordict, where the
-values are MetaTensor instances corresponding to the stored tensors.</p>
+<dd><p>Returns a generator of key-value pairs for the tensordict.</p>
+<p>The values are MetaTensor instances corresponding to the stored tensors.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -685,7 +681,7 @@ values are MetaTensor instances corresponding to the stored tensors.</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.masked_fill">
 <code class="sig-name descname"><span class="pre">masked_fill</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.masked_fill" title="Permalink to this definition">¶</a></dt>
-<dd><p>Out-of-place version of masked_fill</p>
+<dd><p>Out-of-place version of masked_fill.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -743,8 +739,7 @@ must match tensordict shape.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.masked_select">
 <code class="sig-name descname"><span class="pre">masked_select</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.masked_select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Masks all tensors of the TensorDict and return a new TensorDict
-instance with similar keys pointing to masked values.</p>
+<dd><p>Masks all tensors of the TensorDict and return a new TensorDict instance with similar keys pointing to masked values.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>mask</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><em>torch.Tensor</em></a>) – boolean mask to be used for the tensors.
@@ -789,7 +784,7 @@ be stored.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.permute">
 <code class="sig-name descname"><span class="pre">permute</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dims_list</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.permute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a view of a tensordict with the batch dimensions permuted according to dims</p>
+<dd><p>Returns a view of a tensordict with the batch dimensions permuted according to dims.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -838,7 +833,7 @@ a single iterable of integers can be provided.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.pin_memory">
 <code class="sig-name descname"><span class="pre">pin_memory</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.pin_memory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calls pin_memory() on the stored tensors.</p>
+<dd><p>Calls <a class="reference internal" href="#torchrl.data.LazyStackedTensorDict.pin_memory" title="torchrl.data.LazyStackedTensorDict.pin_memory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pin_memory</span></code></a> on the stored tensors.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -880,8 +875,7 @@ key is already present in the TensorDict.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.select">
 <code class="sig-name descname"><span class="pre">select</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">keys</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.LazyStackedTensorDict</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.select" title="Permalink to this definition">¶</a></dt>
-<dd><p>Selects the keys of the tensordict and returns an new tensordict
-with only the selected keys.</p>
+<dd><p>Selects the keys of the tensordict and returns an new tensordict with only the selected keys.</p>
 <p>The values are not copied: in-place modifications a tensor of either
 of the original or new tensordict will result in a change in both
 tensordicts.</p>
@@ -890,7 +884,7 @@ tensordicts.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>*keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – keys to select</p></li>
 <li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True, the tensordict is pruned in place.
-Default is <cite>False</cite>.</p></li>
+Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -910,7 +904,7 @@ Default is <cite>False</cite>.</p></li>
 <li><p><strong>item</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><em>torch.Tensor</em></a>) – value to be stored in the tensordict</p></li>
 <li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True and if a key matches an existing
 key in the tensordict, then the update will occur in-place
-for that key-value pair. Default is <cite>False</cite>.</p></li>
+for that key-value pair. Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -941,7 +935,7 @@ match the original tensor and that the keys is in the tensordict.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.set_at_">
 <code class="sig-name descname"><span class="pre">set_at_</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><span class="pre">dict</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">torchrl.data.tensordict.memmap.MemmapTensor</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">…</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.set_at_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets the values in-place at the index indicated by <cite>idx</cite>.</p>
+<dd><p>Sets the values in-place at the index indicated by <code class="xref py py-obj docutils literal notranslate"><span class="pre">idx</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -959,7 +953,7 @@ match the original tensor and that the keys is in the tensordict.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.shape">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">shape</span></code><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.shape" title="Permalink to this definition">¶</a></dt>
-<dd><p>See TensorDictBase.batch_size</p>
+<dd><p>See <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDictBase.batch_size</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -979,16 +973,14 @@ match the original tensor and that the keys is in the tensordict.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.size">
 <code class="sig-name descname"><span class="pre">size</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the size of the dimension indicated by <cite>dim</cite>. If dim is not
-specified, returns the batch_size (or shape) of the TensorDict.</p>
+<dd><p>Returns the size of the dimension indicated by <code class="xref py py-obj docutils literal notranslate"><span class="pre">dim</span></code>.</p>
+<p>If dim is not specified, returns the batch_size (or shape) of the TensorDict.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.squeeze">
 <code class="sig-name descname"><span class="pre">squeeze</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.squeeze" title="Permalink to this definition">¶</a></dt>
-<dd><p>Squeezes all tensors for a dimension comprised in between
-<cite>-td.batch_dims+1</cite> and <cite>td.batch_dims-1</cite> and returns them
-in a new tensordict.</p>
+<dd><p>Squeezes all tensors for a dimension comprised in between <cite>-td.batch_dims+1</cite> and <cite>td.batch_dims-1</cite> and returns them in a new tensordict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – dimension along which to squeeze</p>
@@ -999,9 +991,8 @@ in a new tensordict.</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.to">
 <code class="sig-name descname"><span class="pre">to</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v1.12)"><span class="pre">torch.device</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.to" title="Permalink to this definition">¶</a></dt>
-<dd><p>Maps a TensorDictBase subclass either on a new device or to another
-TensorDictBase subclass (if permitted). Casting tensors to a new dtype
-is not allowed, as tensordicts are not bound to contain a single
+<dd><p>Maps a TensorDictBase subclass either on a new device or to another TensorDictBase subclass (if permitted).</p>
+<p>Casting tensors to a new dtype is not allowed, as tensordicts are not bound to contain a single
 tensor dtype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1020,12 +1011,7 @@ the tensordict device, this is a no-op.</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.to_dict">
 <code class="sig-name descname"><span class="pre">to_dict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.to_dict" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>dictionary with key-value pairs matching those of the
-tensordict.</p>
-</dd>
-</dl>
+<dd><p>Returns a dictionary with key-value pairs matching those of the tensordict.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1042,17 +1028,14 @@ tensordict.</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.unbind">
 <code class="sig-name descname"><span class="pre">unbind</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">…</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.unbind" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a tuple of indexed tensordicts unbound along the
-indicated dimension. Resulting tensordicts will share
-the storage of the initial tensordict.</p>
+<dd><p>Returns a tuple of indexed tensordicts unbound along the indicated dimension.</p>
+<p>Resulting tensordicts will share the storage of the initial tensordict.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.unsqueeze">
 <code class="sig-name descname"><span class="pre">unsqueeze</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.unsqueeze" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unsqueeze all tensors for a dimension comprised in between
-<cite>-td.batch_dims</cite> and <cite>td.batch_dims</cite> and returns them in a new
-tensordict.</p>
+<dd><p>Unsqueeze all tensors for a dimension comprised in between <cite>-td.batch_dims</cite> and <cite>td.batch_dims</cite> and returns them in a new tensordict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – dimension along which to unsqueeze</p>
@@ -1063,22 +1046,19 @@ tensordict.</p>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.update">
 <code class="sig-name descname"><span class="pre">update</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_dict_or_td</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.update" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Updates the TensorDict with values from either a dictionary or</dt><dd><p>another TensorDict.</p>
-</dd>
-</dl>
+<dd><p>Updates the TensorDict with values from either a dictionary or another TensorDict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_dict_or_td</strong> (<em>TensorDictBase</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Does not keyword arguments
-(unlike <cite>dict.update()</cite>).</p></li>
+(unlike <code class="xref py py-obj docutils literal notranslate"><span class="pre">dict.update()</span></code>).</p></li>
 <li><p><strong>clone</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – whether the tensors in the input (
 tensor) dict should be cloned before being set. Default is
 <cite>False</cite>.</p></li>
 <li><p><strong>inplace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True and if a key matches an existing
 key in the tensordict, then the update will occur in-place
-for that key-value pair. Default is <cite>False</cite>.</p></li>
-<li><p><strong>**kwargs</strong> – keyword arguments for the <cite>TensorDict.set</cite> method</p></li>
+for that key-value pair. Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
+<li><p><strong>**kwargs</strong> – keyword arguments for the <a class="reference internal" href="torchrl.data.TensorDict.html#torchrl.data.TensorDict.set" title="torchrl.data.TensorDict.set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDict.set</span></code></a> method</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1090,15 +1070,14 @@ for that key-value pair. Default is <cite>False</cite>.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.update_">
 <code class="sig-name descname"><span class="pre">update_</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_dict_or_td</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">torchrl.data.tensordict.memmap.MemmapTensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.update_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the TensorDict in-place with values from either a dictionary
-or another TensorDict.</p>
+<dd><p>Updates the TensorDict in-place with values from either a dictionary or another TensorDict.</p>
 <p>Unlike TensorDict.update, this function will
 throw an error if the key is unknown to the TensorDict</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_dict_or_td</strong> (<em>TensorDictBase</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Does not keyword
-arguments (unlike <cite>dict.update()</cite>).</p></li>
+arguments (unlike <code class="xref py py-obj docutils literal notranslate"><span class="pre">dict.update()</span></code>).</p></li>
 <li><p><strong>clone</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – whether the tensors in the input (
 tensor) dict should be cloned before being set. Default is
 <cite>False</cite>.</p></li>
@@ -1113,15 +1092,13 @@ tensor) dict should be cloned before being set. Default is
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.update_at_">
 <code class="sig-name descname"><span class="pre">update_at_</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_dict_or_td</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">torchrl.data.tensordict.memmap.MemmapTensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">…</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.update_at_" title="Permalink to this definition">¶</a></dt>
-<dd><p>Updates the TensorDict in-place at the specified index with
-values from either a dictionary or another TensorDict.</p>
-<p>Unlike  TensorDict.update, this function will throw an error if the
-key is unknown to the TensorDict.</p>
+<dd><p>Updates the TensorDict in-place at the specified index with values from either a dictionary or another TensorDict.</p>
+<p>Unlike  TensorDict.update, this function will throw an error if the key is unknown to the TensorDict.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>input_dict_or_td</strong> (<em>TensorDictBase</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Does not keyword arguments
-(unlike <cite>dict.update()</cite>).</p></li>
+(unlike <code class="xref py py-obj docutils literal notranslate"><span class="pre">dict.update()</span></code>).</p></li>
 <li><p><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><em>torch.Tensor</em></a><em>, </em><em>iterable</em><em>, </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><em>slice</em></a>) – index of the tensordict
 where the update should occur.</p></li>
 <li><p><strong>clone</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – whether the tensors in the input (
@@ -1141,11 +1118,12 @@ tensor) dict should be cloned before being set. Default is
 <span class="gp">... </span>       <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">)},</span> <span class="n">batch_size</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">]),</span>
 <span class="gp">... </span>   <span class="nb">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
 <span class="go">TensorDict(</span>
-<span class="go">    fields={a: Tensor(torch.Size([3, 4, 5]), dtype=torch.float32),</span>
-<span class="go">        b: Tensor(torch.Size([3, 4, 10]),dtype=torch.float32)},</span>
-<span class="go">    shared=False,</span>
+<span class="go">    fields={</span>
+<span class="go">        a: Tensor(torch.Size([3, 4, 5]), dtype=torch.float32),</span>
+<span class="go">        b: Tensor(torch.Size([3, 4, 10]), dtype=torch.float32)},</span>
 <span class="go">    batch_size=torch.Size([3, 4]),</span>
-<span class="go">    device=cpu)</span>
+<span class="go">    device=None,</span>
+<span class="go">    is_shared=False)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1159,15 +1137,14 @@ tensor) dict should be cloned before being set. Default is
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.values_meta">
 <code class="sig-name descname"><span class="pre">values_meta</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">make_unset</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">torchrl.data.tensordict.metatensor.MetaTensor</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.values_meta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a generator representing the values for the tensordict, those
-values are MetaTensor instances corresponding to the stored tensors.</p>
+<dd><p>Returns a generator representing the values for the tensordict.</p>
+<p>Those values are MetaTensor instances corresponding to the stored tensors.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.data.LazyStackedTensorDict.view">
 <code class="sig-name descname"><span class="pre">view</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">,</span> </span><span class="pre">Tuple</span><span class="p"><span class="pre">,</span> </span><span class="pre">torch.Size</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.LazyStackedTensorDict.view" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a tensordict with views of the tensors according to a new
-shape, compatible with the tensordict batch_size.</p>
+<dd><p>Returns a tensordict with views of the tensors according to a new shape, compatible with the tensordict batch_size.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

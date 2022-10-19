@@ -316,7 +316,8 @@
 <dl class="py class">
 <dt id="torchrl.data.MultiStep">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.data.</span></code><code class="sig-name descname"><span class="pre">MultiStep</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps_max</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.data.MultiStep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multistep reward, as presented in ‘Sutton, R. S. 1988. Learning to
+<dd><p>Multistep reward transform.</p>
+<p>Presented in ‘Sutton, R. S. 1988. Learning to
 predict by the methods of temporal differences. Machine learning 3(
 1):9–44.’</p>
 <dl class="field-list simple">
@@ -550,7 +551,8 @@ strings are acceptable.</p>
 <dl class="py method">
 <dt id="torchrl.data.MultiStep.forward">
 <code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.data.MultiStep.forward" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Re-writes a tensordict following the multi-step transform.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>tensordict</strong> – <p>TennsorDict instance with Batch x Time-steps x …
 dimensions.

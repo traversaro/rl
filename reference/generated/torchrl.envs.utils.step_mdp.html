@@ -316,28 +316,29 @@
 <dl class="py function">
 <dt id="torchrl.envs.utils.step_mdp">
 <code class="sig-prename descclassname"><span class="pre">torchrl.envs.utils.</span></code><code class="sig-name descname"><span class="pre">step_mdp</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_other</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_reward</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_done</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_action</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.envs.utils.step_mdp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given a tensordict retrieved after a step, returns another tensordict with all the ‘<a href="#id1"><span class="problematic" id="id2">next_</span></a>’ prefixes are removed,
-i.e. all the <cite>‘next_some_other_string’</cite> keys will be renamed onto <cite>‘some_other_string’</cite> keys.</p>
+<dd><p>Creates a new tensordict that reflects a step in time of the input tensordict.</p>
+<p>Given a tensordict retrieved after a step, returns another tensordict with all the <code class="xref py py-obj docutils literal notranslate"><span class="pre">'next_'</span></code> prefixes are removed,
+i.e. all the <code class="xref py py-obj docutils literal notranslate"><span class="pre">'next_some_other_string'</span></code> keys will be renamed onto <code class="xref py py-obj docutils literal notranslate"><span class="pre">'some_other_string'</span></code> keys.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tensordict</strong> (<em>TensorDictBase</em>) – tensordict with keys to be renamed</p></li>
 <li><p><strong>next_tensordict</strong> (<em>TensorDictBase</em><em>, </em><em>optional</em>) – destination tensordict</p></li>
-<li><p><strong>keep_other</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, all keys that do not start with <cite>‘next_’</cite> will be kept.
+<li><p><strong>keep_other</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, all keys that do not start with <code class="xref py py-obj docutils literal notranslate"><span class="pre">'next_'</span></code> will be kept.
 Default is True.</p></li>
-<li><p><strong>exclude_reward</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the <cite>“reward”</cite> key will be discarded
+<li><p><strong>exclude_reward</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;reward&quot;</span></code> key will be discarded
 from the resulting tensordict.
 Default is True.</p></li>
-<li><p><strong>exclude_done</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the <cite>“done”</cite> key will be discarded
+<li><p><strong>exclude_done</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;done&quot;</span></code> key will be discarded
 from the resulting tensordict.
 Default is True.</p></li>
-<li><p><strong>exclude_action</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the <cite>“action”</cite> key will be discarded
+<li><p><strong>exclude_action</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;action&quot;</span></code> key will be discarded
 from the resulting tensordict.
 Default is True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A new tensordict (or next_tensordict) with the “next_*” keys renamed without the “<a href="#id3"><span class="problematic" id="id4">next_</span></a>” prefix.</p>
+<dd class="field-even"><p>A new tensordict (or next_tensordict) with the “next_*” keys renamed without the “<a href="#id1"><span class="problematic" id="id2">next_</span></a>” prefix.</p>
 </dd>
 </dl>
 <p>Examples:

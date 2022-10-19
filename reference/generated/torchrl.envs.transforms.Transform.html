@@ -321,16 +321,16 @@
 the same or another) tensordict as output, where a series of values have
 been modified or created with a new key. When instantiating a new
 transform, the keys that are to be read from are passed to the
-constructor via the <cite>keys</cite> argument.</p>
+constructor via the <code class="xref py py-obj docutils literal notranslate"><span class="pre">keys</span></code> argument.</p>
 <p>Transforms are to be combined with their target environments with the
-TransformedEnv class, which takes as arguments an <cite>EnvBase</cite> instance
+TransformedEnv class, which takes as arguments an <code class="xref py py-obj docutils literal notranslate"><span class="pre">EnvBase</span></code> instance
 and a transform. If multiple transforms are to be used, they can be
-concatenated using the <cite>Compose</cite> class.
+concatenated using the <a class="reference internal" href="torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose" title="torchrl.envs.transforms.Compose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Compose</span></code></a> class.
 A transform can be stateless or stateful (e.g. CatTransform). Because of
-this, Transforms support the <cite>reset</cite> operation, which should reset the
+this, Transforms support the <a class="reference internal" href="#torchrl.envs.transforms.Transform.reset" title="torchrl.envs.transforms.Transform.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a> operation, which should reset the
 transform to its initial state (such that successive trajectories are kept
 independent).</p>
-<p>Notably, <cite>Transform</cite> subclasses take care of transforming the affected
+<p>Notably, <a class="reference internal" href="#torchrl.envs.transforms.Transform" title="torchrl.envs.transforms.Transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Transform</span></code></a> subclasses take care of transforming the affected
 specs from an environment: when querying
 <cite>transformed_env.observation_spec</cite>, the resulting objects will describe
 the specs of the transformed_in tensors.</p>
@@ -357,8 +357,7 @@ registered hooks while the latter silently ignores them.</p>
 <dl class="py method">
 <dt id="torchrl.envs.transforms.Transform.transform_input_spec">
 <code class="sig-name descname"><span class="pre">transform_input_spec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_spec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensor_specs.TensorSpec</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensor_specs.TensorSpec</span><a class="headerlink" href="#torchrl.envs.transforms.Transform.transform_input_spec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transforms the input spec such that the resulting spec matches
-transform mapping.</p>
+<dd><p>Transforms the input spec such that the resulting spec matches transform mapping.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>input_spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – spec before the transform</p>
@@ -372,8 +371,7 @@ transform mapping.</p>
 <dl class="py method">
 <dt id="torchrl.envs.transforms.Transform.transform_observation_spec">
 <code class="sig-name descname"><span class="pre">transform_observation_spec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation_spec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensor_specs.TensorSpec</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensor_specs.TensorSpec</span><a class="headerlink" href="#torchrl.envs.transforms.Transform.transform_observation_spec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transforms the observation spec such that the resulting spec
-matches transform mapping.</p>
+<dd><p>Transforms the observation spec such that the resulting spec matches transform mapping.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>observation_spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – spec before the transform</p>
@@ -387,8 +385,7 @@ matches transform mapping.</p>
 <dl class="py method">
 <dt id="torchrl.envs.transforms.Transform.transform_reward_spec">
 <code class="sig-name descname"><span class="pre">transform_reward_spec</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reward_spec</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensor_specs.TensorSpec</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensor_specs.TensorSpec</span><a class="headerlink" href="#torchrl.envs.transforms.Transform.transform_reward_spec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transforms the reward spec such that the resulting spec matches
-transform mapping.</p>
+<dd><p>Transforms the reward spec such that the resulting spec matches transform mapping.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>reward_spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – spec before the transform</p>

@@ -316,9 +316,8 @@
 <dl class="py function">
 <dt id="torchrl.trainers.helpers.correct_for_frame_skip">
 <code class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></code><code class="sig-name descname"><span class="pre">correct_for_frame_skip</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">DictConfig</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">DictConfig</span><a class="headerlink" href="#torchrl.trainers.helpers.correct_for_frame_skip" title="Permalink to this definition">¶</a></dt>
-<dd><p>Correct the arguments for the input frame_skip, by dividing all the arguments that reflect a count of frames by the
-frame_skip.
-This is aimed at avoiding unknowingly over-sampling from the environment, i.e. targetting a total number of frames
+<dd><p>Correct the arguments for the input frame_skip, by dividing all the arguments that reflect a count of frames by the frame_skip.</p>
+<p>This is aimed at avoiding unknowingly over-sampling from the environment, i.e. targetting a total number of frames
 of 1M but actually collecting frame_skip * 1M frames.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

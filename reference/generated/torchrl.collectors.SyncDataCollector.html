@@ -387,7 +387,7 @@ Default is False.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>state_dict</strong> (<em>OrderedDict</em>) – ordered dictionary containing the fields
-<cite>“policy_state_dict”</cite> and <cite>“env_state_dict”</cite>.</p>
+<cite>“policy_state_dict”</cite> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;env_state_dict&quot;</span></code>.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -444,11 +444,10 @@ seed will be incremented for each of these. The resulting seed is the seed of th
 <dl class="py method">
 <dt id="torchrl.collectors.SyncDataCollector.state_dict">
 <code class="sig-name descname"><span class="pre">state_dict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="(in Python v3.10)"><span class="pre">collections.OrderedDict</span></a><a class="headerlink" href="#torchrl.collectors.SyncDataCollector.state_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the local state_dict of the data collector (environment
-and policy).</p>
+<dd><p>Returns the local state_dict of the data collector (environment and policy).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>an ordered dictionary with fields <cite>“policy_state_dict”</cite> and
+<dd class="field-odd"><p>an ordered dictionary with fields <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;policy_state_dict&quot;</span></code> and
 <cite>“env_state_dict”</cite>.</p>
 </dd>
 </dl>

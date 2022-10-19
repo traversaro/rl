@@ -329,7 +329,7 @@ embedding for robotic tasks. The models are trained using Ego4d.</p>
 </dl>
 <p>The R3MTransform is created in a lazy manner: the object will be initialized
 only when an attribute (a spec or the forward method) will be queried.
-The reason for this is that the <cite>_init()</cite> method requires some attributes of
+The reason for this is that the <code class="xref py py-obj docutils literal notranslate"><span class="pre">_init()</span></code> method requires some attributes of
 the parent environment (if any) to be accessed: by making the class lazy we
 can ensure that the following code snippet works as expected:</p>
 <p class="rubric">Examples</p>

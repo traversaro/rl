@@ -316,7 +316,21 @@
 <dl class="py function">
 <dt id="torchrl.trainers.helpers.get_stats_random_rollout">
 <code class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></code><code class="sig-name descname"><span class="pre">get_stats_random_rollout</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof_environment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.envs.common.EnvBase</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.trainers.helpers.get_stats_random_rollout" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Gathers stas (loc and scale) from an environment using random rollouts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cfg</strong> (<em>DictConfig</em>) – a config object with <cite>init_env_steps</cite> field, indicating
+the total number of frames to be collected to compute the stats.</p></li>
+<li><p><strong>proof_environment</strong> (<em>EnvBase instance</em><em>, </em><em>optional</em>) – if provided, this env will
+be used ot execute the rollouts. If not, it will be created using
+the cfg object.</p></li>
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – if provided, the stats of this key will be gathered.
+If not, it is expected that only one key exists in <cite>env.observation_spec</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 

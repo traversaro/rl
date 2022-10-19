@@ -316,20 +316,20 @@
 <dl class="py class">
 <dt id="torchrl.modules.ProbabilisticTensorDictModule">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">ProbabilisticTensorDictModule</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">module:</span> <span class="pre">torchrl.modules.tensordict_module.common.TensorDictModule,</span> <span class="pre">dist_param_keys:</span> <span class="pre">Union[str,</span> <span class="pre">Sequence[str],</span> <span class="pre">dict],</span> <span class="pre">out_key_sample:</span> <span class="pre">Union[str,</span> <span class="pre">Sequence[str]],</span> <span class="pre">spec:</span> <span class="pre">Optional[torchrl.data.tensor_specs.TensorSpec]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">safe:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">default_interaction_mode:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'mode',</span> <span class="pre">distribution_class:</span> <span class="pre">Type</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torchrl.modules.distributions.continuous.Delta'&gt;,</span> <span class="pre">distribution_kwargs:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">return_log_prob:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">cache_dist:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">n_empirical_estimate:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">1000</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ProbabilisticTensorDictModule" title="Permalink to this definition">¶</a></dt>
-<dd><p>A probabilistic TD Module.
-<cite>ProbabilisticTDModule</cite> is a special case of a TDModule where the output is
-sampled given some rule, specified by the input <cite>default_interaction_mode</cite>
-argument and the <cite>exploration_mode()</cite> global function.</p>
+<dd><p>A probabilistic TD Module.</p>
+<p><cite>ProbabilisticTDModule</cite> is a special case of a TDModule where the output is
+sampled given some rule, specified by the input <code class="xref py py-obj docutils literal notranslate"><span class="pre">default_interaction_mode</span></code>
+argument and the <code class="xref py py-obj docutils literal notranslate"><span class="pre">exploration_mode()</span></code> global function.</p>
 <p>It consists in a wrapper around another TDModule that returns a tensordict
-updated with the distribution parameters. <cite>ProbabilisticTensorDictModule</cite> is
-responsible for constructing the distribution (through the <cite>get_dist()</cite> method)
-and/or sampling from this distribution (through a regular <cite>__call__()</cite> to the
+updated with the distribution parameters. <a class="reference internal" href="#torchrl.modules.ProbabilisticTensorDictModule" title="torchrl.modules.ProbabilisticTensorDictModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProbabilisticTensorDictModule</span></code></a> is
+responsible for constructing the distribution (through the <code class="xref py py-obj docutils literal notranslate"><span class="pre">get_dist()</span></code> method)
+and/or sampling from this distribution (through a regular <code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__()</span></code> to the
 module).</p>
-<p>A <cite>ProbabilisticTensorDictModule</cite> instance has two main features:
+<p>A <a class="reference internal" href="#torchrl.modules.ProbabilisticTensorDictModule" title="torchrl.modules.ProbabilisticTensorDictModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProbabilisticTensorDictModule</span></code></a> instance has two main features:
 - It reads and writes TensorDict objects
 - It uses a real mapping R^n -&gt; R^m to create a distribution in R^d from
 which values can be sampled or computed.
-When the <cite>__call__</cite> / <cite>forward</cite> method is called, a distribution is created,
+When the <code class="xref py py-obj docutils literal notranslate"><span class="pre">__call__</span></code> / <a class="reference internal" href="#torchrl.modules.ProbabilisticTensorDictModule.forward" title="torchrl.modules.ProbabilisticTensorDictModule.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a> method is called, a distribution is created,
 and a value computed (using the ‘mean’, ‘mode’, ‘median’ attribute or
 the ‘rsample’, ‘sample’ method). The sampling step is skipped if the
 inner TDModule has already created the desired key-value pair.</p>
@@ -340,30 +340,30 @@ a deterministic mapping function.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>module</strong> (<em>nn.Module</em>) – a nn.Module used to map the input to the output parameter space. Can be a functional
-module (FunctionalModule or FunctionalModuleWithBuffers), in which case the <cite>forward</cite> method will expect
+module (FunctionalModule or FunctionalModuleWithBuffers), in which case the <a class="reference internal" href="#torchrl.modules.ProbabilisticTensorDictModule.forward" title="torchrl.modules.ProbabilisticTensorDictModule.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a> method will expect
 the params (and possibly) buffers keyword arguments.</p></li>
 <li><p><strong>dist_param_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>iterable of str</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – key(s) that will be produced
 by the inner TDModule and that will be used to build the distribution.
 Importantly, if it’s an iterable of string or a string, those keys must match the keywords used by the distribution
-class of interest, e.g. <cite>“loc”</cite> and <cite>“scale”</cite> for the Normal distribution
+class of interest, e.g. <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;loc&quot;</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;scale&quot;</span></code> for the Normal distribution
 and similar. If dist_param_keys is a dictionary,, the keys are the keys of the distribution and the values are the
 keys in the tensordict that will get match to the corresponding distribution keys.</p></li>
 <li><p><strong>out_key_sample</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>iterable of str</em>) – keys where the sampled values will be
-written. Importantly, if this key is part of the <cite>out_keys</cite> of the inner model,
+written. Importantly, if this key is part of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">out_keys</span></code> of the inner model,
 the sampling step will be skipped.</p></li>
 <li><p><strong>spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – specs of the first output tensor. Used when calling td_module.random() to generate random
 values in the target space.</p></li>
 <li><p><strong>safe</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the value of the sample is checked against the input spec. Out-of-domain sampling can
-occur because of exploration policies or numerical under/overflow issues. As for the <cite>spec</cite> argument,
+occur because of exploration policies or numerical under/overflow issues. As for the <code class="xref py py-obj docutils literal notranslate"><span class="pre">spec</span></code> argument,
 this check will only occur for the distribution sample, but not the other tensors returned by the input
 module. If the sample is out of bounds, it is projected back onto the desired space using the
 <cite>TensorSpec.project</cite>
 method.
-Default is <cite>False</cite>.</p></li>
+Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
 <li><p><strong>default_interaction_mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – default method to be used to retrieve the output value. Should be one of:
 ‘mode’, ‘median’, ‘mean’ or ‘random’ (in which case the value is sampled randomly from the distribution).
 Default is ‘mode’.
-Note: When a sample is drawn, the <cite>ProbabilisticTDModule</cite> instance will fist look for the interaction mode
+Note: When a sample is drawn, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">ProbabilisticTDModule</span></code> instance will fist look for the interaction mode
 dictated by the <cite>exploration_mode()</cite> global function. If this returns <cite>None</cite> (its default value),
 then the <cite>default_interaction_mode</cite> of the <cite>ProbabilisticTDModule</cite> instance will be used.
 Note that DataCollector instances will use <cite>set_exploration_mode</cite> to <cite>“random”</cite> by default.</p></li>
@@ -450,8 +450,8 @@ registered hooks while the latter silently ignores them.</p>
 <dl class="py method">
 <dt id="torchrl.modules.ProbabilisticTensorDictModule.make_functional_with_buffers">
 <code class="sig-name descname"><span class="pre">make_functional_with_buffers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">native</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ProbabilisticTensorDictModule.make_functional_with_buffers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transforms a stateful module in a functional module and returns its parameters and buffers.
-Unlike functorch.make_functional_with_buffers, this method supports lazy modules.</p>
+<dd><p>Transforms a stateful module in a functional module and returns its parameters and buffers.</p>
+<p>Unlike functorch.make_functional_with_buffers, this method supports lazy modules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

@@ -347,9 +347,8 @@ default: 1.0</p></li>
 <dl class="py method">
 <dt id="torchrl.objectives.ClipPPOLoss.forward">
 <code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.objectives.ClipPPOLoss.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>It is designed to read an input TensorDict and return another tensordict
-with loss keys named “loss*”.
-Splitting the loss in its component can then be used by the trainer to log the various loss values throughout
+<dd><p>It is designed to read an input TensorDict and return another tensordict with loss keys named “loss*”.</p>
+<p>Splitting the loss in its component can then be used by the trainer to log the various loss values throughout
 training. Other scalars present in the output tensordict will be logged too.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

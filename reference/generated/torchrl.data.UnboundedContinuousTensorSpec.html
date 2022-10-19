@@ -329,8 +329,7 @@
 <dl class="py method">
 <dt id="torchrl.data.UnboundedContinuousTensorSpec.assert_is_in">
 <code class="sig-name descname"><span class="pre">assert_is_in</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a><a class="headerlink" href="#torchrl.data.UnboundedContinuousTensorSpec.assert_is_in" title="Permalink to this definition">¶</a></dt>
-<dd><p>Asserts whether a tensor belongs to the box, and raises an
-exception otherwise.</p>
+<dd><p>Asserts whether a tensor belongs to the box, and raises an exception otherwise.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><em>torch.Tensor</em></a>) – value to be checked.</p>
@@ -341,8 +340,7 @@ exception otherwise.</p>
 <dl class="py method">
 <dt id="torchrl.data.UnboundedContinuousTensorSpec.encode">
 <code class="sig-name descname"><span class="pre">encode</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><a class="headerlink" href="#torchrl.data.UnboundedContinuousTensorSpec.encode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Encodes a value given the specified spec, and return the
-corresponding tensor.</p>
+<dd><p>Encodes a value given the specified spec, and return the corresponding tensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>val</strong> (<em>np.ndarray</em><em> or </em><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><em>torch.Tensor</em></a>) – value to be encoded as tensor.</p>
@@ -356,7 +354,7 @@ corresponding tensor.</p>
 <dl class="py method">
 <dt id="torchrl.data.UnboundedContinuousTensorSpec.index">
 <em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">index</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.23)"><span class="pre">numpy.ndarray</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><span class="pre">slice</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">List</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensor_to_index</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><a class="headerlink" href="#torchrl.data.UnboundedContinuousTensorSpec.index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Indexes the input tensor</p>
+<dd><p>Indexes the input tensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -373,8 +371,7 @@ corresponding tensor.</p>
 <dl class="py method">
 <dt id="torchrl.data.UnboundedContinuousTensorSpec.is_in">
 <code class="sig-name descname"><span class="pre">is_in</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a><a class="headerlink" href="#torchrl.data.UnboundedContinuousTensorSpec.is_in" title="Permalink to this definition">¶</a></dt>
-<dd><p>If the value <cite>val</cite> is in the box defined by the TensorSpec,
-returns True, otherwise False.</p>
+<dd><p>If the value <code class="xref py py-obj docutils literal notranslate"><span class="pre">val</span></code> is in the box defined by the TensorSpec, returns True, otherwise False.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>val</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><em>torch.Tensor</em></a>) – value to be checked</p>
@@ -388,8 +385,7 @@ returns True, otherwise False.</p>
 <dl class="py method">
 <dt id="torchrl.data.UnboundedContinuousTensorSpec.project">
 <code class="sig-name descname"><span class="pre">project</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><a class="headerlink" href="#torchrl.data.UnboundedContinuousTensorSpec.project" title="Permalink to this definition">¶</a></dt>
-<dd><p>If the input tensor is not in the TensorSpec box, it maps it back
-to it given some heuristic.</p>
+<dd><p>If the input tensor is not in the TensorSpec box, it maps it back to it given some heuristic.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>val</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><em>torch.Tensor</em></a>) – tensor to be mapped to the box.</p>
@@ -403,8 +399,7 @@ to it given some heuristic.</p>
 <dl class="py method">
 <dt id="torchrl.data.UnboundedContinuousTensorSpec.rand">
 <code class="sig-name descname"><span class="pre">rand</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><a class="headerlink" href="#torchrl.data.UnboundedContinuousTensorSpec.rand" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a random tensor in the box. The sampling will be uniform
-unless the box is unbounded.</p>
+<dd><p>Returns a random tensor in the box. The sampling will be uniform unless the box is unbounded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>shape</strong> (<em>torch.Size</em>) – shape of the random tensor</p>
@@ -436,8 +431,7 @@ performed on the value against the domain of the spec.</p></li>
 <dl class="py method">
 <dt id="torchrl.data.UnboundedContinuousTensorSpec.type_check">
 <code class="sig-name descname"><span class="pre">type_check</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><span class="pre">None</span></a><a class="headerlink" href="#torchrl.data.UnboundedContinuousTensorSpec.type_check" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks the input value dtype against the TensorSpec dtype and
-raises an exception if they don’t match.</p>
+<dd><p>Checks the input value dtype against the TensorSpec dtype and raises an exception if they don’t match.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

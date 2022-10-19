@@ -321,7 +321,7 @@
 To keep the class as versatile as possible, Trainer does not construct any
 of its specific operations: they all must be hooked at specific points in
 the training loop.</p>
-<p>To build a Trainer, one needs an iterable data source (a <cite>collector</cite>), a
+<p>To build a Trainer, one needs an iterable data source (a <code class="xref py py-obj docutils literal notranslate"><span class="pre">collector</span></code>), a
 loss module and an optimizer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -344,12 +344,12 @@ Default is 500</p></li>
 <li><p><strong>clip_grad_norm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, the gradients will be clipped
 based on the total norm of the model parameters. If False,
 all the partial derivatives will be clamped to
-(-clip_norm, clip_norm). Default is <cite>True</cite>.</p></li>
+(-clip_norm, clip_norm). Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>.</p></li>
 <li><p><strong>clip_norm</strong> (<em>Number</em><em>, </em><em>optional</em>) – value to be used for clipping gradients.
 Default is 100.0.</p></li>
 <li><p><strong>progress_bar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – If True, a progress bar will be
 displayed using tqdm. If tqdm is not installed, this option
-won’t have any effect. Default is <cite>True</cite></p></li>
+won’t have any effect. Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a></p></li>
 <li><p><strong>seed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – Seed to be used for the collector, pytorch and
 numpy. Default is 42.</p></li>
 <li><p><strong>save_trainer_interval</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – How often the trainer should be

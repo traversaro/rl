@@ -316,8 +316,9 @@
 <dl class="py function">
 <dt id="torchrl.collectors.utils.split_trajectories">
 <code class="sig-prename descclassname"><span class="pre">torchrl.collectors.utils.</span></code><code class="sig-name descname"><span class="pre">split_trajectories</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rollout_tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.collectors.utils.split_trajectories" title="Permalink to this definition">¶</a></dt>
-<dd><p>Takes a tensordict with a key traj_ids that indicates the id of each trajectory.
-From there, builds a B x T x … zero-padded tensordict with B batches on max duration T</p>
+<dd><p>A util function for trajectory separation.</p>
+<p>Takes a tensordict with a key traj_ids that indicates the id of each trajectory.</p>
+<p>From there, builds a B x T x … zero-padded tensordict with B batches on max duration T</p>
 </dd></dl>
 
 </div>

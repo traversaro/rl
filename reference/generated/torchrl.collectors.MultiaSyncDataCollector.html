@@ -316,12 +316,11 @@
 <dl class="py class">
 <dt id="torchrl.collectors.MultiaSyncDataCollector">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.collectors.</span></code><code class="sig-name descname"><span class="pre">MultiaSyncDataCollector</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.collectors.MultiaSyncDataCollector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runs a given number of DataCollectors on separate processes
-asynchronously.</p>
+<dd><p>Runs a given number of DataCollectors on separate processes asynchronously.</p>
 <p>The collection keeps on occuring on all processes even between the time
 the batch of rollouts is collected and the next call to the iterator.
-This class can be safely used with offline RL algorithms.
-Runs a given number of DataCollectors on separate processes.</p>
+This class can be safely used with offline RL algorithms.</p>
+<p>Runs a given number of DataCollectors on separate processes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -431,8 +430,8 @@ environment.</p>
 <dl class="py method">
 <dt id="torchrl.collectors.MultiaSyncDataCollector.state_dict">
 <code class="sig-name descname"><span class="pre">state_dict</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="(in Python v3.10)"><span class="pre">collections.OrderedDict</span></a><a class="headerlink" href="#torchrl.collectors.MultiaSyncDataCollector.state_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the state_dict of the data collector.
-Each field represents a worker containing its own state_dict.</p>
+<dd><p>Returns the state_dict of the data collector.</p>
+<p>Each field represents a worker containing its own state_dict.</p>
 </dd></dl>
 
 <dl class="py method">

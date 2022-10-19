@@ -316,13 +316,13 @@
 <dl class="py class">
 <dt id="torchrl.envs.transforms.TransformedEnv">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></code><code class="sig-name descname"><span class="pre">TransformedEnv</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_inplace_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_batch_locked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv" title="Permalink to this definition">¶</a></dt>
-<dd><p>A transformed environment.</p>
+<dd><p>A transformed_in environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>env</strong> (<a class="reference internal" href="torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.EnvBase"><em>EnvBase</em></a>) – original environment to be transformed_in.</p></li>
 <li><p><strong>transform</strong> (<a class="reference internal" href="torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform" title="torchrl.envs.transforms.Transform"><em>Transform</em></a><em>, </em><em>optional</em>) – transform to apply to the tensordict resulting
-from <cite>env.step(td)</cite>. If none is provided, an empty Compose
+from <code class="xref py py-obj docutils literal notranslate"><span class="pre">env.step(td)</span></code>. If none is provided, an empty Compose
 placeholder in an eval mode is used.</p></li>
 <li><p><strong>cache_specs</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the specs will be cached once
 and for all after the first call (i.e. the specs will be
@@ -342,14 +342,14 @@ in which case this value should be set  to <cite>False</cite>. Default is
 <dl class="py method">
 <dt id="torchrl.envs.transforms.TransformedEnv.action_spec">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">action_spec</span></code><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv.action_spec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Action spec of the transformed environment</p>
+<dd><p>Action spec of the transformed environment.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.envs.transforms.TransformedEnv.batch_locked">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">batch_locked</span></code><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv.batch_locked" title="Permalink to this definition">¶</a></dt>
-<dd><p>Whether the environnement can be used with a batch size different from the one it was initialized with or not.
-If True, the env needs to be used with a tensordict having the same batch size as the env.
+<dd><p>Whether the environnement can be used with a batch size different from the one it was initialized with or not.</p>
+<p>If True, the env needs to be used with a tensordict having the same batch size as the env.
 batch_locked is an immutable property.</p>
 </dd></dl>
 
@@ -377,7 +377,7 @@ etc.</p>
 <dl class="py method">
 <dt id="torchrl.envs.transforms.TransformedEnv.input_spec">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">input_spec</span></code><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv.input_spec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Action spec of the transformed environment</p>
+<dd><p>Action spec of the transformed environment.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -419,19 +419,19 @@ exists in <a class="reference internal" href="#torchrl.envs.transforms.Transform
 <dl class="py method">
 <dt id="torchrl.envs.transforms.TransformedEnv.observation_spec">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">observation_spec</span></code><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv.observation_spec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Observation spec of the transformed environment</p>
+<dd><p>Observation spec of the transformed environment.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.envs.transforms.TransformedEnv.reward_spec">
 <em class="property"><span class="pre">property</span> </em><code class="sig-name descname"><span class="pre">reward_spec</span></code><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv.reward_spec" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reward spec of the transformed environment</p>
+<dd><p>Reward spec of the transformed environment.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="torchrl.envs.transforms.TransformedEnv.set_seed">
 <code class="sig-name descname"><span class="pre">set_seed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_seed</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv.set_seed" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the seeds of the environment</p>
+<dd><p>Set the seeds of the environment.</p>
 </dd></dl>
 
 <dl class="py method">

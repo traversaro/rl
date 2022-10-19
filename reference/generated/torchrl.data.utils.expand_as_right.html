@@ -316,12 +316,16 @@
 <dl class="py class">
 <dt id="torchrl.data.utils.expand_as_right">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.data.utils.</span></code><code class="sig-name descname"><span class="pre">expand_as_right</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">MemmapTensor</span><span class="p"><span class="pre">,</span> </span><span class="pre">TensorDictBase</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">MemmapTensor</span><span class="p"><span class="pre">,</span> </span><span class="pre">TensorDictBase</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.data.utils.expand_as_right" title="Permalink to this definition">¶</a></dt>
-<dd><p>Expand a tensor on the right to match another tensor shape.
-:param tensor: tensor to be expanded
-:param dest: tensor providing the target shape</p>
+<dd><p>Expand a tensor on the right to match another tensor shape.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>a tensor with shape matching the dest input tensor shape.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tensor</strong> – tensor to be expanded</p></li>
+<li><p><strong>dest</strong> – tensor providing the target shape</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tensor with shape matching the dest input tensor shape.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
