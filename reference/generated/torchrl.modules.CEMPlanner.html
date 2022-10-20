@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>get_stats_random_rollout &mdash; torchrl main documentation</title>
+  <title>CEMPlanner &mdash; torchrl main documentation</title>
   
 
   
@@ -33,7 +33,8 @@
   <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="correct_for_frame_skip" href="torchrl.trainers.helpers.correct_for_frame_skip.html" />
+    <link rel="next" title="MPCPlannerBase" href="torchrl.modules.MPCPlannerBase.html" />
+    <link rel="prev" title="reset_noise" href="torchrl.modules.reset_noise.html" />
   <!-- Google Analytics -->
   
   <!-- End Google Analytics -->
@@ -276,15 +277,15 @@
         
           <li><a href="../index.html">API Reference</a> &gt;</li>
         
-          <li><a href="../trainers.html">torchrl.trainers package</a> &gt;</li>
+          <li><a href="../modules.html">torchrl.modules package</a> &gt;</li>
         
-      <li>get_stats_random_rollout</li>
+      <li>CEMPlanner</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="../../_sources/reference/generated/torchrl.trainers.helpers.get_stats_random_rollout.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl.modules.CEMPlanner.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -310,25 +311,108 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <div class="section" id="get-stats-random-rollout">
-<h1>get_stats_random_rollout<a class="headerlink" href="#get-stats-random-rollout" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="torchrl.trainers.helpers.get_stats_random_rollout">
-<code class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></code><code class="sig-name descname"><span class="pre">get_stats_random_rollout</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof_environment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.envs.common.EnvBase</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.trainers.helpers.get_stats_random_rollout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gathers stas (loc and scale) from an environment using random rollouts.</p>
+  <div class="section" id="cemplanner">
+<h1>CEMPlanner<a class="headerlink" href="#cemplanner" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="torchrl.modules.CEMPlanner">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">CEMPlanner</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.envs.common.EnvBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planning_horizon</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">optim_steps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_candidates</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_top_k_candidates</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">reward_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'reward'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action_key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'action'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.CEMPlanner" title="Permalink to this definition">¶</a></dt>
+<dd><p>CEMPlanner Module.</p>
+<p>Reference: The cross-entropy method for optimization, Botev et al. 2013</p>
+<p>This module will perform a CEM planning step when given a TensorDict
+containing initial states.
+The CEM planning step is performed by sampling actions from a Gaussian
+distribution with zero mean and unit variance.
+The sampled actions are then used to perform a rollout in the environment.
+The cumulative rewards obtained with the rollout is then
+ranked. We select the top-k episodes and use their actions to update the
+mean and standard deviation of the actions distribution.
+The CEM planning step is repeated for a specified number of steps.</p>
+<p>A call to the module returns the actions that empirically maximised the
+returns given a planning horizon</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cfg</strong> (<em>DictConfig</em>) – a config object with <cite>init_env_steps</cite> field, indicating
-the total number of frames to be collected to compute the stats.</p></li>
-<li><p><strong>proof_environment</strong> (<em>EnvBase instance</em><em>, </em><em>optional</em>) – if provided, this env will
-be used ot execute the rollouts. If not, it will be created using
-the cfg object.</p></li>
-<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – if provided, the stats of this key will be gathered.
-If not, it is expected that only one key exists in <cite>env.observation_spec</cite>.</p></li>
+<li><p><strong>env</strong> (<a class="reference internal" href="torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.EnvBase"><em>EnvBase</em></a>) – The environment to perform the planning step on (can be
+<cite>ModelBasedEnv</cite> or <code class="xref py py-obj docutils literal notranslate"><span class="pre">EnvBase</span></code>).</p></li>
+<li><p><strong>planning_horizon</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The length of the simulated trajectories</p></li>
+<li><p><strong>optim_steps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of optimization steps used by the MPC
+planner</p></li>
+<li><p><strong>num_candidates</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of candidates to sample from the
+Gaussian distributions.</p></li>
+<li><p><strong>num_top_k_candidates</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – The number of top candidates to use to
+update the mean and standard deviation of the Gaussian distribution.</p></li>
+<li><p><strong>reward_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The key in the TensorDict to use to
+retrieve the reward. Defaults to “reward”.</p></li>
+<li><p><strong>action_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – The key in the TensorDict to use to store
+the action. Defaults to “action”</p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">CompositeSpec</span><span class="p">,</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">,</span> <span class="n">TensorDict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.envs.model_based</span> <span class="kn">import</span> <span class="n">ModelBasedEnvBase</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyMBEnv</span><span class="p">(</span><span class="n">ModelBasedEnvBase</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">world_model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">world_model</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">observation_spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">(</span>
+<span class="gp">... </span>            <span class="n">next_hidden_observation</span><span class="o">=</span><span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">((</span><span class="mi">4</span><span class="p">,))</span>
+<span class="gp">... </span>        <span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">input_spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">(</span>
+<span class="gp">... </span>            <span class="n">hidden_observation</span><span class="o">=</span><span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">((</span><span class="mi">4</span><span class="p">,)),</span>
+<span class="gp">... </span>            <span class="n">action</span><span class="o">=</span><span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">((</span><span class="mi">1</span><span class="p">,)),</span>
+<span class="gp">... </span>        <span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">reward_spec</span> <span class="o">=</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">((</span><span class="mi">1</span><span class="p">,))</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDict</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">tensordict</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({},</span>
+<span class="gp">... </span>            <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">)</span>
+<span class="gp">... </span>        <span class="n">tensordict</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_spec</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="n">tensordict</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_spec</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">tensordict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">MLP</span><span class="p">,</span> <span class="n">WorldModelWrapper</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">world_model</span> <span class="o">=</span> <span class="n">WorldModelWrapper</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">TensorDictModule</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">MLP</span><span class="p">(</span><span class="n">out_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">activation_class</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="n">activate_last_layer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hidden_observation&quot;</span><span class="p">,</span> <span class="s2">&quot;action&quot;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;next_hidden_observation&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">),</span>
+<span class="gp">... </span>    <span class="n">TensorDictModule</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+<span class="gp">... </span>        <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hidden_observation&quot;</span><span class="p">],</span>
+<span class="gp">... </span>        <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">MyMBEnv</span><span class="p">(</span><span class="n">world_model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Build a planner and use it as actor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">planner</span> <span class="o">=</span> <span class="n">CEMPlanner</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span><span class="o">.</span><span class="n">rollout</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">planner</span><span class="p">)</span>
+<span class="go">TensorDict(</span>
+<span class="go">    fields={</span>
+<span class="go">        action: Tensor(torch.Size([5, 1]), dtype=torch.float32),</span>
+<span class="go">        done: Tensor(torch.Size([5, 1]), dtype=torch.bool),</span>
+<span class="go">        hidden_observation: Tensor(torch.Size([5, 4]), dtype=torch.float32),</span>
+<span class="go">        next_hidden_observation: Tensor(torch.Size([5, 4]), dtype=torch.float32),</span>
+<span class="go">        reward: Tensor(torch.Size([5, 1]), dtype=torch.float32)},</span>
+<span class="go">    batch_size=torch.Size([5]),</span>
+<span class="go">    device=cpu,</span>
+<span class="go">    is_shared=False)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="torchrl.modules.CEMPlanner.planning">
+<code class="sig-name descname"><span class="pre">planning</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><span class="pre">torch.Tensor</span></a><a class="headerlink" href="#torchrl.modules.CEMPlanner.planning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs the MPC planning step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>td</strong> (<a class="reference internal" href="torchrl.data.TensorDict.html#torchrl.data.TensorDict" title="torchrl.data.TensorDict"><em>TensorDict</em></a>) – The TensorDict to perform the planning step on.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -341,8 +425,10 @@ If not, it is expected that only one key exists in <cite>env.observation_spec</c
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="torchrl.modules.MPCPlannerBase.html" class="btn btn-neutral float-right" title="MPCPlannerBase" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
-        <a href="torchrl.trainers.helpers.correct_for_frame_skip.html" class="btn btn-neutral" title="correct_for_frame_skip" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+      
+        <a href="torchrl.modules.reset_noise.html" class="btn btn-neutral" title="reset_noise" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -374,7 +460,7 @@ If not, it is expected that only one key exists in <cite>env.observation_spec</c
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">get_stats_random_rollout</a></li>
+<li><a class="reference internal" href="#">CEMPlanner</a></li>
 </ul>
 
             </div>
