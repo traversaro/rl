@@ -326,7 +326,7 @@ the params (and possibly) buffers keyword arguments.</p></li>
 <li><p><strong>in_keys</strong> (<em>iterable of str</em>) – keys to be read from input tensordict and passed to the module. If it
 contains more than one element, the values will be passed in the order given by the in_keys iterable.</p></li>
 <li><p><strong>out_keys</strong> (<em>iterable of str</em>) – keys to be written to the input tensordict. The length of out_keys must match the
-number of tensors returned by the embedded module.</p></li>
+number of tensors returned by the embedded module. Using “_” as a key avoid writing tensor to output.</p></li>
 <li><p><strong>spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – specs of the output tensor. If the module outputs multiple output tensors,
 spec characterize the space of the first output tensor.</p></li>
 <li><p><strong>safe</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True, the value of the output is checked against the input spec. Out-of-domain sampling can
