@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Welcome to the TorchRL Documentation! &mdash; torchrl main documentation</title>
+  <title>RandomSampler &mdash; torchrl main documentation</title>
   
 
   
@@ -25,31 +25,32 @@
 
   
 
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!-- <link rel="stylesheet" href="_static/pygments.css" type="text/css" /> -->
-  <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
-  <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
-  <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
-  <link rel="stylesheet" href="_static/sg_gallery-rendered-html.css" type="text/css" />
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API Reference" href="reference/index.html" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!-- <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="PrioritizedSampler" href="torchrl.data.replay_buffers.samplers.PrioritizedSampler.html" />
+    <link rel="prev" title="Sampler" href="torchrl.data.replay_buffers.samplers.Sampler.html" />
   <!-- Google Analytics -->
   
   <!-- End Google Analytics -->
   
 
   
-  <script src="_static/js/modernizr.min.js"></script>
+  <script src="../../_static/js/modernizr.min.js"></script>
 
   <!-- Preload the theme fonts -->
 
-<link rel="preload" href="_static/fonts/FreightSans/freight-sans-book.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-<link rel="preload" href="_static/fonts/FreightSans/freight-sans-medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-<link rel="preload" href="_static/fonts/IBMPlexMono/IBMPlexMono-Medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-<link rel="preload" href="_static/fonts/FreightSans/freight-sans-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-<link rel="preload" href="_static/fonts/FreightSans/freight-sans-medium-italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-<link rel="preload" href="_static/fonts/IBMPlexMono/IBMPlexMono-SemiBold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../../_static/fonts/FreightSans/freight-sans-book.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../../_static/fonts/FreightSans/freight-sans-medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../../_static/fonts/IBMPlexMono/IBMPlexMono-Medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../../_static/fonts/FreightSans/freight-sans-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../../_static/fonts/FreightSans/freight-sans-medium-italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="../../_static/fonts/IBMPlexMono/IBMPlexMono-SemiBold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 
 <!-- Preload the katex fonts -->
 
@@ -216,7 +217,7 @@
 
 
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search Docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -232,8 +233,8 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="reference/index.html">API Reference</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
 </ul>
 
             
@@ -266,7 +267,7 @@
   <ul class="pytorch-breadcrumbs">
     
       <li>
-        <a href="#">
+        <a href="../../index.html">
           
             Docs
           
@@ -274,13 +275,17 @@
       </li>
 
         
-      <li>Welcome to the TorchRL Documentation!</li>
+          <li><a href="../index.html">API Reference</a> &gt;</li>
+        
+          <li><a href="../data.html">torchrl.data package</a> &gt;</li>
+        
+      <li>RandomSampler</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"><img src="_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl.data.replay_buffers.samplers.RandomSampler.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -306,87 +311,14 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <div class="section" id="welcome-to-the-torchrl-documentation">
-<h1>Welcome to the TorchRL Documentation!<a class="headerlink" href="#welcome-to-the-torchrl-documentation" title="Permalink to this headline">¶</a></h1>
-<p>TorchRL is an open-source Reinforcement Learning (RL) library for PyTorch.</p>
-<p>It provides pytorch and python-first, low and high level abstractions for RL that are intended to be efficient, modular, documented and properly tested.
-The code is aimed at supporting research in RL. Most of it is written in python in a highly modular way, such that researchers can easily swap components, transform them or write new ones with little effort.</p>
-<p>This repo attempts to align with the existing pytorch ecosystem libraries in that it has a “dataset pillar”
-<a class="reference internal" href="reference/envs.html"><span class="doc">(environments)</span></a>,
-<span class="xref std std-ref">transforms</span>,
-<a class="reference internal" href="reference/modules.html"><span class="doc">models</span></a>,
-data utilities (e.g. collectors and containers), etc.
-TorchRL aims at having as few dependencies as possible (python standard library, numpy and pytorch).
-Common environment libraries (e.g. OpenAI gym) are only optional.</p>
-<p>On the low-level end, torchrl comes with a set of highly re-usable functionals
-for <a class="reference internal" href="reference/objectives.html"><span class="doc">cost functions</span></a>, <span class="xref std std-ref">returns</span> and data processing.</p>
-<p>TorchRL aims at a high modularity and good runtime performance.</p>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="reference/index.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="reference/collectors.html">torchrl.collectors package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="reference/collectors.html#data-collectors">Data collectors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/collectors.html#helper-functions">Helper functions</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="reference/data.html">torchrl.data package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="reference/data.html#replay-buffers">Replay Buffers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/data.html#composable-replay-buffers-prototype">Composable Replay Buffers (Prototype)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/data.html#tensordict">TensorDict</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/data.html#tensorspec">TensorSpec</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/data.html#utils">Utils</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="reference/envs.html">torchrl.envs package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="reference/generated/torchrl.envs.EnvBase.html">EnvBase</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/generated/torchrl.envs.GymLikeEnv.html">GymLikeEnv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/generated/torchrl.envs.SerialEnv.html">SerialEnv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/generated/torchrl.envs.ParallelEnv.html">ParallelEnv</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/envs.html#helpers">Helpers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/envs.html#domain-specific">Domain-specific</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/envs.html#libraries">Libraries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/envs.html#transforms">Transforms</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="reference/modules.html">torchrl.modules package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="reference/modules.html#tensordict-modules">TensorDict modules</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/modules.html#hooks">Hooks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/modules.html#models">Models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/modules.html#exploration">Exploration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/modules.html#planners">Planners</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/modules.html#distributions">Distributions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/modules.html#utils">Utils</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="reference/objectives.html">torchrl.objectives package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="reference/objectives.html#dqn">DQN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/objectives.html#ddpg">DDPG</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/objectives.html#sac">SAC</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/objectives.html#redq">REDQ</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/objectives.html#ppo">PPO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/objectives.html#returns">Returns</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/objectives.html#utils">Utils</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="reference/trainers.html">torchrl.trainers package</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="reference/trainers.html#trainer-and-hooks">Trainer and hooks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/trainers.html#builders">Builders</a></li>
-<li class="toctree-l3"><a class="reference internal" href="reference/trainers.html#utils">Utils</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
+  <div class="section" id="randomsampler">
+<h1>RandomSampler<a class="headerlink" href="#randomsampler" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="torchrl.data.replay_buffers.samplers.RandomSampler">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.data.replay_buffers.samplers.</span></code><code class="sig-name descname"><span class="pre">RandomSampler</span></code><a class="headerlink" href="#torchrl.data.replay_buffers.samplers.RandomSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>A uniformly random sampler for composable replay buffers.</p>
+</dd></dl>
+
 </div>
 
 
@@ -397,8 +329,10 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="reference/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <img src="_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.data.replay_buffers.samplers.PrioritizedSampler.html" class="btn btn-neutral float-right" title="PrioritizedSampler" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
+      
+        <a href="torchrl.data.replay_buffers.samplers.Sampler.html" class="btn btn-neutral" title="Sampler" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -430,8 +364,7 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">Welcome to the TorchRL Documentation!</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference internal" href="#">RandomSampler</a></li>
 </ul>
 
             </div>
@@ -446,18 +379,18 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
   
 
      
-       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-         <script src="_static/jquery.js"></script>
-         <script src="_static/underscore.js"></script>
-         <script src="_static/doctools.js"></script>
+       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+         <script src="../../_static/jquery.js"></script>
+         <script src="../../_static/underscore.js"></script>
+         <script src="../../_static/doctools.js"></script>
      
 
   
 
-  <script type="text/javascript" src="_static/js/vendor/popper.min.js"></script>
-  <script type="text/javascript" src="_static/js/vendor/bootstrap.min.js"></script>
+  <script type="text/javascript" src="../../_static/js/vendor/popper.min.js"></script>
+  <script type="text/javascript" src="../../_static/js/vendor/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
-  <script type="text/javascript" src="_static/js/theme.js"></script>
+  <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
   <script type="text/javascript">
       jQuery(function () {
@@ -562,7 +495,7 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
   <div class="cookie-banner-wrapper">
   <div class="container">
     <p class="gdpr-notice">To analyze traffic and optimize your experience, we serve cookies on this site. By clicking or navigating, you agree to allow our usage of cookies. As the current maintainers of this site, Facebook’s Cookies Policy applies. Learn more, including about available controls: <a href="https://www.facebook.com/policies/cookies/">Cookies Policy</a>.</p>
-    <img class="close-button" src="_static/images/pytorch-x.svg">
+    <img class="close-button" src="../../_static/images/pytorch-x.svg">
   </div>
 </div>
 
@@ -698,7 +631,7 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
 
   <!-- End Mobile Menu -->
 
-  <script type="text/javascript" src="_static/js/vendor/anchor.min.js"></script>
+  <script type="text/javascript" src="../../_static/js/vendor/anchor.min.js"></script>
 
   <script type="text/javascript">
     $(document).ready(function() {
