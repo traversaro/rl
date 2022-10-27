@@ -315,7 +315,7 @@
 <h1>UpdateWeights<a class="headerlink" href="#updateweights" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="torchrl.trainers.UpdateWeights">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.trainers.</span></code><code class="sig-name descname"><span class="pre">UpdateWeights</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collector</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.collectors.collectors._DataCollector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_weights_interval</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.trainers.UpdateWeights" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.trainers.</span></code><code class="sig-name descname"><span class="pre">UpdateWeights</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">collector</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.collectors.collectors._DataCollector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_weights_interval</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.trainers.UpdateWeights" title="Permalink to this definition">¶</a></dt>
 <dd><p>A collector weights update hook class.</p>
 <p>This hook must be used whenever the collector policy weights sit on a
 different device than the policy weights being trained by the Trainer.
@@ -326,7 +326,7 @@ intervals. If the devices match, this will result in a no-op.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>collector</strong> (<em>_DataCollector</em>) – A data collector where the policy weights
 must be synced.</p></li>
-<li><p><strong>update_weights_interval</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Interval (in terms of number of batches
+<li><p><strong>update_weights_interval</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Interval (in terms of number of batches
 collected) where the sync must take place.</p></li>
 </ul>
 </dd>

@@ -342,25 +342,25 @@ a deterministic mapping function.</p>
 <li><p><strong>module</strong> (<em>nn.Module</em>) – a nn.Module used to map the input to the output parameter space. Can be a functional
 module (FunctionalModule or FunctionalModuleWithBuffers), in which case the <a class="reference internal" href="#torchrl.modules.ProbabilisticTensorDictModule.forward" title="torchrl.modules.ProbabilisticTensorDictModule.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a> method will expect
 the params (and possibly) buffers keyword arguments.</p></li>
-<li><p><strong>dist_in_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>iterable of str</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – key(s) that will be produced
+<li><p><strong>dist_in_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>iterable of str</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – key(s) that will be produced
 by the inner TDModule and that will be used to build the distribution.
 Importantly, if it’s an iterable of string or a string, those keys must match the keywords used by the distribution
 class of interest, e.g. <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;loc&quot;</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;scale&quot;</span></code> for the Normal distribution
 and similar. If dist_in_keys is a dictionary,, the keys are the keys of the distribution and the values are the
 keys in the tensordict that will get match to the corresponding distribution keys.</p></li>
-<li><p><strong>sample_out_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em> or </em><em>iterable of str</em>) – keys where the sampled values will be
+<li><p><strong>sample_out_key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>iterable of str</em>) – keys where the sampled values will be
 written. Importantly, if this key is part of the <code class="xref py py-obj docutils literal notranslate"><span class="pre">out_keys</span></code> of the inner model,
 the sampling step will be skipped.</p></li>
 <li><p><strong>spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – specs of the first output tensor. Used when calling td_module.random() to generate random
 values in the target space.</p></li>
-<li><p><strong>safe</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the value of the sample is checked against the input spec. Out-of-domain sampling can
+<li><p><strong>safe</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the value of the sample is checked against the input spec. Out-of-domain sampling can
 occur because of exploration policies or numerical under/overflow issues. As for the <code class="xref py py-obj docutils literal notranslate"><span class="pre">spec</span></code> argument,
 this check will only occur for the distribution sample, but not the other tensors returned by the input
 module. If the sample is out of bounds, it is projected back onto the desired space using the
 <cite>TensorSpec.project</cite>
 method.
-Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
-<li><p><strong>default_interaction_mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>, </em><em>optional</em>) – default method to be used to retrieve the output value. Should be one of:
+Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
+<li><p><strong>default_interaction_mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – default method to be used to retrieve the output value. Should be one of:
 ‘mode’, ‘median’, ‘mean’ or ‘random’ (in which case the value is sampled randomly from the distribution).
 Default is ‘mode’.
 Note: When a sample is drawn, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">ProbabilisticTDModule</span></code> instance will fist look for the interaction mode
@@ -369,15 +369,15 @@ then the <cite>default_interaction_mode</cite> of the <cite>ProbabilisticTDModul
 Note that DataCollector instances will use <cite>set_exploration_mode</cite> to <cite>“random”</cite> by default.</p></li>
 <li><p><strong>distribution_class</strong> (<em>Type</em><em>, </em><em>optional</em>) – a torch.distributions.Distribution class to be used for sampling.
 Default is Delta.</p></li>
-<li><p><strong>distribution_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – kwargs to be passed to the distribution.</p></li>
-<li><p><strong>return_log_prob</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the log-probability of the distribution sample will be written in the
+<li><p><strong>distribution_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – kwargs to be passed to the distribution.</p></li>
+<li><p><strong>return_log_prob</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the log-probability of the distribution sample will be written in the
 tensordict with the key <cite>f’{in_keys[0]}_log_prob’</cite>. Default is <cite>False</cite>.</p></li>
-<li><p><strong>cache_dist</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – EXPERIMENTAL: if True, the parameters of the distribution (i.e. the output of the module)
+<li><p><strong>cache_dist</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – EXPERIMENTAL: if True, the parameters of the distribution (i.e. the output of the module)
 will be written to the tensordict along with the sample. Those parameters can be used to
 re-compute the original distribution later on (e.g. to compute the divergence between the distribution
 used to sample the action and the updated distribution in PPO).
 Default is <cite>False</cite>.</p></li>
-<li><p><strong>n_empirical_estimate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – number of samples to compute the empirical mean when it is not available.
+<li><p><strong>n_empirical_estimate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – number of samples to compute the empirical mean when it is not available.
 Default is 1000</p></li>
 </ul>
 </dd>
@@ -449,17 +449,17 @@ registered hooks while the latter silently ignores them.</p>
 
 <dl class="py method">
 <dt id="torchrl.modules.ProbabilisticTensorDictModule.make_functional_with_buffers">
-<code class="sig-name descname"><span class="pre">make_functional_with_buffers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">native</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ProbabilisticTensorDictModule.make_functional_with_buffers" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">make_functional_with_buffers</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clone</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">native</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ProbabilisticTensorDictModule.make_functional_with_buffers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms a stateful module in a functional module and returns its parameters and buffers.</p>
 <p>Unlike functorch.make_functional_with_buffers, this method supports lazy modules.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>clone</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, a clone of the module is created before it is returned.
+<li><p><strong>clone</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, a clone of the module is created before it is returned.
 This is useful as it prevents the original module to be scraped off of its
 parameters and buffers.
 Defaults to True</p></li>
-<li><p><strong>native</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, TorchRL’s functional modules will be used.
+<li><p><strong>native</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, TorchRL’s functional modules will be used.
 Defaults to True</p></li>
 </ul>
 </dd>

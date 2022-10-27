@@ -327,30 +327,30 @@ different cases (vectors, images, …)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>in_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – number of input features;</p></li>
-<li><p><strong>out_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>list of int</em>) – number of output features. If iterable of integers, the output is reshaped to
+<li><p><strong>in_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – number of input features;</p></li>
+<li><p><strong>out_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>list of int</em>) – number of output features. If iterable of integers, the output is reshaped to
 the desired shape;</p></li>
-<li><p><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – depth of the network. A depth of 0 will produce a single linear layer network with the
+<li><p><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – depth of the network. A depth of 0 will produce a single linear layer network with the
 desired input and output size. A length of 1 will create 2 linear layers etc. If no depth is indicated,
 the depth information should be contained in the num_cells argument (see below). If num_cells is an
 iterable and depth is indicated, both should match: len(num_cells) must be equal to depth.</p></li>
-<li><p><strong>num_cells</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em> or </em><em>Sequence</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – number of cells of every layer in between the input and output. If
+<li><p><strong>num_cells</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em> or </em><em>Sequence</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>]</em><em>, </em><em>optional</em>) – number of cells of every layer in between the input and output. If
 an integer is provided, every layer will have the same number of cells. If an iterable is provided,
 the linear layers out_features will match the content of num_cells.
 default: 32;</p></li>
 <li><p><strong>activation_class</strong> (<em>Type</em><em>[</em><em>nn.Module</em><em>]</em>) – activation class to be used.
 default: nn.Tanh</p></li>
-<li><p><strong>activation_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – kwargs to be used with the activation class;</p></li>
+<li><p><strong>activation_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – kwargs to be used with the activation class;</p></li>
 <li><p><strong>norm_class</strong> (<em>Type</em><em>, </em><em>optional</em>) – normalization class, if any.</p></li>
-<li><p><strong>norm_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – kwargs to be used with the normalization layers;</p></li>
-<li><p><strong>bias_last_layer</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True, the last Linear layer will have a bias parameter.
+<li><p><strong>norm_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – kwargs to be used with the normalization layers;</p></li>
+<li><p><strong>bias_last_layer</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True, the last Linear layer will have a bias parameter.
 default: True;</p></li>
-<li><p><strong>single_bias_last_layer</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – if True, the last dimension of the bias of the last layer will be a singleton
+<li><p><strong>single_bias_last_layer</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True, the last dimension of the bias of the last layer will be a singleton
 dimension.
 default: True;</p></li>
 <li><p><strong>layer_class</strong> (<em>Type</em><em>[</em><em>nn.Module</em><em>]</em>) – class to be used for the linear layers;</p></li>
-<li><p><strong>layer_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>, </em><em>optional</em>) – kwargs for the linear layers;</p></li>
-<li><p><strong>activate_last_layer</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – whether the MLP output should be activated. This is useful when the MLP output
+<li><p><strong>layer_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – kwargs for the linear layers;</p></li>
+<li><p><strong>activate_last_layer</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – whether the MLP output should be activated. This is useful when the MLP output
 is used as the input for another module.
 default: False.</p></li>
 <li><p><strong>device</strong> (<em>Optional</em><em>[</em><em>DEVICE_TYPING</em><em>]</em>) – device to create the module on.</p></li>
