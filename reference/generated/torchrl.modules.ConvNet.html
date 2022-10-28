@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>ConvNet &mdash; torchrl main documentation</title>
@@ -27,6 +28,8 @@
 
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!-- <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
@@ -232,9 +235,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
 </ul>
 
             
@@ -311,14 +315,14 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <div class="section" id="convnet">
-<h1>ConvNet<a class="headerlink" href="#convnet" title="Permalink to this headline">¶</a></h1>
+  <section id="convnet">
+<h1>ConvNet<a class="headerlink" href="#convnet" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt id="torchrl.modules.ConvNet">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">ConvNet</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_features:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">depth:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">num_cells:</span> <span class="pre">Optional[Union[Sequence,</span> <span class="pre">int]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">kernel_sizes:</span> <span class="pre">Union[Sequence[Union[int,</span> <span class="pre">Sequence[int]]],</span> <span class="pre">int]</span> <span class="pre">=</span> <span class="pre">3,</span> <span class="pre">strides:</span> <span class="pre">Union[Sequence,</span> <span class="pre">int]</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">paddings:</span> <span class="pre">Union[Sequence,</span> <span class="pre">int]</span> <span class="pre">=</span> <span class="pre">0,</span> <span class="pre">activation_class:</span> <span class="pre">Type[torch.nn.modules.module.Module]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torch.nn.modules.activation.ELU'&gt;,</span> <span class="pre">activation_kwargs:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">norm_class:</span> <span class="pre">Optional[Type[torch.nn.modules.module.Module]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">norm_kwargs:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">bias_last_layer:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">aggregator_class:</span> <span class="pre">Optional[Type[torch.nn.modules.module.Module]]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torchrl.modules.models.utils.SquashDims'&gt;,</span> <span class="pre">aggregator_kwargs:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">squeeze_output:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">device:</span> <span class="pre">Optional[Union[torch.device,</span> <span class="pre">str,</span> <span class="pre">int]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ConvNet" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.modules.ConvNet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></span><span class="sig-name descname"><span class="pre">ConvNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">in_features:</span> <span class="pre">~typing.Optional[int]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">depth:</span> <span class="pre">~typing.Optional[int]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">num_cells:</span> <span class="pre">~typing.Optional[~typing.Union[~typing.Sequence,</span> <span class="pre">int]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">kernel_sizes:</span> <span class="pre">~typing.Union[~typing.Sequence[~typing.Union[int,</span> <span class="pre">~typing.Sequence[int]]],</span> <span class="pre">int]</span> <span class="pre">=</span> <span class="pre">3,</span> <span class="pre">strides:</span> <span class="pre">~typing.Union[~typing.Sequence,</span> <span class="pre">int]</span> <span class="pre">=</span> <span class="pre">1,</span> <span class="pre">paddings:</span> <span class="pre">~typing.Union[~typing.Sequence,</span> <span class="pre">int]</span> <span class="pre">=</span> <span class="pre">0,</span> <span class="pre">activation_class:</span> <span class="pre">~typing.Type[~torch.nn.modules.module.Module]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torch.nn.modules.activation.ELU'&gt;,</span> <span class="pre">activation_kwargs:</span> <span class="pre">~typing.Optional[dict]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">norm_class:</span> <span class="pre">~typing.Optional[~typing.Type[~torch.nn.modules.module.Module]]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">norm_kwargs:</span> <span class="pre">~typing.Optional[dict]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">bias_last_layer:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True,</span> <span class="pre">aggregator_class:</span> <span class="pre">~typing.Optional[~typing.Type[~torch.nn.modules.module.Module]]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'torchrl.modules.models.utils.SquashDims'&gt;,</span> <span class="pre">aggregator_kwargs:</span> <span class="pre">~typing.Optional[dict]</span> <span class="pre">=</span> <span class="pre">None,</span> <span class="pre">squeeze_output:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False,</span> <span class="pre">device:</span> <span class="pre">~typing.Optional[~typing.Union[~torch.device,</span> <span class="pre">str,</span> <span class="pre">int]]</span> <span class="pre">=</span> <span class="pre">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ConvNet" title="Permalink to this definition">¶</a></dt>
 <dd><p>A convolutional neural network.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>in_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – number of input features;</p></li>
 <li><p><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – depth of the network. A depth of 1 will produce a single linear layer network with the
@@ -402,7 +406,7 @@ default: True.</p></li>
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
              </article>
@@ -447,7 +451,10 @@ default: True.</p></li>
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">ConvNet</a></li>
+<li><a class="reference internal" href="#">ConvNet</a><ul>
+<li><a class="reference internal" href="#torchrl.modules.ConvNet"><code class="docutils literal notranslate"><span class="pre">ConvNet</span></code></a></li>
+</ul>
+</li>
 </ul>
 
             </div>
@@ -463,9 +470,12 @@ default: True.</p></li>
 
      
        <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
          <script src="../../_static/jquery.js"></script>
          <script src="../../_static/underscore.js"></script>
+         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
          <script src="../../_static/doctools.js"></script>
+         <script src="../../_static/sphinx_highlight.js"></script>
      
 
   

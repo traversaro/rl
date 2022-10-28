@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>ModelBasedEnvBase &mdash; torchrl main documentation</title>
@@ -27,6 +28,8 @@
 
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!-- <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
@@ -232,9 +235,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
 </ul>
 
             
@@ -311,11 +315,11 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <div class="section" id="modelbasedenvbase">
-<h1>ModelBasedEnvBase<a class="headerlink" href="#modelbasedenvbase" title="Permalink to this headline">¶</a></h1>
+  <section id="modelbasedenvbase">
+<h1>ModelBasedEnvBase<a class="headerlink" href="#modelbasedenvbase" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
-<dt id="torchrl.envs.ModelBasedEnvBase">
-<code class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></code><code class="sig-name descname"><span class="pre">ModelBasedEnvBase</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.ModelBasedEnvBase" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.ModelBasedEnvBase">
+<span class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></span><span class="sig-name descname"><span class="pre">ModelBasedEnvBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.ModelBasedEnvBase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basic environnement for Model Based RL algorithms.</p>
 <p>Wrapper around the model of the MBRL algorithm.
 It is meant to give an env framework to a world model (including but not limited to observations, reward, done state and safety constraints models).
@@ -387,7 +391,7 @@ and to behave as a classical environment.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>world_model</strong> (<em>nn.Module</em>) – model that generates world states and its corresponding rewards;</p></li>
 <li><p><strong>params</strong> (<em>List</em><em>[</em><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.12)"><em>torch.Tensor</em></a><em>]</em><em>, </em><em>optional</em>) – list of parameters of the world model;</p></li>
@@ -400,39 +404,39 @@ and to behave as a classical environment.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="torchrl.envs.step">
-<code class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></code><code class="sig-name descname"><span class="pre">step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">TensorDict</span> <span class="pre">-&gt;</span> <span class="pre">TensorDict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.step" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.step">
+<span class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></span><span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TensorDict</span> <span class="pre">-&gt;</span> <span class="pre">TensorDict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.step" title="Permalink to this definition">¶</a></dt>
 <dd><p>step in the environment</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="torchrl.envs.reset">
-<code class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></code><code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">TensorDict</span></em>, <em class="sig-param"><span class="pre">optional</span> <span class="pre">-&gt;</span> <span class="pre">TensorDict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.reset" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.reset">
+<span class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></span><span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TensorDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional</span> <span class="pre">-&gt;</span> <span class="pre">TensorDict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>reset the environment</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="torchrl.envs.set_seed">
-<code class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></code><code class="sig-name descname"><span class="pre">set_seed</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">int</span> <span class="pre">-&gt;</span> <span class="pre">int</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.set_seed" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.set_seed">
+<span class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></span><span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">int</span> <span class="pre">-&gt;</span> <span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.set_seed" title="Permalink to this definition">¶</a></dt>
 <dd><p>sets the seed of the environment</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="torchrl.envs.rand_step">
-<code class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></code><code class="sig-name descname"><span class="pre">rand_step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">TensorDict</span></em>, <em class="sig-param"><span class="pre">optional</span> <span class="pre">-&gt;</span> <span class="pre">TensorDict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.rand_step" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.rand_step">
+<span class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></span><span class="sig-name descname"><span class="pre">rand_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">TensorDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optional</span> <span class="pre">-&gt;</span> <span class="pre">TensorDict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.rand_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>random step given the action spec</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="torchrl.envs.rollout">
-<code class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></code><code class="sig-name descname"><span class="pre">rollout</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">Callable</span></em>, <em class="sig-param"><span class="pre">...</span> <span class="pre">-&gt;</span> <span class="pre">TensorDict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.rollout" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.rollout">
+<span class="sig-prename descclassname"><span class="pre">torchrl.envs.</span></span><span class="sig-name descname"><span class="pre">rollout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">...</span> <span class="pre">-&gt;</span> <span class="pre">TensorDict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.rollout" title="Permalink to this definition">¶</a></dt>
 <dd><p>executes a rollout in the environment with the given policy (or random
 steps if no policy is provided)</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
              </article>
@@ -477,7 +481,15 @@ steps if no policy is provided)</p>
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">ModelBasedEnvBase</a></li>
+<li><a class="reference internal" href="#">ModelBasedEnvBase</a><ul>
+<li><a class="reference internal" href="#torchrl.envs.ModelBasedEnvBase"><code class="docutils literal notranslate"><span class="pre">ModelBasedEnvBase()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.step"><code class="docutils literal notranslate"><span class="pre">step()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.reset"><code class="docutils literal notranslate"><span class="pre">reset()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.set_seed"><code class="docutils literal notranslate"><span class="pre">set_seed()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.rand_step"><code class="docutils literal notranslate"><span class="pre">rand_step()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.rollout"><code class="docutils literal notranslate"><span class="pre">rollout()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
             </div>
@@ -493,9 +505,12 @@ steps if no policy is provided)</p>
 
      
        <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
          <script src="../../_static/jquery.js"></script>
          <script src="../../_static/underscore.js"></script>
+         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
          <script src="../../_static/doctools.js"></script>
+         <script src="../../_static/sphinx_highlight.js"></script>
      
 
   

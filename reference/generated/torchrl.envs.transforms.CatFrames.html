@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>CatFrames &mdash; torchrl main documentation</title>
@@ -27,6 +28,8 @@
 
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!-- <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
@@ -232,9 +235,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
 </ul>
 
             
@@ -311,11 +315,11 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <div class="section" id="catframes">
-<h1>CatFrames<a class="headerlink" href="#catframes" title="Permalink to this headline">¶</a></h1>
+  <section id="catframes">
+<h1>CatFrames<a class="headerlink" href="#catframes" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt id="torchrl.envs.transforms.CatFrames">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></code><code class="sig-name descname"><span class="pre">CatFrames</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_dim</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">-</span> <span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.transforms.CatFrames" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.transforms.CatFrames">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></span><span class="sig-name descname"><span class="pre">CatFrames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">N</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cat_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.transforms.CatFrames" title="Permalink to this definition">¶</a></dt>
 <dd><p>Concatenates successive observation frames into a single tensor.</p>
 <p>This can, for instance, account for movement/velocity of the observed
 feature. Proposed in “Playing Atari with Deep Reinforcement Learning” (
@@ -323,26 +327,40 @@ feature. Proposed in “Playing Atari with Deep Reinforcement Learning” (
 <p>CatFrames is a stateful class and it can be reset to its native state by
 calling the <cite>reset()</cite> method.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – number of observation to concatenate.
 Default is <cite>4</cite>.</p></li>
 <li><p><strong>cat_dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – dimension along which concatenate the
 observations. Default is <cite>cat_dim=-3</cite>.</p></li>
-<li><p><strong>keys_in</strong> (<em>list of int</em><em>, </em><em>optional</em>) – keys pointing to the frames that have
+<li><p><strong>keys_in</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> of </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – keys pointing to the frames that have
 to be concatenated.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="torchrl.envs.transforms.CatFrames.reset">
-<code class="sig-name descname"><span class="pre">reset</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.envs.transforms.CatFrames.reset" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.transforms.CatFrames.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="headerlink" href="#torchrl.envs.transforms.CatFrames.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets a tranform if it is stateful.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.CatFrames.transform_observation_spec">
+<span class="sig-name descname"><span class="pre">transform_observation_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation_spec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.transforms.CatFrames.transform_observation_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the observation spec such that the resulting spec matches transform mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>observation_spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – spec before the transform</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>expected spec after the transform</p>
+</dd>
+</dl>
 </dd></dl>
 
-</div>
+</dd></dl>
+
+</section>
 
 
              </article>
@@ -387,7 +405,14 @@ to be concatenated.</p></li>
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">CatFrames</a></li>
+<li><a class="reference internal" href="#">CatFrames</a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.CatFrames"><code class="docutils literal notranslate"><span class="pre">CatFrames</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.CatFrames.reset"><code class="docutils literal notranslate"><span class="pre">CatFrames.reset()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.CatFrames.transform_observation_spec"><code class="docutils literal notranslate"><span class="pre">CatFrames.transform_observation_spec()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             </div>
@@ -403,9 +428,12 @@ to be concatenated.</p></li>
 
      
        <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
          <script src="../../_static/jquery.js"></script>
          <script src="../../_static/underscore.js"></script>
+         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
          <script src="../../_static/doctools.js"></script>
+         <script src="../../_static/sphinx_highlight.js"></script>
      
 
   

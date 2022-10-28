@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>get_stats_random_rollout &mdash; torchrl main documentation</title>
@@ -27,12 +28,15 @@
 
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!-- <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Knowledge Base" href="../knowledge_base.html" />
     <link rel="prev" title="correct_for_frame_skip" href="torchrl.trainers.helpers.correct_for_frame_skip.html" />
   <!-- Google Analytics -->
   
@@ -231,9 +235,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
 </ul>
 
             
@@ -310,14 +315,14 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <div class="section" id="get-stats-random-rollout">
-<h1>get_stats_random_rollout<a class="headerlink" href="#get-stats-random-rollout" title="Permalink to this headline">¶</a></h1>
+  <section id="get-stats-random-rollout">
+<h1>get_stats_random_rollout<a class="headerlink" href="#get-stats-random-rollout" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
-<dt id="torchrl.trainers.helpers.get_stats_random_rollout">
-<code class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></code><code class="sig-name descname"><span class="pre">get_stats_random_rollout</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof_environment</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.envs.common.EnvBase</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.trainers.helpers.get_stats_random_rollout" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.trainers.helpers.get_stats_random_rollout">
+<span class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></span><span class="sig-name descname"><span class="pre">get_stats_random_rollout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof_environment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.common.EnvBase"><span class="pre">EnvBase</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.trainers.helpers.get_stats_random_rollout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gathers stas (loc and scale) from an environment using random rollouts.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cfg</strong> (<em>DictConfig</em>) – a config object with <cite>init_env_steps</cite> field, indicating
 the total number of frames to be collected to compute the stats.</p></li>
@@ -331,7 +336,7 @@ If not, it is expected that only one key exists in <cite>env.observation_spec</c
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
              </article>
@@ -340,6 +345,8 @@ If not, it is expected that only one key exists in <cite>env.observation_spec</c
             <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../knowledge_base.html" class="btn btn-neutral float-right" title="Knowledge Base" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
         <a href="torchrl.trainers.helpers.correct_for_frame_skip.html" class="btn btn-neutral" title="correct_for_frame_skip" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
@@ -374,7 +381,10 @@ If not, it is expected that only one key exists in <cite>env.observation_spec</c
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">get_stats_random_rollout</a></li>
+<li><a class="reference internal" href="#">get_stats_random_rollout</a><ul>
+<li><a class="reference internal" href="#torchrl.trainers.helpers.get_stats_random_rollout"><code class="docutils literal notranslate"><span class="pre">get_stats_random_rollout()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
             </div>
@@ -390,9 +400,12 @@ If not, it is expected that only one key exists in <cite>env.observation_spec</c
 
      
        <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
          <script src="../../_static/jquery.js"></script>
          <script src="../../_static/underscore.js"></script>
+         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
          <script src="../../_static/doctools.js"></script>
+         <script src="../../_static/sphinx_highlight.js"></script>
      
 
   

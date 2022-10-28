@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>ActorCriticWrapper &mdash; torchrl main documentation</title>
@@ -27,6 +28,8 @@
 
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!-- <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
@@ -232,9 +235,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
 </ul>
 
             
@@ -311,18 +315,18 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <div class="section" id="actorcriticwrapper">
-<h1>ActorCriticWrapper<a class="headerlink" href="#actorcriticwrapper" title="Permalink to this headline">¶</a></h1>
+  <section id="actorcriticwrapper">
+<h1>ActorCriticWrapper<a class="headerlink" href="#actorcriticwrapper" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt id="torchrl.modules.ActorCriticWrapper">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">ActorCriticWrapper</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy_operator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.modules.tensordict_module.common.TensorDictModule</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_operator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.modules.tensordict_module.common.TensorDictModule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ActorCriticWrapper" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.modules.ActorCriticWrapper">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></span><span class="sig-name descname"><span class="pre">ActorCriticWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.TensorDictModule.html#torchrl.modules.TensorDictModule" title="torchrl.modules.tensordict_module.common.TensorDictModule"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.TensorDictModule.html#torchrl.modules.TensorDictModule" title="torchrl.modules.tensordict_module.common.TensorDictModule"><span class="pre">TensorDictModule</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ActorCriticWrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Actor-value operator without common module.</p>
 <p>This class wraps together an actor and a value model that do not share a common observation embedding network:</p>
 <a class="reference internal image-reference" href="../../_images/aafig-530360b23a8da4be8c7676a491cea8c897fe953f.svg"><img alt="../../_images/aafig-530360b23a8da4be8c7676a491cea8c897fe953f.svg" height="190.8" src="../../_images/aafig-530360b23a8da4be8c7676a491cea8c897fe953f.svg" width="308.40000000000003" /></a>
 <p>To facilitate the workflow, this  class comes with a get_policy_operator() and get_value_operator() methods, which
 will both return a stand-alone TDModule with the dedicated functionality.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>policy_operator</strong> (<a class="reference internal" href="torchrl.modules.TensorDictModule.html#torchrl.modules.TensorDictModule" title="torchrl.modules.TensorDictModule"><em>TensorDictModule</em></a>) – a policy operator that reads the hidden variable and returns an action</p></li>
 <li><p><strong>value_operator</strong> (<a class="reference internal" href="torchrl.modules.TensorDictModule.html#torchrl.modules.TensorDictModule" title="torchrl.modules.TensorDictModule"><em>TensorDictModule</em></a>) – a value operator, that reads the hidden variable and returns a value</p></li>
@@ -380,20 +384,20 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 </pre></div>
 </div>
 <dl class="py method">
-<dt id="torchrl.modules.ActorCriticWrapper.get_policy_operator">
-<code class="sig-name descname"><span class="pre">get_policy_operator</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.modules.tensordict_module.sequence.TensorDictSequential</span><a class="headerlink" href="#torchrl.modules.ActorCriticWrapper.get_policy_operator" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.modules.ActorCriticWrapper.get_policy_operator">
+<span class="sig-name descname"><span class="pre">get_policy_operator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="torchrl.modules.TensorDictSequential.html#torchrl.modules.TensorDictSequential" title="torchrl.modules.tensordict_module.sequence.TensorDictSequential"><span class="pre">TensorDictSequential</span></a></span></span><a class="headerlink" href="#torchrl.modules.ActorCriticWrapper.get_policy_operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a stand-alone policy operator that maps an observation to an action.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="torchrl.modules.ActorCriticWrapper.get_value_operator">
-<code class="sig-name descname"><span class="pre">get_value_operator</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.modules.tensordict_module.sequence.TensorDictSequential</span><a class="headerlink" href="#torchrl.modules.ActorCriticWrapper.get_value_operator" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.modules.ActorCriticWrapper.get_value_operator">
+<span class="sig-name descname"><span class="pre">get_value_operator</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="torchrl.modules.TensorDictSequential.html#torchrl.modules.TensorDictSequential" title="torchrl.modules.tensordict_module.sequence.TensorDictSequential"><span class="pre">TensorDictSequential</span></a></span></span><a class="headerlink" href="#torchrl.modules.ActorCriticWrapper.get_value_operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a stand-alone value network operator that maps an observation to a value estimate.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
              </article>
@@ -438,7 +442,14 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">ActorCriticWrapper</a></li>
+<li><a class="reference internal" href="#">ActorCriticWrapper</a><ul>
+<li><a class="reference internal" href="#torchrl.modules.ActorCriticWrapper"><code class="docutils literal notranslate"><span class="pre">ActorCriticWrapper</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.modules.ActorCriticWrapper.get_policy_operator"><code class="docutils literal notranslate"><span class="pre">ActorCriticWrapper.get_policy_operator()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.modules.ActorCriticWrapper.get_value_operator"><code class="docutils literal notranslate"><span class="pre">ActorCriticWrapper.get_value_operator()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             </div>
@@ -454,9 +465,12 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 
      
        <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
          <script src="../../_static/jquery.js"></script>
          <script src="../../_static/underscore.js"></script>
+         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
          <script src="../../_static/doctools.js"></script>
+         <script src="../../_static/sphinx_highlight.js"></script>
      
 
   

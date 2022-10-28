@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>DreamerActor &mdash; torchrl main documentation</title>
@@ -27,6 +28,8 @@
 
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!-- <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
@@ -232,9 +235,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
 </ul>
 
             
@@ -311,11 +315,11 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <div class="section" id="dreameractor">
-<h1>DreamerActor<a class="headerlink" href="#dreameractor" title="Permalink to this headline">¶</a></h1>
+  <section id="dreameractor">
+<h1>DreamerActor<a class="headerlink" href="#dreameractor" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt id="torchrl.modules.DreamerActor">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></code><code class="sig-name descname"><span class="pre">DreamerActor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">out_features</span></em>, <em class="sig-param"><span class="pre">depth=4</span></em>, <em class="sig-param"><span class="pre">num_cells=200</span></em>, <em class="sig-param"><span class="pre">activation_class=&lt;class</span> <span class="pre">'torch.nn.modules.activation.ELU'&gt;</span></em>, <em class="sig-param"><span class="pre">std_bias=5.0</span></em>, <em class="sig-param"><span class="pre">std_min_val=0.0001</span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.DreamerActor" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.modules.DreamerActor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></span><span class="sig-name descname"><span class="pre">DreamerActor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth=4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_cells=200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation_class=&lt;class</span> <span class="pre">'torch.nn.modules.activation.ELU'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std_bias=5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std_min_val=0.0001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.DreamerActor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dreamer actor network.</p>
 <p>This network is used to predict the action distribution given the
 the stochastic state and the deterministic belief at the current
@@ -323,7 +327,7 @@ time step.
 It outputs the mean and the scale of the action distribution.</p>
 <p>Reference: <a class="reference external" href="https://arxiv.org/abs/1912.016034">https://arxiv.org/abs/1912.016034</a></p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>out_features</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – Number of output features.</p></li>
 <li><p><strong>depth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of hidden layers.
@@ -340,8 +344,8 @@ Defaults to 1e-4.</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="torchrl.modules.DreamerActor.forward">
-<code class="sig-name descname"><span class="pre">forward</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">belief</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.DreamerActor.forward" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.modules.DreamerActor.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">belief</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.DreamerActor.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Defines the computation performed at every call.</p>
 <p>Should be overridden by all subclasses.</p>
 <div class="admonition note">
@@ -355,7 +359,7 @@ registered hooks while the latter silently ignores them.</p>
 
 </dd></dl>
 
-</div>
+</section>
 
 
              </article>
@@ -400,7 +404,13 @@ registered hooks while the latter silently ignores them.</p>
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">DreamerActor</a></li>
+<li><a class="reference internal" href="#">DreamerActor</a><ul>
+<li><a class="reference internal" href="#torchrl.modules.DreamerActor"><code class="docutils literal notranslate"><span class="pre">DreamerActor</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.modules.DreamerActor.forward"><code class="docutils literal notranslate"><span class="pre">DreamerActor.forward()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             </div>
@@ -416,9 +426,12 @@ registered hooks while the latter silently ignores them.</p>
 
      
        <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
          <script src="../../_static/jquery.js"></script>
          <script src="../../_static/underscore.js"></script>
+         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
          <script src="../../_static/doctools.js"></script>
+         <script src="../../_static/sphinx_highlight.js"></script>
      
 
   

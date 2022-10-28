@@ -6,7 +6,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>VecNorm &mdash; torchrl main documentation</title>
@@ -27,6 +28,8 @@
 
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!-- <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
@@ -232,9 +235,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
 </ul>
 
             
@@ -311,11 +315,11 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <div class="section" id="vecnorm">
-<h1>VecNorm<a class="headerlink" href="#vecnorm" title="Permalink to this headline">¶</a></h1>
+  <section id="vecnorm">
+<h1>VecNorm<a class="headerlink" href="#vecnorm" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt id="torchrl.envs.transforms.VecNorm">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></code><code class="sig-name descname"><span class="pre">VecNorm</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keys_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_td</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">multiprocessing.context.BaseContext.Lock</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.9999</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">0.0001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.transforms.VecNorm" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.transforms.VecNorm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></span><span class="sig-name descname"><span class="pre">VecNorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">keys_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shared_td</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">TensorDictBase</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">Lock</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.9999</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0001</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.transforms.VecNorm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Moving average normalization layer for torchrl environments.</p>
 <p>VecNorm keeps track of the summary statistics of a dataset to standardize
 it on-the-fly. If the transform is in ‘eval’ mode, the running
@@ -327,9 +331,9 @@ processes that share the same reference.</p>
 <p>To use VecNorm at inference time and avoid updating the values with the new
 observations, one should substitute this layer by <cite>vecnorm.to_observation_norm()</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>keys_in</strong> (<em>iterable of str</em><em>, </em><em>optional</em>) – keys to be updated.
+<li><p><strong>keys_in</strong> (<em>iterable</em><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – keys to be updated.
 default: [“next_observation”, “reward”]</p></li>
 <li><p><strong>shared_td</strong> (<em>TensorDictBase</em><em>, </em><em>optional</em>) – A shared tensordict containing the
 keys of the transform.</p></li>
@@ -359,22 +363,22 @@ deviation (for numerical underflow). Default is 1e-4.</p></li>
 </pre></div>
 </div>
 <dl class="py method">
-<dt id="torchrl.envs.transforms.VecNorm.build_td_for_shared_vecnorm">
-<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">build_td_for_shared_vecnorm</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">torchrl.envs.common.EnvBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_prefix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memmap</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> &#x2192; <span class="pre">torchrl.data.tensordict.tensordict.TensorDictBase</span><a class="headerlink" href="#torchrl.envs.transforms.VecNorm.build_td_for_shared_vecnorm" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.transforms.VecNorm.build_td_for_shared_vecnorm">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">build_td_for_shared_vecnorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.common.EnvBase"><span class="pre">EnvBase</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys_prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.11)"><span class="pre">Sequence</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memmap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="headerlink" href="#torchrl.envs.transforms.VecNorm.build_td_for_shared_vecnorm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a shared tensordict for normalization across processes.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>env</strong> (<a class="reference internal" href="torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.EnvBase"><em>EnvBase</em></a>) – example environment to be used to create the
 tensordict</p></li>
-<li><p><strong>keys_prefix</strong> (<em>iterable of str</em><em>, </em><em>optional</em>) – prefix of the keys that
+<li><p><strong>keys_prefix</strong> (<em>iterable</em><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – prefix of the keys that
 have to be normalized. Default is <cite>[“next_”, “reward”]</cite></p></li>
 <li><p><strong>memmap</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True, the resulting tensordict will be cast into
 memmory map (using <cite>memmap_()</cite>). Otherwise, the tensordict
 will be placed in shared memory.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A memory in shared memory to be sent to each process.</p>
 </dd>
 </dl>
@@ -394,8 +398,8 @@ will be placed in shared memory.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="torchrl.envs.transforms.VecNorm.get_extra_state">
-<code class="sig-name descname"><span class="pre">get_extra_state</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">OrderedDict</span><a class="headerlink" href="#torchrl.envs.transforms.VecNorm.get_extra_state" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.transforms.VecNorm.get_extra_state">
+<span class="sig-name descname"><span class="pre">get_extra_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.OrderedDict" title="(in Python v3.11)"><span class="pre">OrderedDict</span></a></span></span><a class="headerlink" href="#torchrl.envs.transforms.VecNorm.get_extra_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns any extra state to include in the module’s state_dict.
 Implement this and a corresponding <a class="reference internal" href="#torchrl.envs.transforms.VecNorm.set_extra_state" title="torchrl.envs.transforms.VecNorm.set_extra_state"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_extra_state()</span></code></a> for your module
 if you need to store extra state. This function is called when building the
@@ -405,38 +409,38 @@ of the state_dict. We only provide provide backwards compatibility guarantees
 for serializing Tensors; other objects may break backwards compatibility if
 their serialized pickled form changes.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Any extra state to store in the module’s state_dict</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.11)">object</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="torchrl.envs.transforms.VecNorm.set_extra_state">
-<code class="sig-name descname"><span class="pre">set_extra_state</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">OrderedDict</span></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a><a class="headerlink" href="#torchrl.envs.transforms.VecNorm.set_extra_state" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.transforms.VecNorm.set_extra_state">
+<span class="sig-name descname"><span class="pre">set_extra_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.OrderedDict" title="(in Python v3.11)"><span class="pre">OrderedDict</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#torchrl.envs.transforms.VecNorm.set_extra_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function is called from <code class="xref py py-func docutils literal notranslate"><span class="pre">load_state_dict()</span></code> to handle any extra state
 found within the <cite>state_dict</cite>. Implement this function and a corresponding
 <a class="reference internal" href="#torchrl.envs.transforms.VecNorm.get_extra_state" title="torchrl.envs.transforms.VecNorm.get_extra_state"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_extra_state()</span></code></a> for your module if you need to store extra state within its
 <cite>state_dict</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – Extra state from the <cite>state_dict</cite></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="torchrl.envs.transforms.VecNorm.to_observation_norm">
-<code class="sig-name descname"><span class="pre">to_observation_norm</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; <span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">torchrl.envs.transforms.transforms.Compose</span><span class="p"><span class="pre">,</span> </span><span class="pre">torchrl.envs.transforms.transforms.ObservationNorm</span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#torchrl.envs.transforms.VecNorm.to_observation_norm" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="torchrl.envs.transforms.VecNorm.to_observation_norm">
+<span class="sig-name descname"><span class="pre">to_observation_norm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose" title="torchrl.envs.transforms.transforms.Compose"><span class="pre">Compose</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="torchrl.envs.transforms.ObservationNorm.html#torchrl.envs.transforms.ObservationNorm" title="torchrl.envs.transforms.transforms.ObservationNorm"><span class="pre">ObservationNorm</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#torchrl.envs.transforms.VecNorm.to_observation_norm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts VecNorm into an ObservationNorm class that can be used at inference time.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
              </article>
@@ -481,7 +485,16 @@ found within the <cite>state_dict</cite>. Implement this function and a correspo
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">VecNorm</a></li>
+<li><a class="reference internal" href="#">VecNorm</a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm"><code class="docutils literal notranslate"><span class="pre">VecNorm</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm.build_td_for_shared_vecnorm"><code class="docutils literal notranslate"><span class="pre">VecNorm.build_td_for_shared_vecnorm()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm.get_extra_state"><code class="docutils literal notranslate"><span class="pre">VecNorm.get_extra_state()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm.set_extra_state"><code class="docutils literal notranslate"><span class="pre">VecNorm.set_extra_state()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm.to_observation_norm"><code class="docutils literal notranslate"><span class="pre">VecNorm.to_observation_norm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             </div>
@@ -497,9 +510,12 @@ found within the <cite>state_dict</cite>. Implement this function and a correspo
 
      
        <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
          <script src="../../_static/jquery.js"></script>
          <script src="../../_static/underscore.js"></script>
+         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
          <script src="../../_static/doctools.js"></script>
+         <script src="../../_static/sphinx_highlight.js"></script>
      
 
   

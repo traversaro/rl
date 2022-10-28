@@ -27,6 +27,8 @@
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!-- <link rel="stylesheet" href="_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
   <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
@@ -230,9 +232,10 @@
               
             
             
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/knowledge_base.html">Knowledge Base</a></li>
 </ul>
 
             
@@ -336,7 +339,7 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.action_spec">action_spec() (torchrl.envs.transforms.TransformedEnv property)</a>
+      <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.action_spec">action_spec (torchrl.envs.transforms.TransformedEnv property)</a>
 </li>
       <li><a href="reference/generated/torchrl.modules.Actor.html#torchrl.modules.Actor">Actor (class in torchrl.modules)</a>
 </li>
@@ -462,7 +465,7 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/generated/torchrl.data.LazyStackedTensorDict.html#torchrl.data.LazyStackedTensorDict.batch_dims">batch_dims() (torchrl.data.LazyStackedTensorDict property)</a>
+      <li><a href="reference/generated/torchrl.data.LazyStackedTensorDict.html#torchrl.data.LazyStackedTensorDict.batch_dims">batch_dims (torchrl.data.LazyStackedTensorDict property)</a>
 
       <ul>
         <li><a href="reference/generated/torchrl.data.SubTensorDict.html#torchrl.data.SubTensorDict.batch_dims">(torchrl.data.SubTensorDict property)</a>
@@ -470,7 +473,7 @@
         <li><a href="reference/generated/torchrl.data.TensorDict.html#torchrl.data.TensorDict.batch_dims">(torchrl.data.TensorDict property)</a>
 </li>
       </ul></li>
-      <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.batch_locked">batch_locked() (torchrl.envs.EnvBase property)</a>
+      <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.batch_locked">batch_locked (torchrl.envs.EnvBase property)</a>
 
       <ul>
         <li><a href="reference/generated/torchrl.envs.GymLikeEnv.html#torchrl.envs.GymLikeEnv.batch_locked">(torchrl.envs.GymLikeEnv property)</a>
@@ -482,7 +485,7 @@
         <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.batch_locked">(torchrl.envs.transforms.TransformedEnv property)</a>
 </li>
       </ul></li>
-      <li><a href="reference/generated/torchrl.data.LazyStackedTensorDict.html#torchrl.data.LazyStackedTensorDict.batch_size">batch_size() (torchrl.data.LazyStackedTensorDict property)</a>
+      <li><a href="reference/generated/torchrl.data.LazyStackedTensorDict.html#torchrl.data.LazyStackedTensorDict.batch_size">batch_size (torchrl.data.LazyStackedTensorDict property)</a>
 
       <ul>
         <li><a href="reference/generated/torchrl.data.SubTensorDict.html#torchrl.data.SubTensorDict.batch_size">(torchrl.data.SubTensorDict property)</a>
@@ -688,7 +691,7 @@
         <li><a href="reference/generated/torchrl.data.TensorDict.html#torchrl.data.TensorDict.detach_">(torchrl.data.TensorDict method)</a>
 </li>
       </ul></li>
-      <li><a href="reference/generated/torchrl.data.LazyStackedTensorDict.html#torchrl.data.LazyStackedTensorDict.device">device() (torchrl.data.LazyStackedTensorDict property)</a>
+      <li><a href="reference/generated/torchrl.data.LazyStackedTensorDict.html#torchrl.data.LazyStackedTensorDict.device">device (torchrl.data.LazyStackedTensorDict property)</a>
 
       <ul>
         <li><a href="reference/generated/torchrl.data.SubTensorDict.html#torchrl.data.SubTensorDict.device">(torchrl.data.SubTensorDict property)</a>
@@ -887,9 +890,13 @@
 </li>
         <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.forward">(torchrl.envs.SerialEnv method)</a>
 </li>
+        <li><a href="reference/generated/torchrl.envs.transforms.R3MTransform.html#torchrl.envs.transforms.R3MTransform.forward">(torchrl.envs.transforms.R3MTransform method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform.forward">(torchrl.envs.transforms.Transform method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.UnsqueezeTransform.html#torchrl.envs.transforms.UnsqueezeTransform.forward">(torchrl.envs.transforms.UnsqueezeTransform method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.VIPTransform.html#torchrl.envs.transforms.VIPTransform.forward">(torchrl.envs.transforms.VIPTransform method)</a>
 </li>
         <li><a href="reference/generated/torchrl.modules.DdpgCnnActor.html#torchrl.modules.DdpgCnnActor.forward">(torchrl.modules.DdpgCnnActor method)</a>
 </li>
@@ -1124,7 +1131,7 @@
       </ul></li>
       <li><a href="reference/generated/torchrl.modules.NoisyLazyLinear.html#torchrl.modules.NoisyLazyLinear.initialize_parameters">initialize_parameters() (torchrl.modules.NoisyLazyLinear method)</a>
 </li>
-      <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.input_spec">input_spec() (torchrl.envs.transforms.TransformedEnv property)</a>
+      <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.input_spec">input_spec (torchrl.envs.transforms.TransformedEnv property)</a>
 </li>
       <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.ipu">ipu() (torchrl.data.MultiStep method)</a>
 
@@ -1251,6 +1258,10 @@
 </li>
         <li><a href="reference/generated/torchrl.envs.GymLikeEnv.html#torchrl.envs.GymLikeEnv.load_state_dict">(torchrl.envs.GymLikeEnv method)</a>
 </li>
+        <li><a href="reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv.load_state_dict">(torchrl.envs.ParallelEnv method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.load_state_dict">(torchrl.envs.SerialEnv method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.load_state_dict">(torchrl.envs.transforms.TransformedEnv method)</a>
 </li>
       </ul></li>
@@ -1338,7 +1349,7 @@
         <li><a href="reference/generated/torchrl.data.TensorDict.html#torchrl.data.TensorDict.masked_select">(torchrl.data.TensorDict method)</a>
 </li>
       </ul></li>
-      <li><a href="reference/generated/torchrl.modules.Delta.html#torchrl.modules.Delta.mean">mean() (torchrl.modules.Delta property)</a>
+      <li><a href="reference/generated/torchrl.modules.Delta.html#torchrl.modules.Delta.mean">mean (torchrl.modules.Delta property)</a>
 
       <ul>
         <li><a href="reference/generated/torchrl.modules.TanhDelta.html#torchrl.modules.TanhDelta.mean">(torchrl.modules.TanhDelta property)</a>
@@ -1354,7 +1365,7 @@
       </ul></li>
       <li><a href="reference/generated/torchrl.modules.MLP.html#torchrl.modules.MLP">MLP (class in torchrl.modules)</a>
 </li>
-      <li><a href="reference/generated/torchrl.modules.Delta.html#torchrl.modules.Delta.mode">mode() (torchrl.modules.Delta property)</a>
+      <li><a href="reference/generated/torchrl.modules.Delta.html#torchrl.modules.Delta.mode">mode (torchrl.modules.Delta property)</a>
 
       <ul>
         <li><a href="reference/generated/torchrl.modules.OneHotCategorical.html#torchrl.modules.OneHotCategorical.mode">(torchrl.modules.OneHotCategorical property)</a>
@@ -1476,7 +1487,7 @@
 </li>
       <li><a href="reference/generated/torchrl.modules.ObsEncoder.html#torchrl.modules.ObsEncoder">ObsEncoder (class in torchrl.modules)</a>
 </li>
-      <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.observation_spec">observation_spec() (torchrl.envs.transforms.TransformedEnv property)</a>
+      <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.observation_spec">observation_spec (torchrl.envs.transforms.TransformedEnv property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -1805,9 +1816,13 @@
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.NoopResetEnv.html#torchrl.envs.transforms.NoopResetEnv.reset">(torchrl.envs.transforms.NoopResetEnv method)</a>
 </li>
+        <li><a href="reference/generated/torchrl.envs.transforms.R3MTransform.html#torchrl.envs.transforms.R3MTransform.reset">(torchrl.envs.transforms.R3MTransform method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.TensorDictPrimer.html#torchrl.envs.transforms.TensorDictPrimer.reset">(torchrl.envs.transforms.TensorDictPrimer method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform.reset">(torchrl.envs.transforms.Transform method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.VIPTransform.html#torchrl.envs.transforms.VIPTransform.reset">(torchrl.envs.transforms.VIPTransform method)</a>
 </li>
       </ul></li>
       <li><a href="reference/generated/torchrl.modules.reset_noise.html#torchrl.modules.reset_noise">reset_noise (class in torchrl.modules)</a>
@@ -1822,7 +1837,7 @@
       </ul></li>
       <li><a href="reference/generated/torchrl.envs.transforms.Resize.html#torchrl.envs.transforms.Resize">Resize (class in torchrl.envs.transforms)</a>
 </li>
-      <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.reward_spec">reward_spec() (torchrl.envs.transforms.TransformedEnv property)</a>
+      <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.reward_spec">reward_spec (torchrl.envs.transforms.TransformedEnv property)</a>
 </li>
       <li><a href="reference/generated/torchrl.envs.transforms.RewardClipping.html#torchrl.envs.transforms.RewardClipping">RewardClipping (class in torchrl.envs.transforms)</a>
 </li>
@@ -1957,10 +1972,14 @@
 </li>
         <li><a href="reference/generated/torchrl.envs.GymLikeEnv.html#torchrl.envs.GymLikeEnv.set_seed">(torchrl.envs.GymLikeEnv method)</a>
 </li>
+        <li><a href="reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv.set_seed">(torchrl.envs.ParallelEnv method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.set_seed">(torchrl.envs.SerialEnv method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.set_seed">(torchrl.envs.transforms.TransformedEnv method)</a>
 </li>
       </ul></li>
-      <li><a href="reference/generated/torchrl.data.LazyStackedTensorDict.html#torchrl.data.LazyStackedTensorDict.shape">shape() (torchrl.data.LazyStackedTensorDict property)</a>
+      <li><a href="reference/generated/torchrl.data.LazyStackedTensorDict.html#torchrl.data.LazyStackedTensorDict.shape">shape (torchrl.data.LazyStackedTensorDict property)</a>
 
       <ul>
         <li><a href="reference/generated/torchrl.data.SubTensorDict.html#torchrl.data.SubTensorDict.shape">(torchrl.data.SubTensorDict property)</a>
@@ -2010,7 +2029,7 @@
       </ul></li>
       <li><a href="reference/generated/torchrl.objectives.SoftUpdate.html#torchrl.objectives.SoftUpdate">SoftUpdate (class in torchrl.objectives)</a>
 </li>
-      <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.specs">specs() (torchrl.envs.EnvBase property)</a>
+      <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.specs">specs (torchrl.envs.EnvBase property)</a>
 
       <ul>
         <li><a href="reference/generated/torchrl.envs.GymLikeEnv.html#torchrl.envs.GymLikeEnv.specs">(torchrl.envs.GymLikeEnv property)</a>
@@ -2048,6 +2067,10 @@
         <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.state_dict">(torchrl.envs.EnvBase method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.GymLikeEnv.html#torchrl.envs.GymLikeEnv.state_dict">(torchrl.envs.GymLikeEnv method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv.state_dict">(torchrl.envs.ParallelEnv method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.state_dict">(torchrl.envs.SerialEnv method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.state_dict">(torchrl.envs.transforms.TransformedEnv method)</a>
 </li>
@@ -2188,8 +2211,6 @@
         <li><a href="reference/generated/torchrl.data.UnboundedContinuousTensorSpec.html#torchrl.data.UnboundedContinuousTensorSpec.to_numpy">(torchrl.data.UnboundedContinuousTensorSpec method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/torchrl.envs.transforms.VecNorm.html#torchrl.envs.transforms.VecNorm.to_observation_norm">to_observation_norm() (torchrl.envs.transforms.VecNorm method)</a>
 </li>
       <li><a href="reference/generated/torchrl.data.LazyStackedTensorDict.html#torchrl.data.LazyStackedTensorDict.to_tensordict">to_tensordict() (torchrl.data.LazyStackedTensorDict method)</a>
@@ -2216,6 +2237,8 @@
         <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.train">(torchrl.envs.transforms.TransformedEnv method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/torchrl.trainers.Trainer.html#torchrl.trainers.Trainer">Trainer (class in torchrl.trainers)</a>
 </li>
       <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform">Transform (class in torchrl.envs.transforms)</a>
@@ -2225,21 +2248,45 @@
       <ul>
         <li><a href="reference/generated/torchrl.envs.transforms.DoubleToFloat.html#torchrl.envs.transforms.DoubleToFloat.transform_input_spec">(torchrl.envs.transforms.DoubleToFloat method)</a>
 </li>
+        <li><a href="reference/generated/torchrl.envs.transforms.R3MTransform.html#torchrl.envs.transforms.R3MTransform.transform_input_spec">(torchrl.envs.transforms.R3MTransform method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform.transform_input_spec">(torchrl.envs.transforms.Transform method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.UnsqueezeTransform.html#torchrl.envs.transforms.UnsqueezeTransform.transform_input_spec">(torchrl.envs.transforms.UnsqueezeTransform method)</a>
 </li>
+        <li><a href="reference/generated/torchrl.envs.transforms.VIPTransform.html#torchrl.envs.transforms.VIPTransform.transform_input_spec">(torchrl.envs.transforms.VIPTransform method)</a>
+</li>
       </ul></li>
-      <li><a href="reference/generated/torchrl.envs.transforms.CatTensors.html#torchrl.envs.transforms.CatTensors.transform_observation_spec">transform_observation_spec() (torchrl.envs.transforms.CatTensors method)</a>
+      <li><a href="reference/generated/torchrl.envs.transforms.CatFrames.html#torchrl.envs.transforms.CatFrames.transform_observation_spec">transform_observation_spec() (torchrl.envs.transforms.CatFrames method)</a>
 
       <ul>
+        <li><a href="reference/generated/torchrl.envs.transforms.CatTensors.html#torchrl.envs.transforms.CatTensors.transform_observation_spec">(torchrl.envs.transforms.CatTensors method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.CenterCrop.html#torchrl.envs.transforms.CenterCrop.transform_observation_spec">(torchrl.envs.transforms.CenterCrop method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose.transform_observation_spec">(torchrl.envs.transforms.Compose method)</a>
 </li>
+        <li><a href="reference/generated/torchrl.envs.transforms.DoubleToFloat.html#torchrl.envs.transforms.DoubleToFloat.transform_observation_spec">(torchrl.envs.transforms.DoubleToFloat method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.FlattenObservation.html#torchrl.envs.transforms.FlattenObservation.transform_observation_spec">(torchrl.envs.transforms.FlattenObservation method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.GrayScale.html#torchrl.envs.transforms.GrayScale.transform_observation_spec">(torchrl.envs.transforms.GrayScale method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.ObservationNorm.html#torchrl.envs.transforms.ObservationNorm.transform_observation_spec">(torchrl.envs.transforms.ObservationNorm method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.R3MTransform.html#torchrl.envs.transforms.R3MTransform.transform_observation_spec">(torchrl.envs.transforms.R3MTransform method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.Resize.html#torchrl.envs.transforms.Resize.transform_observation_spec">(torchrl.envs.transforms.Resize method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.TensorDictPrimer.html#torchrl.envs.transforms.TensorDictPrimer.transform_observation_spec">(torchrl.envs.transforms.TensorDictPrimer method)</a>
 </li>
+        <li><a href="reference/generated/torchrl.envs.transforms.ToTensorImage.html#torchrl.envs.transforms.ToTensorImage.transform_observation_spec">(torchrl.envs.transforms.ToTensorImage method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform.transform_observation_spec">(torchrl.envs.transforms.Transform method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.UnsqueezeTransform.html#torchrl.envs.transforms.UnsqueezeTransform.transform_observation_spec">(torchrl.envs.transforms.UnsqueezeTransform method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.VIPTransform.html#torchrl.envs.transforms.VIPTransform.transform_observation_spec">(torchrl.envs.transforms.VIPTransform method)</a>
 </li>
       </ul></li>
       <li><a href="reference/generated/torchrl.envs.transforms.BinarizeReward.html#torchrl.envs.transforms.BinarizeReward.transform_reward_spec">transform_reward_spec() (torchrl.envs.transforms.BinarizeReward method)</a>
@@ -2249,6 +2296,8 @@
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.DoubleToFloat.html#torchrl.envs.transforms.DoubleToFloat.transform_reward_spec">(torchrl.envs.transforms.DoubleToFloat method)</a>
 </li>
+        <li><a href="reference/generated/torchrl.envs.transforms.R3MTransform.html#torchrl.envs.transforms.R3MTransform.transform_reward_spec">(torchrl.envs.transforms.R3MTransform method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.RewardClipping.html#torchrl.envs.transforms.RewardClipping.transform_reward_spec">(torchrl.envs.transforms.RewardClipping method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.RewardScaling.html#torchrl.envs.transforms.RewardScaling.transform_reward_spec">(torchrl.envs.transforms.RewardScaling method)</a>
@@ -2256,6 +2305,8 @@
         <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform.transform_reward_spec">(torchrl.envs.transforms.Transform method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.UnsqueezeTransform.html#torchrl.envs.transforms.UnsqueezeTransform.transform_reward_spec">(torchrl.envs.transforms.UnsqueezeTransform method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.VIPTransform.html#torchrl.envs.transforms.VIPTransform.transform_reward_spec">(torchrl.envs.transforms.VIPTransform method)</a>
 </li>
       </ul></li>
       <li><a href="reference/generated/torchrl.trainers.helpers.transformed_env_constructor.html#torchrl.trainers.helpers.transformed_env_constructor">transformed_env_constructor() (in module torchrl.trainers.helpers)</a>
@@ -2547,9 +2598,12 @@
 
      
        <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
          <script src="_static/jquery.js"></script>
          <script src="_static/underscore.js"></script>
+         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
          <script src="_static/doctools.js"></script>
+         <script src="_static/sphinx_highlight.js"></script>
      
 
   
