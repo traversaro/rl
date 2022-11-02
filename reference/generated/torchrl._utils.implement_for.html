@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>get_stats_random_rollout &mdash; torchrl main documentation</title>
+  <title>implement_for &mdash; torchrl main documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="torchrl._utils package" href="../utils.html" />
-    <link rel="prev" title="correct_for_frame_skip" href="torchrl.trainers.helpers.correct_for_frame_skip.html" />
+    <link rel="next" title="Knowledge Base" href="../knowledge_base.html" />
+    <link rel="prev" title="torchrl._utils package" href="../utils.html" />
   <!-- Google Analytics -->
   
   <!-- End Google Analytics -->
@@ -281,15 +281,15 @@
         
           <li><a href="../index.html">API Reference</a> &gt;</li>
         
-          <li><a href="../trainers.html">torchrl.trainers package</a> &gt;</li>
+          <li><a href="../utils.html">torchrl._utils package</a> &gt;</li>
         
-      <li>get_stats_random_rollout</li>
+      <li>implement_for</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="../../_sources/reference/generated/torchrl.trainers.helpers.get_stats_random_rollout.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl._utils.implement_for.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -315,25 +315,30 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <section id="get-stats-random-rollout">
-<h1>get_stats_random_rollout<a class="headerlink" href="#get-stats-random-rollout" title="Permalink to this heading">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="torchrl.trainers.helpers.get_stats_random_rollout">
-<span class="sig-prename descclassname"><span class="pre">torchrl.trainers.helpers.</span></span><span class="sig-name descname"><span class="pre">get_stats_random_rollout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DictConfig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof_environment</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.common.EnvBase"><span class="pre">EnvBase</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.trainers.helpers.get_stats_random_rollout" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gathers stas (loc and scale) from an environment using random rollouts.</p>
+  <section id="implement-for">
+<h1>implement_for<a class="headerlink" href="#implement-for" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="torchrl._utils.implement_for">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl._utils.</span></span><span class="sig-name descname"><span class="pre">implement_for</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">from_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl._utils.implement_for" title="Permalink to this definition">¶</a></dt>
+<dd><p>A version decorator that checks the version in the environment and implements a function with the fitting one.</p>
+<p>If specified module is missing or there is no fitting implementation, call of the decorated function
+will lead to the explicit error.
+In case of intersected ranges, first fitting implementation is used.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>cfg</strong> (<em>DictConfig</em>) – a config object with <cite>init_env_steps</cite> field, indicating
-the total number of frames to be collected to compute the stats.</p></li>
-<li><p><strong>proof_environment</strong> (<em>EnvBase instance</em><em>, </em><em>optional</em>) – if provided, this env will
-be used ot execute the rollouts. If not, it will be created using
-the cfg object.</p></li>
-<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – if provided, the stats of this key will be gathered.
-If not, it is expected that only one key exists in <cite>env.observation_spec</cite>.</p></li>
+<li><p><strong>module_name</strong> – version is checked for the module with this name (e.g. “gym”).</p></li>
+<li><p><strong>from_version</strong> – version from which implementation is compatible. Can be open (None).</p></li>
+<li><p><strong>to_version</strong> – version from which implementation is no longer compatible. Can be open (None).</p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; @implement_for(“gym”, “0.13”, “0.14”)
+&gt;&gt;&gt; def fun(self, x):
+</pre></div>
+</div>
+<p>This indicates that the function is compatible with gym 0.13+, but doesn’t with gym 0.14+.</p>
 </dd></dl>
 
 </section>
@@ -346,10 +351,10 @@ If not, it is expected that only one key exists in <cite>env.observation_spec</c
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../utils.html" class="btn btn-neutral float-right" title="torchrl._utils package" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="../knowledge_base.html" class="btn btn-neutral float-right" title="Knowledge Base" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl.trainers.helpers.correct_for_frame_skip.html" class="btn btn-neutral" title="correct_for_frame_skip" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="../utils.html" class="btn btn-neutral" title="torchrl._utils package" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -381,8 +386,8 @@ If not, it is expected that only one key exists in <cite>env.observation_spec</c
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">get_stats_random_rollout</a><ul>
-<li><a class="reference internal" href="#torchrl.trainers.helpers.get_stats_random_rollout"><code class="docutils literal notranslate"><span class="pre">get_stats_random_rollout()</span></code></a></li>
+<li><a class="reference internal" href="#">implement_for</a><ul>
+<li><a class="reference internal" href="#torchrl._utils.implement_for"><code class="docutils literal notranslate"><span class="pre">implement_for</span></code></a></li>
 </ul>
 </li>
 </ul>
