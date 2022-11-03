@@ -404,7 +404,7 @@ will be placed in shared memory.</p></li>
 Implement this and a corresponding <a class="reference internal" href="#torchrl.envs.transforms.VecNorm.set_extra_state" title="torchrl.envs.transforms.VecNorm.set_extra_state"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_extra_state()</span></code></a> for your module
 if you need to store extra state. This function is called when building the
 module’s <cite>state_dict()</cite>.</p>
-<p>Note that extra state should be pickleable to ensure working serialization
+<p>Note that extra state should be picklable to ensure working serialization
 of the state_dict. We only provide provide backwards compatibility guarantees
 for serializing Tensors; other objects may break backwards compatibility if
 their serialized pickled form changes.</p>
