@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Sampler &mdash; torchrl main documentation</title>
+  <title>RemoteTensorDictReplayBuffer &mdash; torchrl main documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="RandomSampler" href="torchrl.data.replay_buffers.samplers.RandomSampler.html" />
-    <link rel="prev" title="RemoteTensorDictReplayBuffer" href="torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.html" />
+    <link rel="next" title="Sampler" href="torchrl.data.replay_buffers.samplers.Sampler.html" />
+    <link rel="prev" title="TensorDictReplayBuffer" href="torchrl.data.replay_buffers.rb_prototype.TensorDictReplayBuffer.html" />
   <!-- Google Analytics -->
   
   <!-- End Google Analytics -->
@@ -283,13 +283,13 @@
         
           <li><a href="../data.html">torchrl.data package</a> &gt;</li>
         
-      <li>Sampler</li>
+      <li>RemoteTensorDictReplayBuffer</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="../../_sources/reference/generated/torchrl.data.replay_buffers.samplers.Sampler.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -315,12 +315,56 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <section id="sampler">
-<h1>Sampler<a class="headerlink" href="#sampler" title="Permalink to this heading">¶</a></h1>
+  <section id="remotetensordictreplaybuffer">
+<h1>RemoteTensorDictReplayBuffer<a class="headerlink" href="#remotetensordictreplaybuffer" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="torchrl.data.replay_buffers.samplers.Sampler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.data.replay_buffers.samplers.</span></span><span class="sig-name descname"><span class="pre">Sampler</span></span><a class="headerlink" href="#torchrl.data.replay_buffers.samplers.Sampler" title="Permalink to this definition">¶</a></dt>
-<dd><p>A generic sampler base class for composable Replay Buffers.</p>
+<dt class="sig sig-object py" id="torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.data.replay_buffers.rb_prototype.</span></span><span class="sig-name descname"><span class="pre">RemoteTensorDictReplayBuffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A remote invocation friendly ReplayBuffer class. Public methods can be invoked by remote agents using <cite>torch.rpc</cite> or called locally as normal.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a single element to the replay buffer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>Any</em>) – data to be added to the replay buffer</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>index where the data lives in the replay buffer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.extend">
+<span class="sig-name descname"><span class="pre">extend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordicts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">TensorDictBase</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><span class="pre">Tensor</span></a></span></span><a class="headerlink" href="#torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.extend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extends the replay buffer with one or more elements contained in an iterable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>iterable</em>) – collection of data to be added to the replay
+buffer.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Indices of the data aded to the replay buffer.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="headerlink" href="#torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Samples a batch of data from the replay buffer.</p>
+<p>Uses Sampler to sample indices, and retrieves them from Storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>batch_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – size of data to be collected.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A batch of data selected in the replay buffer.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -333,10 +377,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.data.replay_buffers.samplers.RandomSampler.html" class="btn btn-neutral float-right" title="RandomSampler" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.data.replay_buffers.samplers.Sampler.html" class="btn btn-neutral float-right" title="Sampler" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.html" class="btn btn-neutral" title="RemoteTensorDictReplayBuffer" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torchrl.data.replay_buffers.rb_prototype.TensorDictReplayBuffer.html" class="btn btn-neutral" title="TensorDictReplayBuffer" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -368,8 +412,13 @@
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">Sampler</a><ul>
-<li><a class="reference internal" href="#torchrl.data.replay_buffers.samplers.Sampler"><code class="docutils literal notranslate"><span class="pre">Sampler</span></code></a></li>
+<li><a class="reference internal" href="#">RemoteTensorDictReplayBuffer</a><ul>
+<li><a class="reference internal" href="#torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer"><code class="docutils literal notranslate"><span class="pre">RemoteTensorDictReplayBuffer</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.add"><code class="docutils literal notranslate"><span class="pre">RemoteTensorDictReplayBuffer.add()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.extend"><code class="docutils literal notranslate"><span class="pre">RemoteTensorDictReplayBuffer.extend()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.data.replay_buffers.rb_prototype.RemoteTensorDictReplayBuffer.sample"><code class="docutils literal notranslate"><span class="pre">RemoteTensorDictReplayBuffer.sample()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
