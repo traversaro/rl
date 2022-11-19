@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>DMControlWrapper &mdash; torchrl main documentation</title>
+  <title>HabitatEnv &mdash; torchrl main documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="JumanjiEnv" href="torchrl.envs.libs.jumanji.JumanjiEnv.html" />
-    <link rel="prev" title="DMControlEnv" href="torchrl.envs.libs.dm_control.DMControlEnv.html" />
+    <link rel="next" title="torchrl.modules package" href="../modules.html" />
+    <link rel="prev" title="JumanjiWrapper" href="torchrl.envs.libs.jumanji.JumanjiWrapper.html" />
   <!-- Google Analytics -->
   
   <!-- End Google Analytics -->
@@ -283,13 +283,13 @@
         
           <li><a href="../envs.html">torchrl.envs package</a> &gt;</li>
         
-      <li>DMControlWrapper</li>
+      <li>HabitatEnv</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="../../_sources/reference/generated/torchrl.envs.libs.dm_control.DMControlWrapper.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl.envs.libs.habitat.HabitatEnv.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -315,29 +315,14 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <section id="dmcontrolwrapper">
-<h1>DMControlWrapper<a class="headerlink" href="#dmcontrolwrapper" title="Permalink to this heading">¶</a></h1>
+  <section id="habitatenv">
+<h1>HabitatEnv<a class="headerlink" href="#habitatenv" title="Permalink to this heading">¶</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="torchrl.envs.libs.dm_control.DMControlWrapper">
-<span class="sig-prename descclassname"><span class="pre">torchrl.envs.libs.dm_control.</span></span><span class="sig-name descname"><span class="pre">DMControlWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.libs.dm_control.DMControlWrapper" title="Permalink to this definition">¶</a></dt>
-<dd><p>DeepMind Control lab environment wrapper.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>env</strong> (<em>dm_control.suite env</em>) – environment instance</p></li>
-<li><p><strong>from_pixels</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True, the observation</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">dm_control</span><span class="o">.</span><span class="n">suite</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;cheetah&quot;</span><span class="p">,</span> <span class="s2">&quot;run&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">DMControlWrapper</span><span class="p">(</span><span class="n">env</span><span class="p">,</span>
-<span class="gp">... </span>   <span class="n">from_pixels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frame_skip</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">td</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">rand_step</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">available_envs</span><span class="p">)</span>
-</pre></div>
-</div>
+<dt class="sig sig-object py" id="torchrl.envs.libs.habitat.HabitatEnv">
+<span class="sig-prename descclassname"><span class="pre">torchrl.envs.libs.habitat.</span></span><span class="sig-name descname"><span class="pre">HabitatEnv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.envs.libs.habitat.HabitatEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper for habitat envs.</p>
+<p>This class currently serves as placeholder and compatibility security.
+It behaves exactly like the GymEnv wrapper.</p>
 </dd></dl>
 
 </section>
@@ -350,10 +335,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.envs.libs.jumanji.JumanjiEnv.html" class="btn btn-neutral float-right" title="JumanjiEnv" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="../modules.html" class="btn btn-neutral float-right" title="torchrl.modules package" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl.envs.libs.dm_control.DMControlEnv.html" class="btn btn-neutral" title="DMControlEnv" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torchrl.envs.libs.jumanji.JumanjiWrapper.html" class="btn btn-neutral" title="JumanjiWrapper" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -385,8 +370,8 @@
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">DMControlWrapper</a><ul>
-<li><a class="reference internal" href="#torchrl.envs.libs.dm_control.DMControlWrapper"><code class="docutils literal notranslate"><span class="pre">DMControlWrapper()</span></code></a></li>
+<li><a class="reference internal" href="#">HabitatEnv</a><ul>
+<li><a class="reference internal" href="#torchrl.envs.libs.habitat.HabitatEnv"><code class="docutils literal notranslate"><span class="pre">HabitatEnv()</span></code></a></li>
 </ul>
 </li>
 </ul>
