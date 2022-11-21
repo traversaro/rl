@@ -235,17 +235,7 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_module.html">TensorDictModule</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/multi_task.html">Task-specific policy in multi-task environments</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">References:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
@@ -338,6 +328,20 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">transformed_env</span> <span class="o">=</span> <span class="n">TransformedEnv</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">transforms</span><span class="p">)</span>
 </pre></div>
 </div>
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.Compose.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="headerlink" href="#torchrl.envs.transforms.Compose.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.Compose.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="headerlink" href="#torchrl.envs.transforms.Compose.reset" title="Permalink to this definition">¶</a></dt>
@@ -536,6 +540,7 @@ only argument)</p></li>
               <ul>
 <li><a class="reference internal" href="#">Compose</a><ul>
 <li><a class="reference internal" href="#torchrl.envs.transforms.Compose"><code class="docutils literal notranslate"><span class="pre">Compose</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.Compose.forward"><code class="docutils literal notranslate"><span class="pre">Compose.forward()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.Compose.reset"><code class="docutils literal notranslate"><span class="pre">Compose.reset()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.Compose.to"><code class="docutils literal notranslate"><span class="pre">Compose.to()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.Compose.transform_input_spec"><code class="docutils literal notranslate"><span class="pre">Compose.transform_input_spec()</span></code></a></li>
