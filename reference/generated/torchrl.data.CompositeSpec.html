@@ -235,7 +235,17 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/multi_task.html">Task-specific policy in multi-task environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
@@ -323,15 +333,10 @@
 <dd><p>A composition of TensorSpecs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>*args</strong> – if an unnamed argument is passed, it must be a dictionary with keys
-matching the expected keys to be found in the <a class="reference internal" href="#torchrl.data.CompositeSpec" title="torchrl.data.CompositeSpec"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompositeSpec</span></code></a> object.
-This is useful to build nested CompositeSpecs with tuple indices.</p></li>
-<li><p><strong>**kwargs</strong> (<em>key</em><em> (</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – value (TensorSpec)): dictionary of tensorspecs
+<dd class="field-odd"><p><strong>**kwargs</strong> (<em>key</em><em> (</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – value (TensorSpec)): dictionary of tensorspecs
 to be stored. Values can be None, in which case is_in will be assumed
 to be <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a> for the corresponding tensors, and <a class="reference internal" href="#torchrl.data.CompositeSpec.project" title="torchrl.data.CompositeSpec.project"><code class="xref py py-obj docutils literal notranslate"><span class="pre">project()</span></code></a> will have no
-effect. <cite>spec.encode</cite> cannot be used with missing values.</p></li>
-</ul>
+effect. <cite>spec.encode</cite> cannot be used with missing values.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
@@ -360,34 +365,13 @@ effect. <cite>spec.encode</cite> cannot be used with missing values.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;random td: &quot;</span><span class="p">,</span> <span class="n">composite_spec</span><span class="o">.</span><span class="n">rand</span><span class="p">([</span><span class="mi">3</span><span class="p">,]))</span>
 <span class="go">random td:  TensorDict(</span>
 <span class="go">    fields={</span>
-<span class="go">        observation_vector: Tensor(torch.Size([3, 33]), dtype=torch.float32),</span>
-<span class="go">        pixels: Tensor(torch.Size([3, 3, 32, 32]), dtype=torch.float32)},</span>
+<span class="go">        pixels: Tensor(torch.Size([3, 3, 32, 32]), dtype=torch.float32),</span>
+<span class="go">        observation_vector: Tensor(torch.Size([3, 33]), dtype=torch.float32)},</span>
 <span class="go">    batch_size=torch.Size([3]),</span>
-<span class="go">    device=None,</span>
+<span class="go">    device=cpu,</span>
 <span class="go">    is_shared=False)</span>
 </pre></div>
 </div>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># we can build a nested composite spec using unnamed arguments</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">CompositeSpec</span><span class="p">({(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">):</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">):</span> <span class="kc">None</span><span class="p">}))</span>
-<span class="go">CompositeSpec(</span>
-<span class="go">    a: CompositeSpec(</span>
-<span class="go">        b: None,</span>
-<span class="go">        c: None))</span>
-</pre></div>
-</div>
-<dl>
-<dt>CompositeSpec supports nested indexing:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span><span class="p">[</span><span class="s2">&quot;nested&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
-<span class="go">CompositeSpec(</span>
-<span class="go">    nested: CompositeSpec(</span>
-<span class="go">        x: None),</span>
-<span class="go">    x: None)</span>
-</pre></div>
-</div>
-</dd>
-</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchrl.data.CompositeSpec.assert_is_in">
 <span class="sig-name descname"><span class="pre">assert_is_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><span class="pre">Tensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#torchrl.data.CompositeSpec.assert_is_in" title="Permalink to this definition">¶</a></dt>
@@ -440,20 +424,6 @@ effect. <cite>spec.encode</cite> cannot be used with missing values.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>boolean indicating if values belongs to the TensorSpec box</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="torchrl.data.CompositeSpec.keys">
-<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yield_nesting_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.KeysView" title="(in Python v3.11)"><span class="pre">KeysView</span></a></span></span><a class="headerlink" href="#torchrl.data.CompositeSpec.keys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Keys of the CompositeSpec.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>yield_nesting_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the values returned
-will contain every level of nesting, i.e. a <code class="xref py py-obj docutils literal notranslate"><span class="pre">CompositeSpec(next=CompositeSpec(obs=None))</span></code>
-will lead to the keys <code class="xref py py-obj docutils literal notranslate"><span class="pre">[&quot;next&quot;,</span> <span class="pre">(&quot;next&quot;,</span> <span class="pre">&quot;obs&quot;)]</span></code>. Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>, i.e.
-only nested keys will be returned.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -587,7 +557,6 @@ indicated key.</p></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.encode"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.encode()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.index"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.index()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.is_in"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.is_in()</span></code></a></li>
-<li><a class="reference internal" href="#torchrl.data.CompositeSpec.keys"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.keys()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.project"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.project()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.rand"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.rand()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.to_numpy"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.to_numpy()</span></code></a></li>

@@ -235,7 +235,17 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/multi_task.html">Task-specific policy in multi-task environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
@@ -352,8 +362,8 @@ A single instance of the Q-value model is returned. It will be multiplicated by 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">hydra</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">hydra.core.config_store</span> <span class="kn">import</span> <span class="n">ConfigStore</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">dataclasses</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">proof_environment</span> <span class="o">=</span> <span class="n">TransformedEnv</span><span class="p">(</span><span class="n">GymEnv</span><span class="p">(</span><span class="s2">&quot;HalfCheetah-v2&quot;</span><span class="p">),</span> <span class="n">Compose</span><span class="p">(</span><span class="n">DoubleToFloat</span><span class="p">([</span><span class="s2">&quot;observation&quot;</span><span class="p">]),</span>
-<span class="gp">... </span>   <span class="n">CatTensors</span><span class="p">([</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="s2">&quot;observation_vector&quot;</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">proof_environment</span> <span class="o">=</span> <span class="n">TransformedEnv</span><span class="p">(</span><span class="n">GymEnv</span><span class="p">(</span><span class="s2">&quot;HalfCheetah-v2&quot;</span><span class="p">),</span> <span class="n">Compose</span><span class="p">(</span><span class="n">DoubleToFloat</span><span class="p">([</span><span class="s2">&quot;next_observation&quot;</span><span class="p">]),</span>
+<span class="gp">... </span>   <span class="n">CatTensors</span><span class="p">([</span><span class="s2">&quot;next_observation&quot;</span><span class="p">],</span> <span class="s2">&quot;next_observation_vector&quot;</span><span class="p">)))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">config_fields</span> <span class="o">=</span> <span class="p">[(</span><span class="n">config_field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">config_field</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">config_field</span><span class="p">)</span> <span class="k">for</span> <span class="n">config_cls</span> <span class="ow">in</span>
 <span class="gp">... </span>                   <span class="p">(</span><span class="n">RedqModelConfig</span><span class="p">,</span> <span class="n">EnvConfig</span><span class="p">)</span>
