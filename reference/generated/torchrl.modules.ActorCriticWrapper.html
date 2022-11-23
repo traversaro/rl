@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="QValueHook" href="torchrl.modules.tensordict_module.actors.QValueHook.html" />
+    <link rel="next" title="is_tensordict_compatible" href="torchrl.modules.tensordict_module.common.is_tensordict_compatible.html" />
     <link rel="prev" title="ActorCriticOperator" href="torchrl.modules.ActorCriticOperator.html" />
   <!-- Google Analytics -->
   
@@ -235,7 +235,17 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/multi_task.html">Task-specific policy in multi-task environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../knowledge_base.html">Knowledge Base</a></li>
@@ -322,7 +332,6 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.modules.</span></span><span class="sig-name descname"><span class="pre">ActorCriticWrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">policy_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.TensorDictModule.html#torchrl.modules.TensorDictModule" title="torchrl.modules.tensordict_module.common.TensorDictModule"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.TensorDictModule.html#torchrl.modules.TensorDictModule" title="torchrl.modules.tensordict_module.common.TensorDictModule"><span class="pre">TensorDictModule</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.modules.ActorCriticWrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>Actor-value operator without common module.</p>
 <p>This class wraps together an actor and a value model that do not share a common observation embedding network:</p>
-<a class="reference internal image-reference" href="../../_images/aafig-530360b23a8da4be8c7676a491cea8c897fe953f.svg"><img alt="../../_images/aafig-530360b23a8da4be8c7676a491cea8c897fe953f.svg" height="190.8" src="../../_images/aafig-530360b23a8da4be8c7676a491cea8c897fe953f.svg" width="308.40000000000003" /></a>
 <p>To facilitate the workflow, this  class comes with a get_policy_operator() and get_value_operator() methods, which
 will both return a stand-alone TDModule with the dedicated functionality.</p>
 <dl class="field-list simple">
@@ -409,7 +418,7 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.modules.tensordict_module.actors.QValueHook.html" class="btn btn-neutral float-right" title="QValueHook" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.modules.tensordict_module.common.is_tensordict_compatible.html" class="btn btn-neutral float-right" title="is_tensordict_compatible" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
         <a href="torchrl.modules.ActorCriticOperator.html" class="btn btn-neutral" title="ActorCriticOperator" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
