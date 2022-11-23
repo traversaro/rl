@@ -235,7 +235,17 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/tensordict_tutorial.html">TensorDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/torch_envs.html">TorchRL envs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/multi_task.html">Task-specific policy in multi-task environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="knowledge_base.html">Knowledge Base</a></li>
@@ -493,34 +503,28 @@ only is also a perfectly valid use.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_sac_loss.html#torchrl.trainers.helpers.make_sac_loss" title="torchrl.trainers.helpers.make_sac_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_sac_loss</span></code></a>(model, cfg)</p></td>
 <td><p>Builds the SAC loss module.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_a2c_loss.html#torchrl.trainers.helpers.make_a2c_loss" title="torchrl.trainers.helpers.make_a2c_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_a2c_loss</span></code></a>(model, cfg)</p></td>
-<td><p>Builds the A2C loss module.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_dqn_loss.html#torchrl.trainers.helpers.make_dqn_loss" title="torchrl.trainers.helpers.make_dqn_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_dqn_loss</span></code></a>(model, cfg)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_dqn_loss.html#torchrl.trainers.helpers.make_dqn_loss" title="torchrl.trainers.helpers.make_dqn_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_dqn_loss</span></code></a>(model, cfg)</p></td>
 <td><p>Builds the DQN loss module.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_ddpg_loss.html#torchrl.trainers.helpers.make_ddpg_loss" title="torchrl.trainers.helpers.make_ddpg_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_ddpg_loss</span></code></a>(model, cfg)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_ddpg_loss.html#torchrl.trainers.helpers.make_ddpg_loss" title="torchrl.trainers.helpers.make_ddpg_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_ddpg_loss</span></code></a>(model, cfg)</p></td>
 <td><p>Builds the DDPG loss module.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_target_updater.html#torchrl.trainers.helpers.make_target_updater" title="torchrl.trainers.helpers.make_target_updater"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_target_updater</span></code></a>(cfg, loss_module)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_target_updater.html#torchrl.trainers.helpers.make_target_updater" title="torchrl.trainers.helpers.make_target_updater"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_target_updater</span></code></a>(cfg, loss_module)</p></td>
 <td><p>Builds a target network weight update object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_ppo_loss.html#torchrl.trainers.helpers.make_ppo_loss" title="torchrl.trainers.helpers.make_ppo_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_ppo_loss</span></code></a>(model, cfg)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_ppo_loss.html#torchrl.trainers.helpers.make_ppo_loss" title="torchrl.trainers.helpers.make_ppo_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_ppo_loss</span></code></a>(model, cfg)</p></td>
 <td><p>Builds the PPO loss module.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_redq_loss.html#torchrl.trainers.helpers.make_redq_loss" title="torchrl.trainers.helpers.make_redq_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_redq_loss</span></code></a>(model, cfg)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_redq_loss.html#torchrl.trainers.helpers.make_redq_loss" title="torchrl.trainers.helpers.make_redq_loss"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_redq_loss</span></code></a>(model, cfg)</p></td>
 <td><p>Builds the REDQ loss module.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_dqn_actor.html#torchrl.trainers.helpers.make_dqn_actor" title="torchrl.trainers.helpers.make_dqn_actor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_dqn_actor</span></code></a>(proof_environment, cfg, device)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_dqn_actor.html#torchrl.trainers.helpers.make_dqn_actor" title="torchrl.trainers.helpers.make_dqn_actor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_dqn_actor</span></code></a>(proof_environment, cfg, device)</p></td>
 <td><p>DQN constructor helper function.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_ddpg_actor.html#torchrl.trainers.helpers.make_ddpg_actor" title="torchrl.trainers.helpers.make_ddpg_actor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_ddpg_actor</span></code></a>(proof_environment, cfg[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_ddpg_actor.html#torchrl.trainers.helpers.make_ddpg_actor" title="torchrl.trainers.helpers.make_ddpg_actor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_ddpg_actor</span></code></a>(proof_environment, cfg[, ...])</p></td>
 <td><p>DDPG constructor helper function.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_ppo_model.html#torchrl.trainers.helpers.make_ppo_model" title="torchrl.trainers.helpers.make_ppo_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_ppo_model</span></code></a>(proof_environment, cfg, device)</p></td>
-<td><p>Actor-value model constructor helper function.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_a2c_model.html#torchrl.trainers.helpers.make_a2c_model" title="torchrl.trainers.helpers.make_a2c_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_a2c_model</span></code></a>(proof_environment, cfg, device)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_ppo_model.html#torchrl.trainers.helpers.make_ppo_model" title="torchrl.trainers.helpers.make_ppo_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_ppo_model</span></code></a>(proof_environment, cfg, device)</p></td>
 <td><p>Actor-value model constructor helper function.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.helpers.make_sac_model.html#torchrl.trainers.helpers.make_sac_model" title="torchrl.trainers.helpers.make_sac_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_sac_model</span></code></a>(proof_environment, cfg[, ...])</p></td>
