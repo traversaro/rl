@@ -33,9 +33,20 @@
   <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="_static/sg_gallery-rendered-html.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
   <!-- Google Analytics -->
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-117752657-2');
+    </script>
   
   <!-- End Google Analytics -->
   
@@ -210,7 +221,17 @@
         <div class="pytorch-menu pytorch-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           <div class="pytorch-left-menu-search">
             
-    
+
+            
+              
+              
+                <div class="version">
+                  main (None )
+                </div>
+              
+            
+
+            
 
 
   
@@ -224,6 +245,7 @@
   </form>
 </div>
 
+            
           </div>
 
           
@@ -232,7 +254,17 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_tutorial.html">TensorDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/torch_envs.html">TorchRL envs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/multi_task.html">Task-specific policy in multi-task environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">References:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/knowledge_base.html">Knowledge Base</a></li>
@@ -298,6 +330,27 @@
 
       <section data-toggle="wy-nav-shift" id="pytorch-content-wrap" class="pytorch-content-wrap">
         <div class="pytorch-content-left">
+
+        
+          <div class="pytorch-call-to-action-links">
+            <div id="tutorial-type">genindex</div>
+
+            <div id="google-colab-link">
+              <img class="call-to-action-img" src="_static/images/pytorch-colab.svg"/>
+              <div class="call-to-action-desktop-view">Run in Google Colab</div>
+              <div class="call-to-action-mobile-view">Colab</div>
+            </div>
+            <div id="download-notebook-link">
+              <img class="call-to-action-notebook-img" src="_static/images/pytorch-download.svg"/>
+              <div class="call-to-action-desktop-view">Download Notebook</div>
+              <div class="call-to-action-mobile-view">Notebook</div>
+            </div>
+            <div id="github-view-link">
+              <img class="call-to-action-img" src="_static/images/pytorch-github.svg"/>
+              <div class="call-to-action-desktop-view">View on GitHub</div>
+              <div class="call-to-action-mobile-view">GitHub</div>
+            </div>
+          </div>
 
         
           
@@ -476,6 +529,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/torchrl.modules.utils.biased_softplus.html#torchrl.modules.utils.biased_softplus">biased_softplus (class in torchrl.modules.utils)</a>
+</li>
       <li><a href="reference/generated/torchrl.envs.transforms.BinarizeReward.html#torchrl.envs.transforms.BinarizeReward">BinarizeReward (class in torchrl.envs.transforms)</a>
 </li>
       <li><a href="reference/generated/torchrl.data.BinaryDiscreteTensorSpec.html#torchrl.data.BinaryDiscreteTensorSpec">BinaryDiscreteTensorSpec (class in torchrl.data)</a>
@@ -650,6 +705,8 @@
         <li><a href="reference/generated/torchrl.data.UnboundedContinuousTensorSpec.html#torchrl.data.UnboundedContinuousTensorSpec.encode">(torchrl.data.UnboundedContinuousTensorSpec method)</a>
 </li>
       </ul></li>
+      <li><a href="reference/generated/torchrl.modules.tensordict_module.common.ensure_tensordict_compatible.html#torchrl.modules.tensordict_module.common.ensure_tensordict_compatible">ensure_tensordict_compatible (class in torchrl.modules.tensordict_module.common)</a>
+</li>
       <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase">EnvBase (class in torchrl.envs)</a>
 </li>
       <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.eval">eval() (torchrl.data.MultiStep method)</a>
@@ -789,13 +846,13 @@
 </li>
         <li><a href="reference/generated/torchrl.modules.RSSMPrior.html#torchrl.modules.RSSMPrior.forward">(torchrl.modules.RSSMPrior method)</a>
 </li>
-        <li><a href="reference/generated/torchrl.modules.SqueezeLayer.html#torchrl.modules.SqueezeLayer.forward">(torchrl.modules.SqueezeLayer method)</a>
-</li>
         <li><a href="reference/generated/torchrl.modules.TensorDictModule.html#torchrl.modules.TensorDictModule.forward">(torchrl.modules.TensorDictModule method)</a>
 </li>
         <li><a href="reference/generated/torchrl.modules.TensorDictModuleWrapper.html#torchrl.modules.TensorDictModuleWrapper.forward">(torchrl.modules.TensorDictModuleWrapper method)</a>
 </li>
         <li><a href="reference/generated/torchrl.modules.TensorDictSequential.html#torchrl.modules.TensorDictSequential.forward">(torchrl.modules.TensorDictSequential method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.modules.utils.biased_softplus.html#torchrl.modules.utils.biased_softplus.forward">(torchrl.modules.utils.biased_softplus method)</a>
 </li>
         <li><a href="reference/generated/torchrl.objectives.A2CLoss.html#torchrl.objectives.A2CLoss.forward">(torchrl.objectives.A2CLoss method)</a>
 </li>
@@ -988,6 +1045,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/torchrl.modules.utils.inv_softplus.html#torchrl.modules.utils.inv_softplus">inv_softplus (class in torchrl.modules.utils)</a>
+</li>
       <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.ipu">ipu() (torchrl.data.MultiStep method)</a>
 
       <ul>
@@ -1022,6 +1081,8 @@
         <li><a href="reference/generated/torchrl.data.UnboundedContinuousTensorSpec.html#torchrl.data.UnboundedContinuousTensorSpec.is_in">(torchrl.data.UnboundedContinuousTensorSpec method)</a>
 </li>
       </ul></li>
+      <li><a href="reference/generated/torchrl.modules.tensordict_module.common.is_tensordict_compatible.html#torchrl.modules.tensordict_module.common.is_tensordict_compatible">is_tensordict_compatible (class in torchrl.modules.tensordict_module.common)</a>
+</li>
       <li><a href="reference/generated/torchrl.collectors.SyncDataCollector.html#torchrl.collectors.SyncDataCollector.iterator">iterator() (torchrl.collectors.SyncDataCollector method)</a>
 </li>
   </ul></td>
@@ -1142,9 +1203,11 @@
 </li>
       <li><a href="reference/generated/torchrl.trainers.helpers.make_target_updater.html#torchrl.trainers.helpers.make_target_updater">make_target_updater() (in module torchrl.trainers.helpers)</a>
 </li>
+      <li><a href="reference/generated/torchrl.trainers.helpers.make_trainer.html#torchrl.trainers.helpers.make_trainer">make_trainer() (in module torchrl.trainers.helpers)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/generated/torchrl.trainers.helpers.make_trainer.html#torchrl.trainers.helpers.make_trainer">make_trainer() (in module torchrl.trainers.helpers)</a>
+      <li><a href="reference/generated/torchrl.modules.utils.mappings.html#torchrl.modules.utils.mappings">mappings (class in torchrl.modules.utils)</a>
 </li>
       <li><a href="reference/generated/torchrl.modules.Delta.html#torchrl.modules.Delta.mean">mean (torchrl.modules.Delta property)</a>
 
@@ -1476,18 +1539,6 @@
         <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.register_full_backward_hook">(torchrl.envs.SerialEnv method)</a>
 </li>
       </ul></li>
-      <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.register_full_backward_pre_hook">register_full_backward_pre_hook() (torchrl.data.MultiStep method)</a>
-
-      <ul>
-        <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.register_full_backward_pre_hook">(torchrl.envs.EnvBase method)</a>
-</li>
-        <li><a href="reference/generated/torchrl.envs.GymLikeEnv.html#torchrl.envs.GymLikeEnv.register_full_backward_pre_hook">(torchrl.envs.GymLikeEnv method)</a>
-</li>
-        <li><a href="reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv.register_full_backward_pre_hook">(torchrl.envs.ParallelEnv method)</a>
-</li>
-        <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.register_full_backward_pre_hook">(torchrl.envs.SerialEnv method)</a>
-</li>
-      </ul></li>
       <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.register_load_state_dict_post_hook">register_load_state_dict_post_hook() (torchrl.data.MultiStep method)</a>
 
       <ul>
@@ -1737,10 +1788,6 @@
 </li>
       </ul></li>
       <li><a href="reference/generated/torchrl.collectors.utils.split_trajectories.html#torchrl.collectors.utils.split_trajectories">split_trajectories() (in module torchrl.collectors.utils)</a>
-</li>
-      <li><a href="reference/generated/torchrl.modules.Squeeze2dLayer.html#torchrl.modules.Squeeze2dLayer">Squeeze2dLayer (class in torchrl.modules)</a>
-</li>
-      <li><a href="reference/generated/torchrl.modules.SqueezeLayer.html#torchrl.modules.SqueezeLayer">SqueezeLayer (class in torchrl.modules)</a>
 </li>
       <li><a href="reference/generated/torchrl.collectors.aSyncDataCollector.html#torchrl.collectors.aSyncDataCollector.state_dict">state_dict() (torchrl.collectors.aSyncDataCollector method)</a>
 
@@ -2272,7 +2319,7 @@
             <li><a href="https://twitter.com/pytorch" target="_blank">Twitter</a></li>
             <li><a href="https://www.youtube.com/pytorch" target="_blank">YouTube</a></li>
             <li><a href="https://www.linkedin.com/company/pytorch" target="_blank">LinkedIn</a></li>
-          </ul>  
+          </ul>
           </div>
 
         <div class="footer-links-col">
@@ -2285,7 +2332,7 @@
           </ul>
          </div>
         </div>
-        
+
         <div class="privacy-policy">
           <ul>
             <li class="privacy-policy-links"><a href="https://www.linuxfoundation.org/terms/" target="_blank">Terms</a></li>
@@ -2335,7 +2382,7 @@
           <li>
             <a href="https://pytorch.org/ecosystem">Ecosystem</a>
           </li>
-            
+
           <li>
             <a href="https://pytorch.org/mobile">Mobile</a>
           </li>
@@ -2397,7 +2444,7 @@
           <li class="resources-mobile-menu-title">
             Resources
           </li>
-            
+
            <ul class="resources-mobile-menu-items">
 
             <li>
