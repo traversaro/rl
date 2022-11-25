@@ -383,7 +383,7 @@ Replay buffers
 .. code-block:: default
 
 
-    from torchrl.data import ReplayBuffer, PrioritizedReplayBuffer
+    from torchrl.data import PrioritizedReplayBuffer, ReplayBuffer
 
 
 
@@ -565,7 +565,7 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
     tensor([[0],
-            [1]], dtype=torch.int32)
+            [0]], dtype=torch.int32)
 
 
 
@@ -592,8 +592,8 @@ Here are examples of using a replaybuffer with tensordicts.
 
  .. code-block:: none
 
-    0 0.06984968483448029
-    1 0.28791671991348267
+    0 0.28791671991348267
+    1 1.0
     2 0.0
 
 
@@ -609,7 +609,7 @@ Envs
 .. code-block:: default
 
 
-    from torchrl.envs.libs.gym import GymWrapper, GymEnv
+    from torchrl.envs.libs.gym import GymEnv, GymWrapper
 
     gym_env = gym.make("Pendulum-v1")
     env = GymWrapper(gym_env)
@@ -712,9 +712,9 @@ Changing environments config
 
     from torchrl.envs import (
         Compose,
+        NoopResetEnv,
         ObservationNorm,
         ToTensorImage,
-        NoopResetEnv,
         TransformedEnv,
     )
 
@@ -741,9 +741,9 @@ Transforms
 
     from torchrl.envs import (
         Compose,
+        NoopResetEnv,
         ObservationNorm,
         ToTensorImage,
-        NoopResetEnv,
         TransformedEnv,
     )
 
@@ -905,7 +905,7 @@ Example of a MLP model:
 .. code-block:: default
 
 
-    from torchrl.modules import MLP, ConvNet
+    from torchrl.modules import ConvNet, MLP
     from torchrl.modules.models.utils import SquashDims
 
     net = MLP(num_cells=[32, 64], out_features=4, activation_class=nn.ELU)
@@ -1327,14 +1327,17 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 484-507
+.. GENERATED FROM PYTHON SOURCE LINES 484-510
 
 .. code-block:: default
 
 
     # Probabilistic modules
-    from torchrl.modules import ProbabilisticTensorDictModule
-    from torchrl.modules import TanhNormal, NormalParamWrapper
+    from torchrl.modules import (
+        NormalParamWrapper,
+        ProbabilisticTensorDictModule,
+        TanhNormal,
+    )
 
     td = TensorDict(
         {"input": torch.randn(3, 5)},
@@ -1375,7 +1378,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 508-526
+.. GENERATED FROM PYTHON SOURCE LINES 511-529
 
 .. code-block:: default
 
@@ -1419,7 +1422,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 527-551
+.. GENERATED FROM PYTHON SOURCE LINES 530-554
 
 .. code-block:: default
 
@@ -1468,12 +1471,12 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 552-554
+.. GENERATED FROM PYTHON SOURCE LINES 555-557
 
 Using Environments and Modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 554-582
+.. GENERATED FROM PYTHON SOURCE LINES 557-585
 
 .. code-block:: default
 
@@ -1533,7 +1536,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 583-601
+.. GENERATED FROM PYTHON SOURCE LINES 586-604
 
 .. code-block:: default
 
@@ -1545,7 +1548,7 @@ Using Environments and Modules
     max_steps = 100
     tensordict = env.reset()
     tensordicts = []
-    for i in range(max_steps):
+    for _ in range(max_steps):
         actor(tensordict)
         tensordicts.append(env.step(tensordict))
         tensordict = step_mdp(tensordict)  # roughly equivalent to obs = next_obs
@@ -1583,7 +1586,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 602-605
+.. GENERATED FROM PYTHON SOURCE LINES 605-608
 
 .. code-block:: default
 
@@ -1603,7 +1606,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 606-613
+.. GENERATED FROM PYTHON SOURCE LINES 609-616
 
 .. code-block:: default
 
@@ -1641,7 +1644,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 614-622
+.. GENERATED FROM PYTHON SOURCE LINES 617-625
 
 .. code-block:: default
 
@@ -1651,7 +1654,7 @@ Using Environments and Modules
     # Collectors
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    from torchrl.collectors import MultiSyncDataCollector, MultiaSyncDataCollector
+    from torchrl.collectors import MultiaSyncDataCollector, MultiSyncDataCollector
 
 
 
@@ -1660,12 +1663,12 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 623-648
+.. GENERATED FROM PYTHON SOURCE LINES 626-651
 
 .. code-block:: default
 
 
-    from torchrl.envs import ParallelEnv, EnvCreator
+    from torchrl.envs import EnvCreator, ParallelEnv
     from torchrl.envs.libs.gym import GymEnv
     from torchrl.modules import TensorDictModule
 
@@ -1696,7 +1699,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 649-656
+.. GENERATED FROM PYTHON SOURCE LINES 652-659
 
 .. code-block:: default
 
@@ -1738,7 +1741,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 657-676
+.. GENERATED FROM PYTHON SOURCE LINES 660-679
 
 .. code-block:: default
 
@@ -1792,12 +1795,12 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 677-679
+.. GENERATED FROM PYTHON SOURCE LINES 680-682
 
 Objectives
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 679-700
+.. GENERATED FROM PYTHON SOURCE LINES 682-703
 
 .. code-block:: default
 
@@ -1829,7 +1832,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 701-715
+.. GENERATED FROM PYTHON SOURCE LINES 704-718
 
 .. code-block:: default
 
@@ -1854,7 +1857,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 716-719
+.. GENERATED FROM PYTHON SOURCE LINES 719-722
 
 .. code-block:: default
 
@@ -1884,7 +1887,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 720-723
+.. GENERATED FROM PYTHON SOURCE LINES 723-726
 
 .. code-block:: default
 
@@ -1919,7 +1922,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 724-743
+.. GENERATED FROM PYTHON SOURCE LINES 727-746
 
 State of the Library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1941,7 +1944,7 @@ RL (or just curious), try it! Give us feedback: what will make the success of
 TorchRL is how well it covers researchers needs. To do that, we need their input!
 Since the library is nascent, it is a great time for you to shape it the way you want!
 
-.. GENERATED FROM PYTHON SOURCE LINES 745-749
+.. GENERATED FROM PYTHON SOURCE LINES 748-752
 
 Installing the Library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1951,7 +1954,7 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  28.026 seconds)
+   **Total running time of the script:** ( 0 minutes  34.609 seconds)
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:

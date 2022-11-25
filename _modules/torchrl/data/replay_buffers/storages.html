@@ -733,25 +733,9 @@
                 <span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">tensor</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">flatten_keys</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
-                <span class="c1"># if isinstance(tensor, TensorDictBase):</span>
-                <span class="c1">#     out[key] = (</span>
-                <span class="c1">#         tensor.expand(self.max_size, *tensor.shape)</span>
-                <span class="c1">#         .clone()</span>
-                <span class="c1">#         .zero_()</span>
-                <span class="c1">#         .memmap_(prefix=self.scratch_dir)</span>
-                <span class="c1">#         .to(self.device)</span>
-                <span class="c1">#     )</span>
-                <span class="c1"># else:</span>
-                <span class="c1">#     out[key] = _value = MemmapTensor(</span>
-                <span class="c1">#         self.max_size,</span>
-                <span class="c1">#         *tensor.shape,</span>
-                <span class="c1">#         device=self.device,</span>
-                <span class="c1">#         dtype=tensor.dtype,</span>
-                <span class="c1">#         prefix=self.scratch_dir,</span>
-                <span class="c1">#     )</span>
                 <span class="n">filesize</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1024</span> <span class="o">/</span> <span class="mi">1024</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">tensor</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">filesize</span><span class="si">}</span><span class="s2"> Mb of storage (size: </span><span class="si">{</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">,</span> <span class="o">*</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">]</span><span class="si">}</span><span class="s2">).&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\t</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">tensor</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">filesize</span><span class="si">}</span><span class="s2"> Mb of storage (size: </span><span class="si">{</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">).&quot;</span>
                 <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span> <span class="o">=</span> <span class="n">out</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span> <span class="o">=</span> <span class="kc">True</span></div>

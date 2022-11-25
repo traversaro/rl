@@ -60,7 +60,7 @@ We do not aim at giving a SOTA implementation of the algorithm, but rather
 to provide a high-level illustration of TorchRL features in the context
 of this algorithm.
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-83
+.. GENERATED FROM PYTHON SOURCE LINES 44-82
 
 .. code-block:: default
 
@@ -72,22 +72,21 @@ of this algorithm.
     from tensordict import TensorDict
     from torch import nn
     from torchrl.collectors import MultiaSyncDataCollector
-    from torchrl.data import TensorDictReplayBuffer, LazyMemmapStorage
-    from torchrl.envs import ParallelEnv, EnvCreator
+    from torchrl.data import LazyMemmapStorage, TensorDictReplayBuffer
+    from torchrl.envs import EnvCreator, ParallelEnv
     from torchrl.envs.libs.gym import GymEnv
     from torchrl.envs.transforms import (
-        TransformedEnv,
-        ToTensorImage,
+        CatFrames,
+        CatTensors,
         Compose,
         GrayScale,
-        CatFrames,
         ObservationNorm,
         Resize,
-        CatTensors,
+        ToTensorImage,
+        TransformedEnv,
     )
-    from torchrl.envs.utils import set_exploration_mode
-    from torchrl.envs.utils import step_mdp
-    from torchrl.modules import QValueActor, EGreedyWrapper, DuelingCnnDQNet
+    from torchrl.envs.utils import set_exploration_mode, step_mdp
+    from torchrl.modules import DuelingCnnDQNet, EGreedyWrapper, QValueActor
 
 
     def is_notebook() -> bool:
@@ -110,7 +109,7 @@ of this algorithm.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 84-89
+.. GENERATED FROM PYTHON SOURCE LINES 83-88
 
 Hyperparameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -118,7 +117,7 @@ Let's start with our hyperparameters. This is a totally arbitrary list of
 hyperparams that we found to work well in practice. Hopefully the performance
 of the algorithm should not be too sentitive to slight variations of these.
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-130
+.. GENERATED FROM PYTHON SOURCE LINES 88-129
 
 .. code-block:: default
 
@@ -170,7 +169,7 @@ of the algorithm should not be too sentitive to slight variations of these.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 131-146
+.. GENERATED FROM PYTHON SOURCE LINES 130-145
 
 **Note**: for fast rendering of the tutorial ``total_frames`` hyperparameter
 was set to a very low number. To get a reasonable performance, use a greater
@@ -188,7 +187,7 @@ Our environment builder has three arguments:
 - mean and standard deviation: we normalize the observations (images)
   with two parameters computed from a random rollout in the environment.
 
-.. GENERATED FROM PYTHON SOURCE LINES 146-177
+.. GENERATED FROM PYTHON SOURCE LINES 145-176
 
 .. code-block:: default
 
@@ -230,11 +229,11 @@ Our environment builder has three arguments:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 178-179
+.. GENERATED FROM PYTHON SOURCE LINES 177-178
 
 Compute normalizing constants:
 
-.. GENERATED FROM PYTHON SOURCE LINES 179-185
+.. GENERATED FROM PYTHON SOURCE LINES 178-184
 
 .. code-block:: default
 
@@ -253,11 +252,11 @@ Compute normalizing constants:
  .. code-block:: none
 
 
-    (0.9927790760993958, 0.0761055275797844)
+    (0.9927796125411987, 0.07610216736793518)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 186-195
+.. GENERATED FROM PYTHON SOURCE LINES 185-194
 
 The problem
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -269,7 +268,7 @@ policy. From gym:
 *goal is to balance the pole by applying forces in the left and right*
 *direction on the cart.*
 
-.. GENERATED FROM PYTHON SOURCE LINES 195-204
+.. GENERATED FROM PYTHON SOURCE LINES 194-203
 
 .. code-block:: default
 
@@ -289,7 +288,7 @@ policy. From gym:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 205-221
+.. GENERATED FROM PYTHON SOURCE LINES 204-220
 
 Building the model (Deep Q-network)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -308,7 +307,7 @@ Our network is wrapped in a ``QValueActor``, which will read the state-action
 values, pick up the one with the maximum value and write all those results
 in the input ``TensorDict``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-279
+.. GENERATED FROM PYTHON SOURCE LINES 220-278
 
 .. code-block:: default
 
@@ -377,14 +376,14 @@ in the input ``TensorDict``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 280-284
+.. GENERATED FROM PYTHON SOURCE LINES 279-283
 
 When creating the model, we initialize the network with an environment reset.
 We print the resulting tensordict instance to get an idea of what
 ``QValueActor`` (pay attention to the keys ``action``, ``action_value`` and
 ``chosen_action_value`` after calling the policy).
 
-.. GENERATED FROM PYTHON SOURCE LINES 284-299
+.. GENERATED FROM PYTHON SOURCE LINES 283-298
 
 .. code-block:: default
 
@@ -434,7 +433,7 @@ We print the resulting tensordict instance to get an idea of what
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 300-312
+.. GENERATED FROM PYTHON SOURCE LINES 299-311
 
 Regular DQN
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -449,7 +448,7 @@ We place the storage on disk using ``LazyMemmapStorage``. The only requirement
 of this storage is that the data given to it must always have the same
 shape. This storage will be instantiated later.
 
-.. GENERATED FROM PYTHON SOURCE LINES 312-320
+.. GENERATED FROM PYTHON SOURCE LINES 311-318
 
 .. code-block:: default
 
@@ -457,7 +456,6 @@ shape. This storage will be instantiated later.
     replay_buffer = TensorDictReplayBuffer(
         buffer_size,
         storage=LazyMemmapStorage(buffer_size),
-        collate_fn=lambda x: x,
         prefetch=n_optim,
     )
 
@@ -468,14 +466,14 @@ shape. This storage will be instantiated later.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 321-325
+.. GENERATED FROM PYTHON SOURCE LINES 319-323
 
 Our *data collector* will run two parallel environments in parallel, and
 deliver the collected tensordicts once at a time to the main process. We'll
 use the ``MultiaSyncDataCollector`` collector, which will collect data while
 the optimization is taking place.
 
-.. GENERATED FROM PYTHON SOURCE LINES 325-340
+.. GENERATED FROM PYTHON SOURCE LINES 323-338
 
 .. code-block:: default
 
@@ -501,11 +499,11 @@ the optimization is taking place.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 341-342
+.. GENERATED FROM PYTHON SOURCE LINES 339-340
 
 Our *optimizer* and the env used for evaluation
 
-.. GENERATED FROM PYTHON SOURCE LINES 342-347
+.. GENERATED FROM PYTHON SOURCE LINES 340-345
 
 .. code-block:: default
 
@@ -536,11 +534,11 @@ Our *optimizer* and the env used for evaluation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 348-349
+.. GENERATED FROM PYTHON SOURCE LINES 346-347
 
 Various lists that will contain the values recorded for evaluation:
 
-.. GENERATED FROM PYTHON SOURCE LINES 349-361
+.. GENERATED FROM PYTHON SOURCE LINES 347-359
 
 .. code-block:: default
 
@@ -563,13 +561,13 @@ Various lists that will contain the values recorded for evaluation:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 362-365
+.. GENERATED FROM PYTHON SOURCE LINES 360-363
 
 Training loop
 ------------------------------
 TODO: how to hide the cell output? a small plot is generated
 
-.. GENERATED FROM PYTHON SOURCE LINES 365-496
+.. GENERATED FROM PYTHON SOURCE LINES 363-494
 
 .. code-block:: default
 
@@ -595,7 +593,7 @@ TODO: how to hide the cell output? a small plot is generated
 
         # check that we have enough data to start training
         if sum(frames) > init_random_frames:
-            for i in range(n_optim):
+            for _ in range(n_optim):
                 # sample from the RB and send to device
                 sampled_data = replay_buffer.sample(batch_size)
                 sampled_data = sampled_data.to(device, non_blocking=True)
@@ -731,57 +729,57 @@ TODO: how to hide the cell output? a small plot is generated
 
 
       0%|          | 0/500 [00:00<?, ?it/s]
-      6%|6         | 32/500 [00:02<00:39, 11.84it/s]Creating a MemmapStorage...
+      6%|6         | 32/500 [00:02<00:42, 10.98it/s]Creating a MemmapStorage...
     The storage is being created: 
-            action: /tmp/tmpptklr4in, 0.00762939453125 Mb of storage (size: [500, 500, 2]).
-            action_value: /tmp/tmpv3au5ads, 0.003814697265625 Mb of storage (size: [500, 500, 2]).
-            chosen_action_value: /tmp/tmp9te0bs6a, 0.0019073486328125 Mb of storage (size: [500, 500, 1]).
-            done: /tmp/tmpae55z1nf, 0.000476837158203125 Mb of storage (size: [500, 500, 1]).
-            mask: /tmp/tmp36qs82pi, 0.000476837158203125 Mb of storage (size: [500, 500, 1]).
-            next.pixels: /tmp/tmp1m_bma5n, 31.25 Mb of storage (size: [500, 500, 4, 64, 64]).
-            pixels: /tmp/tmpiubb3j7m, 31.25 Mb of storage (size: [500, 500, 4, 64, 64]).
-            reward: /tmp/tmp4vgr3u8e, 0.0019073486328125 Mb of storage (size: [500, 500, 1]).
-            step_count: /tmp/tmp14tmzly2, 0.0019073486328125 Mb of storage (size: [500, 500, 1]).
-            traj_ids: /tmp/tmp_dr4uety, 0.0019073486328125 Mb of storage (size: [500, 500, 1]).
+            action: /tmp/tmp_hsph_b4, 0.00762939453125 Mb of storage (size: torch.Size([500, 2])).
+            action_value: /tmp/tmpzn5wznmp, 0.003814697265625 Mb of storage (size: torch.Size([500, 2])).
+            chosen_action_value: /tmp/tmpah21ygja, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+            done: /tmp/tmpy4jjliaf, 0.000476837158203125 Mb of storage (size: torch.Size([500, 1])).
+            mask: /tmp/tmpp16rffji, 0.000476837158203125 Mb of storage (size: torch.Size([500, 1])).
+            next.pixels: /tmp/tmphto70p7b, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
+            pixels: /tmp/tmps1wisp4p, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
+            reward: /tmp/tmpgyb9f4sz, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+            step_count: /tmp/tmpuakwrw5_, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+            traj_ids: /tmp/tmpy8nhkcx_, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
 
-     13%|#2        | 64/500 [00:03<00:18, 23.28it/s]
-     19%|#9        | 96/500 [00:04<00:16, 24.60it/s]
-    error:  23.0782, value:  19.2887:  19%|#9        | 96/500 [00:05<00:16, 24.60it/s]
-    error:  23.0782, value:  19.2887:  26%|##5       | 128/500 [00:05<00:15, 23.74it/s]
-    error:  32.1649, value:  18.7955:  26%|##5       | 128/500 [00:07<00:15, 23.74it/s]
-    error:  32.1649, value:  18.7955:  32%|###2      | 160/500 [00:08<00:20, 16.52it/s]
-    error:  45.1587, value:  18.3438:  32%|###2      | 160/500 [00:09<00:20, 16.52it/s]
-    error:  45.1587, value:  18.3438:  38%|###8      | 192/500 [00:09<00:15, 19.36it/s]
-    error:  19.9476, value:  19.4268:  38%|###8      | 192/500 [00:11<00:15, 19.36it/s]
-    error:  19.9476, value:  19.4268:  45%|####4     | 224/500 [00:12<00:16, 16.78it/s]
-    error:  12.6436, value:  19.4026:  45%|####4     | 224/500 [00:13<00:16, 16.78it/s]
-    error:  12.6436, value:  19.4026:  51%|#####1    | 256/500 [00:14<00:16, 15.05it/s]
-    error:  56.5880, value:  21.2060:  51%|#####1    | 256/500 [00:16<00:16, 15.05it/s]
-    error:  56.5880, value:  21.2060:  58%|#####7    | 288/500 [00:17<00:15, 14.08it/s]
-    error:  19.8406, value:  18.9374:  58%|#####7    | 288/500 [00:19<00:15, 14.08it/s]
-    error:  19.8406, value:  18.9374:  64%|######4   | 320/500 [00:19<00:12, 14.58it/s]
-    error:  37.3810, value:  18.1722:  64%|######4   | 320/500 [00:20<00:12, 14.58it/s]
-    error:  37.3810, value:  18.1722:  70%|#######   | 352/500 [00:21<00:10, 14.59it/s]
-    error:  21.3746, value:  18.2669:  70%|#######   | 352/500 [00:23<00:10, 14.59it/s]
-    error:  21.3746, value:  18.2669:  77%|#######6  | 384/500 [00:24<00:08, 13.36it/s]
-    error:  54.1642, value:  19.6698:  77%|#######6  | 384/500 [00:25<00:08, 13.36it/s]
-    error:  54.1642, value:  19.6698:  83%|########3 | 416/500 [00:27<00:06, 13.04it/s]
-    error:  6.7520, value:  19.4522:  83%|########3 | 416/500 [00:28<00:06, 13.04it/s] 
-    error:  6.7520, value:  19.4522:  90%|########9 | 448/500 [00:29<00:03, 13.85it/s]
-    error:  29.6336, value:  19.6594:  90%|########9 | 448/500 [00:30<00:03, 13.85it/s]
-    error:  29.6336, value:  19.6594:  96%|#########6| 480/500 [00:32<00:01, 12.42it/s]
-    error:  24.4327, value:  19.4862:  96%|#########6| 480/500 [00:33<00:01, 12.42it/s]
-    error:  24.4327, value:  19.4862: : 512it [00:35, 12.23it/s]                       
-    error:  28.6481, value:  17.8363: : 512it [00:36, 12.23it/s]
+     13%|#2        | 64/500 [00:03<00:18, 23.53it/s]
+     19%|#9        | 96/500 [00:05<00:21, 18.37it/s]
+    error:  12.5728, value:  19.1647:  19%|#9        | 96/500 [00:05<00:21, 18.37it/s]
+    error:  12.5728, value:  19.1647:  26%|##5       | 128/500 [00:06<00:15, 23.54it/s]
+    error:  21.1523, value:  19.1192:  26%|##5       | 128/500 [00:06<00:15, 23.54it/s]
+    error:  21.1523, value:  19.1192:  32%|###2      | 160/500 [00:08<00:17, 19.28it/s]
+    error:  18.2539, value:  20.3002:  32%|###2      | 160/500 [00:08<00:17, 19.28it/s]
+    error:  18.2539, value:  20.3002:  38%|###8      | 192/500 [00:09<00:12, 23.90it/s]
+    error:  26.6232, value:  17.1879:  38%|###8      | 192/500 [00:09<00:12, 23.90it/s]
+    error:  26.6232, value:  17.1879:  45%|####4     | 224/500 [00:10<00:13, 21.19it/s]
+    error:  21.6315, value:  17.2940:  45%|####4     | 224/500 [00:11<00:13, 21.19it/s]
+    error:  21.6315, value:  17.2940:  51%|#####1    | 256/500 [00:12<00:12, 19.14it/s]
+    error:  5.4500, value:  19.9293:  51%|#####1    | 256/500 [00:13<00:12, 19.14it/s] 
+    error:  5.4500, value:  19.9293:  58%|#####7    | 288/500 [00:14<00:10, 21.09it/s]
+    error:  9.0840, value:  19.9351:  58%|#####7    | 288/500 [00:14<00:10, 21.09it/s]
+    error:  9.0840, value:  19.9351:  64%|######4   | 320/500 [00:15<00:07, 24.16it/s]
+    error:  13.8485, value:  18.5989:  64%|######4   | 320/500 [00:15<00:07, 24.16it/s]
+    error:  13.8485, value:  18.5989:  70%|#######   | 352/500 [00:16<00:06, 21.82it/s]
+    error:  43.7268, value:  19.8274:  70%|#######   | 352/500 [00:17<00:06, 21.82it/s]
+    error:  43.7268, value:  19.8274:  77%|#######6  | 384/500 [00:18<00:05, 20.15it/s]
+    error:  17.3066, value:  19.1671:  77%|#######6  | 384/500 [00:19<00:05, 20.15it/s]
+    error:  17.3066, value:  19.1671:  83%|########3 | 416/500 [00:19<00:03, 22.03it/s]
+    error:  35.3951, value:  19.0997:  83%|########3 | 416/500 [00:20<00:03, 22.03it/s]
+    error:  35.3951, value:  19.0997:  90%|########9 | 448/500 [00:21<00:02, 22.70it/s]
+    error:  16.3091, value:  18.8548:  90%|########9 | 448/500 [00:21<00:02, 22.70it/s]
+    error:  16.3091, value:  18.8548:  96%|#########6| 480/500 [00:22<00:00, 22.28it/s]
+    error:  20.2487, value:  18.9211:  96%|#########6| 480/500 [00:23<00:00, 22.28it/s]
+    error:  20.2487, value:  18.9211: : 512it [00:24, 22.24it/s]                       
+    error:  36.2913, value:  19.1941: : 512it [00:24, 22.24it/s]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 497-499
+.. GENERATED FROM PYTHON SOURCE LINES 495-497
 
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 500000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 499-506
+.. GENERATED FROM PYTHON SOURCE LINES 497-504
 
 .. code-block:: default
 
@@ -810,7 +808,7 @@ use a greater value for ``total_frames`` e.g. 500000.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 507-524
+.. GENERATED FROM PYTHON SOURCE LINES 505-522
 
 .. code-block:: default
 
@@ -838,7 +836,7 @@ use a greater value for ``total_frames`` e.g. 500000.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 525-541
+.. GENERATED FROM PYTHON SOURCE LINES 523-539
 
 TD-lambda
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -857,7 +855,7 @@ using its mask: by keeping a shape ``[Batch x timesteps]`` and giving this
 to the RB, we'll be creating a replay buffer of size
 ``[Capacity x timesteps]``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 541-546
+.. GENERATED FROM PYTHON SOURCE LINES 539-544
 
 .. code-block:: default
 
@@ -873,11 +871,11 @@ to the RB, we'll be creating a replay buffer of size
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 547-548
+.. GENERATED FROM PYTHON SOURCE LINES 545-546
 
 We reset the actor, the RB and the collector
 
-.. GENERATED FROM PYTHON SOURCE LINES 548-563
+.. GENERATED FROM PYTHON SOURCE LINES 546-561
 
 .. code-block:: default
 
@@ -925,7 +923,7 @@ We reset the actor, the RB and the collector
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 564-584
+.. GENERATED FROM PYTHON SOURCE LINES 562-581
 
 .. code-block:: default
 
@@ -935,7 +933,6 @@ We reset the actor, the RB and the collector
     replay_buffer = TensorDictReplayBuffer(
         -(-buffer_size // max_size),
         storage=LazyMemmapStorage(buffer_size),
-        collate_fn=lambda x: x,
         prefetch=n_optim,
     )
 
@@ -958,11 +955,11 @@ We reset the actor, the RB and the collector
  .. code-block:: none
 
 
-    error:  28.6481, value:  17.8363: : 512it [00:52, 12.23it/s]
+    error:  36.2913, value:  19.1941: : 512it [00:37, 22.24it/s]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 585-590
+.. GENERATED FROM PYTHON SOURCE LINES 582-587
 
 .. code-block:: default
 
@@ -993,7 +990,7 @@ We reset the actor, the RB and the collector
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 591-603
+.. GENERATED FROM PYTHON SOURCE LINES 588-600
 
 .. code-block:: default
 
@@ -1016,7 +1013,7 @@ We reset the actor, the RB and the collector
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 604-612
+.. GENERATED FROM PYTHON SOURCE LINES 601-609
 
 Training loop
 ------------------------------
@@ -1027,7 +1024,7 @@ There are very few differences with the training loop above:
   ``[Batch x max_size]``), and sent directly to the RB.
 - We use ``vec_td_lambda_advantage_estimate`` to compute the target value.
 
-.. GENERATED FROM PYTHON SOURCE LINES 612-750
+.. GENERATED FROM PYTHON SOURCE LINES 609-747
 
 .. code-block:: default
 
@@ -1049,7 +1046,7 @@ There are very few differences with the training loop above:
             traj_lengths.append(data["step_count"][data["done"]].float().mean().item())
 
         if sum(frames) > init_random_frames:
-            for i in range(n_optim):
+            for _ in range(n_optim):
                 sampled_data = replay_buffer.sample(batch_size // max_size)
                 sampled_data = sampled_data.clone().to(device, non_blocking=True)
 
@@ -1196,89 +1193,87 @@ There are very few differences with the training loop above:
 
 
 
-      0%|          | 0/500 [00:00<?, ?it/s]    error:  28.6481, value:  17.8363: : 512it [00:53,  9.57it/s]
+      0%|          | 0/500 [00:00<?, ?it/s]    error:  36.2913, value:  19.1941: : 512it [00:38, 13.41it/s]
 
 
-      6%|6         | 32/500 [00:02<00:38, 12.15it/s]Creating a MemmapStorage...
+      6%|6         | 32/500 [00:02<00:35, 13.16it/s]Creating a MemmapStorage...
     The storage is being created: 
-            action: /tmp/tmprfe3jp95, 0.244140625 Mb of storage (size: [500, 500, 32, 2]).
-            action_value: /tmp/tmp5slwgrht, 0.1220703125 Mb of storage (size: [500, 500, 32, 2]).
-            chosen_action_value: /tmp/tmp6khu0kgg, 0.06103515625 Mb of storage (size: [500, 500, 32, 1]).
-            done: /tmp/tmpql38hswm, 0.0152587890625 Mb of storage (size: [500, 500, 32, 1]).
-            mask: /tmp/tmpybi3k435, 0.0152587890625 Mb of storage (size: [500, 500, 32, 1]).
-            next.pixels: /tmp/tmpuuvy_f9x, 1000.0 Mb of storage (size: [500, 500, 32, 4, 64, 64]).
-            pixels: /tmp/tmp2cauraoa, 1000.0 Mb of storage (size: [500, 500, 32, 4, 64, 64]).
-            reward: /tmp/tmpwovoqgid, 0.06103515625 Mb of storage (size: [500, 500, 32, 1]).
-            step_count: /tmp/tmpiwaea6wg, 0.06103515625 Mb of storage (size: [500, 500, 32, 1]).
-            traj_ids: /tmp/tmp7agkyz3y, 0.06103515625 Mb of storage (size: [500, 500, 32, 1]).
+            action: /tmp/tmpwcvoeux4, 0.244140625 Mb of storage (size: torch.Size([500, 32, 2])).
+            action_value: /tmp/tmpxn35ilqy, 0.1220703125 Mb of storage (size: torch.Size([500, 32, 2])).
+            chosen_action_value: /tmp/tmpn5g7wwd2, 0.06103515625 Mb of storage (size: torch.Size([500, 32, 1])).
+            done: /tmp/tmp0sgmnhtd, 0.0152587890625 Mb of storage (size: torch.Size([500, 32, 1])).
+            mask: /tmp/tmpc6dw4iy7, 0.0152587890625 Mb of storage (size: torch.Size([500, 32, 1])).
+            next.pixels: /tmp/tmphzsqgu0i, 1000.0 Mb of storage (size: torch.Size([500, 32, 4, 64, 64])).
+            pixels: /tmp/tmpeu8gomem, 1000.0 Mb of storage (size: torch.Size([500, 32, 4, 64, 64])).
+            reward: /tmp/tmp8mqml2qe, 0.06103515625 Mb of storage (size: torch.Size([500, 32, 1])).
+            step_count: /tmp/tmp37lp7ovs, 0.06103515625 Mb of storage (size: torch.Size([500, 32, 1])).
+            traj_ids: /tmp/tmp3f466few, 0.06103515625 Mb of storage (size: torch.Size([500, 32, 1])).
 
 
-     13%|#2        | 64/500 [00:16<02:06,  3.46it/s]
+     13%|#2        | 64/500 [00:12<01:32,  4.70it/s]
 
-     19%|#9        | 96/500 [00:16<01:04,  6.29it/s]
+    error:  4.2383, value:  1.2892:  19%|#9        | 96/500 [00:13<01:25,  4.70it/s]
 
-    error:  12.8982, value:  8.7818:  19%|#9        | 96/500 [00:19<01:04,  6.29it/s]
+    error:  4.2383, value:  1.2892:  26%|##5       | 128/500 [00:14<00:37,  9.85it/s]
 
-    error:  12.8982, value:  8.7818:  26%|##5       | 128/500 [00:20<00:53,  6.99it/s]
+    error:  4.5012, value:  1.8901:  26%|##5       | 128/500 [00:15<00:37,  9.85it/s]
 
-    error:  9.5838, value:  0.6619:  26%|##5       | 128/500 [00:21<00:53,  6.99it/s] 
+    error:  4.5012, value:  1.8901:  32%|###2      | 160/500 [00:15<00:26, 12.99it/s]
 
-    error:  9.5838, value:  0.6619:  32%|###2      | 160/500 [00:22<00:40,  8.36it/s]
+    error:  3.4557, value:  2.5235:  32%|###2      | 160/500 [00:16<00:26, 12.99it/s]
 
-    error:  11.1717, value:  9.0023:  32%|###2      | 160/500 [00:24<00:40,  8.36it/s]
+    error:  3.4557, value:  2.5235:  38%|###8      | 192/500 [00:17<00:22, 13.73it/s]
 
-    error:  11.1717, value:  9.0023:  38%|###8      | 192/500 [00:25<00:31,  9.80it/s]
+    error:  4.4328, value:  5.6355:  38%|###8      | 192/500 [00:17<00:22, 13.73it/s]
 
-    error:  3.6599, value:  2.5345:  38%|###8      | 192/500 [00:26<00:31,  9.80it/s] 
+    error:  4.4328, value:  5.6355:  45%|####4     | 224/500 [00:18<00:15, 17.33it/s]
 
-    error:  3.6599, value:  2.5345:  45%|####4     | 224/500 [00:27<00:24, 11.16it/s]
+    error:  5.5024, value:  6.2614:  45%|####4     | 224/500 [00:18<00:15, 17.33it/s]
 
-    error:  6.6734, value:  6.9877:  45%|####4     | 224/500 [00:28<00:24, 11.16it/s]
+    error:  5.5024, value:  6.2614:  51%|#####1    | 256/500 [00:19<00:13, 18.16it/s]
 
-    error:  6.6734, value:  6.9877:  51%|#####1    | 256/500 [00:29<00:20, 12.00it/s]
+    error:  3.7344, value:  5.8358:  51%|#####1    | 256/500 [00:20<00:13, 18.16it/s]
 
-    error:  3.5773, value:  5.0957:  51%|#####1    | 256/500 [00:30<00:20, 12.00it/s]
+    error:  3.7344, value:  5.8358:  58%|#####7    | 288/500 [00:20<00:10, 20.70it/s]
 
-    error:  3.5773, value:  5.0957:  58%|#####7    | 288/500 [00:31<00:16, 12.92it/s]
+    error:  1.8467, value:  6.5214:  58%|#####7    | 288/500 [00:21<00:10, 20.70it/s]
 
-    error:  3.4253, value:  5.1752:  58%|#####7    | 288/500 [00:33<00:16, 12.92it/s]
+    error:  1.8467, value:  6.5214:  64%|######4   | 320/500 [00:22<00:08, 20.49it/s]
 
-    error:  3.4253, value:  5.1752:  64%|######4   | 320/500 [00:34<00:14, 12.35it/s]
+    error:  10.1246, value:  5.0875:  64%|######4   | 320/500 [00:22<00:08, 20.49it/s]
 
-    error:  6.2181, value:  6.3707:  64%|######4   | 320/500 [00:35<00:14, 12.35it/s]
+    error:  10.1246, value:  5.0875:  70%|#######   | 352/500 [00:23<00:06, 22.08it/s]
 
-    error:  6.2181, value:  6.3707:  70%|#######   | 352/500 [00:36<00:11, 13.22it/s]
+    error:  2.4209, value:  5.3423:  70%|#######   | 352/500 [00:24<00:06, 22.08it/s] 
 
-    error:  4.7765, value:  2.5683:  70%|#######   | 352/500 [00:38<00:11, 13.22it/s]
+    error:  2.4209, value:  5.3423:  77%|#######6  | 384/500 [00:25<00:06, 18.56it/s]
 
-    error:  4.7765, value:  2.5683:  77%|#######6  | 384/500 [00:39<00:09, 11.92it/s]
+    error:  16.5128, value:  9.4426:  77%|#######6  | 384/500 [00:26<00:06, 18.56it/s]
 
-    error:  3.2243, value:  5.9332:  77%|#######6  | 384/500 [00:40<00:09, 11.92it/s]
+    error:  16.5128, value:  9.4426:  83%|########3 | 416/500 [00:27<00:04, 19.24it/s]
 
-    error:  3.2243, value:  5.9332:  83%|########3 | 416/500 [00:42<00:06, 12.18it/s]
+    error:  4.6767, value:  6.1701:  83%|########3 | 416/500 [00:28<00:04, 19.24it/s] 
 
-    error:  3.8336, value:  6.6146:  83%|########3 | 416/500 [00:43<00:06, 12.18it/s]
+    error:  4.6767, value:  6.1701:  90%|########9 | 448/500 [00:28<00:02, 19.54it/s]
 
-    error:  3.8336, value:  6.6146:  90%|########9 | 448/500 [00:45<00:04, 11.64it/s]
+    error:  3.8810, value:  3.8974:  90%|########9 | 448/500 [00:29<00:02, 19.54it/s]
 
-    error:  4.2184, value:  6.6967:  90%|########9 | 448/500 [00:46<00:04, 11.64it/s]
+    error:  3.8810, value:  3.8974:  96%|#########6| 480/500 [00:30<00:01, 18.99it/s]
 
-    error:  4.2184, value:  6.6967:  96%|#########6| 480/500 [00:48<00:01, 11.53it/s]
+    error:  4.6113, value:  6.4161:  96%|#########6| 480/500 [00:31<00:01, 18.99it/s]
 
-    error:  15.1239, value:  13.3230:  96%|#########6| 480/500 [00:49<00:01, 11.53it/s]
+    error:  4.6113, value:  6.4161: : 512it [00:32, 20.32it/s]                       
 
-    error:  15.1239, value:  13.3230: : 512it [00:50, 11.63it/s]                       
-
-    error:  12.6332, value:  8.7593: : 512it [00:52, 11.63it/s] 
+    error:  2.1698, value:  4.4349: : 512it [00:32, 20.32it/s]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 751-753
+.. GENERATED FROM PYTHON SOURCE LINES 748-750
 
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 500000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 753-759
+.. GENERATED FROM PYTHON SOURCE LINES 750-756
 
 .. code-block:: default
 
@@ -1306,7 +1301,7 @@ use a greater value for ``total_frames`` e.g. 500000.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 760-777
+.. GENERATED FROM PYTHON SOURCE LINES 757-774
 
 .. code-block:: default
 
@@ -1334,7 +1329,7 @@ use a greater value for ``total_frames`` e.g. 500000.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 778-784
+.. GENERATED FROM PYTHON SOURCE LINES 775-781
 
 Let's compare the results on a single plot. Because the TD(lambda) version
 works better, we'll have fewer episodes collected for a given number of
@@ -1343,7 +1338,7 @@ frames (as there are more frames per episode).
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 500000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 784-864
+.. GENERATED FROM PYTHON SOURCE LINES 781-861
 
 .. code-block:: default
 
@@ -1439,13 +1434,13 @@ use a greater value for ``total_frames`` e.g. 500000.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 865-868
+.. GENERATED FROM PYTHON SOURCE LINES 862-865
 
 Finally, we generate a new video to check what the algorithm has learnt.
 If all goes well, the duration should be significantly longer than with the
 initial, random rollout.
 
-.. GENERATED FROM PYTHON SOURCE LINES 868-873
+.. GENERATED FROM PYTHON SOURCE LINES 865-870
 
 .. code-block:: default
 
@@ -1465,26 +1460,26 @@ initial, random rollout.
 
     TensorDict(
         fields={
-            action: Tensor(torch.Size([9, 2]), dtype=torch.int64),
-            action_value: Tensor(torch.Size([9, 2]), dtype=torch.float32),
-            chosen_action_value: Tensor(torch.Size([9, 1]), dtype=torch.float32),
-            done: Tensor(torch.Size([9, 1]), dtype=torch.bool),
+            action: Tensor(torch.Size([10, 2]), dtype=torch.int64),
+            action_value: Tensor(torch.Size([10, 2]), dtype=torch.float32),
+            chosen_action_value: Tensor(torch.Size([10, 1]), dtype=torch.float32),
+            done: Tensor(torch.Size([10, 1]), dtype=torch.bool),
             next: LazyStackedTensorDict(
                 fields={
-                    pixels: Tensor(torch.Size([9, 4, 64, 64]), dtype=torch.float32)},
-                batch_size=torch.Size([9]),
+                    pixels: Tensor(torch.Size([10, 4, 64, 64]), dtype=torch.float32)},
+                batch_size=torch.Size([10]),
                 device=cpu,
                 is_shared=False),
-            pixels: Tensor(torch.Size([9, 4, 64, 64]), dtype=torch.float32),
-            pixels_save: Tensor(torch.Size([9, 400, 600, 3]), dtype=torch.uint8),
-            reward: Tensor(torch.Size([9, 1]), dtype=torch.float32)},
-        batch_size=torch.Size([9]),
+            pixels: Tensor(torch.Size([10, 4, 64, 64]), dtype=torch.float32),
+            pixels_save: Tensor(torch.Size([10, 400, 600, 3]), dtype=torch.uint8),
+            reward: Tensor(torch.Size([10, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([10]),
         device=cpu,
         is_shared=False)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 874-878
+.. GENERATED FROM PYTHON SOURCE LINES 871-875
 
 .. code-block:: default
 
@@ -1499,7 +1494,7 @@ initial, random rollout.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 879-905
+.. GENERATED FROM PYTHON SOURCE LINES 876-902
 
 Conclusion and possible improvements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1531,7 +1526,7 @@ algorithm. Other possible improvements could include:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  2.134 seconds)
+   **Total running time of the script:** ( 1 minutes  23.918 seconds)
 
 
 .. _sphx_glr_download_tutorials_coding_dqn.py:

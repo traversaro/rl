@@ -49,22 +49,21 @@ from matplotlib import pyplot as plt
 from tensordict import TensorDict
 from torch import nn
 from torchrl.collectors import MultiaSyncDataCollector
-from torchrl.data import TensorDictReplayBuffer, LazyMemmapStorage
-from torchrl.envs import ParallelEnv, EnvCreator
+from torchrl.data import LazyMemmapStorage, TensorDictReplayBuffer
+from torchrl.envs import EnvCreator, ParallelEnv
 from torchrl.envs.libs.gym import GymEnv
 from torchrl.envs.transforms import (
-    TransformedEnv,
-    ToTensorImage,
+    CatFrames,
+    CatTensors,
     Compose,
     GrayScale,
-    CatFrames,
     ObservationNorm,
     Resize,
-    CatTensors,
+    ToTensorImage,
+    TransformedEnv,
 )
-from torchrl.envs.utils import set_exploration_mode
-from torchrl.envs.utils import step_mdp
-from torchrl.modules import QValueActor, EGreedyWrapper, DuelingCnnDQNet
+from torchrl.envs.utils import set_exploration_mode, step_mdp
+from torchrl.modules import DuelingCnnDQNet, EGreedyWrapper, QValueActor
 
 
 def is_notebook() -> bool:
@@ -313,7 +312,6 @@ buffers_target_flat = buffers_target.flatten_keys(".")
 replay_buffer = TensorDictReplayBuffer(
     buffer_size,
     storage=LazyMemmapStorage(buffer_size),
-    collate_fn=lambda x: x,
     prefetch=n_optim,
 )
 
@@ -384,7 +382,7 @@ for j, data in enumerate(data_collector):
 
     # check that we have enough data to start training
     if sum(frames) > init_random_frames:
-        for i in range(n_optim):
+        for _ in range(n_optim):
             # sample from the RB and send to device
             sampled_data = replay_buffer.sample(batch_size)
             sampled_data = sampled_data.to(device, non_blocking=True)
@@ -567,7 +565,6 @@ max_size = frames_per_batch // n_workers
 replay_buffer = TensorDictReplayBuffer(
     -(-buffer_size // max_size),
     storage=LazyMemmapStorage(buffer_size),
-    collate_fn=lambda x: x,
     prefetch=n_optim,
 )
 
@@ -627,7 +624,7 @@ for j, data in enumerate(data_collector):
         traj_lengths.append(data["step_count"][data["done"]].float().mean().item())
 
     if sum(frames) > init_random_frames:
-        for i in range(n_optim):
+        for _ in range(n_optim):
             sampled_data = replay_buffer.sample(batch_size // max_size)
             sampled_data = sampled_data.clone().to(device, non_blocking=True)
 

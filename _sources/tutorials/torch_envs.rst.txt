@@ -189,7 +189,7 @@ uniformly distributed) numbers in that space:
  .. code-block:: none
 
     random action: 
-     tensor([-1.7072])
+     tensor([1.3793])
 
 
 
@@ -610,7 +610,7 @@ argument that allows the user to quickly ask for image-based environments:
  .. code-block:: none
 
 
-    <matplotlib.image.AxesImage object at 0x7fca6b91ca60>
+    <matplotlib.image.AxesImage object at 0x7fa1d59d2d90>
 
 
 
@@ -849,7 +849,7 @@ built around a ``base_dist`` distribution and (a sequence of) ``transforms``.
 .. code-block:: default
 
 
-    from torchrl.envs.transforms import TransformedEnv, ToTensorImage
+    from torchrl.envs.transforms import ToTensorImage, TransformedEnv
 
     # ToTensorImage transforms a numpy-like image into a tensor one,
     env = DMControlEnv("acrobot", "swingup", from_pixels=True, pixels_only=True)
@@ -1476,7 +1476,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    'bar_d09cd786-6ca1-11ed-b668-0242ac120002'
+    'bar_27c4b7b6-6ca4-11ed-b8a1-0242ac120002'
 
 
 
@@ -1525,7 +1525,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7fca522aa790>
+    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7fa1c8882b20>
 
 
 
@@ -1545,7 +1545,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    ['bar_d40079aa-6ca1-11ed-8223-0242ac120002', 'bar_d3d8e7e6-6ca1-11ed-8430-0242ac120002', 'bar_d3e2f862-6ca1-11ed-908d-0242ac120002']
+    ['bar_2b422220-6ca4-11ed-a232-0242ac120002', 'bar_2b7a7cd8-6ca4-11ed-afbf-0242ac120002', 'bar_2b5d7b60-6ca4-11ed-b9ee-0242ac120002']
 
 
 
@@ -1600,7 +1600,7 @@ either at construction time or afterwards:
 .. code-block:: default
 
 
-    from torchrl.envs import ParallelEnv, TransformedEnv, ToTensorImage, Resize, Compose
+    from torchrl.envs import Compose, ParallelEnv, Resize, ToTensorImage, TransformedEnv
     from torchrl.envs.libs.gym import GymEnv
 
 
@@ -1656,12 +1656,12 @@ operations on the main process if possible.
 
 
     from torchrl.envs import (
-        ParallelEnv,
-        TransformedEnv,
-        ToTensorImage,
-        Resize,
         Compose,
         GrayScale,
+        ParallelEnv,
+        Resize,
+        ToTensorImage,
+        TransformedEnv,
     )
     from torchrl.envs.libs.gym import GymEnv
 
@@ -1743,7 +1743,7 @@ In regular setting, using VecNorm is quite easy:
 
 
     from torchrl.envs.libs.gym import GymEnv
-    from torchrl.envs.transforms import VecNorm, TransformedEnv
+    from torchrl.envs.transforms import TransformedEnv, VecNorm
 
     env = TransformedEnv(GymEnv("Pendulum-v1"), VecNorm())
     tensordict = env.rollout(max_steps=100)
@@ -1759,8 +1759,8 @@ In regular setting, using VecNorm is quite easy:
 
  .. code-block:: none
 
-    mean: : tensor([-0.3409, -0.0942, -0.1492])
-    std: : tensor([0.9555, 1.1532, 1.1546])
+    mean: : tensor([0.2958, 0.2963, 0.1104])
+    std: : tensor([1.3439, 1.2246, 1.2648])
 
 
 
@@ -1781,7 +1781,7 @@ once created:
 
     from torchrl.envs import EnvCreator, ParallelEnv
     from torchrl.envs.libs.gym import GymEnv
-    from torchrl.envs.transforms import VecNorm, TransformedEnv
+    from torchrl.envs.transforms import TransformedEnv, VecNorm
 
     make_env = EnvCreator(lambda: TransformedEnv(GymEnv("CartPole-v1"), VecNorm(decay=1.0)))
     env = ParallelEnv(3, make_env)
@@ -1818,8 +1818,8 @@ once created:
         batch_size=torch.Size([3, 5]),
         device=cpu,
         is_shared=False)
-    mean: : tensor([ 0.1222, -0.2688, -0.0084])
-    std: : tensor([0.9115, 1.0267, 0.9971])
+    mean: : tensor([ 0.1906, -0.2450,  0.0467])
+    std: : tensor([0.9408, 0.7969, 0.8298])
 
 
 
@@ -1839,26 +1839,19 @@ This small difference will usually be absored throughout training.
 
     print(
         "update counts: ",
-        make_env.state_dict()["_extra_state"]["td"][("next", "observation_count")],
+        make_env.state_dict()["_extra_state"]["td"]["observation_count"],
     )
 
     env.close()
 
 
+
+
 .. rst-class:: sphx-glr-script-out
 
-.. code-block:: pytb
+ .. code-block:: none
 
-    Traceback (most recent call last):
-      File "/__w/rl/rl/docs/source/reference/generated/tutorials/torch_envs.py", line 661, in <module>
-        make_env.state_dict()["_extra_state"]["td"][("next", "observation_count")],
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/tensordict.py", line 1878, in __getitem__
-        return self.get(idx)
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/tensordict.py", line 2641, in get
-        return self._default_get(key, default)
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/tensordict.py", line 520, in _default_get
-        raise KeyError(
-    KeyError: 'key "(\'next\', \'observation_count\')" not found in TensorDict with keys [\'observation_count\', \'observation_ssq\', \'observation_sum\', \'reward_count\', \'reward_ssq\', \'reward_sum\']'
+    update counts:  tensor([18.])
 
 
 
@@ -1866,7 +1859,7 @@ This small difference will usually be absored throughout training.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  25.821 seconds)
+   **Total running time of the script:** ( 0 minutes  30.076 seconds)
 
 
 .. _sphx_glr_download_tutorials_torch_envs.py:

@@ -49,7 +49,7 @@ We do not aim at giving a SOTA implementation of the algorithm, but rather
 to provide a high-level illustration of TorchRL features in the context of
 this algorithm.
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-75
+.. GENERATED FROM PYTHON SOURCE LINES 32-74
 
 .. code-block:: default
 
@@ -64,32 +64,31 @@ this algorithm.
     import torch.cuda
     import tqdm
     from matplotlib import pyplot as plt
-    from torch import nn
-    from torch import optim
+    from torch import nn, optim
     from torchrl.collectors import MultiaSyncDataCollector
-    from torchrl.data import CompositeSpec
     from torchrl.data import (
+        CompositeSpec,
         TensorDictPrioritizedReplayBuffer,
         TensorDictReplayBuffer,
     )
     from torchrl.data.postprocs import MultiStep
     from torchrl.data.replay_buffers.storages import LazyMemmapStorage
     from torchrl.envs import (
-        ParallelEnv,
-        EnvCreator,
         CatTensors,
-        ObservationNorm,
         DoubleToFloat,
+        EnvCreator,
+        ObservationNorm,
+        ParallelEnv,
     )
     from torchrl.envs.libs.dm_control import DMControlEnv
     from torchrl.envs.libs.gym import GymEnv
     from torchrl.envs.transforms import RewardScaling, TransformedEnv
     from torchrl.envs.utils import set_exploration_mode, step_mdp
     from torchrl.modules import (
-        OrnsteinUhlenbeckProcessWrapper,
         MLP,
-        TensorDictModule,
+        OrnsteinUhlenbeckProcessWrapper,
         ProbabilisticActor,
+        TensorDictModule,
         ValueOperator,
     )
     from torchrl.modules.distributions.continuous import TanhDelta
@@ -103,7 +102,7 @@ this algorithm.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 76-95
+.. GENERATED FROM PYTHON SOURCE LINES 75-94
 
 Environment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -125,7 +124,7 @@ pixel-based environment, this can be done via the keyword argument
 ``from_pixels=True`` which is passed when calling ``GymEnv`` or
 ``DMControlEnv``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-126
+.. GENERATED FROM PYTHON SOURCE LINES 94-125
 
 .. code-block:: default
 
@@ -167,7 +166,7 @@ pixel-based environment, this can be done via the keyword argument
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-140
+.. GENERATED FROM PYTHON SOURCE LINES 126-139
 
 Transforms
 ------------------------------
@@ -183,7 +182,7 @@ to double precision numbers as this is the dtype expected by the library.
 We also leave the possibility to normalize the states: we will take care of
 computing the normalizing constants later on.
 
-.. GENERATED FROM PYTHON SOURCE LINES 140-192
+.. GENERATED FROM PYTHON SOURCE LINES 139-191
 
 .. code-block:: default
 
@@ -246,7 +245,7 @@ computing the normalizing constants later on.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 193-200
+.. GENERATED FROM PYTHON SOURCE LINES 192-199
 
 Parallel execution
 ------------------------------
@@ -256,7 +255,7 @@ execute the transform in the main process, or execute the transforms in
 parallel. To leverage the vectorization capabilities of PyTorch, we adopt
 the first method:
 
-.. GENERATED FROM PYTHON SOURCE LINES 200-222
+.. GENERATED FROM PYTHON SOURCE LINES 199-221
 
 .. code-block:: default
 
@@ -289,7 +288,7 @@ the first method:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 223-228
+.. GENERATED FROM PYTHON SOURCE LINES 222-227
 
 Normalization of the observations
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -297,7 +296,7 @@ To compute the normalizing statistics, we run an arbitrary number of random
 steps in the environment and compute the mean and standard deviation of the
 collected observations:
 
-.. GENERATED FROM PYTHON SOURCE LINES 228-279
+.. GENERATED FROM PYTHON SOURCE LINES 227-278
 
 .. code-block:: default
 
@@ -359,13 +358,13 @@ collected observations:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 280-283
+.. GENERATED FROM PYTHON SOURCE LINES 279-282
 
 Building the model
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Let us now build the DDPG actor and QValue network.
 
-.. GENERATED FROM PYTHON SOURCE LINES 283-341
+.. GENERATED FROM PYTHON SOURCE LINES 282-340
 
 .. code-block:: default
 
@@ -434,7 +433,7 @@ Let us now build the DDPG actor and QValue network.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 342-349
+.. GENERATED FROM PYTHON SOURCE LINES 341-348
 
 Evaluator: building your recorder object
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -444,7 +443,7 @@ do this using a dedicated class, ``Recorder``, which executes the policy in
 the environment at a given frequency and returns some statistics obtained
 from these simulations. The following helper function builds this object:
 
-.. GENERATED FROM PYTHON SOURCE LINES 349-366
+.. GENERATED FROM PYTHON SOURCE LINES 348-365
 
 .. code-block:: default
 
@@ -472,7 +471,7 @@ from these simulations. The following helper function builds this object:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 367-377
+.. GENERATED FROM PYTHON SOURCE LINES 366-376
 
 Replay buffer
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -485,7 +484,7 @@ store tensors on physical memory using a memory-mapped array. The following
 function takes care of creating the replay buffer with the desired
 hyperparameters:
 
-.. GENERATED FROM PYTHON SOURCE LINES 377-409
+.. GENERATED FROM PYTHON SOURCE LINES 376-406
 
 .. code-block:: default
 
@@ -497,7 +496,6 @@ hyperparameters:
                 buffer_size,
                 alpha=0.7,
                 beta=0.5,
-                collate_fn=lambda x: x,
                 pin_memory=False,
                 prefetch=make_replay_buffer,
                 storage=LazyMemmapStorage(
@@ -509,7 +507,6 @@ hyperparameters:
         else:
             replay_buffer = TensorDictReplayBuffer(
                 buffer_size,
-                collate_fn=lambda x: x,
                 pin_memory=False,
                 prefetch=make_replay_buffer,
                 storage=LazyMemmapStorage(
@@ -528,14 +525,14 @@ hyperparameters:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 410-414
+.. GENERATED FROM PYTHON SOURCE LINES 407-411
 
 Hyperparameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 After having written all our helper functions, it is now time to set the
 experiment hyperparameters:
 
-.. GENERATED FROM PYTHON SOURCE LINES 414-462
+.. GENERATED FROM PYTHON SOURCE LINES 411-459
 
 .. code-block:: default
 
@@ -594,7 +591,7 @@ experiment hyperparameters:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 463-473
+.. GENERATED FROM PYTHON SOURCE LINES 460-470
 
 **Note**: for fast rendering of the tutorial ``total_frames`` hyperparameter
 was set to a very low number. To get a reasonable performance, use a greater
@@ -607,7 +604,7 @@ then build the networks, wrap them in an exploration wrapper (following the
 seminal DDPG paper, we used an Ornstein-Uhlenbeck process to add noise to the
 sampled actions).
 
-.. GENERATED FROM PYTHON SOURCE LINES 473-503
+.. GENERATED FROM PYTHON SOURCE LINES 470-500
 
 .. code-block:: default
 
@@ -661,7 +658,7 @@ sampled actions).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 504-529
+.. GENERATED FROM PYTHON SOURCE LINES 501-526
 
 Data collector
 ------------------------------
@@ -689,7 +686,7 @@ The ``MultiStep`` object passed as postproc makes it so that the rewards
 of the n upcoming steps are added (with some discount factor) and the next
 observation is changed to be the n-step forward observation.
 
-.. GENERATED FROM PYTHON SOURCE LINES 529-552
+.. GENERATED FROM PYTHON SOURCE LINES 526-549
 
 .. code-block:: default
 
@@ -729,11 +726,11 @@ observation is changed to be the n-step forward observation.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 553-554
+.. GENERATED FROM PYTHON SOURCE LINES 550-551
 
 We can now create the replay buffer as part of the initialization.
 
-.. GENERATED FROM PYTHON SOURCE LINES 554-561
+.. GENERATED FROM PYTHON SOURCE LINES 551-558
 
 .. code-block:: default
 
@@ -751,12 +748,12 @@ We can now create the replay buffer as part of the initialization.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 562-564
+.. GENERATED FROM PYTHON SOURCE LINES 559-561
 
 Finally, we will use the Adam optimizer for the policy and value network,
 with the same learning rate for both.
 
-.. GENERATED FROM PYTHON SOURCE LINES 564-577
+.. GENERATED FROM PYTHON SOURCE LINES 561-574
 
 .. code-block:: default
 
@@ -780,7 +777,7 @@ with the same learning rate for both.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 578-618
+.. GENERATED FROM PYTHON SOURCE LINES 575-615
 
 Time to train the policy!
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -823,7 +820,7 @@ Some notes about the following cell:
   should be incorporated in the training loop (ideally early in the loop in
   async settings, and at the end of it in sync settings).
 
-.. GENERATED FROM PYTHON SOURCE LINES 618-717
+.. GENERATED FROM PYTHON SOURCE LINES 615-714
 
 .. code-block:: default
 
@@ -833,7 +830,7 @@ Some notes about the following cell:
 
     # Main loop
     norm_factor_training = (
-        sum(gamma ** i for i in range(n_steps_forward)) if n_steps_forward else 1
+        sum(gamma**i for i in range(n_steps_forward)) if n_steps_forward else 1
     )
 
     collected_frames = 0
@@ -861,7 +858,7 @@ Some notes about the following cell:
 
         # optimization steps
         if collected_frames >= init_random_frames:
-            for j in range(optim_steps_per_batch):
+            for _ in range(optim_steps_per_batch):
                 # sample from replay buffer
                 sampled_tensordict = replay_buffer.sample(batch_size).clone()
 
@@ -934,27 +931,27 @@ Some notes about the following cell:
 
  .. code-block:: none
 
-      0%|          | 0/2500 [00:00<?, ?it/s]     20%|##        | 500/2500 [00:01<00:06, 323.56it/s]Creating a MemmapStorage...
+      0%|          | 0/2500 [00:00<?, ?it/s]     20%|##        | 500/2500 [00:01<00:07, 261.96it/s]Creating a MemmapStorage...
     The storage is being created: 
-            action: /tmp/rfqcesr6, 0.057220458984375 Mb of storage (size: [2500, 2500, 6]).
-            done: /tmp/vbop0_30, 0.002384185791015625 Mb of storage (size: [2500, 2500, 1]).
-            gamma: /tmp/g6emgb30, 0.0095367431640625 Mb of storage (size: [2500, 2500, 1]).
-            index: /tmp/x2bz6g38, 0.0095367431640625 Mb of storage (size: [2500, 2500, 1]).
-            mask: /tmp/07tw0dji, 0.002384185791015625 Mb of storage (size: [2500, 2500, 1]).
-            next.observation_vector: /tmp/tmp7hligskv, 0.1621246337890625 Mb of storage (size: [2500, 2500, 17]).
-            nonterminal: /tmp/lyvlbaht, 0.002384185791015625 Mb of storage (size: [2500, 2500, 1]).
-            observation_vector: /tmp/6ytca2pn, 0.1621246337890625 Mb of storage (size: [2500, 2500, 17]).
-            original_reward: /tmp/rxx2y9x9, 0.0095367431640625 Mb of storage (size: [2500, 2500, 1]).
-            param: /tmp/ysjl8px_, 0.057220458984375 Mb of storage (size: [2500, 2500, 6]).
-            reward: /tmp/ftg0qckg, 0.0095367431640625 Mb of storage (size: [2500, 2500, 1]).
-            step_count: /tmp/t56u00tx, 0.0095367431640625 Mb of storage (size: [2500, 2500, 1]).
-            steps_to_next_obs: /tmp/168l2ll7, 0.019073486328125 Mb of storage (size: [2500, 2500, 1]).
-            traj_ids: /tmp/vcxfkdtr, 0.0095367431640625 Mb of storage (size: [2500, 2500, 1]).
-    reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7583:  20%|##        | 500/2500 [00:05<00:06, 323.56it/s]    reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7583:  40%|####      | 1000/2500 [00:05<00:08, 168.59it/s]    reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7583:  40%|####      | 1000/2500 [00:07<00:08, 168.59it/s]    reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7583:  60%|######    | 1500/2500 [00:07<00:04, 216.65it/s]    reward: -1.4095 (r0 = -1.3075), reward eval: reward: -0.7583:  60%|######    | 1500/2500 [00:07<00:04, 216.65it/s]    reward: -1.4095 (r0 = -1.3075), reward eval: reward: -0.7583:  80%|########  | 2000/2500 [00:07<00:01, 284.66it/s]    reward: -1.5917 (r0 = -1.3075), reward eval: reward: -0.7583:  80%|########  | 2000/2500 [00:09<00:01, 284.66it/s]    reward: -1.5917 (r0 = -1.3075), reward eval: reward: -0.7583: 100%|##########| 2500/2500 [00:09<00:00, 289.60it/s]    reward: -2.2234 (r0 = -1.3075), reward eval: reward: -0.7583: 100%|##########| 2500/2500 [00:10<00:00, 289.60it/s]
+            action: /tmp/axv5v7f2, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
+            done: /tmp/h6b40uq2, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
+            gamma: /tmp/3bmbo2sb, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+            index: /tmp/lvm0kzgg, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+            mask: /tmp/jyoni35m, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
+            next.observation_vector: /tmp/tmp5u6h7wd3, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
+            nonterminal: /tmp/us3i7imr, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
+            observation_vector: /tmp/p7ykje64, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
+            original_reward: /tmp/97ux0e_e, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+            param: /tmp/2yr7nabw, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
+            reward: /tmp/cnknb03l, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+            step_count: /tmp/zoupddk7, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+            steps_to_next_obs: /tmp/hsvcftek, 0.019073486328125 Mb of storage (size: torch.Size([2500, 1])).
+            traj_ids: /tmp/xhvw8bnf, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+    reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7567:  20%|##        | 500/2500 [00:07<00:07, 261.96it/s]    reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7567:  40%|####      | 1000/2500 [00:07<00:11, 129.77it/s]    reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7567:  40%|####      | 1000/2500 [00:08<00:11, 129.77it/s]    reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7567:  60%|######    | 1500/2500 [00:08<00:05, 198.31it/s]    reward: -1.4095 (r0 = -1.3075), reward eval: reward: -0.7567:  60%|######    | 1500/2500 [00:10<00:05, 198.31it/s]    reward: -1.4095 (r0 = -1.3075), reward eval: reward: -0.7567:  80%|########  | 2000/2500 [00:10<00:02, 197.16it/s]    reward: -2.0033 (r0 = -1.3075), reward eval: reward: -0.7567:  80%|########  | 2000/2500 [00:12<00:02, 197.16it/s]    reward: -2.0033 (r0 = -1.3075), reward eval: reward: -0.7567: 100%|##########| 2500/2500 [00:12<00:00, 216.34it/s]    reward: -2.2212 (r0 = -1.3075), reward eval: reward: -0.7567: 100%|##########| 2500/2500 [00:13<00:00, 216.34it/s]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 718-725
+.. GENERATED FROM PYTHON SOURCE LINES 715-722
 
 Experiment results
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -964,7 +961,7 @@ that our policy learned quite well to solve the task.
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 1000000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 725-735
+.. GENERATED FROM PYTHON SOURCE LINES 722-731
 
 .. code-block:: default
 
@@ -980,7 +977,6 @@ use a greater value for ``total_frames`` e.g. 1000000.
 
 
 
-
 .. image-sg:: /tutorials/images/sphx_glr_coding_ddpg_001.png
    :alt: coding ddpg
    :srcset: /tutorials/images/sphx_glr_coding_ddpg_001.png
@@ -990,7 +986,7 @@ use a greater value for ``total_frames`` e.g. 1000000.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 736-750
+.. GENERATED FROM PYTHON SOURCE LINES 732-746
 
 Sampling trajectories and using TD(lambda)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1007,7 +1003,7 @@ collect batches of 500 transitions obtained over 2 environments running in
 parallel, hence only 250 steps per trajectory are collected at any given
 time). Hence, we'll devide our replay buffer size by 250:
 
-.. GENERATED FROM PYTHON SOURCE LINES 750-756
+.. GENERATED FROM PYTHON SOURCE LINES 746-752
 
 .. code-block:: default
 
@@ -1031,7 +1027,7 @@ time). Hence, we'll devide our replay buffer size by 250:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 757-760
+.. GENERATED FROM PYTHON SOURCE LINES 753-756
 
 .. code-block:: default
 
@@ -1045,11 +1041,11 @@ time). Hence, we'll devide our replay buffer size by 250:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 761-762
+.. GENERATED FROM PYTHON SOURCE LINES 757-758
 
 The following code is identical to the initialization we made earlier:
 
-.. GENERATED FROM PYTHON SOURCE LINES 762-832
+.. GENERATED FROM PYTHON SOURCE LINES 758-827
 
 .. code-block:: default
 
@@ -1110,7 +1106,6 @@ The following code is identical to the initialization we made earlier:
     # trajectory recorder
     recorder = make_recorder(actor_model_explore, stats)
 
-
     # Optimizers
     optimizer_actor = optim.Adam(actor.parameters(), lr=lr, weight_decay=weight_decay)
     optimizer_qnet = optim.Adam(qnet.parameters(), lr=lr, weight_decay=weight_decay)
@@ -1139,17 +1134,17 @@ The following code is identical to the initialization we made earlier:
              1.7317e-01,  6.3022e-02]), 
     scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
             0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
-    reward: -2.2234 (r0 = -1.3075), reward eval: reward: -0.7583: 100%|##########| 2500/2500 [00:20<00:00, 289.60it/s]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 833-836
+
+.. GENERATED FROM PYTHON SOURCE LINES 828-831
 
 The training loop needs to be modified. First, whereas before extending the
 replay buffer we used to flatten the collected data, this won't be the case
 anymore. To understand why, let's check the output shape of the data collector:
 
-.. GENERATED FROM PYTHON SOURCE LINES 836-841
+.. GENERATED FROM PYTHON SOURCE LINES 831-836
 
 .. code-block:: default
 
@@ -1166,19 +1161,19 @@ anymore. To understand why, let's check the output shape of the data collector:
 
  .. code-block:: none
 
-    torch.Size([2, 250])
+    reward: -2.2212 (r0 = -1.3075), reward eval: reward: -0.7567: 100%|##########| 2500/2500 [00:30<00:00, 216.34it/s]torch.Size([2, 250])
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 842-846
+.. GENERATED FROM PYTHON SOURCE LINES 837-841
 
 We see that our data has shape ``[2, 250]`` as expected: 2 envs, each
 returning 250 frames.
 
 Let's import the td_lambda function
 
-.. GENERATED FROM PYTHON SOURCE LINES 846-851
+.. GENERATED FROM PYTHON SOURCE LINES 841-846
 
 .. code-block:: default
 
@@ -1194,7 +1189,7 @@ Let's import the td_lambda function
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 852-866
+.. GENERATED FROM PYTHON SOURCE LINES 847-861
 
 The training loop is roughly the same as before, with the exception that we
 don't flatten the collected data. Also, the sampling from the replay buffer
@@ -1211,10 +1206,9 @@ that do not have a time dimension, change the batch size to
 ``torch.Size([batch, time])``, compute our loss and then revert the
 batch size to ``torch.Size([batch])``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 866-980
+.. GENERATED FROM PYTHON SOURCE LINES 861-974
 
 .. code-block:: default
-
 
 
     rewards = []
@@ -1222,7 +1216,7 @@ batch size to ``torch.Size([batch])``.
 
     # Main loop
     norm_factor_training = (
-        sum(gamma ** i for i in range(n_steps_forward)) if n_steps_forward else 1
+        sum(gamma**i for i in range(n_steps_forward)) if n_steps_forward else 1
     )
 
     collected_frames = 0
@@ -1248,7 +1242,7 @@ batch size to ``torch.Size([batch])``.
 
         # optimization steps
         if collected_frames >= init_random_frames:
-            for j in range(optim_steps_per_batch):
+            for _ in range(optim_steps_per_batch):
                 # sample from replay buffer
                 sampled_tensordict = replay_buffer.sample(batch_size_traj)
                 # reset the batch size temporarily, and exclude index whose shape is incompatible with the new size
@@ -1331,25 +1325,29 @@ batch size to ``torch.Size([batch])``.
 
 
 
+
+
 .. rst-class:: sphx-glr-script-out
 
-.. code-block:: pytb
+ .. code-block:: none
 
-    Traceback (most recent call last):
-      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py", line 905, in <module>
-        sampled_tensordict.batch_size = [batch_size_traj, 250]
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/tensordict.py", line 2306, in batch_size
-        return self._batch_size_setter(new_size)
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/tensordict.py", line 317, in _batch_size_setter
-        self._check_new_batch_size(new_batch_size)
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/tensordict.py", line 1267, in _check_new_batch_size
-        raise RuntimeError(
-    RuntimeError: TensorDict requires tensors that have at least one more dimension than the batch_size. The tensor "next" has shape torch.Size([4, 250]) which is the same as the new size.
+    Creating a MemmapStorage...
+    The storage is being created: 
+            action: /tmp/vvpov7sq, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
+            done: /tmp/ne0i7c4o, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
+            index: /tmp/7o00t3_0, 0.000762939453125 Mb of storage (size: torch.Size([200, 1])).
+            mask: /tmp/arco3ea4, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
+            next.observation_vector: /tmp/tmpy6ris7u_, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
+            observation_vector: /tmp/hmuxuk9o, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
+            param: /tmp/iu3p0e5k, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
+            reward: /tmp/d4uknw9o, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
+            step_count: /tmp/gdt_zuhy, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
+            traj_ids: /tmp/hp53p8b8, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 981-986
+.. GENERATED FROM PYTHON SOURCE LINES 975-980
 
 We can observe that using TD(lambda) made our results considerably more
 stable for a similar training speed:
@@ -1357,7 +1355,7 @@ stable for a similar training speed:
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 1000000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 986-995
+.. GENERATED FROM PYTHON SOURCE LINES 980-989
 
 .. code-block:: default
 
@@ -1372,9 +1370,26 @@ use a greater value for ``total_frames`` e.g. 1000000.
     plt.title("TD-labmda DDPG results")
 
 
+
+.. image-sg:: /tutorials/images/sphx_glr_coding_ddpg_002.png
+   :alt: TD-labmda DDPG results
+   :srcset: /tutorials/images/sphx_glr_coding_ddpg_002.png
+   :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    Text(0.5, 1.0, 'TD-labmda DDPG results')
+
+
+
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  36.613 seconds)
+   **Total running time of the script:** ( 1 minutes  5.376 seconds)
 
 
 .. _sphx_glr_download_tutorials_coding_ddpg.py:

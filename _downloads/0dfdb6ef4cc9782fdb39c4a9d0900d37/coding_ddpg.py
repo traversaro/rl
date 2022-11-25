@@ -40,32 +40,31 @@ import torch
 import torch.cuda
 import tqdm
 from matplotlib import pyplot as plt
-from torch import nn
-from torch import optim
+from torch import nn, optim
 from torchrl.collectors import MultiaSyncDataCollector
-from torchrl.data import CompositeSpec
 from torchrl.data import (
+    CompositeSpec,
     TensorDictPrioritizedReplayBuffer,
     TensorDictReplayBuffer,
 )
 from torchrl.data.postprocs import MultiStep
 from torchrl.data.replay_buffers.storages import LazyMemmapStorage
 from torchrl.envs import (
-    ParallelEnv,
-    EnvCreator,
     CatTensors,
-    ObservationNorm,
     DoubleToFloat,
+    EnvCreator,
+    ObservationNorm,
+    ParallelEnv,
 )
 from torchrl.envs.libs.dm_control import DMControlEnv
 from torchrl.envs.libs.gym import GymEnv
 from torchrl.envs.transforms import RewardScaling, TransformedEnv
 from torchrl.envs.utils import set_exploration_mode, step_mdp
 from torchrl.modules import (
-    OrnsteinUhlenbeckProcessWrapper,
     MLP,
-    TensorDictModule,
+    OrnsteinUhlenbeckProcessWrapper,
     ProbabilisticActor,
+    TensorDictModule,
     ValueOperator,
 )
 from torchrl.modules.distributions.continuous import TanhDelta
@@ -382,7 +381,6 @@ def make_replay_buffer(make_replay_buffer=3):
             buffer_size,
             alpha=0.7,
             beta=0.5,
-            collate_fn=lambda x: x,
             pin_memory=False,
             prefetch=make_replay_buffer,
             storage=LazyMemmapStorage(
@@ -394,7 +392,6 @@ def make_replay_buffer(make_replay_buffer=3):
     else:
         replay_buffer = TensorDictReplayBuffer(
             buffer_size,
-            collate_fn=lambda x: x,
             pin_memory=False,
             prefetch=make_replay_buffer,
             storage=LazyMemmapStorage(
@@ -621,7 +618,7 @@ rewards_eval = []
 
 # Main loop
 norm_factor_training = (
-    sum(gamma ** i for i in range(n_steps_forward)) if n_steps_forward else 1
+    sum(gamma**i for i in range(n_steps_forward)) if n_steps_forward else 1
 )
 
 collected_frames = 0
@@ -649,7 +646,7 @@ for i, tensordict in enumerate(collector):
 
     # optimization steps
     if collected_frames >= init_random_frames:
-        for j in range(optim_steps_per_batch):
+        for _ in range(optim_steps_per_batch):
             # sample from replay buffer
             sampled_tensordict = replay_buffer.sample(batch_size).clone()
 
@@ -730,7 +727,6 @@ plt.legend()
 plt.xlabel("iter")
 plt.ylabel("reward")
 plt.tight_layout()
-
 
 ###############################################################################
 # Sampling trajectories and using TD(lambda)
@@ -816,7 +812,6 @@ replay_buffer = make_replay_buffer(0)
 # trajectory recorder
 recorder = make_recorder(actor_model_explore, stats)
 
-
 # Optimizers
 optimizer_actor = optim.Adam(actor.parameters(), lr=lr, weight_decay=weight_decay)
 optimizer_qnet = optim.Adam(qnet.parameters(), lr=lr, weight_decay=weight_decay)
@@ -864,13 +859,12 @@ lmbda = 0.95
 # ``torch.Size([batch, time])``, compute our loss and then revert the
 # batch size to ``torch.Size([batch])``.
 
-
 rewards = []
 rewards_eval = []
 
 # Main loop
 norm_factor_training = (
-    sum(gamma ** i for i in range(n_steps_forward)) if n_steps_forward else 1
+    sum(gamma**i for i in range(n_steps_forward)) if n_steps_forward else 1
 )
 
 collected_frames = 0
@@ -896,7 +890,7 @@ for i, tensordict in enumerate(collector):
 
     # optimization steps
     if collected_frames >= init_random_frames:
-        for j in range(optim_steps_per_batch):
+        for _ in range(optim_steps_per_batch):
             # sample from replay buffer
             sampled_tensordict = replay_buffer.sample(batch_size_traj)
             # reset the batch size temporarily, and exclude index whose shape is incompatible with the new size
