@@ -700,7 +700,7 @@ expand:  torch.Size([3, 2, 5]) torch.Size([3, 2, 5, 1])
 </section>
 <section id="replay-buffers">
 <h3>Replay buffers<a class="headerlink" href="#replay-buffers" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">ReplayBuffer</span><span class="p">,</span> <span class="n">PrioritizedReplayBuffer</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">PrioritizedReplayBuffer</span><span class="p">,</span> <span class="n">ReplayBuffer</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">rb</span> <span class="o">=</span> <span class="n">ReplayBuffer</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
@@ -802,7 +802,7 @@ TensorDict(
 </section>
 <section id="envs">
 <h2>Envs<a class="headerlink" href="#envs" title="Permalink to this heading">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymWrapper</span><span class="p">,</span> <span class="n">GymEnv</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymEnv</span><span class="p">,</span> <span class="n">GymWrapper</span>
 
 <span class="n">gym_env</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">)</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">GymWrapper</span><span class="p">(</span><span class="n">gym_env</span><span class="p">)</span>
@@ -852,9 +852,9 @@ TensorDict(
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Compose</span><span class="p">,</span>
+    <span class="n">NoopResetEnv</span><span class="p">,</span>
     <span class="n">ObservationNorm</span><span class="p">,</span>
     <span class="n">ToTensorImage</span><span class="p">,</span>
-    <span class="n">NoopResetEnv</span><span class="p">,</span>
     <span class="n">TransformedEnv</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -868,9 +868,9 @@ TensorDict(
 <h3>Transforms<a class="headerlink" href="#transforms" title="Permalink to this heading">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">Compose</span><span class="p">,</span>
+    <span class="n">NoopResetEnv</span><span class="p">,</span>
     <span class="n">ObservationNorm</span><span class="p">,</span>
     <span class="n">ToTensorImage</span><span class="p">,</span>
-    <span class="n">NoopResetEnv</span><span class="p">,</span>
     <span class="n">TransformedEnv</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -949,7 +949,7 @@ last transform parent:  TransformedEnv(
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">MLP</span><span class="p">,</span> <span class="n">ConvNet</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">ConvNet</span><span class="p">,</span> <span class="n">MLP</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.models.utils</span> <span class="kn">import</span> <span class="n">SquashDims</span>
 
 <span class="n">net</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">num_cells</span><span class="o">=</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">],</span> <span class="n">out_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">activation_class</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">ELU</span><span class="p">)</span>
@@ -1184,8 +1184,11 @@ torch.Size([10, 6400])
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Probabilistic modules</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">ProbabilisticTensorDictModule</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TanhNormal</span><span class="p">,</span> <span class="n">NormalParamWrapper</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">NormalParamWrapper</span><span class="p">,</span>
+    <span class="n">ProbabilisticTensorDictModule</span><span class="p">,</span>
+    <span class="n">TanhNormal</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">td</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">(</span>
     <span class="p">{</span><span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)},</span>
@@ -1403,10 +1406,10 @@ LazyStackedTensorDict(
 <span class="c1"># Collectors</span>
 <span class="c1"># ^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
 
-<span class="kn">from</span> <span class="nn">torchrl.collectors</span> <span class="kn">import</span> <span class="n">MultiSyncDataCollector</span><span class="p">,</span> <span class="n">MultiaSyncDataCollector</span>
+<span class="kn">from</span> <span class="nn">torchrl.collectors</span> <span class="kn">import</span> <span class="n">MultiaSyncDataCollector</span><span class="p">,</span> <span class="n">MultiSyncDataCollector</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="n">ParallelEnv</span><span class="p">,</span> <span class="n">EnvCreator</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="n">EnvCreator</span><span class="p">,</span> <span class="n">ParallelEnv</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymEnv</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
 
@@ -1597,7 +1600,7 @@ Since the library is nascent, it is a great time for you to shape it the way you
 <section id="installing-the-library">
 <h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Permalink to this heading">¶</a></h2>
 <p>The library is on PyPI: <em>pip install torchrl</em></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  26.935 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  27.580 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-torchrl-demo-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/566627e1cd97def8cf2a3b4720332591/torchrl_demo.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">torchrl_demo.py</span></code></a></p>

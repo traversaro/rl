@@ -189,7 +189,7 @@ uniformly distributed) numbers in that space:
  .. code-block:: none
 
     random action: 
-     tensor([-1.7245])
+     tensor([-0.8744])
 
 
 
@@ -610,7 +610,7 @@ argument that allows the user to quickly ask for image-based environments:
  .. code-block:: none
 
 
-    <matplotlib.image.AxesImage object at 0x7f1b90a33a30>
+    <matplotlib.image.AxesImage object at 0x7f2f4f911d90>
 
 
 
@@ -849,7 +849,7 @@ built around a ``base_dist`` distribution and (a sequence of) ``transforms``.
 .. code-block:: default
 
 
-    from torchrl.envs.transforms import TransformedEnv, ToTensorImage
+    from torchrl.envs.transforms import ToTensorImage, TransformedEnv
 
     # ToTensorImage transforms a numpy-like image into a tensor one,
     env = DMControlEnv("acrobot", "swingup", from_pixels=True, pixels_only=True)
@@ -1476,7 +1476,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    'bar_b92e74a6-6c97-11ed-bf8d-0242ac120002'
+    'bar_8234a544-6c9f-11ed-9a70-0242ac120002'
 
 
 
@@ -1525,7 +1525,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7f1b72970310>
+    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7f2f362dae50>
 
 
 
@@ -1545,7 +1545,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    ['bar_bc714148-6c97-11ed-9b26-0242ac120002', 'bar_bc3a79ec-6c97-11ed-8dff-0242ac120002', 'bar_bc278288-6c97-11ed-8882-0242ac120002']
+    ['bar_8569366c-6c9f-11ed-8dfa-0242ac120002', 'bar_853c80b8-6c9f-11ed-a183-0242ac120002', 'bar_85710360-6c9f-11ed-a4ae-0242ac120002']
 
 
 
@@ -1600,7 +1600,7 @@ either at construction time or afterwards:
 .. code-block:: default
 
 
-    from torchrl.envs import ParallelEnv, TransformedEnv, ToTensorImage, Resize, Compose
+    from torchrl.envs import Compose, ParallelEnv, Resize, ToTensorImage, TransformedEnv
     from torchrl.envs.libs.gym import GymEnv
 
 
@@ -1656,12 +1656,12 @@ operations on the main process if possible.
 
 
     from torchrl.envs import (
-        ParallelEnv,
-        TransformedEnv,
-        ToTensorImage,
-        Resize,
         Compose,
         GrayScale,
+        ParallelEnv,
+        Resize,
+        ToTensorImage,
+        TransformedEnv,
     )
     from torchrl.envs.libs.gym import GymEnv
 
@@ -1743,7 +1743,7 @@ In regular setting, using VecNorm is quite easy:
 
 
     from torchrl.envs.libs.gym import GymEnv
-    from torchrl.envs.transforms import VecNorm, TransformedEnv
+    from torchrl.envs.transforms import TransformedEnv, VecNorm
 
     env = TransformedEnv(GymEnv("Pendulum-v1"), VecNorm())
     tensordict = env.rollout(max_steps=100)
@@ -1759,8 +1759,8 @@ In regular setting, using VecNorm is quite easy:
 
  .. code-block:: none
 
-    mean: : tensor([0.1251, 0.1988, 0.2456])
-    std: : tensor([1.1583, 1.1197, 1.1871])
+    mean: : tensor([0.1208, 0.2226, 0.2192])
+    std: : tensor([1.1992, 1.1365, 1.2002])
 
 
 
@@ -1781,7 +1781,7 @@ once created:
 
     from torchrl.envs import EnvCreator, ParallelEnv
     from torchrl.envs.libs.gym import GymEnv
-    from torchrl.envs.transforms import VecNorm, TransformedEnv
+    from torchrl.envs.transforms import TransformedEnv, VecNorm
 
     make_env = EnvCreator(lambda: TransformedEnv(GymEnv("CartPole-v1"), VecNorm(decay=1.0)))
     env = ParallelEnv(3, make_env)
@@ -1818,8 +1818,8 @@ once created:
         batch_size=torch.Size([3, 5]),
         device=cpu,
         is_shared=False)
-    mean: : tensor([ 0.0529, -0.0263, -0.0253])
-    std: : tensor([1.0167, 1.0562, 0.8792])
+    mean: : tensor([ 0.1747, -0.2146,  0.2020])
+    std: : tensor([0.9500, 0.9308, 0.9082])
 
 
 
@@ -1866,7 +1866,7 @@ This small difference will usually be absored throughout training.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  24.579 seconds)
+   **Total running time of the script:** ( 0 minutes  25.089 seconds)
 
 
 .. _sphx_glr_download_tutorials_torch_envs.py:

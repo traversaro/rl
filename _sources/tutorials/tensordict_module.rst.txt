@@ -402,13 +402,16 @@ distribution (through a regular ``__call__()`` to the module).
 One can find the parameters in the output tensordict as well as the log
 probability if needed.
 
-.. GENERATED FROM PYTHON SOURCE LINES 216-239
+.. GENERATED FROM PYTHON SOURCE LINES 216-242
 
 .. code-block:: default
 
 
-    from torchrl.modules import ProbabilisticTensorDictModule
-    from torchrl.modules import TanhNormal, NormalParamWrapper
+    from torchrl.modules import (
+        NormalParamWrapper,
+        ProbabilisticTensorDictModule,
+        TanhNormal,
+    )
 
     td = TensorDict(
         {"input": torch.randn(3, 4), "hidden": torch.randn(3, 8)},
@@ -459,7 +462,7 @@ probability if needed.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 240-258
+.. GENERATED FROM PYTHON SOURCE LINES 243-261
 
 ``Actor``
 ------------------------------
@@ -480,14 +483,14 @@ wraps both an actor network and a value Network.
 ``ActorCriticOperator`` will first compute the action from the actor and
 then the value according to this action.
 
-.. GENERATED FROM PYTHON SOURCE LINES 258-306
+.. GENERATED FROM PYTHON SOURCE LINES 261-309
 
 .. code-block:: default
 
 
     from torchrl.modules import (
-        MLP,
         ActorCriticOperator,
+        MLP,
         NormalParamWrapper,
         TanhNormal,
         ValueOperator,
@@ -585,7 +588,7 @@ then the value according to this action.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 307-330
+.. GENERATED FROM PYTHON SOURCE LINES 310-333
 
 Other blocks exist such as:
 
@@ -611,14 +614,14 @@ We have let the positional encoders aside for simplicity.
 Let's first import the classical transformers blocks
 (see ``src/transformer.py`` for more details.)
 
-.. GENERATED FROM PYTHON SOURCE LINES 330-339
+.. GENERATED FROM PYTHON SOURCE LINES 333-342
 
 .. code-block:: default
 
 
     from tutorials.src.transformer import (
-        FFN,
         Attention,
+        FFN,
         SkipLayerNorm,
         SplitHeads,
         TokensToQKV,
@@ -631,7 +634,7 @@ Let's first import the classical transformers blocks
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 340-348
+.. GENERATED FROM PYTHON SOURCE LINES 343-351
 
 We first create the ``AttentionBlockTensorDict``, the attention block using
 ``TensorDictModule`` and ``TensorDictSequential``.
@@ -642,7 +645,7 @@ to indicate which key each of them must read and write. Unlike
 input/output. Moreover, its components inputs need not be identical to the
 previous layers outputs, allowing us to code complicated neural architecture.
 
-.. GENERATED FROM PYTHON SOURCE LINES 348-385
+.. GENERATED FROM PYTHON SOURCE LINES 351-388
 
 .. code-block:: default
 
@@ -690,12 +693,12 @@ previous layers outputs, allowing us to code complicated neural architecture.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 386-388
+.. GENERATED FROM PYTHON SOURCE LINES 389-391
 
 We build the encoder and decoder blocks that will be part of the transformer
 thanks to ``TensorDictModule``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 388-457
+.. GENERATED FROM PYTHON SOURCE LINES 391-460
 
 .. code-block:: default
 
@@ -775,7 +778,7 @@ thanks to ``TensorDictModule``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 458-465
+.. GENERATED FROM PYTHON SOURCE LINES 461-468
 
 We create the transformer encoder and decoder.
 
@@ -785,7 +788,7 @@ keys and values.
 For a decoder, we now can extract info from ``X_from`` into ``X_to``.
 ``X_from`` will map to queries whereas ``X_from`` will map to keys and values.
 
-.. GENERATED FROM PYTHON SOURCE LINES 465-560
+.. GENERATED FROM PYTHON SOURCE LINES 468-563
 
 .. code-block:: default
 
@@ -891,11 +894,11 @@ For a decoder, we now can extract info from ``X_from`` into ``X_to``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 561-562
+.. GENERATED FROM PYTHON SOURCE LINES 564-565
 
 We now test our new ``TransformerTensorDict``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 562-595
+.. GENERATED FROM PYTHON SOURCE LINES 565-598
 
 .. code-block:: default
 
@@ -956,7 +959,7 @@ We now test our new ``TransformerTensorDict``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 596-602
+.. GENERATED FROM PYTHON SOURCE LINES 599-605
 
 We've achieved to create a transformer with ``TensorDictModule``. This
 shows that ``TensorDictModule`` is a flexible module that can implement
@@ -965,7 +968,7 @@ complex operarations.
 Benchmarking
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 602-605
+.. GENERATED FROM PYTHON SOURCE LINES 605-608
 
 .. code-block:: default
 
@@ -979,7 +982,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 606-616
+.. GENERATED FROM PYTHON SOURCE LINES 609-619
 
 .. code-block:: default
 
@@ -1000,7 +1003,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 617-626
+.. GENERATED FROM PYTHON SOURCE LINES 620-629
 
 .. code-block:: default
 
@@ -1020,7 +1023,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 627-631
+.. GENERATED FROM PYTHON SOURCE LINES 630-634
 
 .. code-block:: default
 
@@ -1035,7 +1038,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 632-645
+.. GENERATED FROM PYTHON SOURCE LINES 635-648
 
 .. code-block:: default
 
@@ -1059,7 +1062,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 646-651
+.. GENERATED FROM PYTHON SOURCE LINES 649-654
 
 .. code-block:: default
 
@@ -1075,11 +1078,11 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 652-653
+.. GENERATED FROM PYTHON SOURCE LINES 655-656
 
 **Inference Time**
 
-.. GENERATED FROM PYTHON SOURCE LINES 653-656
+.. GENERATED FROM PYTHON SOURCE LINES 656-659
 
 .. code-block:: default
 
@@ -1093,7 +1096,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 657-663
+.. GENERATED FROM PYTHON SOURCE LINES 660-666
 
 .. code-block:: default
 
@@ -1111,12 +1114,12 @@ Benchmarking
 
  .. code-block:: none
 
-    Execution time: 0.01214146614074707 seconds
+    Execution time: 0.012318134307861328 seconds
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 664-670
+.. GENERATED FROM PYTHON SOURCE LINES 667-673
 
 .. code-block:: default
 
@@ -1134,12 +1137,12 @@ Benchmarking
 
  .. code-block:: none
 
-    Execution time: 0.006708383560180664 seconds
+    Execution time: 0.006968259811401367 seconds
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 671-675
+.. GENERATED FROM PYTHON SOURCE LINES 674-678
 
 We can see on this minimal example that the overhead introduced by
 ``TensorDictModule`` is marginal.
@@ -1149,7 +1152,7 @@ Have fun with TensorDictModule!
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.101 seconds)
+   **Total running time of the script:** ( 0 minutes  0.104 seconds)
 
 
 .. _sphx_glr_download_tutorials_tensordict_module.py:

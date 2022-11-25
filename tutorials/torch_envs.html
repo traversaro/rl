@@ -450,7 +450,7 @@ projected action:
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>random action:
- tensor([-1.7245])
+ tensor([-0.8744])
 </pre></div>
 </div>
 <p>Envs are also packed with an <code class="docutils literal notranslate"><span class="pre">env.input_spec</span></code> attribute of type
@@ -658,7 +658,7 @@ argument that allows the user to quickly ask for image-based environments:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pixels&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_torch_envs_001.png" srcset="../_images/sphx_glr_torch_envs_001.png" alt="torch envs" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage object at 0x7f1b90a33a30&gt;
+<img src="../_images/sphx_glr_torch_envs_001.png" srcset="../_images/sphx_glr_torch_envs_001.png" alt="torch envs" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage object at 0x7f2f4f911d90&gt;
 </pre></div>
 </div>
 <p>Let’s have a look at what the tensordict contains:</p>
@@ -782,7 +782,7 @@ done in other pytorch domain libraries (e.g. <code class="docutils literal notra
 approach is also similar to the way distributions are transformed in
 <code class="docutils literal notranslate"><span class="pre">torch.distribution</span></code>, where a <code class="docutils literal notranslate"><span class="pre">TransformedDistribution</span></code> object is
 built around a <code class="docutils literal notranslate"><span class="pre">base_dist</span></code> distribution and (a sequence of) <code class="docutils literal notranslate"><span class="pre">transforms</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="n">TransformedEnv</span><span class="p">,</span> <span class="n">ToTensorImage</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="n">ToTensorImage</span><span class="p">,</span> <span class="n">TransformedEnv</span>
 
 <span class="c1"># ToTensorImage transforms a numpy-like image into a tensor one,</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">DMControlEnv</span><span class="p">(</span><span class="s2">&quot;acrobot&quot;</span><span class="p">,</span> <span class="s2">&quot;swingup&quot;</span><span class="p">,</span> <span class="n">from_pixels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">pixels_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1185,7 +1185,7 @@ to access this attribute. Here’s an example:</p>
 <span class="n">env</span><span class="o">.</span><span class="n">foo</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;bar_b92e74a6-6c97-11ed-bf8d-0242ac120002&#39;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;bar_8234a544-6c9f-11ed-9a70-0242ac120002&#39;
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">parallel_env</span> <span class="o">=</span> <span class="n">ParallelEnv</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">env_make</span><span class="p">)</span>  <span class="c1"># -&gt; creates 3 envs in parallel</span>
@@ -1206,13 +1206,13 @@ to access this attribute. Here’s an example:</p>
 <span class="n">foo_list</span>  <span class="c1"># needs to be instantiated, for instance using list</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7f1b72970310&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7f2f362dae50&gt;
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">foo_list</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;bar_bc714148-6c97-11ed-9b26-0242ac120002&#39;, &#39;bar_bc3a79ec-6c97-11ed-8dff-0242ac120002&#39;, &#39;bar_bc278288-6c97-11ed-8882-0242ac120002&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;bar_8569366c-6c9f-11ed-8dfa-0242ac120002&#39;, &#39;bar_853c80b8-6c9f-11ed-a183-0242ac120002&#39;, &#39;bar_85710360-6c9f-11ed-a4ae-0242ac120002&#39;]
 </pre></div>
 </div>
 <p>Similarly, methods can also be accessed:</p>
@@ -1231,7 +1231,7 @@ to access this attribute. Here’s an example:</p>
 <h3>kwargs for parallel environments<a class="headerlink" href="#kwargs-for-parallel-environments" title="Permalink to this heading">¶</a></h3>
 <p>One may want to provide kwargs to the various environments. This can achieved
 either at construction time or afterwards:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="n">ParallelEnv</span><span class="p">,</span> <span class="n">TransformedEnv</span><span class="p">,</span> <span class="n">ToTensorImage</span><span class="p">,</span> <span class="n">Resize</span><span class="p">,</span> <span class="n">Compose</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="n">Compose</span><span class="p">,</span> <span class="n">ParallelEnv</span><span class="p">,</span> <span class="n">Resize</span><span class="p">,</span> <span class="n">ToTensorImage</span><span class="p">,</span> <span class="n">TransformedEnv</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymEnv</span>
 
 
@@ -1270,12 +1270,12 @@ One can therefore think carefully about the transform design to leverage the
 device capabilities (e.g. transforms on cuda devices) and vectorizing
 operations on the main process if possible.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">ParallelEnv</span><span class="p">,</span>
-    <span class="n">TransformedEnv</span><span class="p">,</span>
-    <span class="n">ToTensorImage</span><span class="p">,</span>
-    <span class="n">Resize</span><span class="p">,</span>
     <span class="n">Compose</span><span class="p">,</span>
     <span class="n">GrayScale</span><span class="p">,</span>
+    <span class="n">ParallelEnv</span><span class="p">,</span>
+    <span class="n">Resize</span><span class="p">,</span>
+    <span class="n">ToTensorImage</span><span class="p">,</span>
+    <span class="n">TransformedEnv</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymEnv</span>
 
@@ -1334,7 +1334,7 @@ would therefore advice users to rely on this feature with caution and compare
 it with data normalizing given a fixed version of the normalizing constants.</p>
 <p>In regular setting, using VecNorm is quite easy:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymEnv</span>
-<span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="n">VecNorm</span><span class="p">,</span> <span class="n">TransformedEnv</span>
+<span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="n">TransformedEnv</span><span class="p">,</span> <span class="n">VecNorm</span>
 
 <span class="n">env</span> <span class="o">=</span> <span class="n">TransformedEnv</span><span class="p">(</span><span class="n">GymEnv</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">),</span> <span class="n">VecNorm</span><span class="p">())</span>
 <span class="n">tensordict</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">rollout</span><span class="p">(</span><span class="n">max_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -1343,8 +1343,8 @@ it with data normalizing given a fixed version of the normalizing constants.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;std: :&quot;</span><span class="p">,</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;observation&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>  <span class="c1"># Approx 1</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>mean: : tensor([0.1251, 0.1988, 0.2456])
-std: : tensor([1.1583, 1.1197, 1.1871])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>mean: : tensor([0.1208, 0.2226, 0.2192])
+std: : tensor([1.1992, 1.1365, 1.2002])
 </pre></div>
 </div>
 <p>In <strong>parallel envs</strong> things are slightly more complicated, as we need to
@@ -1355,7 +1355,7 @@ class, and pointing each process to the right common, shared tensordict
 once created:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="n">EnvCreator</span><span class="p">,</span> <span class="n">ParallelEnv</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymEnv</span>
-<span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="n">VecNorm</span><span class="p">,</span> <span class="n">TransformedEnv</span>
+<span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="n">TransformedEnv</span><span class="p">,</span> <span class="n">VecNorm</span>
 
 <span class="n">make_env</span> <span class="o">=</span> <span class="n">EnvCreator</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">TransformedEnv</span><span class="p">(</span><span class="n">GymEnv</span><span class="p">(</span><span class="s2">&quot;CartPole-v1&quot;</span><span class="p">),</span> <span class="n">VecNorm</span><span class="p">(</span><span class="n">decay</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)))</span>
 <span class="n">env</span> <span class="o">=</span> <span class="n">ParallelEnv</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">make_env</span><span class="p">)</span>
@@ -1385,8 +1385,8 @@ once created:</p>
     batch_size=torch.Size([3, 5]),
     device=cpu,
     is_shared=False)
-mean: : tensor([ 0.0529, -0.0263, -0.0253])
-std: : tensor([1.0167, 1.0562, 0.8792])
+mean: : tensor([ 0.1747, -0.2146,  0.2020])
+std: : tensor([0.9500, 0.9308, 0.9082])
 </pre></div>
 </div>
 <p>The count is slightly higher than the number of steps (since we
@@ -1414,7 +1414,7 @@ This small difference will usually be absored throughout training.</p>
 <span class="gr">KeyError</span>: <span class="n">&#39;key &quot;(\&#39;next\&#39;, \&#39;observation_count\&#39;)&quot; not found in TensorDict with keys [\&#39;observation_count\&#39;, \&#39;observation_ssq\&#39;, \&#39;observation_sum\&#39;, \&#39;reward_count\&#39;, \&#39;reward_ssq\&#39;, \&#39;reward_sum\&#39;]&#39;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  24.579 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  25.089 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-torch-envs-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/b4027b1e6f187fa5875852cc5731ee46/torch_envs.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">torch_envs.py</span></code></a></p>
