@@ -51,69 +51,69 @@ Common environment libraries (e.g. OpenAI gym) are only optional.
 **Content**: TODO: should the presentation get changed ?
 
 torchrl
-
-- collectors
-   - collectors.py
-- data
-   - tensor_specs.py
-   - postprocs
-      - postprocs.py
-   - replay_buffers
-      - replay_buffers.py
-      - storages.py
-- envs
-   - common.py
-   - env_creator.py
-   - gym_like.py
-   - vec_env.py
-   - libs
-      - dm_control.py
-      - gym.py
-   - transforms
-      - functional.py
-      - transforms.py
-- modules
-   - distributions
-      - continuous.py
-      - discrete.py
-   - models
-      - models.py
-      - exploration.py
-   - tensordict_module
-      - actors.py
-      - common.py
-      - exploration.py
-      - probabilistic.py
-      - sequence.py
-- objectives
-   - common.py
-   - ddpg.py
-   - dqn.py
-   - functional.py
-   - ppo.py
-   - redq.py
-   - reinforce.py
-   - sac.py
-   - utils.py
-   - value
-      - advantages.py
-      - functional.py
-      - pg.py
-      - utils.py
-      - vtrace.py
-- record
-      - recorder.py
-- trainers
-   - loggers
-   - trainers.py
-   - helpers
-      - collectors.py
-      - envs.py
-      - loggers.py
-      - losses.py
-      - models.py
-      - replay_buffer.py
-      - trainers.py
+│
+├── collectors
+│   └── collectors.py
+├── data
+│   ├── tensor_specs.py
+│   ├── postprocs
+│   │  └── postprocs.py
+│   └── replay_buffers
+│      ├── replay_buffers.py
+│      └── storages.py
+├── envs
+│   ├── common.py
+│   ├── env_creator.py
+│   ├── gym_like.py
+│   ├── vec_env.py
+│   ├── libs
+│   │  ├── dm_control.py
+│   │  └── gym.py
+│   └── transforms
+│      ├── functional.py
+│      └── transforms.py
+├── modules
+│   ├── distributions
+│   │  ├── continuous.py
+│   │  └── discrete.py
+│   ├── models
+│   │  ├── models.py
+│   │  └── exploration.py
+│   └── tensordict_module
+│      ├── actors.py
+│      ├── common.py
+│      ├── exploration.py
+│      ├── probabilistic.py
+│      └── sequence.py
+├── objectives
+│   ├── common.py
+│   ├── ddpg.py
+│   ├── dqn.py
+│   ├── functional.py
+│   ├── ppo.py
+│   ├── redq.py
+│   ├── reinforce.py
+│   ├── sac.py
+│   ├── utils.py
+│   └── value
+│      ├── advantages.py
+│      ├── functional.py
+│      ├── pg.py
+│      ├── utils.py
+│      └── vtrace.py
+├── record
+│      └── recorder.py
+└── trainers
+    ├── loggers
+    ├── trainers.py
+    └── helpers
+       ├── collectors.py
+       ├── envs.py
+       ├── loggers.py
+       ├── losses.py
+       ├── models.py
+       ├── replay_buffer.py
+       └── trainers.py
 
 Unlike other domains, RL is less about media than *algorithms*. As such, it
 is harder to make truly independent components.
@@ -564,8 +564,8 @@ Here are examples of using a replaybuffer with tensordicts.
  .. code-block:: none
 
 
-    tensor([[1],
-            [0]], dtype=torch.int32)
+    tensor([[0],
+            [1]], dtype=torch.int32)
 
 
 
@@ -592,8 +592,8 @@ Here are examples of using a replaybuffer with tensordicts.
 
  .. code-block:: none
 
-    0 0.28791671991348267
-    1 0.06984968483448029
+    0 0.06984968483448029
+    1 0.28791671991348267
     2 0.0
 
 
@@ -1954,7 +1954,7 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  38.307 seconds)
+   **Total running time of the script:** ( 0 minutes  33.740 seconds)
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:

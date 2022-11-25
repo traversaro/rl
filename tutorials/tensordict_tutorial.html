@@ -389,48 +389,56 @@ Dataset B which has images, segmentation maps and labels.</p>
 algorithm that would ignore the mask or infer it when needed).</p>
 <p>In classical pytorch we would need to do the following:</p>
 <p>TODO: should these snippets be re-formatted?</p>
-<p><strong>Method A</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># for i in range(optim_steps):</span>
-<span class="c1">#   images, labels = get_data_A()</span>
-<span class="c1">#   loss = loss_module(images, labels)</span>
-<span class="c1">#   loss.backward()</span>
-<span class="c1">#   optim.step()</span>
-<span class="c1">#   optim.zero_grad()</span>
+<dl>
+<dt><strong>Method A</strong></dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">optim_steps</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">get_data_A</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_module</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Method B</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># for i in range(optim_steps):</span>
-<span class="c1">#   images, labels = get_data_B()</span>
-<span class="c1">#   loss = loss_module(images, labels)</span>
-<span class="c1">#   loss.backward()</span>
-<span class="c1">#   optim.step()</span>
-<span class="c1">#   optim.zero_grad()</span>
+</dd>
+</dl>
+<dl>
+<dt><strong>Method B</strong></dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">optim_steps</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">get_data_B</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_module</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 <p>We can see that this limits the reusability of code. A lot of code has to be
 rewriten because of the modality difference between the 2 datasets.
 The idea of TensorDict is to do the following:</p>
-<p><strong>General Method</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># for i in range(optim_steps):</span>
-<span class="c1">#   images, labels = get_data()</span>
-<span class="c1">#   loss = loss_module(images, labels)</span>
-<span class="c1">#   loss.backward()</span>
-<span class="c1">#   optim.step()</span>
-<span class="c1">#   optim.zero_grad()</span>
+<dl>
+<dt><strong>General Method</strong></dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">optim_steps</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">get_data</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_module</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 <p>We can now reuse the same training loop across datasets and losses.</p>
 <section id="can-t-i-do-this-with-a-python-dict">
 <h3>Can’t I do this with a python dict?<a class="headerlink" href="#can-t-i-do-this-with-a-python-dict" title="Permalink to this heading">¶</a></h3>
 <p>One could argue that you could achieve the same results with a dataset
 that outputs a pytorch dict.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># class DictDataset(Dataset):</span>
-<span class="c1">#   ...</span>
-<span class="c1">#   def __getitem__(self, idx)</span>
-<span class="c1">#       ...</span>
-<span class="c1">#       return {&quot;images&quot;: image, &quot;masks&quot;: mask}</span>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">DictDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="o">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="o">...</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">,</span> <span class="s2">&quot;masks&quot;</span><span class="p">:</span> <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mask</span></a><span class="p">}</span>
 </pre></div>
 </div>
+</div></blockquote>
 <p>However to achieve this you would need to write a complicated collate
 function that make sure that every modality is aggregated properly.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">collate_dict_fn</span><span class="p">(</span><span class="n">dict_list</span><span class="p">):</span>
@@ -444,14 +452,16 @@ function that make sure that every modality is aggregated properly.</p>
 </pre></div>
 </div>
 <p>With TensorDicts this is now much simpler:</p>
-<p><strong>dataloader = Dataloader(DictDataset(), collate_fn = collate_dict_fn)</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># class DictDataset(Dataset):</span>
-<span class="c1">#   ...</span>
-<span class="c1">#   def __getitem__(self, idx)</span>
-<span class="c1">#       ...</span>
-<span class="c1">#       return TensorDict({&quot;images&quot;: image, &quot;masks&quot;: mask})</span>
+<dl>
+<dt><strong>dataloader = Dataloader(DictDataset(), collate_fn = collate_dict_fn)</strong></dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">DictDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+<span class="gp">... </span>  <span class="o">...</span>
+<span class="gp">... </span>  <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+<span class="gp">... </span>      <span class="o">...</span>
+<span class="gp">... </span>      <span class="k">return</span> <a href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="collections.abc.Mapping" class="sphx-glr-backref-module-collections-abc sphx-glr-backref-type-py-class"><span class="n">TensorDict</span></a><span class="p">({</span><span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="n">image</span><span class="p">,</span> <span class="s2">&quot;masks&quot;</span><span class="p">:</span> <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mask</span></a><span class="p">})</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 <p>Here, the collate function is as simple as:</p>
 <p><strong>collate_tensordict_fn = lambda tds : torch.stack(tds, dim=0)</strong></p>
 <p><strong>dataloader = Dataloader(DictDataset(), collate_fn = collate_tensordict_fn)</strong></p>
@@ -954,7 +964,7 @@ the original tensordict.</p>
 </pre></div>
 </div>
 <p>Have fun with TensorDict!</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.034 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.028 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-tensordict-tutorial-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0cd9aa93095a82294c8fa4bfeeebfd48/tensordict_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">tensordict_tutorial.py</span></code></a></p>

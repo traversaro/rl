@@ -391,151 +391,74 @@ utilities (e.g. collectors and containers), etc. TorchRL aims at having as
 few dependencies as possible (python standard library, numpy and pytorch).
 Common environment libraries (e.g. OpenAI gym) are only optional.</p>
 <p><strong>Content</strong>: TODO: should the presentation get changed ?</p>
-<p>torchrl</p>
-<ul class="simple">
-<li><dl class="simple">
-<dt>collectors</dt><dd><ul>
-<li><p>collectors.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>data</dt><dd><ul>
-<li><p>tensor_specs.py</p></li>
-<li><dl class="simple">
-<dt>postprocs</dt><dd><ul>
-<li><p>postprocs.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>replay_buffers</dt><dd><ul>
-<li><p>replay_buffers.py</p></li>
-<li><p>storages.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>envs</dt><dd><ul>
-<li><p>common.py</p></li>
-<li><p>env_creator.py</p></li>
-<li><p>gym_like.py</p></li>
-<li><p>vec_env.py</p></li>
-<li><dl class="simple">
-<dt>libs</dt><dd><ul>
-<li><p>dm_control.py</p></li>
-<li><p>gym.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>transforms</dt><dd><ul>
-<li><p>functional.py</p></li>
-<li><p>transforms.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>modules</dt><dd><ul>
-<li><dl class="simple">
-<dt>distributions</dt><dd><ul>
-<li><p>continuous.py</p></li>
-<li><p>discrete.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>models</dt><dd><ul>
-<li><p>models.py</p></li>
-<li><p>exploration.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>tensordict_module</dt><dd><ul>
-<li><p>actors.py</p></li>
-<li><p>common.py</p></li>
-<li><p>exploration.py</p></li>
-<li><p>probabilistic.py</p></li>
-<li><p>sequence.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>objectives</dt><dd><ul>
-<li><p>common.py</p></li>
-<li><p>ddpg.py</p></li>
-<li><p>dqn.py</p></li>
-<li><p>functional.py</p></li>
-<li><p>ppo.py</p></li>
-<li><p>redq.py</p></li>
-<li><p>reinforce.py</p></li>
-<li><p>sac.py</p></li>
-<li><p>utils.py</p></li>
-<li><dl class="simple">
-<dt>value</dt><dd><ul>
-<li><p>advantages.py</p></li>
-<li><p>functional.py</p></li>
-<li><p>pg.py</p></li>
-<li><p>utils.py</p></li>
-<li><p>vtrace.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>record</dt><dd><ul>
-<li><p>recorder.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>trainers</dt><dd><ul>
-<li><p>loggers</p></li>
-<li><p>trainers.py</p></li>
-<li><dl class="simple">
-<dt>helpers</dt><dd><ul>
-<li><p>collectors.py</p></li>
-<li><p>envs.py</p></li>
-<li><p>loggers.py</p></li>
-<li><p>losses.py</p></li>
-<li><p>models.py</p></li>
-<li><p>replay_buffer.py</p></li>
-<li><p>trainers.py</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
+<p>torchrl
+│
+├── collectors
+│   └── collectors.py
+├── data
+│   ├── tensor_specs.py
+│   ├── postprocs
+│   │  └── postprocs.py
+│   └── replay_buffers
+│      ├── replay_buffers.py
+│      └── storages.py
+├── envs
+│   ├── common.py
+│   ├── env_creator.py
+│   ├── gym_like.py
+│   ├── vec_env.py
+│   ├── libs
+│   │  ├── dm_control.py
+│   │  └── gym.py
+│   └── transforms
+│      ├── functional.py
+│      └── transforms.py
+├── modules
+│   ├── distributions
+│   │  ├── continuous.py
+│   │  └── discrete.py
+│   ├── models
+│   │  ├── models.py
+│   │  └── exploration.py
+│   └── tensordict_module
+│      ├── actors.py
+│      ├── common.py
+│      ├── exploration.py
+│      ├── probabilistic.py
+│      └── sequence.py
+├── objectives
+│   ├── common.py
+│   ├── ddpg.py
+│   ├── dqn.py
+│   ├── functional.py
+│   ├── ppo.py
+│   ├── redq.py
+│   ├── reinforce.py
+│   ├── sac.py
+│   ├── utils.py
+│   └── value
+│      ├── advantages.py
+│      ├── functional.py
+│      ├── pg.py
+│      ├── utils.py
+│      └── vtrace.py
+├── record
+│      └── recorder.py
+└── trainers</p>
+<blockquote>
+<div><p>├── loggers
+├── trainers.py
+└── helpers</p>
+<blockquote>
+<div><p>├── collectors.py
+├── envs.py
+├── loggers.py
+├── losses.py
+├── models.py
+├── replay_buffer.py
+└── trainers.py</p>
+</div></blockquote>
+</div></blockquote>
 <p>Unlike other domains, RL is less about media than <em>algorithms</em>. As such, it
 is harder to make truly independent components.</p>
 <p>What TorchRL is not:
@@ -778,8 +701,8 @@ TensorDict(
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tensordict_sample</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([[1],
-        [0]], dtype=torch.int32)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([[0],
+        [1]], dtype=torch.int32)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tensordict_sample</span><span class="p">[</span><span class="s2">&quot;td_error&quot;</span><span class="p">]</span> <span class="o">=</span> <a href="https://pytorch.org/docs/stable/generated/torch.rand.html#torch.rand" title="torch.rand" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-function"><span class="n">torch</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -793,8 +716,8 @@ TensorDict(
 <span class="kn">import</span> <span class="nn">gym</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0 0.28791671991348267
-1 0.06984968483448029
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0 0.06984968483448029
+1 0.28791671991348267
 2 0.0
 </pre></div>
 </div>
@@ -1600,7 +1523,7 @@ Since the library is nascent, it is a great time for you to shape it the way you
 <section id="installing-the-library">
 <h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Permalink to this heading">¶</a></h2>
 <p>The library is on PyPI: <em>pip install torchrl</em></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  38.307 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  33.740 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-torchrl-demo-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/566627e1cd97def8cf2a3b4720332591/torchrl_demo.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">torchrl_demo.py</span></code></a></p>
