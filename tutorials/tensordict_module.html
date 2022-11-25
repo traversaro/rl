@@ -601,11 +601,8 @@ distribution (through the <code class="docutils literal notranslate"><span class
 distribution (through a regular <code class="docutils literal notranslate"><span class="pre">__call__()</span></code> to the module).</p>
 <p>One can find the parameters in the output tensordict as well as the log
 probability if needed.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">NormalParamWrapper</span><span class="p">,</span>
-    <span class="n">ProbabilisticTensorDictModule</span><span class="p">,</span>
-    <span class="n">TanhNormal</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">ProbabilisticTensorDictModule</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TanhNormal</span><span class="p">,</span> <span class="n">NormalParamWrapper</span>
 
 <span class="n">td</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">(</span>
     <span class="p">{</span><span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;hidden&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">)},</span>
@@ -666,8 +663,8 @@ wraps both an actor network and a value Network.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ActorCriticOperator</span></code> will first compute the action from the actor and
 then the value according to this action.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">ActorCriticOperator</span><span class="p">,</span>
     <span class="n">MLP</span><span class="p">,</span>
+    <span class="n">ActorCriticOperator</span><span class="p">,</span>
     <span class="n">NormalParamWrapper</span><span class="p">,</span>
     <span class="n">TanhNormal</span><span class="p">,</span>
     <span class="n">ValueOperator</span><span class="p">,</span>
@@ -777,8 +774,8 @@ create a transformer that reads <code class="docutils literal notranslate"><span
 <p>Let’s first import the classical transformers blocks
 (see <code class="docutils literal notranslate"><span class="pre">src/transformer.py</span></code> for more details.)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tutorials.src.transformer</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Attention</span><span class="p">,</span>
     <span class="n">FFN</span><span class="p">,</span>
+    <span class="n">Attention</span><span class="p">,</span>
     <span class="n">SkipLayerNorm</span><span class="p">,</span>
     <span class="n">SplitHeads</span><span class="p">,</span>
     <span class="n">TokensToQKV</span><span class="p">,</span>
@@ -1101,7 +1098,7 @@ complex operarations.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Execution time:&quot;</span><span class="p">,</span> <span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">,</span> <span class="s2">&quot;seconds&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Execution time: 0.012318134307861328 seconds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Execution time: 0.01227879524230957 seconds
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t3</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -1110,13 +1107,13 @@ complex operarations.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Execution time:&quot;</span><span class="p">,</span> <span class="n">t4</span> <span class="o">-</span> <span class="n">t3</span><span class="p">,</span> <span class="s2">&quot;seconds&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Execution time: 0.006968259811401367 seconds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Execution time: 0.007532358169555664 seconds
 </pre></div>
 </div>
 <p>We can see on this minimal example that the overhead introduced by
 <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code> is marginal.</p>
 <p>Have fun with TensorDictModule!</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.104 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.102 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-tensordict-module-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3e61c81f224cb8cecc06413ef124320a/tensordict_module.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">tensordict_module.py</span></code></a></p>

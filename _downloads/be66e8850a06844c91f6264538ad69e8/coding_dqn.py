@@ -49,21 +49,22 @@ from matplotlib import pyplot as plt
 from tensordict import TensorDict
 from torch import nn
 from torchrl.collectors import MultiaSyncDataCollector
-from torchrl.data import LazyMemmapStorage, TensorDictReplayBuffer
-from torchrl.envs import EnvCreator, ParallelEnv
+from torchrl.data import TensorDictReplayBuffer, LazyMemmapStorage
+from torchrl.envs import ParallelEnv, EnvCreator
 from torchrl.envs.libs.gym import GymEnv
 from torchrl.envs.transforms import (
-    CatFrames,
-    CatTensors,
+    TransformedEnv,
+    ToTensorImage,
     Compose,
     GrayScale,
+    CatFrames,
     ObservationNorm,
     Resize,
-    ToTensorImage,
-    TransformedEnv,
+    CatTensors,
 )
-from torchrl.envs.utils import set_exploration_mode, step_mdp
-from torchrl.modules import DuelingCnnDQNet, EGreedyWrapper, QValueActor
+from torchrl.envs.utils import set_exploration_mode
+from torchrl.envs.utils import step_mdp
+from torchrl.modules import QValueActor, EGreedyWrapper, DuelingCnnDQNet
 
 
 def is_notebook() -> bool:
@@ -312,6 +313,7 @@ buffers_target_flat = buffers_target.flatten_keys(".")
 replay_buffer = TensorDictReplayBuffer(
     buffer_size,
     storage=LazyMemmapStorage(buffer_size),
+    collate_fn=lambda x: x,
     prefetch=n_optim,
 )
 
@@ -565,6 +567,7 @@ max_size = frames_per_batch // n_workers
 replay_buffer = TensorDictReplayBuffer(
     -(-buffer_size // max_size),
     storage=LazyMemmapStorage(buffer_size),
+    collate_fn=lambda x: x,
     prefetch=n_optim,
 )
 

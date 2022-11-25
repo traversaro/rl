@@ -48,9 +48,9 @@ You will also be able to execute diverse environments in parallel.
 .. code-block:: default
 
 
-    from torchrl.envs import CatTensors, Compose, DoubleToFloat, ParallelEnv, TransformedEnv
+    from torchrl.envs import TransformedEnv, CatTensors, Compose, DoubleToFloat, ParallelEnv
     from torchrl.envs.libs.dm_control import DMControlEnv
-    from torchrl.modules import MLP, TensorDictModule, TensorDictSequential
+    from torchrl.modules import TensorDictModule, TensorDictSequential, MLP
 
 
 
@@ -615,7 +615,7 @@ Rollout
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.684 seconds)
+   **Total running time of the script:** ( 0 minutes  3.696 seconds)
 
 
 .. _sphx_glr_download_tutorials_multi_task.py:

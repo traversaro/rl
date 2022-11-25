@@ -379,9 +379,9 @@ You will also be able to execute diverse environments in parallel.</p>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="n">CatTensors</span><span class="p">,</span> <span class="n">Compose</span><span class="p">,</span> <span class="n">DoubleToFloat</span><span class="p">,</span> <span class="n">ParallelEnv</span><span class="p">,</span> <span class="n">TransformedEnv</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="n">TransformedEnv</span><span class="p">,</span> <span class="n">CatTensors</span><span class="p">,</span> <span class="n">Compose</span><span class="p">,</span> <span class="n">DoubleToFloat</span><span class="p">,</span> <span class="n">ParallelEnv</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.libs.dm_control</span> <span class="kn">import</span> <span class="n">DMControlEnv</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">MLP</span><span class="p">,</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictSequential</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictSequential</span><span class="p">,</span> <span class="n">MLP</span>
 </pre></div>
 </div>
 <p>We design two environments, one humanoid that must complete the stand task
@@ -733,7 +733,7 @@ TensorDict(
     is_shared=False)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.684 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.696 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-multi-task-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fe94dedecc2afb14d9227db6afb81c3f/multi_task.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">multi_task.py</span></code></a></p>

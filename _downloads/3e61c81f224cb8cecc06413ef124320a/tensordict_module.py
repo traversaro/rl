@@ -214,11 +214,8 @@ print("the output tensordict shape is: ", result_td.shape)
 # One can find the parameters in the output tensordict as well as the log
 # probability if needed.
 
-from torchrl.modules import (
-    NormalParamWrapper,
-    ProbabilisticTensorDictModule,
-    TanhNormal,
-)
+from torchrl.modules import ProbabilisticTensorDictModule
+from torchrl.modules import TanhNormal, NormalParamWrapper
 
 td = TensorDict(
     {"input": torch.randn(3, 4), "hidden": torch.randn(3, 8)},
@@ -260,8 +257,8 @@ print(f"TensorDict after going through module now as keys action, loc and scale:
 # then the value according to this action.
 
 from torchrl.modules import (
-    ActorCriticOperator,
     MLP,
+    ActorCriticOperator,
     NormalParamWrapper,
     TanhNormal,
     ValueOperator,
@@ -332,8 +329,8 @@ print(f"Critic: {td_clone}")  # no action
 # (see ``src/transformer.py`` for more details.)
 
 from tutorials.src.transformer import (
-    Attention,
     FFN,
+    Attention,
     SkipLayerNorm,
     SplitHeads,
     TokensToQKV,
