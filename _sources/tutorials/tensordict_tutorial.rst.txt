@@ -22,7 +22,7 @@ TensorDict
 ============================
 ``TensorDict`` is a new tensor structure introduced in TorchRL.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-41
+.. GENERATED FROM PYTHON SOURCE LINES 8-39
 
 With RL, you need to be able to deal with multiple tensors such as actions,
 observations and reward. ``TensorDict`` makes it more convenient to deal
@@ -46,8 +46,6 @@ algorithm that would ignore the mask or infer it when needed).
 
 In classical pytorch we would need to do the following:
 
-TODO: should these snippets be re-formatted?
-
 **Method A**
     .. code-block:: python
 
@@ -58,7 +56,7 @@ TODO: should these snippets be re-formatted?
       ...     optim.step()
       ...     optim.zero_grad()
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-52
+.. GENERATED FROM PYTHON SOURCE LINES 41-50
 
 **Method B**
     .. code-block:: python
@@ -70,13 +68,13 @@ TODO: should these snippets be re-formatted?
       ...     optim.step()
       ...     optim.zero_grad()
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-57
+.. GENERATED FROM PYTHON SOURCE LINES 52-55
 
 We can see that this limits the reusability of code. A lot of code has to be
 rewriten because of the modality difference between the 2 datasets.
 The idea of TensorDict is to do the following:
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-68
+.. GENERATED FROM PYTHON SOURCE LINES 57-66
 
 **General Method**
     .. code-block:: python
@@ -88,7 +86,7 @@ The idea of TensorDict is to do the following:
       ...     optim.step()
       ...     optim.zero_grad()
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-84
+.. GENERATED FROM PYTHON SOURCE LINES 68-82
 
 We can now reuse the same training loop across datasets and losses.
 
@@ -105,12 +103,12 @@ that outputs a pytorch dict.
       ...         ...
       ...         return {"images": image, "masks": mask}
 
-.. GENERATED FROM PYTHON SOURCE LINES 86-88
+.. GENERATED FROM PYTHON SOURCE LINES 84-86
 
 However to achieve this you would need to write a complicated collate
 function that make sure that every modality is aggregated properly.
 
-.. GENERATED FROM PYTHON SOURCE LINES 88-100
+.. GENERATED FROM PYTHON SOURCE LINES 86-98
 
 .. code-block:: default
 
@@ -133,7 +131,7 @@ function that make sure that every modality is aggregated properly.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-111
+.. GENERATED FROM PYTHON SOURCE LINES 99-109
 
 With TensorDicts this is now much simpler:
 
@@ -146,7 +144,7 @@ With TensorDicts this is now much simpler:
       ...       ...
       ...       return TensorDict({"images": image, "masks": mask})
 
-.. GENERATED FROM PYTHON SOURCE LINES 113-127
+.. GENERATED FROM PYTHON SOURCE LINES 111-125
 
 Here, the collate function is as simple as:
 
@@ -163,7 +161,7 @@ that we will detail furtherdown.
 TensorDict structure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-130
+.. GENERATED FROM PYTHON SOURCE LINES 125-128
 
 .. code-block:: default
 
@@ -177,7 +175,7 @@ TensorDict structure
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 131-139
+.. GENERATED FROM PYTHON SOURCE LINES 129-137
 
 .. code-block:: default
 
@@ -196,7 +194,7 @@ TensorDict structure
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 140-148
+.. GENERATED FROM PYTHON SOURCE LINES 138-146
 
 TensorDict is a Datastructure indexed by either keys or numerical indices.
 The values can either be tensors, memory-mapped tensors or ``TensorDict``. The
@@ -207,7 +205,7 @@ Another essential property of TensorDict is the ``batch_size`` (or ``shape``)
 which is defined as the n-first dimensions of the tensors. It must be common
 across values, and it must be set explicitly when instantiating a ``TensorDict``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 148-163
+.. GENERATED FROM PYTHON SOURCE LINES 146-161
 
 .. code-block:: default
 
@@ -239,13 +237,13 @@ across values, and it must be set explicitly when instantiating a ``TensorDict``
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 164-167
+.. GENERATED FROM PYTHON SOURCE LINES 162-165
 
 Nested ``TensorDict`` have therefore the following property: the parent
 ``TensorDict`` needs to have a batch_size included in the childs
 ``TensorDict`` batch size.
 
-.. GENERATED FROM PYTHON SOURCE LINES 167-179
+.. GENERATED FROM PYTHON SOURCE LINES 165-177
 
 .. code-block:: default
 
@@ -286,7 +284,7 @@ Nested ``TensorDict`` have therefore the following property: the parent
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-185
+.. GENERATED FROM PYTHON SOURCE LINES 178-183
 
 ``TensorDict`` does not support algebraic operations by design.
 
@@ -294,7 +292,7 @@ TensorDict Dictionary Features
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ``TensorDict`` shares a lot of features with python dictionaries.
 
-.. GENERATED FROM PYTHON SOURCE LINES 185-191
+.. GENERATED FROM PYTHON SOURCE LINES 183-189
 
 .. code-block:: default
 
@@ -323,14 +321,14 @@ TensorDict Dictionary Features
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 192-196
+.. GENERATED FROM PYTHON SOURCE LINES 190-194
 
 ``get(key)``
 ------------------------------
 If we want to access a certain key, we can index the tensordict
 or alternatively use the ``get`` method:
 
-.. GENERATED FROM PYTHON SOURCE LINES 196-200
+.. GENERATED FROM PYTHON SOURCE LINES 194-198
 
 .. code-block:: default
 
@@ -352,11 +350,11 @@ or alternatively use the ``get`` method:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 201-202
+.. GENERATED FROM PYTHON SOURCE LINES 199-200
 
 The ``get`` method also supports default values:
 
-.. GENERATED FROM PYTHON SOURCE LINES 202-206
+.. GENERATED FROM PYTHON SOURCE LINES 200-204
 
 .. code-block:: default
 
@@ -377,14 +375,14 @@ The ``get`` method also supports default values:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 207-211
+.. GENERATED FROM PYTHON SOURCE LINES 205-209
 
 ``set(key, value)``
 ------------------------------
 The ``set()`` method can be used to set new values.
 Regular indexing also does the job:
 
-.. GENERATED FROM PYTHON SOURCE LINES 211-220
+.. GENERATED FROM PYTHON SOURCE LINES 209-218
 
 .. code-block:: default
 
@@ -411,13 +409,13 @@ Regular indexing also does the job:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-224
+.. GENERATED FROM PYTHON SOURCE LINES 219-222
 
 ``keys()``
 ------------------------------
 We can access the keys of a tensordict:
 
-.. GENERATED FROM PYTHON SOURCE LINES 224-230
+.. GENERATED FROM PYTHON SOURCE LINES 222-228
 
 .. code-block:: default
 
@@ -434,7 +432,7 @@ We can access the keys of a tensordict:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 231-236
+.. GENERATED FROM PYTHON SOURCE LINES 229-234
 
 ``values()``
 ------------------------------
@@ -442,7 +440,7 @@ The values of a ``TensorDict`` can be retrieved with the ``values()`` function.
 Note that, unlike python ``dicts``, the ``values()`` method returns a
 generator and not a list.
 
-.. GENERATED FROM PYTHON SOURCE LINES 236-240
+.. GENERATED FROM PYTHON SOURCE LINES 234-238
 
 .. code-block:: default
 
@@ -466,14 +464,14 @@ generator and not a list.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 241-245
+.. GENERATED FROM PYTHON SOURCE LINES 239-243
 
 ``update(tensordict_or_dict)``
 ------------------------------
 The ``update`` method can be used to update a TensorDict with another one
 (or with a dict):
 
-.. GENERATED FROM PYTHON SOURCE LINES 245-252
+.. GENERATED FROM PYTHON SOURCE LINES 243-250
 
 .. code-block:: default
 
@@ -498,13 +496,13 @@ The ``update`` method can be used to update a TensorDict with another one
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 253-256
+.. GENERATED FROM PYTHON SOURCE LINES 251-254
 
 ``del``
 ------------------------------
 TensorDict also support keys deletion with the ``del`` operator:
 
-.. GENERATED FROM PYTHON SOURCE LINES 256-261
+.. GENERATED FROM PYTHON SOURCE LINES 254-259
 
 .. code-block:: default
 
@@ -530,7 +528,7 @@ TensorDict also support keys deletion with the ``del`` operator:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 262-268
+.. GENERATED FROM PYTHON SOURCE LINES 260-266
 
 .. code-block:: default
 
@@ -556,7 +554,7 @@ TensorDict also support keys deletion with the ``del`` operator:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 269-281
+.. GENERATED FROM PYTHON SOURCE LINES 267-279
 
 TensorDict tensor features
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -571,7 +569,7 @@ size can be [], unidimensional or multidimensional according to your needs,
 but it must be shared across tensors. Indeed, you cannot have items that don't
 share the batch size inside the same TensorDict:
 
-.. GENERATED FROM PYTHON SOURCE LINES 281-287
+.. GENERATED FROM PYTHON SOURCE LINES 279-285
 
 .. code-block:: default
 
@@ -594,11 +592,11 @@ share the batch size inside the same TensorDict:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 288-289
+.. GENERATED FROM PYTHON SOURCE LINES 286-287
 
 The batch size can be changed if needed:
 
-.. GENERATED FROM PYTHON SOURCE LINES 289-296
+.. GENERATED FROM PYTHON SOURCE LINES 287-294
 
 .. code-block:: default
 
@@ -636,11 +634,11 @@ The batch size can be changed if needed:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 297-298
+.. GENERATED FROM PYTHON SOURCE LINES 295-296
 
 but it must comply with the tensor shapes:
 
-.. GENERATED FROM PYTHON SOURCE LINES 298-303
+.. GENERATED FROM PYTHON SOURCE LINES 296-301
 
 .. code-block:: default
 
@@ -656,7 +654,7 @@ but it must comply with the tensor shapes:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 304-310
+.. GENERATED FROM PYTHON SOURCE LINES 302-308
 
 .. code-block:: default
 
@@ -679,11 +677,11 @@ but it must comply with the tensor shapes:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 311-312
+.. GENERATED FROM PYTHON SOURCE LINES 309-310
 
 We can also fill the values of a TensorDict sequentially
 
-.. GENERATED FROM PYTHON SOURCE LINES 312-318
+.. GENERATED FROM PYTHON SOURCE LINES 310-316
 
 .. code-block:: default
 
@@ -711,11 +709,11 @@ We can also fill the values of a TensorDict sequentially
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 319-320
+.. GENERATED FROM PYTHON SOURCE LINES 317-318
 
 If all values are not filled, they get the default value of zero.
 
-.. GENERATED FROM PYTHON SOURCE LINES 320-329
+.. GENERATED FROM PYTHON SOURCE LINES 318-327
 
 .. code-block:: default
 
@@ -735,7 +733,7 @@ If all values are not filled, they get the default value of zero.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 330-349
+.. GENERATED FROM PYTHON SOURCE LINES 328-347
 
 Devices
 ------------------------------
@@ -757,7 +755,7 @@ We can perform tensor operations among the batch dimensions:
 TensorDict supports cloning. Cloning returns the same TensorDict class
 than the original item.
 
-.. GENERATED FROM PYTHON SOURCE LINES 349-355
+.. GENERATED FROM PYTHON SOURCE LINES 347-353
 
 .. code-block:: default
 
@@ -780,13 +778,13 @@ than the original item.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 356-359
+.. GENERATED FROM PYTHON SOURCE LINES 354-357
 
 **Slicing and Indexing**
 
 Slicing and indexing is supported along the batch dimensions.
 
-.. GENERATED FROM PYTHON SOURCE LINES 359-362
+.. GENERATED FROM PYTHON SOURCE LINES 357-360
 
 .. code-block:: default
 
@@ -812,7 +810,7 @@ Slicing and indexing is supported along the batch dimensions.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 363-366
+.. GENERATED FROM PYTHON SOURCE LINES 361-364
 
 .. code-block:: default
 
@@ -838,7 +836,7 @@ Slicing and indexing is supported along the batch dimensions.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 367-370
+.. GENERATED FROM PYTHON SOURCE LINES 365-368
 
 .. code-block:: default
 
@@ -864,7 +862,7 @@ Slicing and indexing is supported along the batch dimensions.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 371-381
+.. GENERATED FROM PYTHON SOURCE LINES 369-379
 
 **Setting Values with Indexing**
 
@@ -877,7 +875,7 @@ the ``get_sub_tensordict`` method can be used: in that case, a
 to the original tensordict as well as the desired index such that tensor
 modifications can be achieved easily.
 
-.. GENERATED FROM PYTHON SOURCE LINES 381-390
+.. GENERATED FROM PYTHON SOURCE LINES 379-388
 
 .. code-block:: default
 
@@ -897,11 +895,11 @@ modifications can be achieved easily.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 391-392
+.. GENERATED FROM PYTHON SOURCE LINES 389-390
 
 We can set values easily just by indexing the tensordict:
 
-.. GENERATED FROM PYTHON SOURCE LINES 392-397
+.. GENERATED FROM PYTHON SOURCE LINES 390-395
 
 .. code-block:: default
 
@@ -949,13 +947,13 @@ We can set values easily just by indexing the tensordict:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 398-401
+.. GENERATED FROM PYTHON SOURCE LINES 396-399
 
 **Masking**
 
 We mask ``TensorDict`` as we mask tensors.
 
-.. GENERATED FROM PYTHON SOURCE LINES 401-405
+.. GENERATED FROM PYTHON SOURCE LINES 399-403
 
 .. code-block:: default
 
@@ -982,14 +980,14 @@ We mask ``TensorDict`` as we mask tensors.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 406-410
+.. GENERATED FROM PYTHON SOURCE LINES 404-408
 
 **Stacking**
 
 ``TensorDict`` supports stacking. By default, stacking is done in a lazy
 fashion, returning a ``LazyStackedTensorDict`` item.
 
-.. GENERATED FROM PYTHON SOURCE LINES 410-420
+.. GENERATED FROM PYTHON SOURCE LINES 408-418
 
 .. code-block:: default
 
@@ -1023,13 +1021,13 @@ fashion, returning a ``LazyStackedTensorDict`` item.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 421-424
+.. GENERATED FROM PYTHON SOURCE LINES 419-422
 
 If we want to have a contiguous tensordict, we can call ``.to_tensordict()``
 or ``.contiguous()``. It is recommended to perform this operation before
 accessing the values of the stacked tensordict for efficiency purposes.
 
-.. GENERATED FROM PYTHON SOURCE LINES 424-428
+.. GENERATED FROM PYTHON SOURCE LINES 422-426
 
 .. code-block:: default
 
@@ -1044,13 +1042,13 @@ accessing the values of the stacked tensordict for efficiency purposes.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 429-432
+.. GENERATED FROM PYTHON SOURCE LINES 427-430
 
 **Unbind**
 
 TensorDict can be unbound along a dim over the tensordict batch size.
 
-.. GENERATED FROM PYTHON SOURCE LINES 432-438
+.. GENERATED FROM PYTHON SOURCE LINES 430-436
 
 .. code-block:: default
 
@@ -1067,14 +1065,14 @@ TensorDict can be unbound along a dim over the tensordict batch size.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 439-443
+.. GENERATED FROM PYTHON SOURCE LINES 437-441
 
 **Cat**
 
 TensorDict supports cat to concatenate among a dim. The dim must be lower
 than the ``batch_dims`` (i.e. the length of the batch_size).
 
-.. GENERATED FROM PYTHON SOURCE LINES 443-447
+.. GENERATED FROM PYTHON SOURCE LINES 441-445
 
 .. code-block:: default
 
@@ -1089,14 +1087,14 @@ than the ``batch_dims`` (i.e. the length of the batch_size).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 448-452
+.. GENERATED FROM PYTHON SOURCE LINES 446-450
 
 **View**
 
 Support for the view operation returning a ``_ViewedTensorDict``.
 Use ``to_tensordict`` to comeback to retrieve TensorDict.
 
-.. GENERATED FROM PYTHON SOURCE LINES 452-456
+.. GENERATED FROM PYTHON SOURCE LINES 450-454
 
 .. code-block:: default
 
@@ -1111,14 +1109,14 @@ Use ``to_tensordict`` to comeback to retrieve TensorDict.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 457-461
+.. GENERATED FROM PYTHON SOURCE LINES 455-459
 
 **Permute**
 
 We can permute the dims of ``TensorDict``. Permute is a Lazy operation that
 returns _PermutedTensorDict. Use ``to_tensordict`` to convert to ``TensorDict``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 461-465
+.. GENERATED FROM PYTHON SOURCE LINES 459-463
 
 .. code-block:: default
 
@@ -1133,13 +1131,13 @@ returns _PermutedTensorDict. Use ``to_tensordict`` to convert to ``TensorDict``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 466-469
+.. GENERATED FROM PYTHON SOURCE LINES 464-467
 
 **Reshape**
 
 Reshape allows reshaping the ``TensorDict`` batch size.
 
-.. GENERATED FROM PYTHON SOURCE LINES 469-472
+.. GENERATED FROM PYTHON SOURCE LINES 467-470
 
 .. code-block:: default
 
@@ -1153,7 +1151,7 @@ Reshape allows reshaping the ``TensorDict`` batch size.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 473-479
+.. GENERATED FROM PYTHON SOURCE LINES 471-477
 
 **Squeeze and Unsqueeze**
 
@@ -1162,7 +1160,7 @@ that returns _UnsqueezedTensorDict. Use ``to_tensordict`` to retrieve a
 tensordict after unsqueeze. Calling ``unsqueeze(dim).squeeze(dim)`` returns
 the original tensordict.
 
-.. GENERATED FROM PYTHON SOURCE LINES 479-487
+.. GENERATED FROM PYTHON SOURCE LINES 477-485
 
 .. code-block:: default
 
@@ -1181,7 +1179,7 @@ the original tensordict.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 488-489
+.. GENERATED FROM PYTHON SOURCE LINES 486-487
 
 Have fun with TensorDict!
 

@@ -388,7 +388,6 @@ Dataset B which has images, segmentation maps and labels.</p>
 <p>Suppose we want to train a common algorithm over these two datasets (i.e. an
 algorithm that would ignore the mask or infer it when needed).</p>
 <p>In classical pytorch we would need to do the following:</p>
-<p>TODO: should these snippets be re-formatted?</p>
 <dl>
 <dt><strong>Method A</strong></dt><dd><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">optim_steps</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">get_data_A</span><span class="p">()</span>
