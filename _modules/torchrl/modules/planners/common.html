@@ -371,13 +371,13 @@
 <span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDictBase</span>
 
 <span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="n">EnvBase</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">SafeModule</span>
 
 
-<div class="viewcode-block" id="MPCPlannerBase"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.MPCPlannerBase.html#torchrl.modules.MPCPlannerBase">[docs]</a><span class="k">class</span> <span class="nc">MPCPlannerBase</span><span class="p">(</span><span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
+<div class="viewcode-block" id="MPCPlannerBase"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.MPCPlannerBase.html#torchrl.modules.MPCPlannerBase">[docs]</a><span class="k">class</span> <span class="nc">MPCPlannerBase</span><span class="p">(</span><span class="n">SafeModule</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;MPCPlannerBase abstract Module.</span>
 
-<span class="sd">    This class inherits from :obj:`TensorDictModule`. Provided a :obj:`TensorDict`, this module will perform a Model Predictive Control (MPC) planning step.</span>
+<span class="sd">    This class inherits from :obj:`SafeModule`. Provided a :obj:`TensorDict`, this module will perform a Model Predictive Control (MPC) planning step.</span>
 <span class="sd">    At the end of the planning step, the :obj:`MPCPlanner` will return a proposed action.</span>
 
 <span class="sd">    Args:</span>

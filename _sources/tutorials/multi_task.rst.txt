@@ -54,7 +54,14 @@ You will also be able to execute diverse environments in parallel.
 
 
 
+.. rst-class:: sphx-glr-script-out
 
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/__w/rl/rl/docs/source/reference/generated/tutorials/multi_task.py", line 19, in <module>
+        from torchrl.modules import MLP, TensorDictModule, TensorDictSequential
+    ImportError: cannot import name 'TensorDictModule' from 'torchrl.modules' (/__w/rl/rl/torchrl/modules/__init__.py)
 
 
 
@@ -97,12 +104,6 @@ and another that must learn to walk.
     )
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 53-62
 
 .. code-block:: default
@@ -117,37 +118,12 @@ and another that must learn to walk.
     assert tdreset[0] is tdreset1
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 63-66
 
 .. code-block:: default
 
 
     print(tdreset[0])
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    TensorDict(
-        fields={
-            done: Tensor(torch.Size([1]), dtype=torch.bool),
-            observation: Tensor(torch.Size([67]), dtype=torch.float32),
-            observation_stand: Tensor(torch.Size([67]), dtype=torch.float32)},
-        batch_size=torch.Size([]),
-        device=cpu,
-        is_shared=False)
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 67-73
@@ -165,12 +141,6 @@ and pass them through the dedicated sub-network.
 
 
     action_dim = env1.action_spec.shape[-1]
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 77-95
@@ -196,12 +166,6 @@ and pass them through the dedicated sub-network.
     )
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 96-97
 
 Let's check that our sequence outputs actions for a single env (stand).
@@ -214,27 +178,6 @@ Let's check that our sequence outputs actions for a single env (stand).
     seq(env1.reset())
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    TensorDict(
-        fields={
-            action: Tensor(torch.Size([21]), dtype=torch.float32),
-            done: Tensor(torch.Size([1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([64]), dtype=torch.float32),
-            observation: Tensor(torch.Size([67]), dtype=torch.float32),
-            observation_stand: Tensor(torch.Size([67]), dtype=torch.float32)},
-        batch_size=torch.Size([]),
-        device=cpu,
-        is_shared=False)
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 101-102
 
 Let's check that our sequence outputs actions for a single env (walk).
@@ -245,27 +188,6 @@ Let's check that our sequence outputs actions for a single env (walk).
 
 
     seq(env2.reset())
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    TensorDict(
-        fields={
-            action: Tensor(torch.Size([21]), dtype=torch.float32),
-            done: Tensor(torch.Size([1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([64]), dtype=torch.float32),
-            observation: Tensor(torch.Size([67]), dtype=torch.float32),
-            observation_walk: Tensor(torch.Size([67]), dtype=torch.float32)},
-        batch_size=torch.Size([]),
-        device=cpu,
-        is_shared=False)
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 106-110
@@ -281,26 +203,6 @@ backbone was executed in a vectorized way - not in a loop - which is more effici
 
 
     seq(tdreset)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    LazyStackedTensorDict(
-        fields={
-            action: Tensor(torch.Size([2, 21]), dtype=torch.float32),
-            done: Tensor(torch.Size([2, 1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([2, 64]), dtype=torch.float32),
-            observation: Tensor(torch.Size([2, 67]), dtype=torch.float32)},
-        batch_size=torch.Size([2]),
-        device=cpu,
-        is_shared=False)
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 114-124
@@ -359,40 +261,6 @@ it will assume that we are in a multi-task setting.
     print(tdreset[1])  # should be different
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    LazyStackedTensorDict(
-        fields={
-            done: Tensor(torch.Size([2, 1]), dtype=torch.bool),
-            observation: Tensor(torch.Size([2, 67]), dtype=torch.float32)},
-        batch_size=torch.Size([2]),
-        device=cpu,
-        is_shared=False)
-    TensorDict(
-        fields={
-            done: Tensor(torch.Size([1]), dtype=torch.bool),
-            observation: Tensor(torch.Size([67]), dtype=torch.float32),
-            observation_stand: Tensor(torch.Size([67]), dtype=torch.float32)},
-        batch_size=torch.Size([]),
-        device=cpu,
-        is_shared=False)
-    TensorDict(
-        fields={
-            done: Tensor(torch.Size([1]), dtype=torch.bool),
-            observation: Tensor(torch.Size([67]), dtype=torch.float32),
-            observation_walk: Tensor(torch.Size([67]), dtype=torch.float32)},
-        batch_size=torch.Size([]),
-        device=cpu,
-        is_shared=False)
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 163-164
 
 Let's pass the output through our network.
@@ -408,46 +276,6 @@ Let's pass the output through our network.
     print(tdreset[1])  # should be different but all have an "action" key
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    LazyStackedTensorDict(
-        fields={
-            action: Tensor(torch.Size([2, 21]), dtype=torch.float32),
-            done: Tensor(torch.Size([2, 1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([2, 64]), dtype=torch.float32),
-            observation: Tensor(torch.Size([2, 67]), dtype=torch.float32)},
-        batch_size=torch.Size([2]),
-        device=cpu,
-        is_shared=False)
-    TensorDict(
-        fields={
-            action: Tensor(torch.Size([21]), dtype=torch.float32),
-            done: Tensor(torch.Size([1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([64]), dtype=torch.float32),
-            observation: Tensor(torch.Size([67]), dtype=torch.float32),
-            observation_stand: Tensor(torch.Size([67]), dtype=torch.float32)},
-        batch_size=torch.Size([]),
-        device=cpu,
-        is_shared=False)
-    TensorDict(
-        fields={
-            action: Tensor(torch.Size([21]), dtype=torch.float32),
-            done: Tensor(torch.Size([1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([64]), dtype=torch.float32),
-            observation: Tensor(torch.Size([67]), dtype=torch.float32),
-            observation_walk: Tensor(torch.Size([67]), dtype=torch.float32)},
-        batch_size=torch.Size([]),
-        device=cpu,
-        is_shared=False)
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 171-177
 
 .. code-block:: default
@@ -457,69 +285,6 @@ Let's pass the output through our network.
     print(tdreset)
     print(tdreset[0])
     print(tdreset[1])  # next_observation has now been written
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    LazyStackedTensorDict(
-        fields={
-            action: Tensor(torch.Size([2, 21]), dtype=torch.float32),
-            done: Tensor(torch.Size([2, 1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([2, 64]), dtype=torch.float32),
-            next: LazyStackedTensorDict(
-                fields={
-                    observation: Tensor(torch.Size([2, 67]), dtype=torch.float32)},
-                batch_size=torch.Size([2]),
-                device=cpu,
-                is_shared=False),
-            observation: Tensor(torch.Size([2, 67]), dtype=torch.float32),
-            reward: Tensor(torch.Size([2, 1]), dtype=torch.float64)},
-        batch_size=torch.Size([2]),
-        device=cpu,
-        is_shared=False)
-    TensorDict(
-        fields={
-            action: Tensor(torch.Size([21]), dtype=torch.float32),
-            done: Tensor(torch.Size([1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([64]), dtype=torch.float32),
-            next: TensorDict(
-                fields={
-                    observation: Tensor(torch.Size([67]), dtype=torch.float32),
-                    observation_stand: Tensor(torch.Size([67]), dtype=torch.float32)},
-                batch_size=torch.Size([]),
-                device=cpu,
-                is_shared=False),
-            observation: Tensor(torch.Size([67]), dtype=torch.float32),
-            observation_stand: Tensor(torch.Size([67]), dtype=torch.float32),
-            reward: Tensor(torch.Size([1]), dtype=torch.float64)},
-        batch_size=torch.Size([]),
-        device=cpu,
-        is_shared=False)
-    TensorDict(
-        fields={
-            action: Tensor(torch.Size([21]), dtype=torch.float32),
-            done: Tensor(torch.Size([1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([64]), dtype=torch.float32),
-            next: TensorDict(
-                fields={
-                    observation: Tensor(torch.Size([67]), dtype=torch.float32),
-                    observation_walk: Tensor(torch.Size([67]), dtype=torch.float32)},
-                batch_size=torch.Size([]),
-                device=cpu,
-                is_shared=False),
-            observation: Tensor(torch.Size([67]), dtype=torch.float32),
-            observation_walk: Tensor(torch.Size([67]), dtype=torch.float32),
-            reward: Tensor(torch.Size([1]), dtype=torch.float64)},
-        batch_size=torch.Size([]),
-        device=cpu,
-        is_shared=False)
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 178-180
@@ -535,45 +300,12 @@ Rollout
     td_rollout = env.rollout(100, policy=seq, return_contiguous=False)
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 184-187
 
 .. code-block:: default
 
 
     td_rollout[:, 0]  # tensordict of the first step: only the common keys are shown
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    LazyStackedTensorDict(
-        fields={
-            action: Tensor(torch.Size([2, 21]), dtype=torch.float32),
-            done: Tensor(torch.Size([2, 1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([2, 64]), dtype=torch.float32),
-            next: LazyStackedTensorDict(
-                fields={
-                    observation: Tensor(torch.Size([2, 67]), dtype=torch.float32)},
-                batch_size=torch.Size([2]),
-                device=cpu,
-                is_shared=False),
-            observation: Tensor(torch.Size([2, 67]), dtype=torch.float32),
-            reward: Tensor(torch.Size([2, 1]), dtype=torch.float64)},
-        batch_size=torch.Size([2]),
-        device=cpu,
-        is_shared=False)
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 188-190
@@ -584,38 +316,9 @@ Rollout
     td_rollout[0]  # tensordict of the first env: the stand obs is present
 
 
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    LazyStackedTensorDict(
-        fields={
-            action: Tensor(torch.Size([100, 21]), dtype=torch.float32),
-            done: Tensor(torch.Size([100, 1]), dtype=torch.bool),
-            hidden: Tensor(torch.Size([100, 64]), dtype=torch.float32),
-            next: LazyStackedTensorDict(
-                fields={
-                    observation: Tensor(torch.Size([100, 67]), dtype=torch.float32),
-                    observation_stand: Tensor(torch.Size([100, 67]), dtype=torch.float32)},
-                batch_size=torch.Size([100]),
-                device=cpu,
-                is_shared=False),
-            observation: Tensor(torch.Size([100, 67]), dtype=torch.float32),
-            observation_stand: Tensor(torch.Size([100, 67]), dtype=torch.float32),
-            reward: Tensor(torch.Size([100, 1]), dtype=torch.float64)},
-        batch_size=torch.Size([100]),
-        device=cpu,
-        is_shared=False)
-
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.768 seconds)
+   **Total running time of the script:** ( 0 minutes  0.003 seconds)
 
 
 .. _sphx_glr_download_tutorials_multi_task.py:

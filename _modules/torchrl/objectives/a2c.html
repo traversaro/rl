@@ -371,8 +371,8 @@
 <span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span><span class="p">,</span> <span class="n">TensorDictBase</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">distributions</span> <span class="k">as</span> <span class="n">d</span>
 
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module</span> <span class="kn">import</span> <span class="n">ProbabilisticTensorDictModule</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">SafeModule</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module</span> <span class="kn">import</span> <span class="n">SafeProbabilisticModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.objectives.common</span> <span class="kn">import</span> <span class="n">LossModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.objectives.utils</span> <span class="kn">import</span> <span class="n">distance_loss</span>
 
@@ -388,7 +388,7 @@
 <span class="sd">    https://arxiv.org/abs/1602.01783v2</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        actor (ProbabilisticTensorDictModule): policy operator.</span>
+<span class="sd">        actor (SafeProbabilisticModule): policy operator.</span>
 <span class="sd">        critic (ValueOperator): value operator.</span>
 <span class="sd">        advantage_key (str): the input tensordict key where the advantage is expected to be written.</span>
 <span class="sd">            default: &quot;advantage&quot;</span>
@@ -398,13 +398,13 @@
 <span class="sd">        critic_coef (float): the weight of the critic loss.</span>
 <span class="sd">        gamma (scalar): a discount factor for return computation.</span>
 <span class="sd">        loss_function_type (str): loss function for the value discrepancy. Can be one of &quot;l1&quot;, &quot;l2&quot; or &quot;smooth_l1&quot;.</span>
-<span class="sd">        advantage_module (nn.Module): TensorDictModule used to compute tha advantage function.</span>
+<span class="sd">        advantage_module (nn.Module): SafeModule used to compute tha advantage function.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">actor</span><span class="p">:</span> <span class="n">ProbabilisticTensorDictModule</span><span class="p">,</span>
-        <span class="n">critic</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="n">actor</span><span class="p">:</span> <span class="n">SafeProbabilisticModule</span><span class="p">,</span>
+        <span class="n">critic</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
         <span class="n">advantage_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;advantage&quot;</span><span class="p">,</span>
         <span class="n">advantage_diff_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;value_error&quot;</span><span class="p">,</span>
         <span class="n">entropy_bonus</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>

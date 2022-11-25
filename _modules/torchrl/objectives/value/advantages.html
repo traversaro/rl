@@ -372,7 +372,7 @@
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
 
 <span class="kn">from</span> <span class="nn">torchrl.envs.utils</span> <span class="kn">import</span> <span class="n">step_mdp</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">SafeModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.objectives.value.functional</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">td_lambda_advantage_estimate</span><span class="p">,</span>
     <span class="n">vec_generalized_advantage_estimate</span><span class="p">,</span>
@@ -388,7 +388,7 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        gamma (scalar): exponential mean discount.</span>
-<span class="sd">        value_network (TensorDictModule): value operator used to retrieve the value estimates.</span>
+<span class="sd">        value_network (SafeModule): value operator used to retrieve the value estimates.</span>
 <span class="sd">        average_rewards (bool, optional): if True, rewards will be standardized</span>
 <span class="sd">            before the TD is computed.</span>
 <span class="sd">        gradient_mode (bool, optional): if True, gradients are propagated throught</span>
@@ -400,7 +400,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">gamma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
-        <span class="n">value_network</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="n">value_network</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
         <span class="n">average_rewards</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">gradient_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">value_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;state_value&quot;</span><span class="p">,</span>
@@ -491,7 +491,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        gamma (scalar): exponential mean discount.</span>
 <span class="sd">        lmbda (scalar): trajectory discount.</span>
-<span class="sd">        value_network (TensorDictModule): value operator used to retrieve the value estimates.</span>
+<span class="sd">        value_network (SafeModule): value operator used to retrieve the value estimates.</span>
 <span class="sd">        average_rewards (bool, optional): if True, rewards will be standardized</span>
 <span class="sd">            before the TD is computed.</span>
 <span class="sd">        gradient_mode (bool, optional): if True, gradients are propagated throught</span>
@@ -506,7 +506,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">gamma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
         <span class="n">lmbda</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
-        <span class="n">value_network</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="n">value_network</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
         <span class="n">average_rewards</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">gradient_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">value_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;state_value&quot;</span><span class="p">,</span>
@@ -613,7 +613,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        gamma (scalar): exponential mean discount.</span>
 <span class="sd">        lmbda (scalar): trajectory discount.</span>
-<span class="sd">        value_network (TensorDictModule): value operator used to retrieve the value estimates.</span>
+<span class="sd">        value_network (SafeModule): value operator used to retrieve the value estimates.</span>
 <span class="sd">        average_rewards (bool): if True, rewards will be standardized before the GAE is computed.</span>
 <span class="sd">        gradient_mode (bool): if True, gradients are propagated throught the computation of the value function.</span>
 <span class="sd">            Default is `False`.</span>
@@ -624,7 +624,7 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">gamma</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
         <span class="n">lmbda</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">value_network</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="n">value_network</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
         <span class="n">average_rewards</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">gradient_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>

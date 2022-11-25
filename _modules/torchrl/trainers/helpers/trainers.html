@@ -370,13 +370,14 @@
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModuleWrapper</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">optim</span>
 <span class="kn">from</span> <span class="nn">torch.optim.lr_scheduler</span> <span class="kn">import</span> <span class="n">CosineAnnealingLR</span>
 
 <span class="kn">from</span> <span class="nn">torchrl.collectors.collectors</span> <span class="kn">import</span> <span class="n">_DataCollector</span>
 <span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">ReplayBuffer</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.common</span> <span class="kn">import</span> <span class="n">EnvBase</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">reset_noise</span><span class="p">,</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictModuleWrapper</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">reset_noise</span><span class="p">,</span> <span class="n">SafeModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.objectives.common</span> <span class="kn">import</span> <span class="n">LossModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.objectives.utils</span> <span class="kn">import</span> <span class="n">TargetNetUpdater</span>
 <span class="kn">from</span> <span class="nn">torchrl.trainers.loggers</span> <span class="kn">import</span> <span class="n">Logger</span>
@@ -441,9 +442,7 @@
     <span class="n">loss_module</span><span class="p">:</span> <span class="n">LossModule</span><span class="p">,</span>
     <span class="n">recorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EnvBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">target_net_updater</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TargetNetUpdater</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">policy_exploration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span>
-        <span class="n">Union</span><span class="p">[</span><span class="n">TensorDictModuleWrapper</span><span class="p">,</span> <span class="n">TensorDictModule</span><span class="p">]</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">policy_exploration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TensorDictModuleWrapper</span><span class="p">,</span> <span class="n">SafeModule</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">replay_buffer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ReplayBuffer</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="s2">&quot;DictConfig&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># noqa: F821</span>
@@ -475,7 +474,7 @@
 <span class="sd">        &gt;&gt;&gt; from torchrl.collectors.collectors import SyncDataCollector</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import TensorDictReplayBuffer</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.envs.libs.gym import GymEnv</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.modules import TensorDictModuleWrapper, TensorDictModule, ValueOperator, EGreedyWrapper</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.modules import TensorDictModuleWrapper, SafeModule, ValueOperator, EGreedyWrapper</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.objectives.common import LossModule</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.objectives.utils import TargetNetUpdater</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.objectives import DDPGLoss</span>
@@ -485,7 +484,7 @@
 <span class="sd">        &gt;&gt;&gt; action_spec = env_proof.action_spec</span>
 <span class="sd">        &gt;&gt;&gt; net = torch.nn.Linear(env_proof.observation_spec.shape[-1], action_spec.shape[-1])</span>
 <span class="sd">        &gt;&gt;&gt; net_value = torch.nn.Linear(env_proof.observation_spec.shape[-1], 1)  # for the purpose of testing</span>
-<span class="sd">        &gt;&gt;&gt; policy = TensorDictModule(action_spec, net, in_keys=[&quot;observation&quot;], out_keys=[&quot;action&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; policy = SafeModule(action_spec, net, in_keys=[&quot;observation&quot;], out_keys=[&quot;action&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; value = ValueOperator(net_value, in_keys=[&quot;observation&quot;], out_keys=[&quot;state_action_value&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; collector = SyncDataCollector(env_maker, policy, total_frames=100)</span>
 <span class="sd">        &gt;&gt;&gt; loss_module = DDPGLoss(policy, value, gamma=0.99)</span>

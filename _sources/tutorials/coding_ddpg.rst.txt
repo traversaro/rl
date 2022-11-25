@@ -97,7 +97,14 @@ this algorithm.
 
 
 
+.. rst-class:: sphx-glr-script-out
 
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py", line 63, in <module>
+        from torchrl.modules import (
+    ImportError: cannot import name 'TensorDictModule' from 'torchrl.modules' (/__w/rl/rl/torchrl/modules/__init__.py)
 
 
 
@@ -157,12 +164,6 @@ pixel-based environment, this can be done via the keyword argument
         }
         env = env_library(*env_args, **env_kwargs)
         return env
-
-
-
-
-
-
 
 
 
@@ -239,12 +240,6 @@ computing the normalizing constants later on.
 
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 192-199
 
 Parallel execution
@@ -279,12 +274,6 @@ the first method:
         )
         env = make_transformed_env(parallel_env, stats, **env_kwargs)
         return env
-
-
-
-
-
-
 
 
 
@@ -349,12 +338,6 @@ collected observations:
         # make sure proof_env is closed
         proof_env.close()
         return stats
-
-
-
-
-
-
 
 
 
@@ -427,12 +410,6 @@ Let us now build the DDPG actor and QValue network.
 
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 341-348
 
 Evaluator: building your recorder object
@@ -462,12 +439,6 @@ from these simulations. The following helper function builds this object:
             record_interval=record_interval,
         )
         return recorder_obj
-
-
-
-
-
-
 
 
 
@@ -516,12 +487,6 @@ hyperparameters:
                 ),
             )
         return replay_buffer
-
-
-
-
-
-
 
 
 
@@ -585,12 +550,6 @@ experiment hyperparameters:
     seed = 0
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 460-470
 
 **Note**: for fast rendering of the tutorial ``total_frames`` hyperparameter
@@ -637,25 +596,6 @@ sampled actions).
     create_env_fn = parallel_env_constructor(
         stats=stats,
     )
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    computing state stats
-    stats computed for 1000 steps. Got: 
-    loc = tensor([-3.9152e-01,  2.3728e+00,  1.6790e-02, -5.8100e-03,  2.0432e-02,
-             2.4661e-02,  1.7335e-02,  5.6330e-03,  9.3439e-04, -1.3564e-02,
-             6.1885e-02,  1.4405e-01, -2.1127e-01,  2.9993e-01, -2.7058e-01,
-             1.7317e-01,  6.3022e-02]), 
-    scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
-            0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 501-526
@@ -714,18 +654,6 @@ observation is changed to be the n-step forward observation.
     collector.set_seed(seed)
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    3018685293
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 550-551
 
 We can now create the replay buffer as part of the initialization.
@@ -740,12 +668,6 @@ We can now create the replay buffer as part of the initialization.
 
     # Trajectory recorder
     recorder = make_recorder(actor_model_explore, stats)
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 559-561
@@ -769,12 +691,6 @@ with the same learning rate for both.
     scheduler2 = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer_qnet, T_max=total_collection_steps
     )
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 575-615
@@ -924,33 +840,6 @@ Some notes about the following cell:
     collector.shutdown()
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-      0%|          | 0/2500 [00:00<?, ?it/s]     20%|##        | 500/2500 [00:01<00:06, 315.32it/s]Creating a MemmapStorage...
-    The storage is being created: 
-            action: /tmp/5j3nbx7k, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
-            done: /tmp/yq69nimk, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
-            gamma: /tmp/lw9iypnj, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-            index: /tmp/2ju4_hwx, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-            mask: /tmp/y7qfual9, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
-            next.observation_vector: /tmp/tmpsorxmt2t, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
-            nonterminal: /tmp/rk7zh5mw, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
-            observation_vector: /tmp/dh6s11ae, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
-            original_reward: /tmp/u5s58ki2, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-            param: /tmp/uqyo0ttg, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
-            reward: /tmp/4nysevjv, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-            step_count: /tmp/ujh9op_h, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-            steps_to_next_obs: /tmp/pzkq2npz, 0.019073486328125 Mb of storage (size: torch.Size([2500, 1])).
-            traj_ids: /tmp/ip2d1ukz, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-    reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7592:  20%|##        | 500/2500 [00:06<00:06, 315.32it/s]    reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7592:  40%|####      | 1000/2500 [00:06<00:09, 150.62it/s]    reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7592:  40%|####      | 1000/2500 [00:07<00:09, 150.62it/s]    reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7592:  60%|######    | 1500/2500 [00:07<00:04, 203.68it/s]    reward: -1.4266 (r0 = -1.3075), reward eval: reward: -0.7592:  60%|######    | 1500/2500 [00:08<00:04, 203.68it/s]    reward: -1.4266 (r0 = -1.3075), reward eval: reward: -0.7592:  80%|########  | 2000/2500 [00:08<00:02, 243.93it/s]    reward: -1.6997 (r0 = -1.3075), reward eval: reward: -0.7592:  80%|########  | 2000/2500 [00:10<00:02, 243.93it/s]    reward: -1.6997 (r0 = -1.3075), reward eval: reward: -0.7592: 100%|##########| 2500/2500 [00:10<00:00, 281.37it/s]    reward: -2.1691 (r0 = -1.3075), reward eval: reward: -0.7592: 100%|##########| 2500/2500 [00:12<00:00, 281.37it/s]
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 715-722
 
 Experiment results
@@ -973,17 +862,6 @@ use a greater value for ``total_frames`` e.g. 1000000.
     plt.xlabel("iter")
     plt.ylabel("reward")
     plt.tight_layout()
-
-
-
-
-.. image-sg:: /tutorials/images/sphx_glr_coding_ddpg_001.png
-   :alt: coding ddpg
-   :srcset: /tutorials/images/sphx_glr_coding_ddpg_001.png
-   :class: sphx-glr-single-img
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 732-746
@@ -1014,31 +892,12 @@ time). Hence, we'll devide our replay buffer size by 250:
     print("the new batch size for trajectories is", batch_size_traj)
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    the new buffer size is 200
-    the new batch size for trajectories is 4
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 753-756
 
 .. code-block:: default
 
 
     n_steps_forward = 0  # disable multi-step for simplicity
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 757-758
@@ -1119,25 +978,6 @@ The following code is identical to the initialization we made earlier:
     )
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    computing state stats
-    stats computed for 1000 steps. Got: 
-    loc = tensor([-3.9152e-01,  2.3728e+00,  1.6790e-02, -5.8100e-03,  2.0432e-02,
-             2.4661e-02,  1.7335e-02,  5.6330e-03,  9.3439e-04, -1.3564e-02,
-             6.1885e-02,  1.4405e-01, -2.1127e-01,  2.9993e-01, -2.7058e-01,
-             1.7317e-01,  6.3022e-02]), 
-    scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
-            0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 828-831
 
 The training loop needs to be modified. First, whereas before extending the
@@ -1152,18 +992,6 @@ anymore. To understand why, let's check the output shape of the data collector:
     for data in collector:
         print(data.shape)
         break
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    torch.Size([2, 250])
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 837-841
@@ -1181,12 +1009,6 @@ Let's import the td_lambda function
     from torchrl.objectives.value.functional import vec_td_lambda_advantage_estimate
 
     lmbda = 0.95
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 847-861
@@ -1324,29 +1146,6 @@ batch size to ``torch.Size([batch])``.
     collector.shutdown()
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Creating a MemmapStorage...
-    The storage is being created: 
-            action: /tmp/ijpviux5, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-            done: /tmp/bie5ioca, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
-            index: /tmp/hrqesh_y, 0.000762939453125 Mb of storage (size: torch.Size([200, 1])).
-            mask: /tmp/kbq2g2td, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
-            next.observation_vector: /tmp/tmpo5_xqs9s, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
-            observation_vector: /tmp/q3kuyek7, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
-            param: /tmp/yqqa2qza, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-            reward: /tmp/lu2dtmkg, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
-            step_count: /tmp/86_3yntv, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
-            traj_ids: /tmp/g82f393h, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
-    reward: -2.1691 (r0 = -1.3075), reward eval: reward: -0.7592: 100%|##########| 2500/2500 [00:30<00:00, 281.37it/s]
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 975-980
 
 We can observe that using TD(lambda) made our results considerably more
@@ -1370,26 +1169,9 @@ use a greater value for ``total_frames`` e.g. 1000000.
     plt.title("TD-labmda DDPG results")
 
 
-
-.. image-sg:: /tutorials/images/sphx_glr_coding_ddpg_002.png
-   :alt: TD-labmda DDPG results
-   :srcset: /tutorials/images/sphx_glr_coding_ddpg_002.png
-   :class: sphx-glr-single-img
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    Text(0.5, 1.0, 'TD-labmda DDPG results')
-
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  53.967 seconds)
+   **Total running time of the script:** ( 0 minutes  0.002 seconds)
 
 
 .. _sphx_glr_download_tutorials_coding_ddpg.py:

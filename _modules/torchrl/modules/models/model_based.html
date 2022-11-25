@@ -373,8 +373,8 @@
 <span class="kn">from</span> <span class="nn">torchrl.envs.utils</span> <span class="kn">import</span> <span class="n">step_mdp</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.distributions</span> <span class="kn">import</span> <span class="n">NormalParamWrapper</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.models.models</span> <span class="kn">import</span> <span class="n">MLP</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.common</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.sequence</span> <span class="kn">import</span> <span class="n">TensorDictSequential</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.common</span> <span class="kn">import</span> <span class="n">SafeModule</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.sequence</span> <span class="kn">import</span> <span class="n">SafeSequential</span>
 
 
 <div class="viewcode-block" id="DreamerActor"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.DreamerActor.html#torchrl.modules.DreamerActor">[docs]</a><span class="k">class</span> <span class="nc">DreamerActor</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -513,15 +513,15 @@
 <span class="sd">    Reference: https://arxiv.org/abs/1811.04551</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        rssm_prior (TensorDictModule): Prior network.</span>
-<span class="sd">        rssm_posterior (TensorDictModule): Posterior network.</span>
+<span class="sd">        rssm_prior (SafeModule): Prior network.</span>
+<span class="sd">        rssm_posterior (SafeModule): Posterior network.</span>
 
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rssm_prior</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">rssm_posterior</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rssm_prior</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span> <span class="n">rssm_posterior</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="n">_module</span> <span class="o">=</span> <span class="n">TensorDictSequential</span><span class="p">(</span><span class="n">rssm_prior</span><span class="p">,</span> <span class="n">rssm_posterior</span><span class="p">)</span>
+        <span class="n">_module</span> <span class="o">=</span> <span class="n">SafeSequential</span><span class="p">(</span><span class="n">rssm_prior</span><span class="p">,</span> <span class="n">rssm_posterior</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_keys</span> <span class="o">=</span> <span class="n">_module</span><span class="o">.</span><span class="n">in_keys</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span> <span class="o">=</span> <span class="n">_module</span><span class="o">.</span><span class="n">out_keys</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rssm_prior</span> <span class="o">=</span> <span class="n">rssm_prior</span>

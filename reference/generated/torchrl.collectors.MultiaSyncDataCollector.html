@@ -382,7 +382,7 @@ This class can be safely used with offline RL algorithms.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>create_env_fn</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em> of </em><em>Callabled</em>) – list of Callables, each returning an instance of EnvBase</p></li>
-<li><p><strong>policy</strong> (<em>Callable</em><em>, </em><em>optional</em>) – Instance of ProbabilisticTensorDictModule class.
+<li><p><strong>policy</strong> (<em>Callable</em><em>, </em><em>optional</em>) – Instance of SafeProbabilisticModule class.
 Must accept TensorDictBase object as input.</p></li>
 <li><p><strong>total_frames</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – lower bound of the total number of frames returned by the collector. In parallel settings,
 the actual number of frames may well be greater than this as the closing signals are sent to the

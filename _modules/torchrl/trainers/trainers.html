@@ -391,7 +391,7 @@
 <span class="kn">from</span> <span class="nn">torchrl.data.utils</span> <span class="kn">import</span> <span class="n">DEVICE_TYPING</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.common</span> <span class="kn">import</span> <span class="n">EnvBase</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.utils</span> <span class="kn">import</span> <span class="n">set_exploration_mode</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">SafeModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.objectives.common</span> <span class="kn">import</span> <span class="n">LossModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.trainers.loggers</span> <span class="kn">import</span> <span class="n">Logger</span>
 
@@ -1398,7 +1398,7 @@
         <span class="n">record_interval</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">record_frames</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">frame_skip</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">policy_exploration</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="n">policy_exploration</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
         <span class="n">recorder</span><span class="p">:</span> <span class="n">EnvBase</span><span class="p">,</span>
         <span class="n">exploration_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;random&quot;</span><span class="p">,</span>
         <span class="n">log_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>

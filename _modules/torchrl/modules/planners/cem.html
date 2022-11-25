@@ -409,7 +409,7 @@
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import CompositeSpec, NdUnboundedContinuousTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.envs.model_based import ModelBasedEnvBase</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.modules import TensorDictModule</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.modules import SafeModule</span>
 <span class="sd">        &gt;&gt;&gt; class MyMBEnv(ModelBasedEnvBase):</span>
 <span class="sd">        ...     def __init__(self, world_model, device=&quot;cpu&quot;, dtype=None, batch_size=None):</span>
 <span class="sd">        ...         super().__init__(world_model, device=device, dtype=dtype, batch_size=batch_size)</span>
@@ -433,12 +433,12 @@
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import MLP, WorldModelWrapper</span>
 <span class="sd">        &gt;&gt;&gt; import torch.nn as nn</span>
 <span class="sd">        &gt;&gt;&gt; world_model = WorldModelWrapper(</span>
-<span class="sd">        ...     TensorDictModule(</span>
+<span class="sd">        ...     SafeModule(</span>
 <span class="sd">        ...         MLP(out_features=4, activation_class=nn.ReLU, activate_last_layer=True, depth=0),</span>
 <span class="sd">        ...         in_keys=[&quot;hidden_observation&quot;, &quot;action&quot;],</span>
 <span class="sd">        ...         out_keys=[&quot;hidden_observation&quot;],</span>
 <span class="sd">        ...     ),</span>
-<span class="sd">        ...     TensorDictModule(</span>
+<span class="sd">        ...     SafeModule(</span>
 <span class="sd">        ...         nn.Linear(4, 1),</span>
 <span class="sd">        ...         in_keys=[&quot;hidden_observation&quot;],</span>
 <span class="sd">        ...         out_keys=[&quot;reward&quot;],</span>

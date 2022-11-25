@@ -365,34 +365,25 @@
 <span class="c1"># This source code is licensed under the MIT license found in the</span>
 <span class="c1"># LICENSE file in the root directory of this source tree.</span>
 
-<span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">indent</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDictBase</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">distributions</span> <span class="k">as</span> <span class="n">d</span><span class="p">,</span> <span class="n">Tensor</span>
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">ProbabilisticTensorDictModule</span>
 
 <span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">TensorSpec</span>
-<span class="kn">from</span> <span class="nn">torchrl.envs.utils</span> <span class="kn">import</span> <span class="n">exploration_mode</span><span class="p">,</span> <span class="n">set_exploration_mode</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules.distributions</span> <span class="kn">import</span> <span class="n">Delta</span><span class="p">,</span> <span class="n">distributions_maps</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.common</span> <span class="kn">import</span> <span class="n">_check_all_str</span><span class="p">,</span> <span class="n">TensorDictModule</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules.distributions</span> <span class="kn">import</span> <span class="n">Delta</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.common</span> <span class="kn">import</span> <span class="n">SafeModule</span>
 
 
-<div class="viewcode-block" id="ProbabilisticTensorDictModule"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.ProbabilisticTensorDictModule.html#torchrl.modules.ProbabilisticTensorDictModule">[docs]</a><span class="k">class</span> <span class="nc">ProbabilisticTensorDictModule</span><span class="p">(</span><span class="n">TensorDictModule</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A probabilistic TD Module.</span>
-
-<span class="sd">    `ProbabilisticTDModule` is a special case of a TDModule where the output is</span>
-<span class="sd">    sampled given some rule, specified by the input :obj:`default_interaction_mode`</span>
-<span class="sd">    argument and the :obj:`exploration_mode()` global function.</span>
+<div class="viewcode-block" id="SafeProbabilisticModule"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.SafeProbabilisticModule.html#torchrl.modules.SafeProbabilisticModule">[docs]</a><span class="k">class</span> <span class="nc">SafeProbabilisticModule</span><span class="p">(</span><span class="n">ProbabilisticTensorDictModule</span><span class="p">,</span> <span class="n">SafeModule</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A :obj:``SafeProbabilisticModule`` is an :obj:``tensordict.nn.ProbabilisticTensorDictModule`` subclass that accepts a :obj:``TensorSpec`` as argument to control the output domain.</span>
 
 <span class="sd">    It consists in a wrapper around another TDModule that returns a tensordict</span>
-<span class="sd">    updated with the distribution parameters. :obj:`ProbabilisticTensorDictModule` is</span>
+<span class="sd">    updated with the distribution parameters. :obj:`SafeProbabilisticModule` is</span>
 <span class="sd">    responsible for constructing the distribution (through the :obj:`get_dist()` method)</span>
 <span class="sd">    and/or sampling from this distribution (through a regular :obj:`__call__()` to the</span>
 <span class="sd">    module).</span>
 
-<span class="sd">    A :obj:`ProbabilisticTensorDictModule` instance has two main features:</span>
+<span class="sd">    A :obj:`SafeProbabilisticModule` instance has two main features:</span>
 <span class="sd">    - It reads and writes TensorDict objects</span>
 <span class="sd">    - It uses a real mapping R^n -&gt; R^m to create a distribution in R^d from</span>
 <span class="sd">    which values can be sampled or computed.</span>
@@ -401,8 +392,8 @@
 <span class="sd">    the &#39;rsample&#39;, &#39;sample&#39; method). The sampling step is skipped if the</span>
 <span class="sd">    inner TDModule has already created the desired key-value pair.</span>
 
-<span class="sd">    By default, ProbabilisticTensorDictModule distribution class is a Delta</span>
-<span class="sd">    distribution, making ProbabilisticTensorDictModule a simple wrapper around</span>
+<span class="sd">    By default, SafeProbabilisticModule distribution class is a Delta</span>
+<span class="sd">    distribution, making SafeProbabilisticModule a simple wrapper around</span>
 <span class="sd">    a deterministic mapping function.</span>
 
 <span class="sd">    Args:</span>
@@ -452,13 +443,13 @@
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import NdUnboundedContinuousTensorSpec</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.modules import ProbabilisticTensorDictModule, TanhNormal, NormalParamWrapper</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.modules import SafeProbabilisticModule, TanhNormal, NormalParamWrapper</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;input&quot;: torch.randn(3, 4), &quot;hidden&quot;: torch.randn(3, 8)}, [3,])</span>
 <span class="sd">        &gt;&gt;&gt; spec = NdUnboundedContinuousTensorSpec(4)</span>
 <span class="sd">        &gt;&gt;&gt; net = NormalParamWrapper(torch.nn.GRUCell(4, 8))</span>
 <span class="sd">        &gt;&gt;&gt; fnet, params, buffers = functorch.make_functional_with_buffers(net)</span>
-<span class="sd">        &gt;&gt;&gt; module = TensorDictModule(fnet, in_keys=[&quot;input&quot;, &quot;hidden&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
-<span class="sd">        &gt;&gt;&gt; td_module = ProbabilisticTensorDictModule(</span>
+<span class="sd">        &gt;&gt;&gt; module = SafeModule(fnet, in_keys=[&quot;input&quot;, &quot;hidden&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; td_module = SafeProbabilisticModule(</span>
 <span class="sd">        ...    module=module,</span>
 <span class="sd">        ...    spec=spec,</span>
 <span class="sd">        ...    dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
@@ -501,7 +492,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">module</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="n">module</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
         <span class="n">dist_in_keys</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="nb">dict</span><span class="p">],</span>
         <span class="n">sample_out_key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorSpec</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -513,206 +504,24 @@
         <span class="n">cache_dist</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">n_empirical_estimate</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="n">in_keys</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">in_keys</span>
-
-        <span class="c1"># if the module returns the sampled key we wont be sampling it again</span>
-        <span class="c1"># then ProbabilisticTensorDictModule is presumably used to return the distribution using `get_dist`</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dist_in_keys</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">dist_in_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">dist_in_keys</span><span class="p">]</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_out_key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">sample_out_key</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample_out_key</span><span class="p">]</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dist_in_keys</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="n">dist_in_keys</span> <span class="o">=</span> <span class="p">{</span><span class="n">param_key</span><span class="p">:</span> <span class="n">param_key</span> <span class="k">for</span> <span class="n">param_key</span> <span class="ow">in</span> <span class="n">dist_in_keys</span><span class="p">}</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">dist_in_keys</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">out_keys</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;The key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> could not be found in the wrapped module `</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">module</span><span class="p">)</span><span class="si">}</span><span class="s2">.out_keys`.&quot;</span>
-                <span class="p">)</span>
-        <span class="n">module_out_keys</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">out_keys</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sample_out_key</span> <span class="o">=</span> <span class="n">sample_out_key</span>
-        <span class="n">_check_all_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_out_key</span><span class="p">)</span>
-        <span class="n">sample_out_key</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sample_out_key</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">module_out_keys</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_requires_sample</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sample_out_key</span><span class="p">))</span>
-        <span class="n">out_keys</span> <span class="o">=</span> <span class="n">sample_out_key</span> <span class="o">+</span> <span class="n">module_out_keys</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span> <span class="n">in_keys</span><span class="o">=</span><span class="n">in_keys</span><span class="p">,</span> <span class="n">out_keys</span><span class="o">=</span><span class="n">out_keys</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="n">safe</span>
+            <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
+            <span class="n">dist_in_keys</span><span class="o">=</span><span class="n">dist_in_keys</span><span class="p">,</span>
+            <span class="n">sample_out_key</span><span class="o">=</span><span class="n">sample_out_key</span><span class="p">,</span>
+            <span class="n">default_interaction_mode</span><span class="o">=</span><span class="n">default_interaction_mode</span><span class="p">,</span>
+            <span class="n">distribution_class</span><span class="o">=</span><span class="n">distribution_class</span><span class="p">,</span>
+            <span class="n">distribution_kwargs</span><span class="o">=</span><span class="n">distribution_kwargs</span><span class="p">,</span>
+            <span class="n">return_log_prob</span><span class="o">=</span><span class="n">return_log_prob</span><span class="p">,</span>
+            <span class="n">cache_dist</span><span class="o">=</span><span class="n">cache_dist</span><span class="p">,</span>
+            <span class="n">n_empirical_estimate</span><span class="o">=</span><span class="n">n_empirical_estimate</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dist_in_keys</span> <span class="o">=</span> <span class="n">dist_in_keys</span>
-        <span class="n">_check_all_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_in_keys</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="n">_check_all_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_in_keys</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">default_interaction_mode</span> <span class="o">=</span> <span class="n">default_interaction_mode</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">distribution_class</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">distribution_class</span> <span class="o">=</span> <span class="n">distributions_maps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">distribution_class</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">distribution_class</span> <span class="o">=</span> <span class="n">distribution_class</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">distribution_kwargs</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">distribution_kwargs</span> <span class="k">if</span> <span class="n">distribution_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_empirical_estimate</span> <span class="o">=</span> <span class="n">n_empirical_estimate</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dist</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cache_dist</span> <span class="o">=</span> <span class="n">cache_dist</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">distribution_class</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">return_log_prob</span> <span class="o">=</span> <span class="n">return_log_prob</span>
-
-    <span class="k">def</span> <span class="nf">_call_module</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">,</span>
-        <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">buffers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">(</span><span class="n">tensordict</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">buffers</span><span class="o">=</span><span class="n">buffers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<div class="viewcode-block" id="ProbabilisticTensorDictModule.make_functional_with_buffers"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.ProbabilisticTensorDictModule.html#torchrl.modules.ProbabilisticTensorDictModule.make_functional_with_buffers">[docs]</a>    <span class="k">def</span> <span class="nf">make_functional_with_buffers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clone</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">native</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-        <span class="n">module_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">module_params</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="s2">&quot;make_functional_with_buffers cannot be called on ProbabilisticTensorDictModule&quot;</span>
-                <span class="s2">&quot;that contain parameters on the outer level.&quot;</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="n">clone</span><span class="p">:</span>
-            <span class="n">self_copy</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">self_copy</span> <span class="o">=</span> <span class="bp">self</span>
-
-        <span class="n">self_copy</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="n">other</span> <span class="o">=</span> <span class="n">self_copy</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">make_functional_with_buffers</span><span class="p">(</span>
-            <span class="n">clone</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">native</span><span class="o">=</span><span class="n">native</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="n">self_copy</span><span class="p">,</span> <span class="n">other</span></div>
-
-    <span class="k">def</span> <span class="nf">get_dist</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">,</span>
-        <span class="n">tensordict_out</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">buffers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">Distribution</span><span class="p">,</span> <span class="n">TensorDictBase</span><span class="p">]:</span>
-        <span class="n">interaction_mode</span> <span class="o">=</span> <span class="n">exploration_mode</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">interaction_mode</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">interaction_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_interaction_mode</span>
-        <span class="k">with</span> <span class="n">set_exploration_mode</span><span class="p">(</span><span class="n">interaction_mode</span><span class="p">):</span>
-            <span class="n">tensordict_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_module</span><span class="p">(</span>
-                <span class="n">tensordict</span><span class="p">,</span>
-                <span class="n">tensordict_out</span><span class="o">=</span><span class="n">tensordict_out</span><span class="p">,</span>
-                <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
-                <span class="n">buffers</span><span class="o">=</span><span class="n">buffers</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_dist_from_params</span><span class="p">(</span><span class="n">tensordict_out</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">dist</span><span class="p">,</span> <span class="n">tensordict_out</span>
-
-    <span class="k">def</span> <span class="nf">build_dist_from_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict_out</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">d</span><span class="o">.</span><span class="n">Distribution</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">selected_td_out</span> <span class="o">=</span> <span class="n">tensordict_out</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_in_keys</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
-            <span class="n">dist_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="n">dist_key</span><span class="p">:</span> <span class="n">selected_td_out</span><span class="p">[</span><span class="n">td_key</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">dist_key</span><span class="p">,</span> <span class="n">td_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist_in_keys</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="p">}</span>
-            <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution_class</span><span class="p">(</span><span class="o">**</span><span class="n">dist_kwargs</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;an unexpected keyword argument&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="s2">&quot;distribution keywords and tensordict keys indicated by ProbabilisticTensorDictModule.dist_in_keys must match.&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Got this error message: </span><span class="se">\n</span><span class="si">{</span><span class="n">indent</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">),</span> <span class="mi">4</span> <span class="o">*</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">with dist_in_keys=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_in_keys</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
-            <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;missing.*required positional arguments&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)):</span>
-                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;TensorDict with keys </span><span class="si">{</span><span class="n">tensordict_out</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span><span class="si">}</span><span class="s2"> does not match the distribution </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution_class</span><span class="si">}</span><span class="s2"> keywords.&quot;</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">err</span>
-        <span class="k">return</span> <span class="n">dist</span>
-
-<div class="viewcode-block" id="ProbabilisticTensorDictModule.forward"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.ProbabilisticTensorDictModule.html#torchrl.modules.ProbabilisticTensorDictModule.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">,</span>
-        <span class="n">tensordict_out</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">buffers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-
-        <span class="n">dist</span><span class="p">,</span> <span class="n">tensordict_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span>
-            <span class="n">tensordict</span><span class="p">,</span>
-            <span class="n">tensordict_out</span><span class="o">=</span><span class="n">tensordict_out</span><span class="p">,</span>
-            <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
-            <span class="n">buffers</span><span class="o">=</span><span class="n">buffers</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_requires_sample</span><span class="p">:</span>
-            <span class="n">out_tensors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dist_sample</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">interaction_mode</span><span class="o">=</span><span class="n">exploration_mode</span><span class="p">())</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out_tensors</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">):</span>
-                <span class="n">out_tensors</span> <span class="o">=</span> <span class="p">(</span><span class="n">out_tensors</span><span class="p">,)</span>
-            <span class="n">tensordict_out</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">value</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_out_key</span><span class="p">,</span> <span class="n">out_tensors</span><span class="p">)}</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_log_prob</span><span class="p">:</span>
-                <span class="n">log_prob</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="o">*</span><span class="n">out_tensors</span><span class="p">)</span>
-                <span class="n">tensordict_out</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;sample_log_prob&quot;</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_log_prob</span><span class="p">:</span>
-            <span class="n">out_tensors</span> <span class="o">=</span> <span class="p">[</span><span class="n">tensordict_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_out_key</span><span class="p">]</span>
-            <span class="n">log_prob</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="o">*</span><span class="n">out_tensors</span><span class="p">)</span>
-            <span class="n">tensordict_out</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;sample_log_prob&quot;</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">)</span>
-            <span class="c1"># raise RuntimeError(</span>
-            <span class="c1">#     &quot;ProbabilisticTensorDictModule.return_log_prob = True is incompatible with settings in which &quot;</span>
-            <span class="c1">#     &quot;the submodule is responsible for sampling. To manually gather the log-probability, call first &quot;</span>
-            <span class="c1">#     &quot;\n&gt;&gt;&gt; dist, tensordict = tensordict_module.get_dist(tensordict)&quot;</span>
-            <span class="c1">#     &quot;\n&gt;&gt;&gt; tensordict.set(&#39;sample_log_prob&#39;, dist.log_prob(tensordict.get(sample_key))&quot;</span>
-            <span class="c1"># )</span>
-        <span class="k">return</span> <span class="n">tensordict_out</span></div>
-
-    <span class="k">def</span> <span class="nf">_dist_sample</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">dist</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">Distribution</span><span class="p">,</span>
-        <span class="o">*</span><span class="n">tensors</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span>
-        <span class="n">interaction_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">],</span> <span class="n">Tensor</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="n">interaction_mode</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">interaction_mode</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
-            <span class="n">interaction_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_interaction_mode</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">Distribution</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span><span class="si">}</span><span class="s2"> not recognised by _dist_sample&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">interaction_mode</span> <span class="o">==</span> <span class="s2">&quot;mode&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="s2">&quot;mode&quot;</span><span class="p">):</span>
-                <span class="k">return</span> <span class="n">dist</span><span class="o">.</span><span class="n">mode</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;method </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span><span class="si">}</span><span class="s2">.mode is not implemented&quot;</span>
-                <span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">interaction_mode</span> <span class="o">==</span> <span class="s2">&quot;median&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="s2">&quot;median&quot;</span><span class="p">):</span>
-                <span class="k">return</span> <span class="n">dist</span><span class="o">.</span><span class="n">median</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;method </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span><span class="si">}</span><span class="s2">.median is not implemented&quot;</span>
-                <span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">interaction_mode</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">dist</span><span class="o">.</span><span class="n">mean</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">NotImplementedError</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">has_rsample</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">dist</span><span class="o">.</span><span class="n">rsample</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_empirical_estimate</span><span class="p">,))</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">dist</span><span class="o">.</span><span class="n">sample</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">n_empirical_estimate</span><span class="p">,))</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">interaction_mode</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">dist</span><span class="o">.</span><span class="n">has_rsample</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">dist</span><span class="o">.</span><span class="n">rsample</span><span class="p">()</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">dist</span><span class="o">.</span><span class="n">sample</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unknown interaction_mode </span><span class="si">{</span><span class="n">interaction_mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">num_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">num_params</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">num_buffers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">num_buffers</span></div>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ProbabilisticTensorDictModule</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
+            <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span>
+            <span class="n">in_keys</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_keys</span><span class="p">,</span>
+            <span class="n">out_keys</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">,</span>
+            <span class="n">safe</span><span class="o">=</span><span class="n">safe</span><span class="p">,</span>
+        <span class="p">)</span></div>
 </pre></div>
 
              </article>
