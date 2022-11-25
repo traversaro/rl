@@ -22,7 +22,7 @@ Introduction to TorchRL
 ============================
 This demo was presented at ICML 2022 on the industry demo day.
 
-.. GENERATED FROM PYTHON SOURCE LINES 8-119
+.. GENERATED FROM PYTHON SOURCE LINES 8-126
 
 It gives a good overview of TorchRL functionalities. Feel free to reach out
 to vmoens@fb.com or submit issues if you have questions or comments about
@@ -51,77 +51,84 @@ Common environment libraries (e.g. OpenAI gym) are only optional.
 **Content**:
    .. aafig::
 
-     torchrl
+     "torchrl"
      │
-     ├── collectors
-     │   └── collectors.py
-     ├── data
-     │   ├── tensor_specs.py
-     │   ├── postprocs
-     │   │  └── postprocs.py
-     │   └── replay_buffers
-     │      ├── replay_buffers.py
-     │      └── storages.py
-     ├── envs
-     │   ├── common.py
-     │   ├── env_creator.py
-     │   ├── gym_like.py
-     │   ├── vec_env.py
-     │   ├── libs
-     │   │  ├── dm_control.py
-     │   │  └── gym.py
-     │   └── transforms
-     │      ├── functional.py
-     │      └── transforms.py
-     ├── modules
-     │   ├── distributions
-     │   │  ├── continuous.py
-     │   │  └── discrete.py
-     │   ├── models
-     │   │  ├── models.py
-     │   │  └── exploration.py
-     │   └── tensordict_module
-     │      ├── actors.py
-     │      ├── common.py
-     │      ├── exploration.py
-     │      ├── probabilistic.py
-     │      └── sequence.py
-     ├── objectives
-     │   ├── common.py
-     │   ├── ddpg.py
-     │   ├── dqn.py
-     │   ├── functional.py
-     │   ├── ppo.py
-     │   ├── redq.py
-     │   ├── reinforce.py
-     │   ├── sac.py
-     │   ├── utils.py
-     │   └── value
-     │      ├── advantages.py
-     │      ├── functional.py
-     │      ├── pg.py
-     │      ├── utils.py
-     │      └── vtrace.py
-     ├── record
-     │      └── recorder.py
-     └── trainers
-         ├── loggers
-         ├── trainers.py
-         └── helpers
-            ├── collectors.py
-            ├── envs.py
-            ├── loggers.py
-            ├── losses.py
-            ├── models.py
-            ├── replay_buffer.py
-            └── trainers.py
+     ├── "collectors"
+     │   └── "collectors.py"
+     ├── "data"
+     │   ├── "tensor_specs.py"
+     │   ├── "postprocs"
+     │   │  └── "postprocs.py"
+     │   └── "replay_buffers"
+     │      ├── "replay_buffers.py"
+     │      └── "storages.py"
+     ├── "envs"
+     │   ├── "common.py"
+     │   ├── "env_creator.py"
+     │   ├── "gym_like.py"
+     │   ├── "vec_env.py"
+     │   ├── "libs"
+     │   │  ├── "dm_control.py"
+     │   │  └── "gym.py"
+     │   └── "transforms"
+     │      ├── "functional.py"
+     │      └── "transforms.py"
+     ├── "modules"
+     │   ├── "distributions"
+     │   │  ├── "continuous.py"
+     │   │  └── "discrete.py"
+     │   ├── "models"
+     │   │  ├── "models.py"
+     │   │  └── "exploration.py"
+     │   └── "tensordict_module"
+     │      ├── "actors.py"
+     │      ├── "common.py"
+     │      ├── "exploration.py"
+     │      ├── "probabilistic.py"
+     │      └── "sequence.py"
+     ├── "objectives"
+     │   ├── "common.py"
+     │   ├── "ddpg.py"
+     │   ├── "dqn.py"
+     │   ├── "functional.py"
+     │   ├── "ppo.py"
+     │   ├── "redq.py"
+     │   ├── "reinforce.py"
+     │   ├── "sac.py"
+     │   ├── "utils.py"
+     │   └── "value"
+     │      ├── "advantages.py"
+     │      ├── "functional.py"
+     │      ├── "pg.py"
+     │      ├── "utils.py"
+     │      └── "vtrace.py"
+     ├── "record"
+     │      └── "recorder.py"
+     └── "trainers"
+         ├── "loggers"
+         │  ├── "common.py"
+         │  ├── "csv.py"
+         │  ├── "mlflow.py"
+         │  ├── "tensorboard.py"
+         │  └── "wandb.py"
+         ├── "trainers.py"
+         └── "helpers"
+            ├── "collectors.py"
+            ├── "envs.py"
+            ├── "loggers.py"
+            ├── "losses.py"
+            ├── "models.py"
+            ├── "replay_buffer.py"
+            └── "trainers.py"
 
 Unlike other domains, RL is less about media than *algorithms*. As such, it
 is harder to make truly independent components.
 
 What TorchRL is not:
+
 * a collection of algorithms: we do not intend to provide SOTA implementations of RL algorithms,
   but we provide these algorithms only as examples of how to use the library.
+
 * a research framework: modularity in TorchRL comes in two flavours. First, we try
   to build re-usable components, such that they can be easily swapped with each other.
   Second, we make our best such that components can be used independently of the rest
@@ -136,7 +143,7 @@ Data
 TensorDict
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-123
+.. GENERATED FROM PYTHON SOURCE LINES 126-130
 
 .. code-block:: default
 
@@ -151,11 +158,11 @@ TensorDict
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 124-125
+.. GENERATED FROM PYTHON SOURCE LINES 131-132
 
 Let's create a TensorDict.
 
-.. GENERATED FROM PYTHON SOURCE LINES 125-136
+.. GENERATED FROM PYTHON SOURCE LINES 132-143
 
 .. code-block:: default
 
@@ -189,11 +196,11 @@ Let's create a TensorDict.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 137-138
+.. GENERATED FROM PYTHON SOURCE LINES 144-145
 
 You can index a TensorDict as well as query keys.
 
-.. GENERATED FROM PYTHON SOURCE LINES 138-142
+.. GENERATED FROM PYTHON SOURCE LINES 145-149
 
 .. code-block:: default
 
@@ -221,11 +228,11 @@ You can index a TensorDict as well as query keys.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 143-144
+.. GENERATED FROM PYTHON SOURCE LINES 150-151
 
 The following shows how to stack multiple TensorDicts.
 
-.. GENERATED FROM PYTHON SOURCE LINES 144-164
+.. GENERATED FROM PYTHON SOURCE LINES 151-171
 
 .. code-block:: default
 
@@ -272,11 +279,11 @@ The following shows how to stack multiple TensorDicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-166
+.. GENERATED FROM PYTHON SOURCE LINES 172-173
 
 Here are some other functionalities of TensorDict.
 
-.. GENERATED FROM PYTHON SOURCE LINES 166-189
+.. GENERATED FROM PYTHON SOURCE LINES 173-196
 
 .. code-block:: default
 
@@ -332,11 +339,11 @@ Here are some other functionalities of TensorDict.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 190-191
+.. GENERATED FROM PYTHON SOURCE LINES 197-198
 
 You can create a **nested TensorDict** as well.
 
-.. GENERATED FROM PYTHON SOURCE LINES 191-204
+.. GENERATED FROM PYTHON SOURCE LINES 198-211
 
 .. code-block:: default
 
@@ -377,12 +384,12 @@ You can create a **nested TensorDict** as well.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 205-207
+.. GENERATED FROM PYTHON SOURCE LINES 212-214
 
 Replay buffers
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 207-210
+.. GENERATED FROM PYTHON SOURCE LINES 214-217
 
 .. code-block:: default
 
@@ -396,7 +403,7 @@ Replay buffers
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 211-216
+.. GENERATED FROM PYTHON SOURCE LINES 218-223
 
 .. code-block:: default
 
@@ -418,7 +425,7 @@ Replay buffers
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 217-221
+.. GENERATED FROM PYTHON SOURCE LINES 224-228
 
 .. code-block:: default
 
@@ -439,7 +446,7 @@ Replay buffers
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 222-228
+.. GENERATED FROM PYTHON SOURCE LINES 229-235
 
 .. code-block:: default
 
@@ -456,11 +463,11 @@ Replay buffers
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 229-230
+.. GENERATED FROM PYTHON SOURCE LINES 236-237
 
 Here are examples of using a replaybuffer with tensordicts.
 
-.. GENERATED FROM PYTHON SOURCE LINES 230-236
+.. GENERATED FROM PYTHON SOURCE LINES 237-243
 
 .. code-block:: default
 
@@ -483,7 +490,7 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 237-243
+.. GENERATED FROM PYTHON SOURCE LINES 244-250
 
 .. code-block:: default
 
@@ -518,7 +525,7 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 244-255
+.. GENERATED FROM PYTHON SOURCE LINES 251-262
 
 .. code-block:: default
 
@@ -552,7 +559,7 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 256-259
+.. GENERATED FROM PYTHON SOURCE LINES 263-266
 
 .. code-block:: default
 
@@ -569,11 +576,11 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
     tensor([[0],
-            [0]], dtype=torch.int32)
+            [1]], dtype=torch.int32)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 260-271
+.. GENERATED FROM PYTHON SOURCE LINES 267-278
 
 .. code-block:: default
 
@@ -596,19 +603,19 @@ Here are examples of using a replaybuffer with tensordicts.
 
  .. code-block:: none
 
-    0 0.28791671991348267
-    1 1.0
+    0 0.06984968483448029
+    1 0.28791671991348267
     2 0.0
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 272-274
+.. GENERATED FROM PYTHON SOURCE LINES 279-281
 
 Envs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 274-281
+.. GENERATED FROM PYTHON SOURCE LINES 281-288
 
 .. code-block:: default
 
@@ -626,7 +633,7 @@ Envs
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 282-286
+.. GENERATED FROM PYTHON SOURCE LINES 289-293
 
 .. code-block:: default
 
@@ -661,12 +668,12 @@ Envs
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 287-289
+.. GENERATED FROM PYTHON SOURCE LINES 294-296
 
 Changing environments config
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 289-293
+.. GENERATED FROM PYTHON SOURCE LINES 296-300
 
 .. code-block:: default
 
@@ -694,7 +701,7 @@ Changing environments config
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 294-298
+.. GENERATED FROM PYTHON SOURCE LINES 301-305
 
 .. code-block:: default
 
@@ -709,7 +716,7 @@ Changing environments config
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 299-312
+.. GENERATED FROM PYTHON SOURCE LINES 306-319
 
 .. code-block:: default
 
@@ -733,12 +740,12 @@ Changing environments config
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 313-315
+.. GENERATED FROM PYTHON SOURCE LINES 320-322
 
 Transforms
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 315-328
+.. GENERATED FROM PYTHON SOURCE LINES 322-335
 
 .. code-block:: default
 
@@ -762,7 +769,7 @@ Transforms
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 329-332
+.. GENERATED FROM PYTHON SOURCE LINES 336-339
 
 .. code-block:: default
 
@@ -788,7 +795,7 @@ Transforms
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 333-337
+.. GENERATED FROM PYTHON SOURCE LINES 340-344
 
 .. code-block:: default
 
@@ -819,12 +826,12 @@ Transforms
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 338-340
+.. GENERATED FROM PYTHON SOURCE LINES 345-347
 
 Vectorized Environments
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 340-352
+.. GENERATED FROM PYTHON SOURCE LINES 347-359
 
 .. code-block:: default
 
@@ -859,7 +866,7 @@ Vectorized Environments
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 353-356
+.. GENERATED FROM PYTHON SOURCE LINES 360-363
 
 .. code-block:: default
 
@@ -880,7 +887,7 @@ Vectorized Environments
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 357-364
+.. GENERATED FROM PYTHON SOURCE LINES 364-371
 
 Modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -890,7 +897,7 @@ Models
 
 Example of a MLP model:
 
-.. GENERATED FROM PYTHON SOURCE LINES 364-367
+.. GENERATED FROM PYTHON SOURCE LINES 371-374
 
 .. code-block:: default
 
@@ -904,7 +911,7 @@ Example of a MLP model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 368-376
+.. GENERATED FROM PYTHON SOURCE LINES 375-383
 
 .. code-block:: default
 
@@ -936,11 +943,11 @@ Example of a MLP model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 377-378
+.. GENERATED FROM PYTHON SOURCE LINES 384-385
 
 Example of a CNN model:
 
-.. GENERATED FROM PYTHON SOURCE LINES 378-385
+.. GENERATED FROM PYTHON SOURCE LINES 385-392
 
 .. code-block:: default
 
@@ -971,12 +978,12 @@ Example of a CNN model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 386-388
+.. GENERATED FROM PYTHON SOURCE LINES 393-395
 
 TensorDictModules
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 388-397
+.. GENERATED FROM PYTHON SOURCE LINES 395-404
 
 .. code-block:: default
 
@@ -1008,12 +1015,12 @@ TensorDictModules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 398-400
+.. GENERATED FROM PYTHON SOURCE LINES 405-407
 
 Sequences of Modules
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 400-415
+.. GENERATED FROM PYTHON SOURCE LINES 407-422
 
 .. code-block:: default
 
@@ -1071,7 +1078,7 @@ Sequences of Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 416-419
+.. GENERATED FROM PYTHON SOURCE LINES 423-426
 
 .. code-block:: default
 
@@ -1091,7 +1098,7 @@ Sequences of Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 420-429
+.. GENERATED FROM PYTHON SOURCE LINES 427-436
 
 .. code-block:: default
 
@@ -1125,7 +1132,7 @@ Sequences of Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 430-438
+.. GENERATED FROM PYTHON SOURCE LINES 437-445
 
 .. code-block:: default
 
@@ -1158,12 +1165,12 @@ Sequences of Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 439-441
+.. GENERATED FROM PYTHON SOURCE LINES 446-448
 
 Functional Programming (Ensembling / Meta-RL)
 ----------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 441-445
+.. GENERATED FROM PYTHON SOURCE LINES 448-452
 
 .. code-block:: default
 
@@ -1184,7 +1191,7 @@ Functional Programming (Ensembling / Meta-RL)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 446-449
+.. GENERATED FROM PYTHON SOURCE LINES 453-456
 
 .. code-block:: default
 
@@ -1212,7 +1219,7 @@ Functional Programming (Ensembling / Meta-RL)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 450-458
+.. GENERATED FROM PYTHON SOURCE LINES 457-465
 
 .. code-block:: default
 
@@ -1245,12 +1252,12 @@ Functional Programming (Ensembling / Meta-RL)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 459-461
+.. GENERATED FROM PYTHON SOURCE LINES 466-468
 
 Specialized Classes
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 461-473
+.. GENERATED FROM PYTHON SOURCE LINES 468-480
 
 .. code-block:: default
 
@@ -1279,7 +1286,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 474-478
+.. GENERATED FROM PYTHON SOURCE LINES 481-485
 
 .. code-block:: default
 
@@ -1300,7 +1307,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 479-487
+.. GENERATED FROM PYTHON SOURCE LINES 486-494
 
 .. code-block:: default
 
@@ -1331,7 +1338,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 488-514
+.. GENERATED FROM PYTHON SOURCE LINES 495-521
 
 .. code-block:: default
 
@@ -1382,7 +1389,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 515-533
+.. GENERATED FROM PYTHON SOURCE LINES 522-540
 
 .. code-block:: default
 
@@ -1426,7 +1433,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 534-558
+.. GENERATED FROM PYTHON SOURCE LINES 541-565
 
 .. code-block:: default
 
@@ -1475,12 +1482,12 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 559-561
+.. GENERATED FROM PYTHON SOURCE LINES 566-568
 
 Using Environments and Modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 561-589
+.. GENERATED FROM PYTHON SOURCE LINES 568-596
 
 .. code-block:: default
 
@@ -1540,7 +1547,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 590-608
+.. GENERATED FROM PYTHON SOURCE LINES 597-615
 
 .. code-block:: default
 
@@ -1590,7 +1597,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 609-612
+.. GENERATED FROM PYTHON SOURCE LINES 616-619
 
 .. code-block:: default
 
@@ -1610,7 +1617,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 613-620
+.. GENERATED FROM PYTHON SOURCE LINES 620-627
 
 .. code-block:: default
 
@@ -1648,7 +1655,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 621-629
+.. GENERATED FROM PYTHON SOURCE LINES 628-636
 
 .. code-block:: default
 
@@ -1667,7 +1674,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 630-655
+.. GENERATED FROM PYTHON SOURCE LINES 637-662
 
 .. code-block:: default
 
@@ -1703,7 +1710,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 656-663
+.. GENERATED FROM PYTHON SOURCE LINES 663-670
 
 .. code-block:: default
 
@@ -1745,7 +1752,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 664-683
+.. GENERATED FROM PYTHON SOURCE LINES 671-690
 
 .. code-block:: default
 
@@ -1799,12 +1806,12 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 684-686
+.. GENERATED FROM PYTHON SOURCE LINES 691-693
 
 Objectives
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 686-707
+.. GENERATED FROM PYTHON SOURCE LINES 693-714
 
 .. code-block:: default
 
@@ -1836,7 +1843,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 708-722
+.. GENERATED FROM PYTHON SOURCE LINES 715-729
 
 .. code-block:: default
 
@@ -1861,7 +1868,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 723-726
+.. GENERATED FROM PYTHON SOURCE LINES 730-733
 
 .. code-block:: default
 
@@ -1891,7 +1898,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 727-730
+.. GENERATED FROM PYTHON SOURCE LINES 734-737
 
 .. code-block:: default
 
@@ -1926,7 +1933,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 731-750
+.. GENERATED FROM PYTHON SOURCE LINES 738-757
 
 State of the Library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1948,7 +1955,7 @@ RL (or just curious), try it! Give us feedback: what will make the success of
 TorchRL is how well it covers researchers needs. To do that, we need their input!
 Since the library is nascent, it is a great time for you to shape it the way you want!
 
-.. GENERATED FROM PYTHON SOURCE LINES 752-756
+.. GENERATED FROM PYTHON SOURCE LINES 759-763
 
 Installing the Library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1958,7 +1965,7 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  36.033 seconds)
+   **Total running time of the script:** ( 0 minutes  28.103 seconds)
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:
