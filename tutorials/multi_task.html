@@ -376,18 +376,13 @@ to download the full example code</p>
 can compute actions in diverse settings using a distinct set of weights.
 You will also be able to execute diverse environments in parallel.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictSequential</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="n">CatTensors</span><span class="p">,</span> <span class="n">Compose</span><span class="p">,</span> <span class="n">DoubleToFloat</span><span class="p">,</span> <span class="n">ParallelEnv</span><span class="p">,</span> <span class="n">TransformedEnv</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.libs.dm_control</span> <span class="kn">import</span> <span class="n">DMControlEnv</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">MLP</span><span class="p">,</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictSequential</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/__w/rl/rl/docs/source/reference/generated/tutorials/multi_task.py&quot;</span>, line <span class="m">19</span>, in <span class="n">&lt;module&gt;</span>
-    <span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">MLP</span><span class="p">,</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictSequential</span>
-<span class="gr">ImportError</span>: <span class="n">cannot import name &#39;TensorDictModule&#39; from &#39;torchrl.modules&#39; (/__w/rl/rl/torchrl/modules/__init__.py)</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">MLP</span>
 </pre></div>
 </div>
 <p>We design two environments, one humanoid that must complete the stand task
@@ -432,6 +427,16 @@ and another that must learn to walk.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tdreset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        observation: Tensor(torch.Size([67]), dtype=torch.float32),
+        observation_stand: Tensor(torch.Size([67]), dtype=torch.float32)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
+</pre></div>
+</div>
 <section id="policy">
 <h2>Policy<a class="headerlink" href="#policy" title="Permalink to this heading">¶</a></h2>
 <p>We will design a policy where a backbone reads the “observation” key.
@@ -463,8 +468,32 @@ and pass them through the dedicated sub-network.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">seq</span><span class="p">(</span><span class="n">env1</span><span class="o">.</span><span class="n">reset</span><span class="p">())</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        action: Tensor(torch.Size([21]), dtype=torch.float32),
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([64]), dtype=torch.float32),
+        observation: Tensor(torch.Size([67]), dtype=torch.float32),
+        observation_stand: Tensor(torch.Size([67]), dtype=torch.float32)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
+</pre></div>
+</div>
 <p>Let’s check that our sequence outputs actions for a single env (walk).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">seq</span><span class="p">(</span><span class="n">env2</span><span class="o">.</span><span class="n">reset</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        action: Tensor(torch.Size([21]), dtype=torch.float32),
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([64]), dtype=torch.float32),
+        observation: Tensor(torch.Size([67]), dtype=torch.float32),
+        observation_walk: Tensor(torch.Size([67]), dtype=torch.float32)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
 </pre></div>
 </div>
 <p>This also works with the stack: now the stand and walk keys have
@@ -472,6 +501,17 @@ disappeared, because they’re not shared by all tensordicts. But the
 <code class="docutils literal notranslate"><span class="pre">TensorDictSequential</span></code> still performed the operations. Note that the
 backbone was executed in a vectorized way - not in a loop - which is more efficient.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">seq</span><span class="p">(</span><span class="n">tdreset</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>LazyStackedTensorDict(
+    fields={
+        action: Tensor(torch.Size([2, 21]), dtype=torch.float32),
+        done: Tensor(torch.Size([2, 1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([2, 64]), dtype=torch.float32),
+        observation: Tensor(torch.Size([2, 67]), dtype=torch.float32)},
+    batch_size=torch.Size([2]),
+    device=cpu,
+    is_shared=False)
 </pre></div>
 </div>
 </section>
@@ -521,6 +561,31 @@ it will assume that we are in a multi-task setting.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">tdreset</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># should be different</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>LazyStackedTensorDict(
+    fields={
+        done: Tensor(torch.Size([2, 1]), dtype=torch.bool),
+        observation: Tensor(torch.Size([2, 67]), dtype=torch.float32)},
+    batch_size=torch.Size([2]),
+    device=cpu,
+    is_shared=False)
+TensorDict(
+    fields={
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        observation: Tensor(torch.Size([67]), dtype=torch.float32),
+        observation_stand: Tensor(torch.Size([67]), dtype=torch.float32)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
+TensorDict(
+    fields={
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        observation: Tensor(torch.Size([67]), dtype=torch.float32),
+        observation_walk: Tensor(torch.Size([67]), dtype=torch.float32)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
+</pre></div>
+</div>
 <p>Let’s pass the output through our network.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tdreset</span> <span class="o">=</span> <span class="n">seq</span><span class="p">(</span><span class="n">tdreset</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">tdreset</span><span class="p">)</span>
@@ -528,10 +593,95 @@ it will assume that we are in a multi-task setting.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">tdreset</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># should be different but all have an &quot;action&quot; key</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>LazyStackedTensorDict(
+    fields={
+        action: Tensor(torch.Size([2, 21]), dtype=torch.float32),
+        done: Tensor(torch.Size([2, 1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([2, 64]), dtype=torch.float32),
+        observation: Tensor(torch.Size([2, 67]), dtype=torch.float32)},
+    batch_size=torch.Size([2]),
+    device=cpu,
+    is_shared=False)
+TensorDict(
+    fields={
+        action: Tensor(torch.Size([21]), dtype=torch.float32),
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([64]), dtype=torch.float32),
+        observation: Tensor(torch.Size([67]), dtype=torch.float32),
+        observation_stand: Tensor(torch.Size([67]), dtype=torch.float32)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
+TensorDict(
+    fields={
+        action: Tensor(torch.Size([21]), dtype=torch.float32),
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([64]), dtype=torch.float32),
+        observation: Tensor(torch.Size([67]), dtype=torch.float32),
+        observation_walk: Tensor(torch.Size([67]), dtype=torch.float32)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
+</pre></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">tdreset</span><span class="p">)</span>  <span class="c1"># computes actions and execute steps in parallel</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">tdreset</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">tdreset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">tdreset</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># next_observation has now been written</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>LazyStackedTensorDict(
+    fields={
+        action: Tensor(torch.Size([2, 21]), dtype=torch.float32),
+        done: Tensor(torch.Size([2, 1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([2, 64]), dtype=torch.float32),
+        next: LazyStackedTensorDict(
+            fields={
+                observation: Tensor(torch.Size([2, 67]), dtype=torch.float32)},
+            batch_size=torch.Size([2]),
+            device=cpu,
+            is_shared=False),
+        observation: Tensor(torch.Size([2, 67]), dtype=torch.float32),
+        reward: Tensor(torch.Size([2, 1]), dtype=torch.float64)},
+    batch_size=torch.Size([2]),
+    device=cpu,
+    is_shared=False)
+TensorDict(
+    fields={
+        action: Tensor(torch.Size([21]), dtype=torch.float32),
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([64]), dtype=torch.float32),
+        next: TensorDict(
+            fields={
+                observation: Tensor(torch.Size([67]), dtype=torch.float32),
+                observation_stand: Tensor(torch.Size([67]), dtype=torch.float32)},
+            batch_size=torch.Size([]),
+            device=cpu,
+            is_shared=False),
+        observation: Tensor(torch.Size([67]), dtype=torch.float32),
+        observation_stand: Tensor(torch.Size([67]), dtype=torch.float32),
+        reward: Tensor(torch.Size([1]), dtype=torch.float64)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
+TensorDict(
+    fields={
+        action: Tensor(torch.Size([21]), dtype=torch.float32),
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([64]), dtype=torch.float32),
+        next: TensorDict(
+            fields={
+                observation: Tensor(torch.Size([67]), dtype=torch.float32),
+                observation_walk: Tensor(torch.Size([67]), dtype=torch.float32)},
+            batch_size=torch.Size([]),
+            device=cpu,
+            is_shared=False),
+        observation: Tensor(torch.Size([67]), dtype=torch.float32),
+        observation_walk: Tensor(torch.Size([67]), dtype=torch.float32),
+        reward: Tensor(torch.Size([1]), dtype=torch.float64)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
 </pre></div>
 </div>
 </section>
@@ -543,10 +693,48 @@ it will assume that we are in a multi-task setting.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">td_rollout</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># tensordict of the first step: only the common keys are shown</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>LazyStackedTensorDict(
+    fields={
+        action: Tensor(torch.Size([2, 21]), dtype=torch.float32),
+        done: Tensor(torch.Size([2, 1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([2, 64]), dtype=torch.float32),
+        next: LazyStackedTensorDict(
+            fields={
+                observation: Tensor(torch.Size([2, 67]), dtype=torch.float32)},
+            batch_size=torch.Size([2]),
+            device=cpu,
+            is_shared=False),
+        observation: Tensor(torch.Size([2, 67]), dtype=torch.float32),
+        reward: Tensor(torch.Size([2, 1]), dtype=torch.float64)},
+    batch_size=torch.Size([2]),
+    device=cpu,
+    is_shared=False)
+</pre></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">td_rollout</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># tensordict of the first env: the stand obs is present</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.004 seconds)</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>LazyStackedTensorDict(
+    fields={
+        action: Tensor(torch.Size([100, 21]), dtype=torch.float32),
+        done: Tensor(torch.Size([100, 1]), dtype=torch.bool),
+        hidden: Tensor(torch.Size([100, 64]), dtype=torch.float32),
+        next: LazyStackedTensorDict(
+            fields={
+                observation: Tensor(torch.Size([100, 67]), dtype=torch.float32),
+                observation_stand: Tensor(torch.Size([100, 67]), dtype=torch.float32)},
+            batch_size=torch.Size([100]),
+            device=cpu,
+            is_shared=False),
+        observation: Tensor(torch.Size([100, 67]), dtype=torch.float32),
+        observation_stand: Tensor(torch.Size([100, 67]), dtype=torch.float32),
+        reward: Tensor(torch.Size([100, 1]), dtype=torch.float64)},
+    batch_size=torch.Size([100]),
+    device=cpu,
+    is_shared=False)
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.946 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-multi-task-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fe94dedecc2afb14d9227db6afb81c3f/multi_task.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">multi_task.py</span></code></a></p>

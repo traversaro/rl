@@ -368,6 +368,7 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -386,10 +387,13 @@
         <span class="s2">&quot;functional programming should work, but functionality and performance &quot;</span>
         <span class="s2">&quot;may be affected. Consider installing functorch and/or upgrating pytorch.&quot;</span>
     <span class="p">)</span>
-    <span class="kn">from</span> <span class="nn">tensordict.nn.functional_modules</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">FunctionalModule</span><span class="p">,</span>
-        <span class="n">FunctionalModuleWithBuffers</span><span class="p">,</span>
-    <span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">FunctionalModule</span><span class="p">:</span>  <span class="c1"># noqa: D101</span>
+        <span class="k">pass</span>
+
+    <span class="k">class</span> <span class="nc">FunctionalModuleWithBuffers</span><span class="p">:</span>  <span class="c1"># noqa: D101</span>
+        <span class="k">pass</span>
+
 
 <span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
 <span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDictBase</span>
@@ -413,33 +417,44 @@
 
 
 <span class="k">def</span> <span class="nf">_forward_hook_safe_action</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">tensordict_in</span><span class="p">,</span> <span class="n">tensordict_out</span><span class="p">):</span>
-    <span class="n">spec</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">spec</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">out_keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-            <span class="s2">&quot;safe SafeModules with multiple out_keys require a CompositeSpec with matching keys. Got &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;keys </span><span class="si">{</span><span class="n">module</span><span class="o">.</span><span class="n">out_keys</span><span class="si">}</span><span class="s2">.&quot;</span>
-        <span class="p">)</span>
-    <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
-        <span class="n">out_key</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">out_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">out_key</span><span class="p">]</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">spec</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">spec</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">_spec</span><span class="p">,</span> <span class="n">_key</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">_spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">continue</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">_spec</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">tensordict_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_key</span><span class="p">)):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">tensordict_out</span><span class="o">.</span><span class="n">set_</span><span class="p">(</span>
-                    <span class="n">_key</span><span class="p">,</span>
-                    <span class="n">_spec</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">tensordict_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_key</span><span class="p">)),</span>
-                <span class="p">)</span>
-            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
-                <span class="n">tensordict_out</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-                    <span class="n">_key</span><span class="p">,</span>
-                    <span class="n">_spec</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">tensordict_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_key</span><span class="p">)),</span>
-                <span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">spec</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">out_keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;safe SafeModules with multiple out_keys require a CompositeSpec with matching keys. Got &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;keys </span><span class="si">{</span><span class="n">module</span><span class="o">.</span><span class="n">out_keys</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
+            <span class="n">out_key</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">out_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">out_key</span><span class="p">]</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">spec</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">spec</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">spec</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">_spec</span><span class="p">,</span> <span class="n">_key</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">keys</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">_spec</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_spec</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">tensordict_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_key</span><span class="p">)):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">tensordict_out</span><span class="o">.</span><span class="n">set_</span><span class="p">(</span>
+                        <span class="n">_key</span><span class="p">,</span>
+                        <span class="n">_spec</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">tensordict_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_key</span><span class="p">)),</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                    <span class="n">tensordict_out</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+                        <span class="n">_key</span><span class="p">,</span>
+                        <span class="n">_spec</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">tensordict_out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_key</span><span class="p">)),</span>
+                    <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="s2">&quot;attempting to use a Tensor in some data-dependent control flow&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="c1"># &quot;_is_stateless&quot; in module.__dict__ and module._is_stateless:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;vmap cannot be used with safe=True, consider turning the safe mode off. (original error message: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">)&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">err</span>
 
 
 <div class="viewcode-block" id="SafeModule"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.SafeModule.html#torchrl.modules.SafeModule">[docs]</a><span class="k">class</span> <span class="nc">SafeModule</span><span class="p">(</span><span class="n">TensorDictModule</span><span class="p">):</span>
@@ -465,34 +480,35 @@
 <span class="sd">        case, the &#39;params&#39; (and &#39;buffers&#39;) keyword argument must be specified:</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import functorch</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict.nn.functional_modules import make_functional</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import NdUnboundedContinuousTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import SafeModule</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;input&quot;: torch.randn(3, 4), &quot;hidden&quot;: torch.randn(3, 8)}, [3,])</span>
 <span class="sd">        &gt;&gt;&gt; spec = NdUnboundedContinuousTensorSpec(8)</span>
 <span class="sd">        &gt;&gt;&gt; module = torch.nn.GRUCell(4, 8)</span>
-<span class="sd">        &gt;&gt;&gt; fmodule, params, buffers = functorch.make_functional_with_buffers(module)</span>
 <span class="sd">        &gt;&gt;&gt; td_fmodule = SafeModule(</span>
-<span class="sd">        ...    module=fmodule,</span>
+<span class="sd">        ...    module=module,</span>
 <span class="sd">        ...    spec=spec,</span>
 <span class="sd">        ...    in_keys=[&quot;input&quot;, &quot;hidden&quot;],</span>
 <span class="sd">        ...    out_keys=[&quot;output&quot;],</span>
 <span class="sd">        ...    )</span>
-<span class="sd">        &gt;&gt;&gt; td_functional = td_fmodule(td.clone(), params=params, buffers=buffers)</span>
+<span class="sd">        &gt;&gt;&gt; params = make_functional(td_fmodule)</span>
+<span class="sd">        &gt;&gt;&gt; td_functional = td_fmodule(td.clone(), params=params)</span>
 <span class="sd">        &gt;&gt;&gt; print(td_functional)</span>
 <span class="sd">        TensorDict(</span>
-<span class="sd">            fields={input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="sd">            fields={</span>
 <span class="sd">                hidden: Tensor(torch.Size([3, 8]), dtype=torch.float32),</span>
+<span class="sd">                input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
 <span class="sd">                output: Tensor(torch.Size([3, 8]), dtype=torch.float32)},</span>
-<span class="sd">            shared=False,</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
-<span class="sd">            device=cpu)</span>
+<span class="sd">            device=None,</span>
+<span class="sd">            is_shared=False)</span>
 
 <span class="sd">    In the stateful case:</span>
 <span class="sd">        &gt;&gt;&gt; td_module = SafeModule(</span>
-<span class="sd">        ...    module=module,</span>
+<span class="sd">        ...    module=torch.nn.GRUCell(4, 8),</span>
 <span class="sd">        ...    spec=spec,</span>
 <span class="sd">        ...    in_keys=[&quot;input&quot;, &quot;hidden&quot;],</span>
 <span class="sd">        ...    out_keys=[&quot;output&quot;],</span>
@@ -500,27 +516,29 @@
 <span class="sd">        &gt;&gt;&gt; td_stateful = td_module(td.clone())</span>
 <span class="sd">        &gt;&gt;&gt; print(td_stateful)</span>
 <span class="sd">        TensorDict(</span>
-<span class="sd">            fields={input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="sd">            fields={</span>
 <span class="sd">                hidden: Tensor(torch.Size([3, 8]), dtype=torch.float32),</span>
+<span class="sd">                input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
 <span class="sd">                output: Tensor(torch.Size([3, 8]), dtype=torch.float32)},</span>
-<span class="sd">            shared=False,</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
-<span class="sd">            device=cpu)</span>
+<span class="sd">            device=None,</span>
+<span class="sd">            is_shared=False)</span>
 
 <span class="sd">    One can use a vmap operator to call the functional module. In this case the tensordict is expanded to match the</span>
 <span class="sd">    batch size (i.e. the tensordict isn&#39;t modified in-place anymore):</span>
 <span class="sd">        &gt;&gt;&gt; # Model ensemble using vmap</span>
-<span class="sd">        &gt;&gt;&gt; params_repeat = tuple(param.expand(4, *param.shape).contiguous().normal_() for param in params)</span>
-<span class="sd">        &gt;&gt;&gt; buffers_repeat = tuple(param.expand(4, *param.shape).contiguous().normal_() for param in buffers)</span>
-<span class="sd">        &gt;&gt;&gt; td_vmap = td_fmodule(td.clone(), params=params_repeat, buffers=buffers_repeat, vmap=True)</span>
+<span class="sd">        &gt;&gt;&gt; from functorch import vmap</span>
+<span class="sd">        &gt;&gt;&gt; params_repeat = params.expand(4, *params.shape)</span>
+<span class="sd">        &gt;&gt;&gt; td_vmap = vmap(td_fmodule, (None, 0))(td.clone(), params_repeat)</span>
 <span class="sd">        &gt;&gt;&gt; print(td_vmap)</span>
 <span class="sd">        TensorDict(</span>
-<span class="sd">            fields={input: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
+<span class="sd">            fields={</span>
 <span class="sd">                hidden: Tensor(torch.Size([4, 3, 8]), dtype=torch.float32),</span>
+<span class="sd">                input: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
 <span class="sd">                output: Tensor(torch.Size([4, 3, 8]), dtype=torch.float32)},</span>
-<span class="sd">            shared=False,</span>
 <span class="sd">            batch_size=torch.Size([4, 3]),</span>
-<span class="sd">            device=cpu)</span>
+<span class="sd">            device=None,</span>
+<span class="sd">            is_shared=False)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

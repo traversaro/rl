@@ -427,7 +427,9 @@
         <span class="n">advantage_module</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">TensorDictBase</span><span class="p">],</span> <span class="n">TensorDictBase</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_functional</span><span class="p">(</span><span class="n">actor</span><span class="p">,</span> <span class="s2">&quot;actor&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_functional</span><span class="p">(</span>
+            <span class="n">actor</span><span class="p">,</span> <span class="s2">&quot;actor&quot;</span><span class="p">,</span> <span class="n">funs_to_decorate</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="s2">&quot;get_dist&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
         <span class="c1"># we want to make sure there are no duplicates in the params: the</span>
         <span class="c1"># params of critic must be refs to actor if they&#39;re shared</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_functional</span><span class="p">(</span><span class="n">critic</span><span class="p">,</span> <span class="s2">&quot;critic&quot;</span><span class="p">,</span> <span class="n">compare_against</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">)</span>
@@ -468,7 +470,8 @@
         <span class="n">tensordict_clone</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">in_keys</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 
         <span class="n">dist</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span>
-            <span class="n">tensordict_clone</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">,</span> <span class="n">buffers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_buffers</span>
+            <span class="n">tensordict_clone</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">log_prob</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
         <span class="n">log_prob</span> <span class="o">=</span> <span class="n">log_prob</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -498,7 +501,6 @@
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span>
                 <span class="n">tensordict_select</span><span class="p">,</span>
                 <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">critic_params</span><span class="p">,</span>
-                <span class="n">buffers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">critic_buffers</span><span class="p">,</span>
             <span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;state_value&quot;</span><span class="p">)</span>
             <span class="n">value_target</span> <span class="o">=</span> <span class="n">advantage</span> <span class="o">+</span> <span class="n">value</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
             <span class="n">loss_value</span> <span class="o">=</span> <span class="n">distance_loss</span><span class="p">(</span>
@@ -725,7 +727,8 @@
 
         <span class="n">previous_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">build_dist_from_params</span><span class="p">(</span><span class="n">tensordict_clone</span><span class="p">)</span>
         <span class="n">current_dist</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span>
-            <span class="n">tensordict_clone</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">,</span> <span class="n">buffers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_buffers</span>
+            <span class="n">tensordict_clone</span><span class="p">,</span>
+            <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">kl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">kl</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">(</span><span class="n">previous_dist</span><span class="p">,</span> <span class="n">current_dist</span><span class="p">)</span>

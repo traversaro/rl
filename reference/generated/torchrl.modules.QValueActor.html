@@ -376,27 +376,27 @@
 <dd><p>DQN Actor subclass.</p>
 <p>This class hooks the module such that it returns a one-hot encoding of the argmax value.</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">functorch</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict.nn.functional_modules</span> <span class="kn">import</span> <span class="n">make_functional</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">OneHotDiscreteTensorSpec</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.actors</span> <span class="kn">import</span> <span class="n">QValueActor</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">td</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s1">&#39;observation&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)},</span> <span class="p">[</span><span class="mi">5</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fmodule</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">buffers</span> <span class="o">=</span> <span class="n">functorch</span><span class="o">.</span><span class="n">make_functional_with_buffers</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span><span class="o">=</span> <span class="n">make_functional</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">action_spec</span> <span class="o">=</span> <span class="n">OneHotDiscreteTensorSpec</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">qvalue_actor</span> <span class="o">=</span> <span class="n">QValueActor</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">fmodule</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">qvalue_actor</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">buffers</span><span class="o">=</span><span class="n">buffers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qvalue_actor</span> <span class="o">=</span> <span class="n">QValueActor</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qvalue_actor</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
 <span class="go">TensorDict(</span>
 <span class="go">    fields={</span>
-<span class="go">        observation: Tensor(torch.Size([5, 4]), dtype=torch.float32),</span>
 <span class="go">        action: Tensor(torch.Size([5, 4]), dtype=torch.int64),</span>
 <span class="go">        action_value: Tensor(torch.Size([5, 4]), dtype=torch.float32),</span>
-<span class="go">        chosen_action_value: Tensor(torch.Size([5, 1]), dtype=torch.float32)},</span>
+<span class="go">        chosen_action_value: Tensor(torch.Size([5, 1]), dtype=torch.float32),</span>
+<span class="go">        observation: Tensor(torch.Size([5, 4]), dtype=torch.float32)},</span>
 <span class="go">    batch_size=torch.Size([5]),</span>
-<span class="go">    device=cpu,</span>
+<span class="go">    device=None,</span>
 <span class="go">    is_shared=False)</span>
 </pre></div>
 </div>

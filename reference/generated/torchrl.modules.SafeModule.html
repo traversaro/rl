@@ -399,35 +399,36 @@ case, the ‘params’ (and ‘buffers’) keyword argument must be specified:</
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">functorch</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict.nn.functional_modules</span> <span class="kn">import</span> <span class="n">make_functional</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">NdUnboundedContinuousTensorSpec</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">SafeModule</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">td</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;hidden&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">)},</span> <span class="p">[</span><span class="mi">3</span><span class="p">,])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span> <span class="o">=</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRUCell</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">fmodule</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">buffers</span> <span class="o">=</span> <span class="n">functorch</span><span class="o">.</span><span class="n">make_functional_with_buffers</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">td_fmodule</span> <span class="o">=</span> <span class="n">SafeModule</span><span class="p">(</span>
-<span class="gp">... </span>   <span class="n">module</span><span class="o">=</span><span class="n">fmodule</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;hidden&quot;</span><span class="p">],</span>
 <span class="gp">... </span>   <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
 <span class="gp">... </span>   <span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">td_functional</span> <span class="o">=</span> <span class="n">td_fmodule</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">buffers</span><span class="o">=</span><span class="n">buffers</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">make_functional</span><span class="p">(</span><span class="n">td_fmodule</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">td_functional</span> <span class="o">=</span> <span class="n">td_fmodule</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td_functional</span><span class="p">)</span>
 <span class="go">TensorDict(</span>
-<span class="go">    fields={input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">    fields={</span>
 <span class="go">        hidden: Tensor(torch.Size([3, 8]), dtype=torch.float32),</span>
+<span class="go">        input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
 <span class="go">        output: Tensor(torch.Size([3, 8]), dtype=torch.float32)},</span>
-<span class="go">    shared=False,</span>
 <span class="go">    batch_size=torch.Size([3]),</span>
-<span class="go">    device=cpu)</span>
+<span class="go">    device=None,</span>
+<span class="go">    is_shared=False)</span>
 </pre></div>
 </div>
 <dl>
 <dt>In the stateful case:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">td_module</span> <span class="o">=</span> <span class="n">SafeModule</span><span class="p">(</span>
-<span class="gp">... </span>   <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
+<span class="gp">... </span>   <span class="n">module</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">GRUCell</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
 <span class="gp">... </span>   <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;hidden&quot;</span><span class="p">],</span>
 <span class="gp">... </span>   <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">],</span>
@@ -435,12 +436,13 @@ case, the ‘params’ (and ‘buffers’) keyword argument must be specified:</
 <span class="gp">&gt;&gt;&gt; </span><span class="n">td_stateful</span> <span class="o">=</span> <span class="n">td_module</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td_stateful</span><span class="p">)</span>
 <span class="go">TensorDict(</span>
-<span class="go">    fields={input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">    fields={</span>
 <span class="go">        hidden: Tensor(torch.Size([3, 8]), dtype=torch.float32),</span>
+<span class="go">        input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
 <span class="go">        output: Tensor(torch.Size([3, 8]), dtype=torch.float32)},</span>
-<span class="go">    shared=False,</span>
 <span class="go">    batch_size=torch.Size([3]),</span>
-<span class="go">    device=cpu)</span>
+<span class="go">    device=None,</span>
+<span class="go">    is_shared=False)</span>
 </pre></div>
 </div>
 </dd>
@@ -448,17 +450,18 @@ case, the ‘params’ (and ‘buffers’) keyword argument must be specified:</
 <p>One can use a vmap operator to call the functional module. In this case the tensordict is expanded to match the
 batch size (i.e. the tensordict isn’t modified in-place anymore):</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Model ensemble using vmap</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">params_repeat</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">*</span><span class="n">param</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">normal_</span><span class="p">()</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">buffers_repeat</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">*</span><span class="n">param</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">normal_</span><span class="p">()</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">buffers</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">td_vmap</span> <span class="o">=</span> <span class="n">td_fmodule</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span> <span class="n">params</span><span class="o">=</span><span class="n">params_repeat</span><span class="p">,</span> <span class="n">buffers</span><span class="o">=</span><span class="n">buffers_repeat</span><span class="p">,</span> <span class="n">vmap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">functorch</span> <span class="kn">import</span> <span class="n">vmap</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params_repeat</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">td_vmap</span> <span class="o">=</span> <span class="n">vmap</span><span class="p">(</span><span class="n">td_fmodule</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">td</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span> <span class="n">params_repeat</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td_vmap</span><span class="p">)</span>
 <span class="go">TensorDict(</span>
-<span class="go">    fields={input: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
+<span class="go">    fields={</span>
 <span class="go">        hidden: Tensor(torch.Size([4, 3, 8]), dtype=torch.float32),</span>
+<span class="go">        input: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
 <span class="go">        output: Tensor(torch.Size([4, 3, 8]), dtype=torch.float32)},</span>
-<span class="go">    shared=False,</span>
 <span class="go">    batch_size=torch.Size([4, 3]),</span>
-<span class="go">    device=cpu)</span>
+<span class="go">    device=None,</span>
+<span class="go">    is_shared=False)</span>
 </pre></div>
 </div>
 <dl class="py method">

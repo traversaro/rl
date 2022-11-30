@@ -404,6 +404,7 @@ this algorithm.</p>
 <span class="kn">import</span> <span class="nn">torch.cuda</span>
 <span class="kn">import</span> <span class="nn">tqdm</span>
 <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">optim</span>
 <span class="kn">from</span> <span class="nn">torchrl.collectors</span> <span class="kn">import</span> <span class="n">MultiaSyncDataCollector</span>
 <span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="p">(</span>
@@ -428,18 +429,11 @@ this algorithm.</p>
     <span class="n">MLP</span><span class="p">,</span>
     <span class="n">OrnsteinUhlenbeckProcessWrapper</span><span class="p">,</span>
     <span class="n">ProbabilisticActor</span><span class="p">,</span>
-    <span class="n">TensorDictModule</span><span class="p">,</span>
     <span class="n">ValueOperator</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.distributions.continuous</span> <span class="kn">import</span> <span class="n">TanhDelta</span>
 <span class="kn">from</span> <span class="nn">torchrl.objectives.utils</span> <span class="kn">import</span> <span class="n">hold_out_net</span>
 <span class="kn">from</span> <span class="nn">torchrl.trainers</span> <span class="kn">import</span> <span class="n">Recorder</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py&quot;</span>, line <span class="m">63</span>, in <span class="n">&lt;module&gt;</span>
-    <span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="p">(</span>
-<span class="gr">ImportError</span>: <span class="n">cannot import name &#39;TensorDictModule&#39; from &#39;torchrl.modules&#39; (/__w/rl/rl/torchrl/modules/__init__.py)</span>
 </pre></div>
 </div>
 <section id="environment">
@@ -846,6 +840,16 @@ sampled actions).</p>
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>computing state stats
+stats computed for 1000 steps. Got:
+loc = tensor([-3.9152e-01,  2.3728e+00,  1.6790e-02, -5.8100e-03,  2.0432e-02,
+         2.4661e-02,  1.7335e-02,  5.6330e-03,  9.3439e-04, -1.3564e-02,
+         6.1885e-02,  1.4405e-01, -2.1127e-01,  2.9993e-01, -2.7058e-01,
+         1.7317e-01,  6.3022e-02]),
+scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
+        0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
+</pre></div>
+</div>
 <section id="data-collector">
 <h3>Data collector<a class="headerlink" href="#data-collector" title="Permalink to this heading">¶</a></h3>
 <p>Creating the data collector is a crucial step in an RL experiment. TorchRL
@@ -891,6 +895,9 @@ observation is changed to be the n-step forward observation.</p>
     <span class="n">exploration_mode</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">collector</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>3018685293
 </pre></div>
 </div>
 <p>We can now create the replay buffer as part of the initialization.</p>
@@ -1058,6 +1065,45 @@ async settings, and at the end of it in sync settings).</p></li>
 <span class="n">collector</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/2500 [00:00&lt;?, ?it/s]
+
+ 20%|##        | 500/2500 [00:02&lt;00:10, 190.25it/s]Creating a MemmapStorage...
+The storage is being created:
+        action: /tmp/q1bfwpeb, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
+        done: /tmp/accah3sm, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
+        gamma: /tmp/lexc_f16, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        index: /tmp/rawbo5h7, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        mask: /tmp/ylypslnn, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
+        nonterminal: /tmp/t81egn3k, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
+        observation_vector: /tmp/dbvkh4ja, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
+        original_reward: /tmp/hheqjn5v, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        param: /tmp/0fbkmfq7, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
+        reward: /tmp/cv5tt6rl, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        step_count: /tmp/4jvz1jek, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        steps_to_next_obs: /tmp/trjkq3jn, 0.019073486328125 Mb of storage (size: torch.Size([2500, 1])).
+        traj_ids: /tmp/gumlm9xu, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/tmpnx10u80i, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
+
+
+reward: -0.1951 (r0 = -1.1591), reward eval: reward: -0.9123:  20%|##        | 500/2500 [00:07&lt;00:10, 190.25it/s]
+
+reward: -0.1951 (r0 = -1.1591), reward eval: reward: -0.9123:  40%|####      | 1000/2500 [00:07&lt;00:11, 128.24it/s]
+
+reward: -0.2201 (r0 = -1.1591), reward eval: reward: -0.9123:  40%|####      | 1000/2500 [00:08&lt;00:11, 128.24it/s]
+
+reward: -0.2201 (r0 = -1.1591), reward eval: reward: -0.9123:  60%|######    | 1500/2500 [00:08&lt;00:05, 193.90it/s]
+
+reward: -1.4571 (r0 = -1.1591), reward eval: reward: -0.9123:  60%|######    | 1500/2500 [00:08&lt;00:05, 193.90it/s]
+
+reward: -1.4571 (r0 = -1.1591), reward eval: reward: -0.9123:  80%|########  | 2000/2500 [00:10&lt;00:02, 226.65it/s]
+
+reward: -1.9380 (r0 = -1.1591), reward eval: reward: -0.9123:  80%|########  | 2000/2500 [00:10&lt;00:02, 226.65it/s]
+
+reward: -1.9380 (r0 = -1.1591), reward eval: reward: -0.9123: 100%|##########| 2500/2500 [00:10&lt;00:00, 285.78it/s]
+
+reward: -1.9956 (r0 = -1.1591), reward eval: reward: -0.9123: 100%|##########| 2500/2500 [00:11&lt;00:00, 285.78it/s]
+</pre></div>
+</div>
 </section>
 <section id="experiment-results">
 <h2>Experiment results<a class="headerlink" href="#experiment-results" title="Permalink to this heading">¶</a></h2>
@@ -1074,7 +1120,7 @@ use a greater value for <code class="docutils literal notranslate"><span class="
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
+<img src="../_images/sphx_glr_coding_ddpg_001.png" srcset="../_images/sphx_glr_coding_ddpg_001.png" alt="coding ddpg" class = "sphx-glr-single-img"/></section>
 <section id="sampling-trajectories-and-using-td-lambda">
 <h2>Sampling trajectories and using TD(lambda)<a class="headerlink" href="#sampling-trajectories-and-using-td-lambda" title="Permalink to this heading">¶</a></h2>
 <p>TD(lambda) is known to be less biased than the regular TD-error we used in
@@ -1091,6 +1137,10 @@ time). Hence, we’ll devide our replay buffer size by 250:</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;the new buffer size is&quot;</span><span class="p">,</span> <span class="n">buffer_size</span><span class="p">)</span>
 <span class="n">batch_size_traj</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">//</span> <span class="mi">250</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;the new batch size for trajectories is&quot;</span><span class="p">,</span> <span class="n">batch_size_traj</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>the new buffer size is 200
+the new batch size for trajectories is 4
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n_steps_forward</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># disable multi-step for simplicity</span>
@@ -1166,12 +1216,28 @@ time). Hence, we’ll devide our replay buffer size by 250:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>computing state stats
+stats computed for 1000 steps. Got:
+loc = tensor([-3.9152e-01,  2.3728e+00,  1.6790e-02, -5.8100e-03,  2.0432e-02,
+         2.4661e-02,  1.7335e-02,  5.6330e-03,  9.3439e-04, -1.3564e-02,
+         6.1885e-02,  1.4405e-01, -2.1127e-01,  2.9993e-01, -2.7058e-01,
+         1.7317e-01,  6.3022e-02]),
+scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
+        0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
+
+
+reward: -1.9956 (r0 = -1.1591), reward eval: reward: -0.9123: 100%|##########| 2500/2500 [00:28&lt;00:00, 285.78it/s]
+</pre></div>
+</div>
 <p>The training loop needs to be modified. First, whereas before extending the
 replay buffer we used to flatten the collected data, this won’t be the case
 anymore. To understand why, let’s check the output shape of the data collector:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">collector</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">break</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([2, 250])
 </pre></div>
 </div>
 <p>We see that our data has shape <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">250]</span></code> as expected: 2 envs, each
@@ -1308,6 +1374,20 @@ batch size to <code class="docutils literal notranslate"><span class="pre">torch
 <span class="n">collector</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating a MemmapStorage...
+The storage is being created:
+        action: /tmp/pnn69x8y, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
+        done: /tmp/veawc55s, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
+        index: /tmp/bzxe11q6, 0.000762939453125 Mb of storage (size: torch.Size([200, 1])).
+        mask: /tmp/rd0_6q28, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
+        observation_vector: /tmp/75mmttsw, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
+        param: /tmp/vk3ul42p, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
+        reward: /tmp/c0d6okg5, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
+        step_count: /tmp/m_xvv2ey, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
+        traj_ids: /tmp/f3hpe3he, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
+        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/tmpoizjl8wz, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
+</pre></div>
+</div>
 <p>We can observe that using TD(lambda) made our results considerably more
 stable for a similar training speed:</p>
 <p><strong>Note</strong>: As already mentioned above, to get a more reasonable performance,
@@ -1322,7 +1402,10 @@ use a greater value for <code class="docutils literal notranslate"><span class="
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;TD-labmda DDPG results&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.002 seconds)</p>
+<img src="../_images/sphx_glr_coding_ddpg_002.png" srcset="../_images/sphx_glr_coding_ddpg_002.png" alt="TD-labmda DDPG results" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;TD-labmda DDPG results&#39;)
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  4.954 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-ddpg-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0dfdb6ef4cc9782fdb39c4a9d0900d37/coding_ddpg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_ddpg.py</span></code></a></p>

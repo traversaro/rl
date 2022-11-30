@@ -390,7 +390,7 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module</span> <span class="kn">import</span> <span class="n">ProbabilisticActor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">ProbabilisticActor</span><span class="p">,</span> <span class="n">SafeModule</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">,</span> <span class="n">NdBoundedTensorSpec</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">ValueOperator</span><span class="p">,</span> <span class="n">TanhNormal</span><span class="p">,</span> <span class="n">ActorValueOperator</span><span class="p">,</span> <span class="n">NormalParamWrapper</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">spec_hidden</span> <span class="o">=</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
@@ -425,35 +425,40 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">td_clone</span> <span class="o">=</span> <span class="n">td_module</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td_clone</span><span class="p">)</span>
 <span class="go">TensorDict(</span>
-<span class="go">    fields={observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">    fields={</span>
 <span class="go">        action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">        loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
 <span class="go">        sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
+<span class="go">        scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
 <span class="go">        state_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
-<span class="go">    shared=False,</span>
 <span class="go">    batch_size=torch.Size([3]),</span>
-<span class="go">    device=cpu)</span>
+<span class="go">    device=None,</span>
+<span class="go">    is_shared=False)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">td_clone</span> <span class="o">=</span> <span class="n">td_module</span><span class="o">.</span><span class="n">get_policy_operator</span><span class="p">()(</span><span class="n">td</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td_clone</span><span class="p">)</span>  <span class="c1"># no value</span>
 <span class="go">TensorDict(</span>
-<span class="go">    fields={observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">    fields={</span>
 <span class="go">        action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
-<span class="go">    shared=False,</span>
+<span class="go">        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">        loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">        sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
+<span class="go">        scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},</span>
 <span class="go">    batch_size=torch.Size([3]),</span>
-<span class="go">    device=cpu)</span>
-</pre></div>
-</div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">td_clone</span> <span class="o">=</span> <span class="n">td_module</span><span class="o">.</span><span class="n">get_value_operator</span><span class="p">()(</span><span class="n">td</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
+<span class="go">    device=None,</span>
+<span class="go">    is_shared=False)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">td_clone</span> <span class="o">=</span> <span class="n">td_module</span><span class="o">.</span><span class="n">get_value_operator</span><span class="p">()(</span><span class="n">td</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td_clone</span><span class="p">)</span>  <span class="c1"># no action</span>
 <span class="go">TensorDict(</span>
-<span class="go">    fields={observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">    fields={</span>
 <span class="go">        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="go">        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
 <span class="go">        state_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
-<span class="go">    shared=False,</span>
 <span class="go">    batch_size=torch.Size([3]),</span>
-<span class="go">    device=cpu)</span>
+<span class="go">    device=None,</span>
+<span class="go">    is_shared=False)</span>
 </pre></div>
 </div>
 <dl class="py method">

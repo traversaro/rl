@@ -393,76 +393,73 @@
 
 <span class="sd">    TensorDictSequence supports functional, modular and vmap coding:</span>
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import functorch</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.data import NdUnboundedContinuousTensorSpec</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.modules import TanhNormal, SafeSequential, NormalParamWrapper</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict.nn.functional_modules import make_functional</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.data import CompositeSpec, NdUnboundedContinuousTensorSpec</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.modules import TanhNormal, SafeSequential, SafeModule, NormalParamWrapper</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules.tensordict_module import SafeProbabilisticModule</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;input&quot;: torch.randn(3, 4)}, [3,])</span>
-<span class="sd">        &gt;&gt;&gt; spec1 = NdUnboundedContinuousTensorSpec(4)</span>
+<span class="sd">        &gt;&gt;&gt; spec1 = CompositeSpec(hidden=NdUnboundedContinuousTensorSpec(4), loc=None, scale=None)</span>
 <span class="sd">        &gt;&gt;&gt; net1 = NormalParamWrapper(torch.nn.Linear(4, 8))</span>
-<span class="sd">        &gt;&gt;&gt; fnet1, params1, buffers1 = functorch.make_functional_with_buffers(net1)</span>
-<span class="sd">        &gt;&gt;&gt; fmodule1 = SafeModule(fnet1, in_keys=[&quot;input&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; module1 = SafeModule(net1, in_keys=[&quot;input&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; td_module1 = SafeProbabilisticModule(</span>
-<span class="sd">        ...    module=fmodule1,</span>
-<span class="sd">        ...    spec=spec1,</span>
-<span class="sd">        ...    dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
-<span class="sd">        ...    sample_out_key=[&quot;hidden&quot;],</span>
-<span class="sd">        ...    distribution_class=TanhNormal,</span>
-<span class="sd">        ...    return_log_prob=True,</span>
-<span class="sd">        ...    )</span>
+<span class="sd">        ...     module=module1,</span>
+<span class="sd">        ...     spec=spec1,</span>
+<span class="sd">        ...     dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
+<span class="sd">        ...     sample_out_key=[&quot;hidden&quot;],</span>
+<span class="sd">        ...     distribution_class=TanhNormal,</span>
+<span class="sd">        ...     return_log_prob=True,</span>
+<span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; spec2 = NdUnboundedContinuousTensorSpec(8)</span>
 <span class="sd">        &gt;&gt;&gt; module2 = torch.nn.Linear(4, 8)</span>
-<span class="sd">        &gt;&gt;&gt; fmodule2, params2, buffers2 = functorch.make_functional_with_buffers(module2)</span>
 <span class="sd">        &gt;&gt;&gt; td_module2 = SafeModule(</span>
-<span class="sd">        ...    module=fmodule2,</span>
+<span class="sd">        ...    module=module2,</span>
 <span class="sd">        ...    spec=spec2,</span>
 <span class="sd">        ...    in_keys=[&quot;hidden&quot;],</span>
 <span class="sd">        ...    out_keys=[&quot;output&quot;],</span>
 <span class="sd">        ...    )</span>
 <span class="sd">        &gt;&gt;&gt; td_module = SafeSequential(td_module1, td_module2)</span>
-<span class="sd">        &gt;&gt;&gt; params = params1 + params2</span>
-<span class="sd">        &gt;&gt;&gt; buffers = buffers1 + buffers2</span>
-<span class="sd">        &gt;&gt;&gt; _ = td_module(td, params=params, buffers=buffers)</span>
+<span class="sd">        &gt;&gt;&gt; params = make_functional(td_module)</span>
+<span class="sd">        &gt;&gt;&gt; td_module(td, params=params)</span>
 <span class="sd">        &gt;&gt;&gt; print(td)</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
+<span class="sd">                hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
 <span class="sd">                input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
 <span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="sd">                output: Tensor(torch.Size([3, 8]), dtype=torch.float32),</span>
 <span class="sd">                sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
-<span class="sd">                output: Tensor(torch.Size([3, 8]), dtype=torch.float32)},</span>
+<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
-<span class="sd">            device=cpu,</span>
+<span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
-
 <span class="sd">        &gt;&gt;&gt; # The module spec aggregates all the input specs:</span>
 <span class="sd">        &gt;&gt;&gt; print(td_module.spec)</span>
 <span class="sd">        CompositeSpec(</span>
 <span class="sd">            hidden: NdUnboundedContinuousTensorSpec(</span>
-<span class="sd">                 shape=torch.Size([4]),space=None,device=cpu,dtype=torch.float32,domain=continuous),</span>
+<span class="sd">                shape=torch.Size([4]), space=None, device=cpu, dtype=torch.float32, domain=continuous),</span>
+<span class="sd">            loc: None,</span>
+<span class="sd">            scale: None,</span>
 <span class="sd">            output: NdUnboundedContinuousTensorSpec(</span>
-<span class="sd">                 shape=torch.Size([8]),space=None,device=cpu,dtype=torch.float32,domain=continuous))</span>
+<span class="sd">                shape=torch.Size([8]), space=None, device=cpu, dtype=torch.float32, domain=continuous))</span>
 
 <span class="sd">    In the vmap case:</span>
-<span class="sd">        &gt;&gt;&gt; params = tuple(p.expand(4, *p.shape).contiguous().normal_() for p in params)</span>
-<span class="sd">        &gt;&gt;&gt; buffers = tuple(b.expand(4, *b.shape).contiguous().normal_() for p in buffers)</span>
-<span class="sd">        &gt;&gt;&gt; td_vmap = td_module(td, params=params, buffers=buffers, vmap=True)</span>
+<span class="sd">        &gt;&gt;&gt; from functorch import vmap</span>
+<span class="sd">        &gt;&gt;&gt; params = params.expand(4, *params.shape)</span>
+<span class="sd">        &gt;&gt;&gt; td_vmap = vmap(td_module, (None, 0))(td, params)</span>
 <span class="sd">        &gt;&gt;&gt; print(td_vmap)</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
+<span class="sd">                hidden: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
 <span class="sd">                input: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
 <span class="sd">                loc: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
-<span class="sd">                hidden: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
+<span class="sd">                output: Tensor(torch.Size([4, 3, 8]), dtype=torch.float32),</span>
 <span class="sd">                sample_log_prob: Tensor(torch.Size([4, 3, 1]), dtype=torch.float32),</span>
-<span class="sd">                output: Tensor(torch.Size([4, 3, 8]), dtype=torch.float32)},</span>
+<span class="sd">                scale: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32)},</span>
 <span class="sd">            batch_size=torch.Size([4, 3]),</span>
-<span class="sd">            device=cpu,</span>
+<span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
-
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

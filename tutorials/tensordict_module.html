@@ -373,7 +373,7 @@ to download the full example code</p>
 <span id="sphx-glr-tutorials-tensordict-module-py"></span><h1>TensorDictModule<a class="headerlink" href="#tensordictmodule" title="Permalink to this heading">¶</a></h1>
 <p>We recommand reading the TensorDict tutorial before going through this one.</p>
 <p>For a convenient usage of the <code class="docutils literal notranslate"><span class="pre">TensorDict</span></code> class with <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code>,
-TorchRL provides an interface between the two named <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code>.
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">tensordict</span></code> provides an interface between the two named <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code>.
 The <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code> class is an <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> that takes a
 <code class="docutils literal notranslate"><span class="pre">TensorDict</span></code> as input when called.
 It is up to the user to define the keys to be read as input and output.</p>
@@ -382,13 +382,7 @@ It is up to the user to define the keys to be read as input and output.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictSequential</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/__w/rl/rl/docs/source/reference/generated/tutorials/tensordict_module.py&quot;</span>, line <span class="m">20</span>, in <span class="n">&lt;module&gt;</span>
-    <span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictSequential</span>
-<span class="gr">ImportError</span>: <span class="n">cannot import name &#39;TensorDictModule&#39; from &#39;torchrl.modules&#39; (/__w/rl/rl/torchrl/modules/__init__.py)</span>
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictSequential</span>
 </pre></div>
 </div>
 <section id="example-1-simple-usage">
@@ -403,6 +397,16 @@ value associated with <code class="docutils literal notranslate"><span class="pr
 <span class="n">linear</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
 <span class="k">assert</span> <span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        a: Tensor(torch.Size([5, 3]), dtype=torch.float32),
+        a_out: Tensor(torch.Size([5, 10]), dtype=torch.float32),
+        b: Tensor(torch.Size([5, 4, 3]), dtype=torch.float32)},
+    batch_size=torch.Size([5]),
+    device=None,
+    is_shared=False)
 </pre></div>
 </div>
 </section>
@@ -437,6 +441,16 @@ instance read multiple input values, one must register them in the
 <span class="n">mergelinear</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        a: Tensor(torch.Size([5, 3]), dtype=torch.float32),
+        b: Tensor(torch.Size([5, 4]), dtype=torch.float32),
+        output: Tensor(torch.Size([5, 10]), dtype=torch.float32)},
+    batch_size=torch.Size([5]),
+    device=None,
+    is_shared=False)
+</pre></div>
+</div>
 </section>
 <section id="example-3-multiple-outputs">
 <h3>Example 3: Multiple outputs<a class="headerlink" href="#example-3-multiple-outputs" title="Permalink to this heading">¶</a></h3>
@@ -462,6 +476,16 @@ of the constructor.</p>
     <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;output_1&quot;</span><span class="p">,</span> <span class="s2">&quot;output_2&quot;</span><span class="p">],</span>
 <span class="p">)</span>
 <span class="n">splitlinear</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        a: Tensor(torch.Size([5, 3]), dtype=torch.float32),
+        output_1: Tensor(torch.Size([5, 4]), dtype=torch.float32),
+        output_2: Tensor(torch.Size([5, 10]), dtype=torch.float32)},
+    batch_size=torch.Size([5]),
+    device=None,
+    is_shared=False)
 </pre></div>
 </div>
 <p>When having multiple input keys and output keys, make sure they match the
@@ -502,40 +526,73 @@ tensordict following the sequence of modules provided.</p>
 </section>
 <section id="example-5-compatibility-with-functorch">
 <h3>Example 5: Compatibility with functorch<a class="headerlink" href="#example-5-compatibility-with-functorch" title="Permalink to this heading">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code> comes with its own <code class="docutils literal notranslate"><span class="pre">make_functional_with_buffers</span></code>
-method to make it functional (you should not be using
-<code class="docutils literal notranslate"><span class="pre">functorch.make_functional_with_buffers(tensordictmodule)</span></code>, that will
-not work in general).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tensordict</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)},</span> <span class="n">batch_size</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+<p>tensordict.nn is compatible with functorch. It also comes with its own functional
+utilities. Let us have a look:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">functorch</span>
+
+<span class="n">tensordict</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)},</span> <span class="n">batch_size</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
 
 <span class="n">splitlinear</span> <span class="o">=</span> <span class="n">TensorDictModule</span><span class="p">(</span>
     <span class="n">MultiHeadLinear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
     <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">],</span>
     <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;output_1&quot;</span><span class="p">,</span> <span class="s2">&quot;output_2&quot;</span><span class="p">],</span>
 <span class="p">)</span>
-<span class="n">func</span><span class="p">,</span> <span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">buffers</span><span class="p">)</span> <span class="o">=</span> <span class="n">splitlinear</span><span class="o">.</span><span class="n">make_functional_with_buffers</span><span class="p">()</span>
-<span class="n">func</span><span class="p">(</span><span class="n">tensordict</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">buffers</span><span class="o">=</span><span class="n">buffers</span><span class="p">)</span>
+<span class="n">func</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">buffers</span> <span class="o">=</span> <span class="n">functorch</span><span class="o">.</span><span class="n">make_functional_with_buffers</span><span class="p">(</span><span class="n">splitlinear</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">buffers</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>We can also use the <code class="docutils literal notranslate"><span class="pre">vmap</span></code> operator, here’s an example of
-model ensembling with it:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tensordict</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)},</span> <span class="n">batch_size</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        a: Tensor(torch.Size([5, 3]), dtype=torch.float32),
+        output_1: Tensor(torch.Size([5, 4]), dtype=torch.float32),
+        output_2: Tensor(torch.Size([5, 10]), dtype=torch.float32)},
+    batch_size=torch.Size([5]),
+    device=None,
+    is_shared=False)
+</pre></div>
+</div>
+<p>This can be used with the vmap operator. For example, we use 3 replicas of the
+params and buffers and execute a vectorized map over these for a single batch
+of data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params_expand</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">]</span>
+<span class="n">buffers_expand</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">buffers</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">functorch</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">))(</span><span class="n">params_expand</span><span class="p">,</span> <span class="n">buffers_expand</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        a: Tensor(torch.Size([3, 5, 3]), dtype=torch.float32),
+        output_1: Tensor(torch.Size([3, 5, 4]), dtype=torch.float32),
+        output_2: Tensor(torch.Size([3, 5, 10]), dtype=torch.float32)},
+    batch_size=torch.Size([3, 5]),
+    device=None,
+    is_shared=False)
+</pre></div>
+</div>
+<p>We can also use the native <code class="xref py py-obj docutils literal notranslate"><span class="pre">get_functional()</span></code> function from tensordict.nn,
+which modifies the module to make it accept the parameters as regular inputs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">make_functional</span>
+
+<span class="n">tensordict</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)},</span> <span class="n">batch_size</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
 <span class="n">num_models</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">TensorDictModule</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">],</span> <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">])</span>
-<span class="n">fmodel</span><span class="p">,</span> <span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">buffers</span><span class="p">)</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_functional_with_buffers</span><span class="p">()</span>
-<span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">num_models</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">]</span>
-<span class="n">buffers</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">num_models</span><span class="p">,</span> <span class="o">*</span><span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">buffers</span><span class="p">]</span>
-<span class="n">result_td</span> <span class="o">=</span> <span class="n">fmodel</span><span class="p">(</span><span class="n">tensordict</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">buffers</span><span class="o">=</span><span class="n">buffers</span><span class="p">,</span> <span class="n">vmap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">make_functional</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="c1"># we stack two groups of parameters to show the vmap usage:</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">params</span><span class="p">,</span> <span class="n">params</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">))],</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">result_td</span> <span class="o">=</span> <span class="n">functorch</span><span class="o">.</span><span class="n">vmap</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))(</span><span class="n">tensordict</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;the output tensordict shape is: &quot;</span><span class="p">,</span> <span class="n">result_td</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">ProbabilisticTensorDictModule</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>the output tensordict shape is:  torch.Size([2, 5])
 </pre></div>
 </div>
 </section>
 </section>
 <section id="do-s-and-don-t-with-tensordictmodule">
 <h2>Do’s and don’t with TensorDictModule<a class="headerlink" href="#do-s-and-don-t-with-tensordictmodule" title="Permalink to this heading">¶</a></h2>
-<p>Don’t use <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code> wrappers with <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code> componants.
-This would break some of <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code> features such as <code class="docutils literal notranslate"><span class="pre">functorch</span></code>
-compatibility.</p>
 <p>Don’t use <code class="docutils literal notranslate"><span class="pre">nn.Sequence</span></code>, similar to <code class="docutils literal notranslate"><span class="pre">nn.Module</span></code>, it would break features
 such as <code class="docutils literal notranslate"><span class="pre">functorch</span></code> compatibility. Do use <code class="docutils literal notranslate"><span class="pre">TensorDictSequential</span></code> instead.</p>
 <p>Don’t assign the output tensordict to a new variable, as the output
@@ -544,13 +601,6 @@ tensordict is just the input modified in-place:</p>
 <div><p>tensordict = module(tensordict)  # ok!</p>
 <p>tensordict_out = module(tensordict)  # don’t!</p>
 </div></blockquote>
-<p>Don’t use <code class="docutils literal notranslate"><span class="pre">make_functional_with_buffers</span></code> from <code class="docutils literal notranslate"><span class="pre">functorch</span></code> directly but
-use <code class="docutils literal notranslate"><span class="pre">TensorDictModule.make_functional_with_buffers</span></code> instead.</p>
-</section>
-<section id="tensordictmodule-for-rl">
-<h2>TensorDictModule for RL<a class="headerlink" href="#tensordictmodule-for-rl" title="Permalink to this heading">¶</a></h2>
-<p>TorchRL provides a few RL-specific <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code> instances that
-serves domain-specific needs.</p>
 <section id="probabilistictensordictmodule">
 <h3><code class="docutils literal notranslate"><span class="pre">ProbabilisticTensorDictModule</span></code><a class="headerlink" href="#probabilistictensordictmodule" title="Permalink to this heading">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">ProbabilisticTensorDictModule</span></code> is a special case of a <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code>
@@ -564,11 +614,7 @@ distribution (through the <code class="docutils literal notranslate"><span class
 distribution (through a regular <code class="docutils literal notranslate"><span class="pre">__call__()</span></code> to the module).</p>
 <p>One can find the parameters in the output tensordict as well as the log
 probability if needed.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">NormalParamWrapper</span><span class="p">,</span>
-    <span class="n">ProbabilisticTensorDictModule</span><span class="p">,</span>
-    <span class="n">TanhNormal</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">NormalParamWrapper</span><span class="p">,</span> <span class="n">TanhNormal</span>
 
 <span class="n">td</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">(</span>
     <span class="p">{</span><span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;hidden&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">8</span><span class="p">)},</span>
@@ -588,6 +634,26 @@ probability if needed.</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TensorDict before going through module: </span><span class="si">{</span><span class="n">td</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">td_module</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TensorDict after going through module now as keys action, loc and scale: </span><span class="si">{</span><span class="n">td</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict before going through module: TensorDict(
+    fields={
+        hidden: Tensor(torch.Size([3, 8]), dtype=torch.float32),
+        input: Tensor(torch.Size([3, 4]), dtype=torch.float32)},
+    batch_size=torch.Size([3]),
+    device=None,
+    is_shared=False)
+TensorDict after going through module now as keys action, loc and scale: TensorDict(
+    fields={
+        action: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        hidden: Tensor(torch.Size([3, 8]), dtype=torch.float32),
+        input: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),
+        scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},
+    batch_size=torch.Size([3]),
+    device=None,
+    is_shared=False)
 </pre></div>
 </div>
 </section>
@@ -654,6 +720,49 @@ then the value according to this action.</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Policy: </span><span class="si">{</span><span class="n">td_clone</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># no value</span>
 <span class="n">td_clone</span> <span class="o">=</span> <span class="n">td_module</span><span class="o">.</span><span class="n">get_critic_operator</span><span class="p">()(</span><span class="n">td</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Critic: </span><span class="si">{</span><span class="n">td_clone</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># no action</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32)},
+    batch_size=torch.Size([3]),
+    device=None,
+    is_shared=False)
+TensorDict(
+    fields={
+        action: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),
+        scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        state_action_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},
+    batch_size=torch.Size([3]),
+    device=None,
+    is_shared=False)
+Policy: TensorDict(
+    fields={
+        action: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),
+        scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},
+    batch_size=torch.Size([3]),
+    device=None,
+    is_shared=False)
+Critic: TensorDict(
+    fields={
+        action: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),
+        scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+        state_action_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},
+    batch_size=torch.Size([3]),
+    device=None,
+    is_shared=False)
 </pre></div>
 </div>
 <p>Other blocks exist such as:</p>
@@ -928,6 +1037,20 @@ keys and values.</p>
 <span class="n">tokens</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        Attn: Tensor(torch.Size([8, 2, 10, 3]), dtype=torch.float32),
+        K: Tensor(torch.Size([8, 2, 3, 5]), dtype=torch.float32),
+        Q: Tensor(torch.Size([8, 2, 10, 5]), dtype=torch.float32),
+        V: Tensor(torch.Size([8, 2, 3, 5]), dtype=torch.float32),
+        X_decode: Tensor(torch.Size([8, 10, 6]), dtype=torch.float32),
+        X_encode: Tensor(torch.Size([8, 3, 5]), dtype=torch.float32),
+        X_out: Tensor(torch.Size([8, 10, 6]), dtype=torch.float32)},
+    batch_size=torch.Size([8]),
+    device=None,
+    is_shared=False)
+</pre></div>
+</div>
 <p>We’ve achieved to create a transformer with <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code>. This
 shows that <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code> is a flexible module that can implement
 complex operarations.</p>
@@ -987,16 +1110,22 @@ complex operarations.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Execution time:&quot;</span><span class="p">,</span> <span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span><span class="p">,</span> <span class="s2">&quot;seconds&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Execution time: 0.013623714447021484 seconds
+</pre></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t3</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="n">X_out</span> <span class="o">=</span> <span class="n">transformer</span><span class="p">(</span><span class="n">X_encode</span><span class="p">,</span> <span class="n">X_decode</span><span class="p">)</span>
 <span class="n">t4</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Execution time:&quot;</span><span class="p">,</span> <span class="n">t4</span> <span class="o">-</span> <span class="n">t3</span><span class="p">,</span> <span class="s2">&quot;seconds&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Execution time: 0.008682012557983398 seconds
+</pre></div>
+</div>
 <p>We can see on this minimal example that the overhead introduced by
 <code class="docutils literal notranslate"><span class="pre">TensorDictModule</span></code> is marginal.</p>
 <p>Have fun with TensorDictModule!</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.001 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.139 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-tensordict-module-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/3e61c81f224cb8cecc06413ef124320a/tensordict_module.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">tensordict_module.py</span></code></a></p>
@@ -1062,8 +1191,7 @@ complex operarations.</p>
 <li><a class="reference internal" href="#example-5-compatibility-with-functorch">Example 5: Compatibility with functorch</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#do-s-and-don-t-with-tensordictmodule">Do’s and don’t with TensorDictModule</a></li>
-<li><a class="reference internal" href="#tensordictmodule-for-rl">TensorDictModule for RL</a><ul>
+<li><a class="reference internal" href="#do-s-and-don-t-with-tensordictmodule">Do’s and don’t with TensorDictModule</a><ul>
 <li><a class="reference internal" href="#probabilistictensordictmodule"><code class="docutils literal notranslate"><span class="pre">ProbabilisticTensorDictModule</span></code></a></li>
 <li><a class="reference internal" href="#actor"><code class="docutils literal notranslate"><span class="pre">Actor</span></code></a></li>
 <li><a class="reference internal" href="#probabilisticactor"><code class="docutils literal notranslate"><span class="pre">ProbabilisticActor</span></code></a></li>

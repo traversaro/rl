@@ -439,53 +439,57 @@
 <span class="sd">            Default is 1000</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; import functorch</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.data import NdUnboundedContinuousTensorSpec</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.modules import SafeProbabilisticModule, TanhNormal, NormalParamWrapper</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict.nn.functional_modules import make_functional</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.data import CompositeSpec, NdUnboundedContinuousTensorSpec</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.modules import (</span>
+<span class="sd">                NormalParamWrapper,</span>
+<span class="sd">                SafeModule,</span>
+<span class="sd">                SafeProbabilisticModule,</span>
+<span class="sd">                TanhNormal,</span>
+<span class="sd">            )</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;input&quot;: torch.randn(3, 4), &quot;hidden&quot;: torch.randn(3, 8)}, [3,])</span>
-<span class="sd">        &gt;&gt;&gt; spec = NdUnboundedContinuousTensorSpec(4)</span>
+<span class="sd">        &gt;&gt;&gt; spec = CompositeSpec(action=NdUnboundedContinuousTensorSpec(4), loc=None, scale=None)</span>
 <span class="sd">        &gt;&gt;&gt; net = NormalParamWrapper(torch.nn.GRUCell(4, 8))</span>
-<span class="sd">        &gt;&gt;&gt; fnet, params, buffers = functorch.make_functional_with_buffers(net)</span>
-<span class="sd">        &gt;&gt;&gt; module = SafeModule(fnet, in_keys=[&quot;input&quot;, &quot;hidden&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; module = SafeModule(net, in_keys=[&quot;input&quot;, &quot;hidden&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; td_module = SafeProbabilisticModule(</span>
-<span class="sd">        ...    module=module,</span>
-<span class="sd">        ...    spec=spec,</span>
-<span class="sd">        ...    dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
-<span class="sd">        ...    sample_out_key=[&quot;action&quot;],</span>
-<span class="sd">        ...    distribution_class=TanhNormal,</span>
-<span class="sd">        ...    return_log_prob=True,</span>
-<span class="sd">        ...    )</span>
-<span class="sd">        &gt;&gt;&gt; _ = td_module(td, params=params, buffers=buffers)</span>
+<span class="sd">        ...     module=module,</span>
+<span class="sd">        ...     spec=spec,</span>
+<span class="sd">        ...     dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
+<span class="sd">        ...     sample_out_key=[&quot;action&quot;],</span>
+<span class="sd">        ...     distribution_class=TanhNormal,</span>
+<span class="sd">        ...     return_log_prob=True,</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; params = make_functional(td_module)</span>
+<span class="sd">        &gt;&gt;&gt; td_module(td, params=params)</span>
 <span class="sd">        &gt;&gt;&gt; print(td)</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                hidden: Tensor(torch.Size([3, 8]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
 <span class="sd">                action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
+<span class="sd">                hidden: Tensor(torch.Size([3, 8]), dtype=torch.float32),</span>
+<span class="sd">                input: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
+<span class="sd">                sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
+<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
-<span class="sd">            device=cpu,</span>
+<span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
-
 <span class="sd">        &gt;&gt;&gt; # In the vmap case, the tensordict is again expended to match the batch:</span>
-<span class="sd">        &gt;&gt;&gt; params = tuple(p.expand(4, *p.shape).contiguous().normal_() for p in params)</span>
-<span class="sd">        &gt;&gt;&gt; buffers = tuple(b.expand(4, *b.shape).contiguous().normal_() for p in buffers)</span>
-<span class="sd">        &gt;&gt;&gt; td_vmap = td_module(td, params=params, buffers=buffers, vmap=True)</span>
+<span class="sd">        &gt;&gt;&gt; from functorch import vmap</span>
+<span class="sd">        &gt;&gt;&gt; params = params.expand(4, *params.shape)</span>
+<span class="sd">        &gt;&gt;&gt; td_vmap = vmap(td_module, (None, 0))(td, params)</span>
 <span class="sd">        &gt;&gt;&gt; print(td_vmap)</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                input: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
-<span class="sd">                hidden: Tensor(torch.Size([4, 3, 8]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
 <span class="sd">                action: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
-<span class="sd">                sample_log_prob: Tensor(torch.Size([4, 3, 1]), dtype=torch.float32)},</span>
+<span class="sd">                hidden: Tensor(torch.Size([4, 3, 8]), dtype=torch.float32),</span>
+<span class="sd">                input: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
+<span class="sd">                loc: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),</span>
+<span class="sd">                sample_log_prob: Tensor(torch.Size([4, 3, 1]), dtype=torch.float32),</span>
+<span class="sd">                scale: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32)},</span>
 <span class="sd">            batch_size=torch.Size([4, 3]),</span>
-<span class="sd">            device=cpu,</span>
+<span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
