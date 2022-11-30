@@ -255,7 +255,7 @@ Compute normalizing constants:
  .. code-block:: none
 
 
-    (0.9927080869674683, 0.0761088877916336)
+    (0.9927796721458435, 0.07610216736793518)
 
 
 
@@ -696,27 +696,42 @@ Training loop
 
 
 
+
+.. rst-class:: sphx-glr-horizontal
+
+
+    *
+
+      .. image-sg:: /tutorials/images/sphx_glr_coding_dqn_001.png
+         :alt: coding dqn
+         :srcset: /tutorials/images/sphx_glr_coding_dqn_001.png
+         :class: sphx-glr-multi-img
+
+    *
+
+      .. image-sg:: /tutorials/images/sphx_glr_coding_dqn_002.png
+         :alt: loss, value, grad norm, traj length (training)
+         :srcset: /tutorials/images/sphx_glr_coding_dqn_002.png
+         :class: sphx-glr-multi-img
+
+
 .. rst-class:: sphx-glr-script-out
 
-.. code-block:: pytb
+ .. code-block:: none
 
-    Traceback (most recent call last):
-      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py", line 398, in <module>
-        sampled_data_out = factor(sampled_data_out, params=params)
-      File "/github/home/miniconda/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1190, in _call_impl
-        return forward_call(*input, **kwargs)
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/nn/functional_modules.py", line 309, in new_fun
-        old_params = _assign_params(
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/nn/functional_modules.py", line 329, in _assign_params
-        out = _swap_state(module, params, make_stateless, return_old_tensordict)
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/nn/functional_modules.py", line 227, in _swap_state
-        _old_value = _swap_state(
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/nn/functional_modules.py", line 227, in _swap_state
-        _old_value = _swap_state(
-      File "/github/home/miniconda/lib/python3.9/site-packages/tensordict/nn/functional_modules.py", line 216, in _swap_state
-        keys.remove(key)
-    KeyError: '1'
-
+      0%|          | 0/500 [00:00<?, ?it/s]      6%|6         | 32/500 [00:03<00:57,  8.09it/s]Creating a MemmapStorage...
+    The storage is being created: 
+            action: /tmp/tmp1tfoeqkf, 0.00762939453125 Mb of storage (size: torch.Size([500, 2])).
+            action_value: /tmp/tmp0t22qw5n, 0.003814697265625 Mb of storage (size: torch.Size([500, 2])).
+            chosen_action_value: /tmp/tmpvnmexfvu, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+            done: /tmp/tmpolyfi_8z, 0.000476837158203125 Mb of storage (size: torch.Size([500, 1])).
+            mask: /tmp/tmpcm5cxoll, 0.000476837158203125 Mb of storage (size: torch.Size([500, 1])).
+            pixels: /tmp/tmp82aqdagy, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
+            reward: /tmp/tmptrajme1v, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+            step_count: /tmp/tmpna8g33rq, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+            traj_ids: /tmp/tmpoh67p26i, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+            ('next', 'pixels'): /tmp/tmpjm92rfgn, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
+     13%|#2        | 64/500 [00:05<00:32, 13.39it/s]     19%|#9        | 96/500 [00:09<00:39, 10.21it/s]    error:  32.8844, value:  18.9604:  19%|#9        | 96/500 [00:09<00:39, 10.21it/s]    error:  32.8844, value:  18.9604:  26%|##5       | 128/500 [00:09<00:25, 14.67it/s]    error:  34.2395, value:  19.5668:  26%|##5       | 128/500 [00:10<00:25, 14.67it/s]    error:  34.2395, value:  19.5668:  32%|###2      | 160/500 [00:15<00:34,  9.94it/s]    error:  1.2782, value:  19.6279:  32%|###2      | 160/500 [00:15<00:34,  9.94it/s]     error:  1.2782, value:  19.6279:  38%|###8      | 192/500 [00:15<00:22, 13.48it/s]    error:  30.7996, value:  19.2015:  38%|###8      | 192/500 [00:16<00:22, 13.48it/s]    error:  30.7996, value:  19.2015:  45%|####4     | 224/500 [00:21<00:28,  9.60it/s]    error:  30.1721, value:  18.5607:  45%|####4     | 224/500 [00:21<00:28,  9.60it/s]    error:  30.1721, value:  18.5607:  51%|#####1    | 256/500 [00:21<00:18, 12.96it/s]    error:  18.8798, value:  19.9016:  51%|#####1    | 256/500 [00:22<00:18, 12.96it/s]    error:  18.8798, value:  19.9016:  58%|#####7    | 288/500 [00:24<00:16, 13.03it/s]    error:  17.5312, value:  19.5256:  58%|#####7    | 288/500 [00:24<00:16, 13.03it/s]    error:  17.5312, value:  19.5256:  64%|######4   | 320/500 [00:25<00:11, 15.33it/s]    error:  34.1843, value:  18.0557:  64%|######4   | 320/500 [00:26<00:11, 15.33it/s]    error:  34.1843, value:  18.0557:  70%|#######   | 352/500 [00:29<00:12, 11.77it/s]    error:  2.3973, value:  21.2911:  70%|#######   | 352/500 [00:30<00:12, 11.77it/s]     error:  2.3973, value:  21.2911:  77%|#######6  | 384/500 [00:30<00:08, 13.77it/s]    error:  30.6611, value:  17.4604:  77%|#######6  | 384/500 [00:31<00:08, 13.77it/s]    error:  30.6611, value:  17.4604:  83%|########3 | 416/500 [00:34<00:07, 11.89it/s]    error:  27.7474, value:  18.5693:  83%|########3 | 416/500 [00:35<00:07, 11.89it/s]    error:  27.7474, value:  18.5693:  90%|########9 | 448/500 [00:36<00:04, 12.57it/s]    error:  14.7175, value:  18.8013:  90%|########9 | 448/500 [00:37<00:04, 12.57it/s]    error:  14.7175, value:  18.8013:  96%|#########6| 480/500 [00:38<00:01, 13.97it/s]    error:  22.0807, value:  20.2866:  96%|#########6| 480/500 [00:39<00:01, 13.97it/s]    error:  22.0807, value:  20.2866: : 512it [00:39, 15.77it/s]                           error:  28.2265, value:  19.8515: : 512it [00:40, 15.77it/s]
 
 
 
@@ -735,6 +750,23 @@ use a greater value for ``total_frames`` e.g. 500000.
     plt.imshow(plt.imread("dqn_td0.png"))
     plt.tight_layout()
     plt.axis("off")
+
+
+
+
+.. image-sg:: /tutorials/images/sphx_glr_coding_dqn_003.png
+   :alt: coding dqn
+   :srcset: /tutorials/images/sphx_glr_coding_dqn_003.png
+   :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    (-0.5, 1499.5, 1499.5, -0.5)
+
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 502-519
@@ -757,6 +789,12 @@ use a greater value for ``total_frames`` e.g. 500000.
         },
         "saved_results_td0.pt",
     )
+
+
+
+
+
+
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 520-536
@@ -788,6 +826,12 @@ to the RB, we'll be creating a replay buffer of size
     from torchrl.objectives.value.functional import vec_td_lambda_advantage_estimate
 
 
+
+
+
+
+
+
 .. GENERATED FROM PYTHON SOURCE LINES 542-543
 
 We reset the actor, the RB and the collector
@@ -806,6 +850,34 @@ We reset the actor, the RB and the collector
     ) = make_model()
     params_flat = params.flatten_keys(".")
     params_target_flat = params_target.flatten_keys(".")
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    reset results: TensorDict(
+        fields={
+            done: Tensor(torch.Size([1]), dtype=torch.bool),
+            pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32)},
+        batch_size=torch.Size([]),
+        device=cpu,
+        is_shared=False)
+    Q-value network results: TensorDict(
+        fields={
+            action: Tensor(torch.Size([2]), dtype=torch.int64),
+            action_value: Tensor(torch.Size([2]), dtype=torch.float32),
+            chosen_action_value: Tensor(torch.Size([1]), dtype=torch.float32),
+            done: Tensor(torch.Size([1]), dtype=torch.bool),
+            pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32)},
+        batch_size=torch.Size([]),
+        device=cpu,
+        is_shared=False)
+
+
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 555-574
@@ -832,6 +904,17 @@ We reset the actor, the RB and the collector
     )
 
 
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    error:  28.2265, value:  19.8515: : 512it [00:50, 15.77it/s]
+
+
+
 .. GENERATED FROM PYTHON SOURCE LINES 575-580
 
 .. code-block:: default
@@ -840,6 +923,27 @@ We reset the actor, the RB and the collector
     optim = torch.optim.Adam(list(params_flat.values()), lr)
     dummy_env = make_env(parallel=False, m=m, s=s)
     print(actor_explore(dummy_env.reset()))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([2]), dtype=torch.int64),
+            action_value: Tensor(torch.Size([2]), dtype=torch.float32),
+            chosen_action_value: Tensor(torch.Size([1]), dtype=torch.float32),
+            done: Tensor(torch.Size([1]), dtype=torch.bool),
+            pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32)},
+        batch_size=torch.Size([]),
+        device=cpu,
+        is_shared=False)
+
+
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 581-593
@@ -857,6 +961,12 @@ We reset the actor, the RB and the collector
     mavgs = []
     traj_count = []
     prev_traj_count = 0
+
+
+
+
+
+
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 594-602
@@ -1006,6 +1116,78 @@ There are very few differences with the training loop above:
         display.display(plt.gcf())
 
 
+
+
+.. rst-class:: sphx-glr-horizontal
+
+
+    *
+
+      .. image-sg:: /tutorials/images/sphx_glr_coding_dqn_004.png
+         :alt: coding dqn
+         :srcset: /tutorials/images/sphx_glr_coding_dqn_004.png
+         :class: sphx-glr-multi-img
+
+    *
+
+      .. image-sg:: /tutorials/images/sphx_glr_coding_dqn_005.png
+         :alt: loss, value, grad norm, traj length (training)
+         :srcset: /tutorials/images/sphx_glr_coding_dqn_005.png
+         :class: sphx-glr-multi-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+      0%|          | 0/500 [00:00<?, ?it/s]    error:  28.2265, value:  19.8515: : 512it [00:55,  9.29it/s]
+
+      6%|6         | 32/500 [00:06<01:29,  5.22it/s]Creating a MemmapStorage...
+    The storage is being created: 
+            action: /tmp/tmpegun3854, 0.244140625 Mb of storage (size: torch.Size([500, 32, 2])).
+            action_value: /tmp/tmpds0qlggf, 0.1220703125 Mb of storage (size: torch.Size([500, 32, 2])).
+            chosen_action_value: /tmp/tmpnusxvir0, 0.06103515625 Mb of storage (size: torch.Size([500, 32, 1])).
+            done: /tmp/tmpzmxrqdqv, 0.0152587890625 Mb of storage (size: torch.Size([500, 32, 1])).
+            mask: /tmp/tmpgiu8bjur, 0.0152587890625 Mb of storage (size: torch.Size([500, 32, 1])).
+            pixels: /tmp/tmphoxsi3zk, 1000.0 Mb of storage (size: torch.Size([500, 32, 4, 64, 64])).
+            reward: /tmp/tmpr90oy07d, 0.06103515625 Mb of storage (size: torch.Size([500, 32, 1])).
+            step_count: /tmp/tmpg8t_se6g, 0.06103515625 Mb of storage (size: torch.Size([500, 32, 1])).
+            traj_ids: /tmp/tmp50q65vxu, 0.06103515625 Mb of storage (size: torch.Size([500, 32, 1])).
+            ('next', 'pixels'): /tmp/tmpzqo48ime, 1000.0 Mb of storage (size: torch.Size([500, 32, 4, 64, 64])).
+
+     13%|#2        | 64/500 [00:17<02:07,  3.43it/s]
+     19%|#9        | 96/500 [00:17<01:04,  6.24it/s]
+    error:  9.3898, value:  7.5171:  19%|#9        | 96/500 [00:18<01:04,  6.24it/s]
+    error:  9.3898, value:  7.5171:  26%|##5       | 128/500 [00:22<00:56,  6.60it/s]
+    error:  4.6061, value:  5.6547:  26%|##5       | 128/500 [00:23<00:56,  6.60it/s]
+    error:  4.6061, value:  5.6547:  32%|###2      | 160/500 [00:23<00:36,  9.23it/s]
+    error:  4.5104, value:  5.7029:  32%|###2      | 160/500 [00:24<00:36,  9.23it/s]
+    error:  4.5104, value:  5.7029:  38%|###8      | 192/500 [00:28<00:38,  7.92it/s]
+    error:  9.1333, value:  7.8991:  38%|###8      | 192/500 [00:28<00:38,  7.92it/s]
+    error:  9.1333, value:  7.8991:  45%|####4     | 224/500 [00:29<00:25, 10.76it/s]
+    error:  4.2242, value:  6.6233:  45%|####4     | 224/500 [00:30<00:25, 10.76it/s]
+    error:  4.2242, value:  6.6233:  51%|#####1    | 256/500 [00:33<00:26,  9.13it/s]
+    error:  1.2748, value:  3.0032:  51%|#####1    | 256/500 [00:34<00:26,  9.13it/s]
+    error:  1.2748, value:  3.0032:  58%|#####7    | 288/500 [00:35<00:19, 10.75it/s]
+    error:  6.2659, value:  8.1152:  58%|#####7    | 288/500 [00:36<00:19, 10.75it/s]
+    error:  6.2659, value:  8.1152:  64%|######4   | 320/500 [00:39<00:18,  9.77it/s]
+    error:  4.5811, value:  8.2158:  64%|######4   | 320/500 [00:40<00:18,  9.77it/s]
+    error:  4.5811, value:  8.2158:  70%|#######   | 352/500 [00:40<00:11, 12.43it/s]
+    error:  2.1805, value:  7.4157:  70%|#######   | 352/500 [00:41<00:11, 12.43it/s]
+    error:  2.1805, value:  7.4157:  77%|#######6  | 384/500 [00:43<00:09, 11.86it/s]
+    error:  6.3789, value:  8.7920:  77%|#######6  | 384/500 [00:44<00:09, 11.86it/s]
+    error:  6.3789, value:  8.7920:  83%|########3 | 416/500 [00:45<00:06, 12.43it/s]
+    error:  3.9102, value:  8.1298:  83%|########3 | 416/500 [00:46<00:06, 12.43it/s]
+    error:  3.9102, value:  8.1298:  90%|########9 | 448/500 [00:48<00:04, 12.58it/s]
+    error:  2.9952, value:  8.1757:  90%|########9 | 448/500 [00:49<00:04, 12.58it/s]
+    error:  2.9952, value:  8.1757:  96%|#########6| 480/500 [00:50<00:01, 13.16it/s]
+    error:  2.3845, value:  7.0804:  96%|#########6| 480/500 [00:51<00:01, 13.16it/s]
+    error:  2.3845, value:  7.0804: : 512it [00:52, 13.61it/s]                       
+    error:  2.1209, value:  6.9278: : 512it [00:53, 13.61it/s]
+
+
+
 .. GENERATED FROM PYTHON SOURCE LINES 734-736
 
 **Note**: As already mentioned above, to get a more reasonable performance,
@@ -1020,6 +1202,23 @@ use a greater value for ``total_frames`` e.g. 500000.
     plt.imshow(plt.imread("dqn_tdlambda.png"))
     plt.tight_layout()
     plt.axis("off")
+
+
+
+
+.. image-sg:: /tutorials/images/sphx_glr_coding_dqn_006.png
+   :alt: coding dqn
+   :srcset: /tutorials/images/sphx_glr_coding_dqn_006.png
+   :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    (-0.5, 1499.5, 1499.5, -0.5)
+
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 743-760
@@ -1042,6 +1241,12 @@ use a greater value for ``total_frames`` e.g. 500000.
         },
         "saved_results_tdlambda.pt",
     )
+
+
+
+
+
+
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 761-767
@@ -1138,6 +1343,17 @@ use a greater value for ``total_frames`` e.g. 500000.
 
 
 
+
+
+.. image-sg:: /tutorials/images/sphx_glr_coding_dqn_007.png
+   :alt: loss, value, grad norm, episode length (training)
+   :srcset: /tutorials/images/sphx_glr_coding_dqn_007.png
+   :class: sphx-glr-single-img
+
+
+
+
+
 .. GENERATED FROM PYTHON SOURCE LINES 848-851
 
 Finally, we generate a new video to check what the algorithm has learnt.
@@ -1154,6 +1370,35 @@ initial, random rollout.
     eval_rollout
 
 
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([10, 2]), dtype=torch.int64),
+            action_value: Tensor(torch.Size([10, 2]), dtype=torch.float32),
+            chosen_action_value: Tensor(torch.Size([10, 1]), dtype=torch.float32),
+            done: Tensor(torch.Size([10, 1]), dtype=torch.bool),
+            next: LazyStackedTensorDict(
+                fields={
+                    pixels: Tensor(torch.Size([10, 4, 64, 64]), dtype=torch.float32)},
+                batch_size=torch.Size([10]),
+                device=cpu,
+                is_shared=False),
+            pixels: Tensor(torch.Size([10, 4, 64, 64]), dtype=torch.float32),
+            pixels_save: Tensor(torch.Size([10, 400, 600, 3]), dtype=torch.uint8),
+            reward: Tensor(torch.Size([10, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([10]),
+        device=cpu,
+        is_shared=False)
+
+
+
 .. GENERATED FROM PYTHON SOURCE LINES 857-861
 
 .. code-block:: default
@@ -1161,6 +1406,12 @@ initial, random rollout.
 
     # imageio.mimwrite('cartpole.mp4', eval_rollout["pixels_save"].numpy(), fps=30);
     # Video('cartpole.mp4', width=480, height=360) #the width and height option as additional thing new in Ipython 7.6.1
+
+
+
+
+
+
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 862-888
@@ -1195,7 +1446,7 @@ algorithm. Other possible improvements could include:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  13.713 seconds)
+   **Total running time of the script:** ( 1 minutes  59.864 seconds)
 
 
 .. _sphx_glr_download_tutorials_coding_dqn.py:
