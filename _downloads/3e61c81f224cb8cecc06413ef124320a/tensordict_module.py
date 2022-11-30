@@ -14,6 +14,12 @@ We recommand reading the TensorDict tutorial before going through this one.
 # TensorDictModule by examples
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+# sphinx_gallery_start_ignore
+import warnings
+
+warnings.filterwarnings("ignore")
+# sphinx_gallery_end_ignore
+
 import torch
 import torch.nn as nn
 from tensordict import TensorDict

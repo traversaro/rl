@@ -60,9 +60,10 @@ We do not aim at giving a SOTA implementation of the algorithm, but rather
 to provide a high-level illustration of TorchRL features in the context
 of this algorithm.
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-84
+.. GENERATED FROM PYTHON SOURCE LINES 44-85
 
 .. code-block:: default
+
 
 
     import torch
@@ -111,7 +112,7 @@ of this algorithm.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 85-90
+.. GENERATED FROM PYTHON SOURCE LINES 91-96
 
 Hyperparameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -119,7 +120,7 @@ Let's start with our hyperparameters. This is a totally arbitrary list of
 hyperparams that we found to work well in practice. Hopefully the performance
 of the algorithm should not be too sentitive to slight variations of these.
 
-.. GENERATED FROM PYTHON SOURCE LINES 90-131
+.. GENERATED FROM PYTHON SOURCE LINES 96-137
 
 .. code-block:: default
 
@@ -171,7 +172,7 @@ of the algorithm should not be too sentitive to slight variations of these.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-147
+.. GENERATED FROM PYTHON SOURCE LINES 138-153
 
 **Note**: for fast rendering of the tutorial ``total_frames`` hyperparameter
 was set to a very low number. To get a reasonable performance, use a greater
@@ -189,7 +190,7 @@ Our environment builder has three arguments:
 - mean and standard deviation: we normalize the observations (images)
   with two parameters computed from a random rollout in the environment.
 
-.. GENERATED FROM PYTHON SOURCE LINES 147-178
+.. GENERATED FROM PYTHON SOURCE LINES 153-184
 
 .. code-block:: default
 
@@ -231,11 +232,11 @@ Our environment builder has three arguments:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 179-180
+.. GENERATED FROM PYTHON SOURCE LINES 185-186
 
 Compute normalizing constants:
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-186
+.. GENERATED FROM PYTHON SOURCE LINES 186-192
 
 .. code-block:: default
 
@@ -254,11 +255,11 @@ Compute normalizing constants:
  .. code-block:: none
 
 
-    (0.9911559820175171, 0.08300016820430756)
+    (0.9927080869674683, 0.0761088877916336)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 187-196
+.. GENERATED FROM PYTHON SOURCE LINES 193-202
 
 The problem
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -270,7 +271,7 @@ policy. From gym:
 *goal is to balance the pole by applying forces in the left and right*
 *direction on the cart.*
 
-.. GENERATED FROM PYTHON SOURCE LINES 196-205
+.. GENERATED FROM PYTHON SOURCE LINES 202-211
 
 .. code-block:: default
 
@@ -290,7 +291,7 @@ policy. From gym:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 206-222
+.. GENERATED FROM PYTHON SOURCE LINES 212-228
 
 Building the model (Deep Q-network)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -309,7 +310,7 @@ Our network is wrapped in a ``QValueActor``, which will read the state-action
 values, pick up the one with the maximum value and write all those results
 in the input ``TensorDict``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 222-278
+.. GENERATED FROM PYTHON SOURCE LINES 228-284
 
 .. code-block:: default
 
@@ -376,14 +377,14 @@ in the input ``TensorDict``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 279-283
+.. GENERATED FROM PYTHON SOURCE LINES 285-289
 
 When creating the model, we initialize the network with an environment reset.
 We print the resulting tensordict instance to get an idea of what
 ``QValueActor`` (pay attention to the keys ``action``, ``action_value`` and
 ``chosen_action_value`` after calling the policy).
 
-.. GENERATED FROM PYTHON SOURCE LINES 283-294
+.. GENERATED FROM PYTHON SOURCE LINES 289-300
 
 .. code-block:: default
 
@@ -429,7 +430,7 @@ We print the resulting tensordict instance to get an idea of what
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 295-307
+.. GENERATED FROM PYTHON SOURCE LINES 301-313
 
 Regular DQN
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -444,7 +445,7 @@ We place the storage on disk using ``LazyMemmapStorage``. The only requirement
 of this storage is that the data given to it must always have the same
 shape. This storage will be instantiated later.
 
-.. GENERATED FROM PYTHON SOURCE LINES 307-314
+.. GENERATED FROM PYTHON SOURCE LINES 313-320
 
 .. code-block:: default
 
@@ -462,14 +463,14 @@ shape. This storage will be instantiated later.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 315-319
+.. GENERATED FROM PYTHON SOURCE LINES 321-325
 
 Our *data collector* will run two parallel environments in parallel, and
 deliver the collected tensordicts once at a time to the main process. We'll
 use the ``MultiaSyncDataCollector`` collector, which will collect data while
 the optimization is taking place.
 
-.. GENERATED FROM PYTHON SOURCE LINES 319-334
+.. GENERATED FROM PYTHON SOURCE LINES 325-340
 
 .. code-block:: default
 
@@ -495,11 +496,11 @@ the optimization is taking place.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 335-336
+.. GENERATED FROM PYTHON SOURCE LINES 341-342
 
 Our *optimizer* and the env used for evaluation
 
-.. GENERATED FROM PYTHON SOURCE LINES 336-341
+.. GENERATED FROM PYTHON SOURCE LINES 342-347
 
 .. code-block:: default
 
@@ -530,11 +531,11 @@ Our *optimizer* and the env used for evaluation
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 342-343
+.. GENERATED FROM PYTHON SOURCE LINES 348-349
 
 Various lists that will contain the values recorded for evaluation:
 
-.. GENERATED FROM PYTHON SOURCE LINES 343-355
+.. GENERATED FROM PYTHON SOURCE LINES 349-361
 
 .. code-block:: default
 
@@ -557,12 +558,12 @@ Various lists that will contain the values recorded for evaluation:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 356-358
+.. GENERATED FROM PYTHON SOURCE LINES 362-364
 
 Training loop
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 358-485
+.. GENERATED FROM PYTHON SOURCE LINES 364-491
 
 .. code-block:: default
 
@@ -700,7 +701,7 @@ Training loop
 .. code-block:: pytb
 
     Traceback (most recent call last):
-      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py", line 392, in <module>
+      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py", line 398, in <module>
         sampled_data_out = factor(sampled_data_out, params=params)
       File "/github/home/miniconda/lib/python3.9/site-packages/torch/nn/modules/module.py", line 1190, in _call_impl
         return forward_call(*input, **kwargs)
@@ -719,12 +720,12 @@ Training loop
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 486-488
+.. GENERATED FROM PYTHON SOURCE LINES 492-494
 
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 500000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 488-495
+.. GENERATED FROM PYTHON SOURCE LINES 494-501
 
 .. code-block:: default
 
@@ -736,7 +737,7 @@ use a greater value for ``total_frames`` e.g. 500000.
     plt.axis("off")
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 496-513
+.. GENERATED FROM PYTHON SOURCE LINES 502-519
 
 .. code-block:: default
 
@@ -758,7 +759,7 @@ use a greater value for ``total_frames`` e.g. 500000.
     )
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 514-530
+.. GENERATED FROM PYTHON SOURCE LINES 520-536
 
 TD-lambda
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -777,7 +778,7 @@ using its mask: by keeping a shape ``[Batch x timesteps]`` and giving this
 to the RB, we'll be creating a replay buffer of size
 ``[Capacity x timesteps]``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 530-535
+.. GENERATED FROM PYTHON SOURCE LINES 536-541
 
 .. code-block:: default
 
@@ -787,11 +788,11 @@ to the RB, we'll be creating a replay buffer of size
     from torchrl.objectives.value.functional import vec_td_lambda_advantage_estimate
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 536-537
+.. GENERATED FROM PYTHON SOURCE LINES 542-543
 
 We reset the actor, the RB and the collector
 
-.. GENERATED FROM PYTHON SOURCE LINES 537-548
+.. GENERATED FROM PYTHON SOURCE LINES 543-554
 
 .. code-block:: default
 
@@ -807,7 +808,7 @@ We reset the actor, the RB and the collector
     params_target_flat = params_target.flatten_keys(".")
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 549-568
+.. GENERATED FROM PYTHON SOURCE LINES 555-574
 
 .. code-block:: default
 
@@ -831,7 +832,7 @@ We reset the actor, the RB and the collector
     )
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 569-574
+.. GENERATED FROM PYTHON SOURCE LINES 575-580
 
 .. code-block:: default
 
@@ -841,7 +842,7 @@ We reset the actor, the RB and the collector
     print(actor_explore(dummy_env.reset()))
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 575-587
+.. GENERATED FROM PYTHON SOURCE LINES 581-593
 
 .. code-block:: default
 
@@ -858,7 +859,7 @@ We reset the actor, the RB and the collector
     prev_traj_count = 0
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 588-596
+.. GENERATED FROM PYTHON SOURCE LINES 594-602
 
 Training loop
 ------------------------------
@@ -869,7 +870,7 @@ There are very few differences with the training loop above:
   ``[Batch x max_size]``), and sent directly to the RB.
 - We use ``vec_td_lambda_advantage_estimate`` to compute the target value.
 
-.. GENERATED FROM PYTHON SOURCE LINES 596-727
+.. GENERATED FROM PYTHON SOURCE LINES 602-733
 
 .. code-block:: default
 
@@ -1005,12 +1006,12 @@ There are very few differences with the training loop above:
         display.display(plt.gcf())
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 728-730
+.. GENERATED FROM PYTHON SOURCE LINES 734-736
 
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 500000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 730-736
+.. GENERATED FROM PYTHON SOURCE LINES 736-742
 
 .. code-block:: default
 
@@ -1021,7 +1022,7 @@ use a greater value for ``total_frames`` e.g. 500000.
     plt.axis("off")
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 737-754
+.. GENERATED FROM PYTHON SOURCE LINES 743-760
 
 .. code-block:: default
 
@@ -1043,7 +1044,7 @@ use a greater value for ``total_frames`` e.g. 500000.
     )
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 755-761
+.. GENERATED FROM PYTHON SOURCE LINES 761-767
 
 Let's compare the results on a single plot. Because the TD(lambda) version
 works better, we'll have fewer episodes collected for a given number of
@@ -1052,7 +1053,7 @@ frames (as there are more frames per episode).
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 500000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 761-841
+.. GENERATED FROM PYTHON SOURCE LINES 767-847
 
 .. code-block:: default
 
@@ -1137,13 +1138,13 @@ use a greater value for ``total_frames`` e.g. 500000.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 842-845
+.. GENERATED FROM PYTHON SOURCE LINES 848-851
 
 Finally, we generate a new video to check what the algorithm has learnt.
 If all goes well, the duration should be significantly longer than with the
 initial, random rollout.
 
-.. GENERATED FROM PYTHON SOURCE LINES 845-850
+.. GENERATED FROM PYTHON SOURCE LINES 851-856
 
 .. code-block:: default
 
@@ -1153,7 +1154,7 @@ initial, random rollout.
     eval_rollout
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 851-855
+.. GENERATED FROM PYTHON SOURCE LINES 857-861
 
 .. code-block:: default
 
@@ -1162,7 +1163,7 @@ initial, random rollout.
     # Video('cartpole.mp4', width=480, height=360) #the width and height option as additional thing new in Ipython 7.6.1
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 856-882
+.. GENERATED FROM PYTHON SOURCE LINES 862-888
 
 Conclusion and possible improvements
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1194,7 +1195,7 @@ algorithm. Other possible improvements could include:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  14.254 seconds)
+   **Total running time of the script:** ( 0 minutes  13.713 seconds)
 
 
 .. _sphx_glr_download_tutorials_coding_dqn.py:

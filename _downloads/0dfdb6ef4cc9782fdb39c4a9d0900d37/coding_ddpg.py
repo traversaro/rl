@@ -32,6 +32,12 @@ Coding DDPG using TorchRL
 
 # Make all the necessary imports for training
 
+# sphinx_gallery_start_ignore
+import warnings
+
+warnings.filterwarnings("ignore")
+# sphinx_gallery_end_ignore
+
 from copy import deepcopy
 from typing import Optional
 

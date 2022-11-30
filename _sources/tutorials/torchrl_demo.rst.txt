@@ -143,9 +143,10 @@ Data
 TensorDict
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 126-130
+.. GENERATED FROM PYTHON SOURCE LINES 126-131
 
 .. code-block:: default
+
 
 
     import torch
@@ -158,11 +159,11 @@ TensorDict
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 131-132
+.. GENERATED FROM PYTHON SOURCE LINES 137-138
 
 Let's create a TensorDict.
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-143
+.. GENERATED FROM PYTHON SOURCE LINES 138-149
 
 .. code-block:: default
 
@@ -196,11 +197,11 @@ Let's create a TensorDict.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 144-145
+.. GENERATED FROM PYTHON SOURCE LINES 150-151
 
 You can index a TensorDict as well as query keys.
 
-.. GENERATED FROM PYTHON SOURCE LINES 145-149
+.. GENERATED FROM PYTHON SOURCE LINES 151-155
 
 .. code-block:: default
 
@@ -228,11 +229,11 @@ You can index a TensorDict as well as query keys.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 150-151
+.. GENERATED FROM PYTHON SOURCE LINES 156-157
 
 The following shows how to stack multiple TensorDicts.
 
-.. GENERATED FROM PYTHON SOURCE LINES 151-171
+.. GENERATED FROM PYTHON SOURCE LINES 157-177
 
 .. code-block:: default
 
@@ -279,17 +280,19 @@ The following shows how to stack multiple TensorDicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 172-173
+.. GENERATED FROM PYTHON SOURCE LINES 178-179
 
 Here are some other functionalities of TensorDict.
 
-.. GENERATED FROM PYTHON SOURCE LINES 173-196
+.. GENERATED FROM PYTHON SOURCE LINES 179-204
 
 .. code-block:: default
 
 
     print(
-        "view(-1): ", tensordict.view(-1).batch_size, tensordict.view(-1).get("key 1").shape
+        "view(-1): ",
+        tensordict.view(-1).batch_size,
+        tensordict.view(-1).get("key 1").shape,
     )
 
     print("to device: ", tensordict.to("cpu"))
@@ -339,11 +342,11 @@ Here are some other functionalities of TensorDict.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 197-198
+.. GENERATED FROM PYTHON SOURCE LINES 205-206
 
 You can create a **nested TensorDict** as well.
 
-.. GENERATED FROM PYTHON SOURCE LINES 198-211
+.. GENERATED FROM PYTHON SOURCE LINES 206-219
 
 .. code-block:: default
 
@@ -384,12 +387,12 @@ You can create a **nested TensorDict** as well.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 212-214
+.. GENERATED FROM PYTHON SOURCE LINES 220-222
 
 Replay buffers
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 214-217
+.. GENERATED FROM PYTHON SOURCE LINES 222-225
 
 .. code-block:: default
 
@@ -403,7 +406,7 @@ Replay buffers
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-223
+.. GENERATED FROM PYTHON SOURCE LINES 226-231
 
 .. code-block:: default
 
@@ -425,7 +428,7 @@ Replay buffers
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 224-228
+.. GENERATED FROM PYTHON SOURCE LINES 232-236
 
 .. code-block:: default
 
@@ -446,7 +449,7 @@ Replay buffers
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 229-235
+.. GENERATED FROM PYTHON SOURCE LINES 237-243
 
 .. code-block:: default
 
@@ -463,11 +466,11 @@ Replay buffers
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 236-237
+.. GENERATED FROM PYTHON SOURCE LINES 244-245
 
 Here are examples of using a replaybuffer with tensordicts.
 
-.. GENERATED FROM PYTHON SOURCE LINES 237-243
+.. GENERATED FROM PYTHON SOURCE LINES 245-251
 
 .. code-block:: default
 
@@ -490,7 +493,7 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 244-250
+.. GENERATED FROM PYTHON SOURCE LINES 252-258
 
 .. code-block:: default
 
@@ -525,7 +528,7 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 251-262
+.. GENERATED FROM PYTHON SOURCE LINES 259-270
 
 .. code-block:: default
 
@@ -559,7 +562,7 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 263-266
+.. GENERATED FROM PYTHON SOURCE LINES 271-274
 
 .. code-block:: default
 
@@ -580,7 +583,7 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 267-278
+.. GENERATED FROM PYTHON SOURCE LINES 275-286
 
 .. code-block:: default
 
@@ -610,12 +613,12 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 279-281
+.. GENERATED FROM PYTHON SOURCE LINES 287-289
 
 Envs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 281-288
+.. GENERATED FROM PYTHON SOURCE LINES 289-296
 
 .. code-block:: default
 
@@ -633,7 +636,7 @@ Envs
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 289-293
+.. GENERATED FROM PYTHON SOURCE LINES 297-301
 
 .. code-block:: default
 
@@ -668,12 +671,12 @@ Envs
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 294-296
+.. GENERATED FROM PYTHON SOURCE LINES 302-304
 
 Changing environments config
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 296-300
+.. GENERATED FROM PYTHON SOURCE LINES 304-308
 
 .. code-block:: default
 
@@ -701,7 +704,7 @@ Changing environments config
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 301-305
+.. GENERATED FROM PYTHON SOURCE LINES 309-313
 
 .. code-block:: default
 
@@ -716,7 +719,7 @@ Changing environments config
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 306-319
+.. GENERATED FROM PYTHON SOURCE LINES 314-327
 
 .. code-block:: default
 
@@ -740,12 +743,12 @@ Changing environments config
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 320-322
+.. GENERATED FROM PYTHON SOURCE LINES 328-330
 
 Transforms
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 322-335
+.. GENERATED FROM PYTHON SOURCE LINES 330-343
 
 .. code-block:: default
 
@@ -769,7 +772,7 @@ Transforms
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 336-339
+.. GENERATED FROM PYTHON SOURCE LINES 344-347
 
 .. code-block:: default
 
@@ -795,7 +798,7 @@ Transforms
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 340-344
+.. GENERATED FROM PYTHON SOURCE LINES 348-352
 
 .. code-block:: default
 
@@ -826,12 +829,12 @@ Transforms
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 345-347
+.. GENERATED FROM PYTHON SOURCE LINES 353-355
 
 Vectorized Environments
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 347-359
+.. GENERATED FROM PYTHON SOURCE LINES 355-368
 
 .. code-block:: default
 
@@ -839,7 +842,8 @@ Vectorized Environments
     from torchrl.envs import ParallelEnv
 
     base_env = ParallelEnv(
-        4, lambda: GymEnv("Pendulum-v1", frame_skip=3, from_pixels=True, pixels_only=False)
+        4,
+        lambda: GymEnv("Pendulum-v1", frame_skip=3, from_pixels=True, pixels_only=False),
     )
     env = TransformedEnv(
         base_env, Compose(NoopResetEnv(3), ToTensorImage())
@@ -866,7 +870,7 @@ Vectorized Environments
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 360-363
+.. GENERATED FROM PYTHON SOURCE LINES 369-372
 
 .. code-block:: default
 
@@ -887,7 +891,7 @@ Vectorized Environments
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 364-371
+.. GENERATED FROM PYTHON SOURCE LINES 373-380
 
 Modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -897,7 +901,7 @@ Models
 
 Example of a MLP model:
 
-.. GENERATED FROM PYTHON SOURCE LINES 371-374
+.. GENERATED FROM PYTHON SOURCE LINES 380-383
 
 .. code-block:: default
 
@@ -911,7 +915,7 @@ Example of a MLP model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 375-383
+.. GENERATED FROM PYTHON SOURCE LINES 384-392
 
 .. code-block:: default
 
@@ -943,17 +947,20 @@ Example of a MLP model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 384-385
+.. GENERATED FROM PYTHON SOURCE LINES 393-394
 
 Example of a CNN model:
 
-.. GENERATED FROM PYTHON SOURCE LINES 385-392
+.. GENERATED FROM PYTHON SOURCE LINES 394-404
 
 .. code-block:: default
 
 
     cnn = ConvNet(
-        num_cells=[32, 64], kernel_sizes=[8, 4], strides=[2, 1], aggregator_class=SquashDims
+        num_cells=[32, 64],
+        kernel_sizes=[8, 4],
+        strides=[2, 1],
+        aggregator_class=SquashDims,
     )
     print(cnn)
     print(cnn(torch.randn(10, 3, 32, 32)).shape)  # last tensor is squashed
@@ -978,17 +985,17 @@ Example of a CNN model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 393-395
+.. GENERATED FROM PYTHON SOURCE LINES 405-407
 
 TensorDictModules
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 395-404
+.. GENERATED FROM PYTHON SOURCE LINES 407-416
 
 .. code-block:: default
 
 
-    from torchrl.modules import TensorDictModule
+    from tensordict.nn import TensorDictModule
 
     tensordict = TensorDict({"key 1": torch.randn(10, 3)}, batch_size=[10])
     module = nn.Linear(3, 4)
@@ -998,29 +1005,34 @@ TensorDictModules
 
 
 
+
+
 .. rst-class:: sphx-glr-script-out
 
-.. code-block:: pytb
+ .. code-block:: none
 
-    Traceback (most recent call last):
-      File "/__w/rl/rl/docs/source/reference/generated/tutorials/torchrl_demo.py", line 396, in <module>
-        from torchrl.modules import TensorDictModule
-    ImportError: cannot import name 'TensorDictModule' from 'torchrl.modules' (/__w/rl/rl/torchrl/modules/__init__.py)
+    TensorDict(
+        fields={
+            key 1: Tensor(torch.Size([10, 3]), dtype=torch.float32),
+            key 2: Tensor(torch.Size([10, 4]), dtype=torch.float32)},
+        batch_size=torch.Size([10]),
+        device=None,
+        is_shared=False)
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 405-407
+.. GENERATED FROM PYTHON SOURCE LINES 417-419
 
 Sequences of Modules
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 407-422
+.. GENERATED FROM PYTHON SOURCE LINES 419-434
 
 .. code-block:: default
 
 
-    from torchrl.modules import TensorDictSequential
+    from tensordict.nn import TensorDictSequential
 
     backbone_module = nn.Linear(5, 3)
     backbone = TensorDictModule(
@@ -1035,7 +1047,45 @@ Sequences of Modules
     print(sequence)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 423-426
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    TensorDictSequential(
+        module=ModuleList(
+          (0): TensorDictModule(
+              module=Linear(in_features=5, out_features=3, bias=True), 
+              device=cpu, 
+              in_keys=['observation'], 
+              out_keys=['hidden'])
+          (1): TensorDictModule(
+              module=Linear(in_features=3, out_features=4, bias=True), 
+              device=cpu, 
+              in_keys=['hidden'], 
+              out_keys=['action'])
+          (2): TensorDictModule(
+              module=MLP(
+                (0): LazyLinear(in_features=0, out_features=4, bias=True)
+                (1): Tanh()
+                (2): Linear(in_features=4, out_features=5, bias=True)
+                (3): Tanh()
+                (4): Linear(in_features=5, out_features=1, bias=True)
+              ), 
+              device=cpu, 
+              in_keys=['hidden', 'action'], 
+              out_keys=['value'])
+        ), 
+        device=cpu, 
+        in_keys=['observation'], 
+        out_keys=['hidden', 'action', 'value'])
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 435-438
 
 .. code-block:: default
 
@@ -1043,7 +1093,19 @@ Sequences of Modules
     print(sequence.in_keys, sequence.out_keys)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 427-436
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    ['observation'] ['hidden', 'action', 'value']
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 439-448
 
 .. code-block:: default
 
@@ -1057,7 +1119,27 @@ Sequences of Modules
     value(tensordict)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 437-445
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+            hidden: Tensor(torch.Size([3, 3]), dtype=torch.float32),
+            observation: Tensor(torch.Size([3, 5]), dtype=torch.float32),
+            value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([3]),
+        device=None,
+        is_shared=False)
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 449-457
 
 .. code-block:: default
 
@@ -1070,64 +1152,150 @@ Sequences of Modules
     print(tensordict)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 446-448
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+            hidden: Tensor(torch.Size([3, 3]), dtype=torch.float32),
+            observation: Tensor(torch.Size([3, 5]), dtype=torch.float32),
+            value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([3]),
+        device=None,
+        is_shared=False)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 458-460
 
 Functional Programming (Ensembling / Meta-RL)
 ----------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 448-452
+.. GENERATED FROM PYTHON SOURCE LINES 460-466
 
 .. code-block:: default
 
 
-    fsequence, (params, buffers) = sequence.make_functional_with_buffers()
-    len(list(fsequence.parameters()))  # functional modules have no parameters
+    from tensordict.nn import make_functional
+
+    params = make_functional(sequence)
+    len(list(sequence.parameters()))  # functional modules have no parameters
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 453-456
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    0
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 467-470
 
 .. code-block:: default
 
 
-    fsequence(tensordict, params=params, buffers=buffers)
+    sequence(tensordict, params)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 457-465
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([3, 4]), dtype=torch.float32),
+            hidden: Tensor(torch.Size([3, 3]), dtype=torch.float32),
+            observation: Tensor(torch.Size([3, 5]), dtype=torch.float32),
+            value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([3]),
+        device=None,
+        is_shared=False)
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 471-478
 
 .. code-block:: default
 
 
-    params_expand = [p.expand(4, *p.shape) for p in params]
-    buffers_expand = [b.expand(4, *b.shape) for b in buffers]
-    tensordict_exp = fsequence(
-        tensordict, params=params_expand, buffers=buffers, vmap=(0, 0, None)
-    )
+    import functorch
+
+    params_expand = params.expand(4)
+    tensordict_exp = functorch.vmap(sequence, (None, 0))(tensordict, params_expand)
     print(tensordict_exp)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 466-468
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([4, 3, 4]), dtype=torch.float32),
+            hidden: Tensor(torch.Size([4, 3, 3]), dtype=torch.float32),
+            observation: Tensor(torch.Size([4, 3, 5]), dtype=torch.float32),
+            value: Tensor(torch.Size([4, 3, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([4, 3]),
+        device=None,
+        is_shared=False)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 479-481
 
 Specialized Classes
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 468-480
+.. GENERATED FROM PYTHON SOURCE LINES 481-494
 
 .. code-block:: default
 
 
     torch.manual_seed(0)
     from torchrl.data import NdBoundedTensorSpec
+    from torchrl.modules import SafeModule
 
     spec = NdBoundedTensorSpec(-torch.ones(3), torch.ones(3))
     base_module = nn.Linear(5, 3)
-    module = TensorDictModule(
+    module = SafeModule(
         module=base_module, spec=spec, in_keys=["obs"], out_keys=["action"], safe=True
     )
     tensordict = TensorDict({"obs": torch.randn(5)}, batch_size=[])
     module(tensordict)["action"]
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 481-485
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    tensor([-0.0137,  0.1524, -0.0641], grad_fn=<AddBackward0>)
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 495-499
 
 .. code-block:: default
 
@@ -1136,7 +1304,19 @@ Specialized Classes
     module(tensordict)["action"]  # safe=True projects the result within the set
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 486-494
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    tensor([-1.,  1., -1.], grad_fn=<IndexPutBackward0>)
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 500-510
 
 .. code-block:: default
 
@@ -1148,18 +1328,22 @@ Specialized Classes
     tensordict = TensorDict({"obs": torch.randn(5)}, batch_size=[])
     actor(tensordict)  # action is the default value
 
+    from tensordict.nn import ProbabilisticTensorDictModule
 
-.. GENERATED FROM PYTHON SOURCE LINES 495-521
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 511-533
 
 .. code-block:: default
 
 
     # Probabilistic modules
-    from torchrl.modules import (
-        NormalParamWrapper,
-        ProbabilisticTensorDictModule,
-        TanhNormal,
-    )
+    from torchrl.modules import NormalParamWrapper, TanhNormal
 
     td = TensorDict(
         {"input": torch.randn(3, 5)},
@@ -1180,7 +1364,27 @@ Specialized Classes
     print(td)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 522-540
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([3, 2]), dtype=torch.float32),
+            input: Tensor(torch.Size([3, 5]), dtype=torch.float32),
+            loc: Tensor(torch.Size([3, 2]), dtype=torch.float32),
+            scale: Tensor(torch.Size([3, 2]), dtype=torch.float32)},
+        batch_size=torch.Size([3]),
+        device=None,
+        is_shared=False)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 534-552
 
 .. code-block:: default
 
@@ -1203,7 +1407,28 @@ Specialized Classes
     print(td)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 541-565
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([3, 2]), dtype=torch.float32),
+            input: Tensor(torch.Size([3, 5]), dtype=torch.float32),
+            loc: Tensor(torch.Size([3, 2]), dtype=torch.float32),
+            sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),
+            scale: Tensor(torch.Size([3, 2]), dtype=torch.float32)},
+        batch_size=torch.Size([3]),
+        device=None,
+        is_shared=False)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 553-577
 
 .. code-block:: default
 
@@ -1232,12 +1457,32 @@ Specialized Classes
         print("mean:", td["action"])
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 566-568
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    random: tensor([[ 0.8728, -0.1335],
+            [-0.9833,  0.3497],
+            [-0.6889, -0.6433]], grad_fn=<ClampBackward1>)
+    mode: tensor([[-0.1131,  0.1761],
+            [-0.3425, -0.2665],
+            [ 0.2915,  0.6207]], grad_fn=<ClampBackward1>)
+    mean: tensor([[-0.1131,  0.1441],
+            [-0.2375, -0.1242],
+            [ 0.1372,  0.3810]], grad_fn=<MeanBackward1>)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 578-580
 
 Using Environments and Modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 568-596
+.. GENERATED FROM PYTHON SOURCE LINES 580-608
 
 .. code-block:: default
 
@@ -1248,7 +1493,7 @@ Using Environments and Modules
 
     action_spec = env.action_spec
     actor_module = nn.Linear(3, 1)
-    actor = TensorDictModule(
+    actor = SafeModule(
         actor_module, spec=action_spec, in_keys=["observation"], out_keys=["action"]
     )
 
@@ -1270,7 +1515,34 @@ Using Environments and Modules
     print(tensordicts)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 597-615
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    total steps: 99
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([100, 1]), dtype=torch.float32),
+            done: Tensor(torch.Size([100, 1]), dtype=torch.bool),
+            next: TensorDict(
+                fields={
+                    observation: Tensor(torch.Size([100, 3]), dtype=torch.float32)},
+                batch_size=torch.Size([100]),
+                device=None,
+                is_shared=False),
+            observation: Tensor(torch.Size([100, 3]), dtype=torch.float32),
+            reward: Tensor(torch.Size([100, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([100]),
+        device=None,
+        is_shared=False)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 609-627
 
 .. code-block:: default
 
@@ -1293,7 +1565,34 @@ Using Environments and Modules
     print(tensordicts_stack)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 616-619
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    total steps: 99
+    LazyStackedTensorDict(
+        fields={
+            action: Tensor(torch.Size([100, 1]), dtype=torch.float32),
+            done: Tensor(torch.Size([100, 1]), dtype=torch.bool),
+            next: LazyStackedTensorDict(
+                fields={
+                    observation: Tensor(torch.Size([100, 3]), dtype=torch.float32)},
+                batch_size=torch.Size([100]),
+                device=cpu,
+                is_shared=False),
+            observation: Tensor(torch.Size([100, 3]), dtype=torch.float32),
+            reward: Tensor(torch.Size([100, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([100]),
+        device=cpu,
+        is_shared=False)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 628-631
 
 .. code-block:: default
 
@@ -1301,7 +1600,19 @@ Using Environments and Modules
     (tensordicts_stack == tensordicts_prealloc).all()
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 620-627
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    True
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 632-639
 
 .. code-block:: default
 
@@ -1313,12 +1624,40 @@ Using Environments and Modules
     tensordict_rollout
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 628-636
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([100, 1]), dtype=torch.float32),
+            done: Tensor(torch.Size([100, 1]), dtype=torch.bool),
+            next: LazyStackedTensorDict(
+                fields={
+                    observation: Tensor(torch.Size([100, 3]), dtype=torch.float32)},
+                batch_size=torch.Size([100]),
+                device=cpu,
+                is_shared=False),
+            observation: Tensor(torch.Size([100, 3]), dtype=torch.float32),
+            reward: Tensor(torch.Size([100, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([100]),
+        device=cpu,
+        is_shared=False)
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 640-650
 
 .. code-block:: default
 
 
     (tensordict_rollout == tensordicts_prealloc).all()
+
+    from tensordict.nn import TensorDictModule
 
     # Collectors
     # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1326,14 +1665,19 @@ Using Environments and Modules
     from torchrl.collectors import MultiaSyncDataCollector, MultiSyncDataCollector
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 637-662
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 651-675
 
 .. code-block:: default
 
 
     from torchrl.envs import EnvCreator, ParallelEnv
     from torchrl.envs.libs.gym import GymEnv
-    from torchrl.modules import TensorDictModule
 
     # EnvCreator makes sure that we can send a lambda function from process to process
     parallel_env = ParallelEnv(3, EnvCreator(lambda: GymEnv("Pendulum-v1")))
@@ -1356,7 +1700,13 @@ Using Environments and Modules
     )
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 663-670
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 676-685
 
 .. code-block:: default
 
@@ -1366,9 +1716,41 @@ Using Environments and Modules
             print(d)  # trajectories are split automatically in [6 workers x 10 steps]
         collector.update_policy_weights_()  # make sure that our policies have the latest weights if working on multiple devices
     print(i)
+    collector.shutdown()
+    del collector
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 671-690
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([6, 10, 1]), dtype=torch.float32),
+            done: Tensor(torch.Size([6, 10, 1]), dtype=torch.bool),
+            mask: Tensor(torch.Size([6, 10, 1]), dtype=torch.bool),
+            next: TensorDict(
+                fields={
+                    observation: Tensor(torch.Size([6, 10, 3]), dtype=torch.float32)},
+                batch_size=torch.Size([6, 10]),
+                device=None,
+                is_shared=False),
+            observation: Tensor(torch.Size([6, 10, 3]), dtype=torch.float32),
+            reward: Tensor(torch.Size([6, 10, 1]), dtype=torch.float32),
+            step_count: Tensor(torch.Size([6, 10, 1]), dtype=torch.float32),
+            traj_ids: Tensor(torch.Size([6, 10, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([6, 10]),
+        device=None,
+        is_shared=False)
+    3
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 686-706
 
 .. code-block:: default
 
@@ -1389,15 +1771,46 @@ Using Environments and Modules
             print(d)  # trajectories are split automatically in [6 workers x 10 steps]
         collector.update_policy_weights_()  # make sure that our policies have the latest weights if working on multiple devices
     print(i)
+    collector.shutdown()
     del collector
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 691-693
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([3, 20, 1]), dtype=torch.float32),
+            done: Tensor(torch.Size([3, 20, 1]), dtype=torch.bool),
+            mask: Tensor(torch.Size([3, 20, 1]), dtype=torch.bool),
+            next: TensorDict(
+                fields={
+                    observation: Tensor(torch.Size([3, 20, 3]), dtype=torch.float32)},
+                batch_size=torch.Size([3, 20]),
+                device=cpu,
+                is_shared=False),
+            observation: Tensor(torch.Size([3, 20, 3]), dtype=torch.float32),
+            reward: Tensor(torch.Size([3, 20, 1]), dtype=torch.float32),
+            step_count: Tensor(torch.Size([3, 20, 1]), dtype=torch.float32),
+            traj_ids: Tensor(torch.Size([3, 20, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([3, 20]),
+        device=cpu,
+        is_shared=False)
+    3
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 707-709
 
 Objectives
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 693-714
+.. GENERATED FROM PYTHON SOURCE LINES 709-730
 
 .. code-block:: default
 
@@ -1423,7 +1836,13 @@ Objectives
     loss_fn = DDPGLoss(actor, value, gamma=0.99)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 715-729
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 731-745
 
 .. code-block:: default
 
@@ -1442,23 +1861,78 @@ Objectives
     loss_td = loss_fn(tensordict)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 730-733
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 746-749
 
 .. code-block:: default
 
 
-    loss_td
+    print(loss_td)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 734-737
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    TensorDict(
+        fields={
+            loss_actor: Tensor(torch.Size([1]), dtype=torch.float32),
+            loss_value: Tensor(torch.Size([1]), dtype=torch.float32),
+            pred_value: Tensor(torch.Size([1]), dtype=torch.float32),
+            pred_value_max: Tensor(torch.Size([1]), dtype=torch.float32),
+            target_value: Tensor(torch.Size([1]), dtype=torch.float32),
+            target_value_max: Tensor(torch.Size([1]), dtype=torch.float32)},
+        batch_size=torch.Size([]),
+        device=None,
+        is_shared=False)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 750-753
 
 .. code-block:: default
 
 
-    tensordict
+    print(tensordict)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 738-757
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    TensorDict(
+        fields={
+            action: Tensor(torch.Size([10, 1]), dtype=torch.float32),
+            done: Tensor(torch.Size([10, 1]), dtype=torch.bool),
+            next: TensorDict(
+                fields={
+                    observation: Tensor(torch.Size([10, 3]), dtype=torch.float32)},
+                batch_size=torch.Size([10]),
+                device=cpu,
+                is_shared=False),
+            observation: Tensor(torch.Size([10, 3]), dtype=torch.float32),
+            reward: Tensor(torch.Size([10, 1]), dtype=torch.float32),
+            td_error: Tensor(torch.Size([10, 1]), dtype=torch.float32)},
+        batch_size=torch.Size([10]),
+        device=cpu,
+        is_shared=False)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 754-773
 
 State of the Library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1480,7 +1954,7 @@ RL (or just curious), try it! Give us feedback: what will make the success of
 TorchRL is how well it covers researchers needs. To do that, we need their input!
 Since the library is nascent, it is a great time for you to shape it the way you want!
 
-.. GENERATED FROM PYTHON SOURCE LINES 759-763
+.. GENERATED FROM PYTHON SOURCE LINES 775-779
 
 Installing the Library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1490,7 +1964,7 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.735 seconds)
+   **Total running time of the script:** ( 0 minutes  29.457 seconds)
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:

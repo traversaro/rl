@@ -33,9 +33,10 @@ It is up to the user to define the keys to be read as input and output.
 TensorDictModule by examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-22
+.. GENERATED FROM PYTHON SOURCE LINES 16-23
 
 .. code-block:: default
+
 
 
     import torch
@@ -50,14 +51,14 @@ TensorDictModule by examples
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-27
+.. GENERATED FROM PYTHON SOURCE LINES 29-33
 
 Example 1: Simple usage
 --------------------------------------
 We have a ``TensorDict`` with 2 entries ``"a"`` and ``"b"`` but only the
 value associated with ``"a"`` has to be read by the network.
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-37
+.. GENERATED FROM PYTHON SOURCE LINES 33-43
 
 .. code-block:: default
 
@@ -91,7 +92,7 @@ value associated with ``"a"`` has to be read by the network.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-44
+.. GENERATED FROM PYTHON SOURCE LINES 44-50
 
 Example 2: Multiple inputs
 --------------------------------------
@@ -100,7 +101,7 @@ averages them into a single output tensor. To make a ``TensorDictModule``
 instance read multiple input values, one must register them in the
 ``in_keys`` keyword argument of the constructor.
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-56
+.. GENERATED FROM PYTHON SOURCE LINES 50-62
 
 .. code-block:: default
 
@@ -123,7 +124,7 @@ instance read multiple input values, one must register them in the
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-72
+.. GENERATED FROM PYTHON SOURCE LINES 63-78
 
 .. code-block:: default
 
@@ -162,7 +163,7 @@ instance read multiple input values, one must register them in the
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 73-79
+.. GENERATED FROM PYTHON SOURCE LINES 79-85
 
 Example 3: Multiple outputs
 --------------------------------------
@@ -171,7 +172,7 @@ multiple outputs. To make a ``TensorDictModule`` instance write to multiple
 output values, one must register them in the ``out_keys`` keyword argument
 of the constructor.
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-91
+.. GENERATED FROM PYTHON SOURCE LINES 85-97
 
 .. code-block:: default
 
@@ -194,7 +195,7 @@ of the constructor.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-102
+.. GENERATED FROM PYTHON SOURCE LINES 98-108
 
 .. code-block:: default
 
@@ -228,7 +229,7 @@ of the constructor.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-125
+.. GENERATED FROM PYTHON SOURCE LINES 109-131
 
 When having multiple input keys and output keys, make sure they match the
 order in the module.
@@ -253,7 +254,7 @@ tensordict following the sequence of modules provided.
 We can also gather the inputs needed by ``TensorDictSequential`` with the
 ``in_keys`` property, and the outputs keys are found at the ``out_keys`` attribute.
 
-.. GENERATED FROM PYTHON SOURCE LINES 125-143
+.. GENERATED FROM PYTHON SOURCE LINES 131-149
 
 .. code-block:: default
 
@@ -282,14 +283,14 @@ We can also gather the inputs needed by ``TensorDictSequential`` with the
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 144-148
+.. GENERATED FROM PYTHON SOURCE LINES 150-154
 
 Example 5: Compatibility with functorch
 -----------------------------------------
 tensordict.nn is compatible with functorch. It also comes with its own functional
 utilities. Let us have a look:
 
-.. GENERATED FROM PYTHON SOURCE LINES 148-161
+.. GENERATED FROM PYTHON SOURCE LINES 154-167
 
 .. code-block:: default
 
@@ -326,13 +327,13 @@ utilities. Let us have a look:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 162-165
+.. GENERATED FROM PYTHON SOURCE LINES 168-171
 
 This can be used with the vmap operator. For example, we use 3 replicas of the
 params and buffers and execute a vectorized map over these for a single batch
 of data:
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-170
+.. GENERATED FROM PYTHON SOURCE LINES 171-176
 
 .. code-block:: default
 
@@ -361,12 +362,12 @@ of data:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 171-173
+.. GENERATED FROM PYTHON SOURCE LINES 177-179
 
 We can also use the native :obj:`get_functional()` function from tensordict.nn,
 which modifies the module to make it accept the parameters as regular inputs:
 
-.. GENERATED FROM PYTHON SOURCE LINES 173-188
+.. GENERATED FROM PYTHON SOURCE LINES 179-194
 
 .. code-block:: default
 
@@ -398,7 +399,7 @@ which modifies the module to make it accept the parameters as regular inputs:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 189-218
+.. GENERATED FROM PYTHON SOURCE LINES 195-224
 
 Do's and don't with TensorDictModule
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -430,7 +431,7 @@ distribution (through a regular ``__call__()`` to the module).
 One can find the parameters in the output tensordict as well as the log
 probability if needed.
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-240
+.. GENERATED FROM PYTHON SOURCE LINES 224-246
 
 .. code-block:: default
 
@@ -486,7 +487,7 @@ probability if needed.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 241-259
+.. GENERATED FROM PYTHON SOURCE LINES 247-265
 
 ``Actor``
 ------------------------------
@@ -507,7 +508,7 @@ wraps both an actor network and a value Network.
 ``ActorCriticOperator`` will first compute the action from the actor and
 then the value according to this action.
 
-.. GENERATED FROM PYTHON SOURCE LINES 259-307
+.. GENERATED FROM PYTHON SOURCE LINES 265-313
 
 .. code-block:: default
 
@@ -612,7 +613,7 @@ then the value according to this action.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 308-331
+.. GENERATED FROM PYTHON SOURCE LINES 314-337
 
 Other blocks exist such as:
 
@@ -638,7 +639,7 @@ We have let the positional encoders aside for simplicity.
 Let's first import the classical transformers blocks
 (see ``src/transformer.py`` for more details.)
 
-.. GENERATED FROM PYTHON SOURCE LINES 331-340
+.. GENERATED FROM PYTHON SOURCE LINES 337-346
 
 .. code-block:: default
 
@@ -658,7 +659,7 @@ Let's first import the classical transformers blocks
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 341-349
+.. GENERATED FROM PYTHON SOURCE LINES 347-355
 
 We first create the ``AttentionBlockTensorDict``, the attention block using
 ``TensorDictModule`` and ``TensorDictSequential``.
@@ -669,7 +670,7 @@ to indicate which key each of them must read and write. Unlike
 input/output. Moreover, its components inputs need not be identical to the
 previous layers outputs, allowing us to code complicated neural architecture.
 
-.. GENERATED FROM PYTHON SOURCE LINES 349-386
+.. GENERATED FROM PYTHON SOURCE LINES 355-392
 
 .. code-block:: default
 
@@ -717,12 +718,12 @@ previous layers outputs, allowing us to code complicated neural architecture.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 387-389
+.. GENERATED FROM PYTHON SOURCE LINES 393-395
 
 We build the encoder and decoder blocks that will be part of the transformer
 thanks to ``TensorDictModule``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 389-458
+.. GENERATED FROM PYTHON SOURCE LINES 395-464
 
 .. code-block:: default
 
@@ -802,7 +803,7 @@ thanks to ``TensorDictModule``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 459-466
+.. GENERATED FROM PYTHON SOURCE LINES 465-472
 
 We create the transformer encoder and decoder.
 
@@ -812,7 +813,7 @@ keys and values.
 For a decoder, we now can extract info from ``X_from`` into ``X_to``.
 ``X_from`` will map to queries whereas ``X_from`` will map to keys and values.
 
-.. GENERATED FROM PYTHON SOURCE LINES 466-561
+.. GENERATED FROM PYTHON SOURCE LINES 472-567
 
 .. code-block:: default
 
@@ -918,11 +919,11 @@ For a decoder, we now can extract info from ``X_from`` into ``X_to``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 562-563
+.. GENERATED FROM PYTHON SOURCE LINES 568-569
 
 We now test our new ``TransformerTensorDict``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 563-596
+.. GENERATED FROM PYTHON SOURCE LINES 569-602
 
 .. code-block:: default
 
@@ -983,7 +984,7 @@ We now test our new ``TransformerTensorDict``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 597-603
+.. GENERATED FROM PYTHON SOURCE LINES 603-609
 
 We've achieved to create a transformer with ``TensorDictModule``. This
 shows that ``TensorDictModule`` is a flexible module that can implement
@@ -992,7 +993,7 @@ complex operarations.
 Benchmarking
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 603-606
+.. GENERATED FROM PYTHON SOURCE LINES 609-612
 
 .. code-block:: default
 
@@ -1006,7 +1007,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 607-617
+.. GENERATED FROM PYTHON SOURCE LINES 613-623
 
 .. code-block:: default
 
@@ -1027,7 +1028,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 618-627
+.. GENERATED FROM PYTHON SOURCE LINES 624-633
 
 .. code-block:: default
 
@@ -1047,7 +1048,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 628-632
+.. GENERATED FROM PYTHON SOURCE LINES 634-638
 
 .. code-block:: default
 
@@ -1062,7 +1063,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 633-646
+.. GENERATED FROM PYTHON SOURCE LINES 639-652
 
 .. code-block:: default
 
@@ -1086,7 +1087,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 647-652
+.. GENERATED FROM PYTHON SOURCE LINES 653-658
 
 .. code-block:: default
 
@@ -1102,11 +1103,11 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 653-654
+.. GENERATED FROM PYTHON SOURCE LINES 659-660
 
 **Inference Time**
 
-.. GENERATED FROM PYTHON SOURCE LINES 654-657
+.. GENERATED FROM PYTHON SOURCE LINES 660-663
 
 .. code-block:: default
 
@@ -1120,7 +1121,7 @@ Benchmarking
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 658-664
+.. GENERATED FROM PYTHON SOURCE LINES 664-670
 
 .. code-block:: default
 
@@ -1138,12 +1139,12 @@ Benchmarking
 
  .. code-block:: none
 
-    Execution time: 0.013623714447021484 seconds
+    Execution time: 0.013832807540893555 seconds
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 665-671
+.. GENERATED FROM PYTHON SOURCE LINES 671-677
 
 .. code-block:: default
 
@@ -1161,12 +1162,12 @@ Benchmarking
 
  .. code-block:: none
 
-    Execution time: 0.008682012557983398 seconds
+    Execution time: 0.008616924285888672 seconds
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 672-676
+.. GENERATED FROM PYTHON SOURCE LINES 678-682
 
 We can see on this minimal example that the overhead introduced by
 ``TensorDictModule`` is marginal.
@@ -1176,7 +1177,7 @@ Have fun with TensorDictModule!
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.139 seconds)
+   **Total running time of the script:** ( 0 minutes  0.120 seconds)
 
 
 .. _sphx_glr_download_tutorials_tensordict_module.py:

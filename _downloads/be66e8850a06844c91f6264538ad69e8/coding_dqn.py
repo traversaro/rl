@@ -42,6 +42,12 @@ Coding a pixel-based DQN using TorchRL
 # to provide a high-level illustration of TorchRL features in the context
 # of this algorithm.
 
+# sphinx_gallery_start_ignore
+import warnings
+
+warnings.filterwarnings("ignore")
+# sphinx_gallery_end_ignore
+
 import torch
 import tqdm
 from functorch import vmap

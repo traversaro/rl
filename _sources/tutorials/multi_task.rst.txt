@@ -28,9 +28,10 @@ At the end of this tutorial, you will be capable of writing policies that
 can compute actions in diverse settings using a distinct set of weights.
 You will also be able to execute diverse environments in parallel.
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-16
+.. GENERATED FROM PYTHON SOURCE LINES 11-17
 
 .. code-block:: default
+
 
 
     import torch
@@ -44,7 +45,7 @@ You will also be able to execute diverse environments in parallel.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-22
+.. GENERATED FROM PYTHON SOURCE LINES 23-28
 
 .. code-block:: default
 
@@ -60,12 +61,12 @@ You will also be able to execute diverse environments in parallel.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-25
+.. GENERATED FROM PYTHON SOURCE LINES 29-31
 
 We design two environments, one humanoid that must complete the stand task
 and another that must learn to walk.
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-53
+.. GENERATED FROM PYTHON SOURCE LINES 31-59
 
 .. code-block:: default
 
@@ -104,7 +105,7 @@ and another that must learn to walk.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-63
+.. GENERATED FROM PYTHON SOURCE LINES 60-69
 
 .. code-block:: default
 
@@ -124,7 +125,7 @@ and another that must learn to walk.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-67
+.. GENERATED FROM PYTHON SOURCE LINES 70-73
 
 .. code-block:: default
 
@@ -151,7 +152,7 @@ and another that must learn to walk.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 68-74
+.. GENERATED FROM PYTHON SOURCE LINES 74-80
 
 Policy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -160,7 +161,7 @@ Then specific sub-components will ready the "observation_stand" and
 "observation_walk" keys of the stacked tensordicts, if they are present,
 and pass them through the dedicated sub-network.
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-77
+.. GENERATED FROM PYTHON SOURCE LINES 80-83
 
 .. code-block:: default
 
@@ -174,7 +175,7 @@ and pass them through the dedicated sub-network.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-96
+.. GENERATED FROM PYTHON SOURCE LINES 84-102
 
 .. code-block:: default
 
@@ -203,11 +204,11 @@ and pass them through the dedicated sub-network.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 97-98
+.. GENERATED FROM PYTHON SOURCE LINES 103-104
 
 Let's check that our sequence outputs actions for a single env (stand).
 
-.. GENERATED FROM PYTHON SOURCE LINES 98-101
+.. GENERATED FROM PYTHON SOURCE LINES 104-107
 
 .. code-block:: default
 
@@ -236,11 +237,11 @@ Let's check that our sequence outputs actions for a single env (stand).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 102-103
+.. GENERATED FROM PYTHON SOURCE LINES 108-109
 
 Let's check that our sequence outputs actions for a single env (walk).
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-106
+.. GENERATED FROM PYTHON SOURCE LINES 109-112
 
 .. code-block:: default
 
@@ -269,14 +270,14 @@ Let's check that our sequence outputs actions for a single env (walk).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-111
+.. GENERATED FROM PYTHON SOURCE LINES 113-117
 
 This also works with the stack: now the stand and walk keys have
 disappeared, because they're not shared by all tensordicts. But the
 ``TensorDictSequential`` still performed the operations. Note that the
 backbone was executed in a vectorized way - not in a loop - which is more efficient.
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-114
+.. GENERATED FROM PYTHON SOURCE LINES 117-120
 
 .. code-block:: default
 
@@ -304,7 +305,7 @@ backbone was executed in a vectorized way - not in a loop - which is more effici
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 115-125
+.. GENERATED FROM PYTHON SOURCE LINES 121-131
 
 Executing diverse tasks in parallel
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -317,7 +318,7 @@ If ParallelEnv receives a single env making function, it will assume that
 a single task has to be performed. If a list of functions is provided, then
 it will assume that we are in a multi-task setting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 125-163
+.. GENERATED FROM PYTHON SOURCE LINES 131-169
 
 .. code-block:: default
 
@@ -394,11 +395,11 @@ it will assume that we are in a multi-task setting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 164-165
+.. GENERATED FROM PYTHON SOURCE LINES 170-171
 
 Let's pass the output through our network.
 
-.. GENERATED FROM PYTHON SOURCE LINES 165-171
+.. GENERATED FROM PYTHON SOURCE LINES 171-177
 
 .. code-block:: default
 
@@ -449,7 +450,7 @@ Let's pass the output through our network.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 172-178
+.. GENERATED FROM PYTHON SOURCE LINES 178-184
 
 .. code-block:: default
 
@@ -523,12 +524,12 @@ Let's pass the output through our network.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 179-181
+.. GENERATED FROM PYTHON SOURCE LINES 185-187
 
 Rollout
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 181-184
+.. GENERATED FROM PYTHON SOURCE LINES 187-190
 
 .. code-block:: default
 
@@ -542,7 +543,7 @@ Rollout
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 185-188
+.. GENERATED FROM PYTHON SOURCE LINES 191-194
 
 .. code-block:: default
 
@@ -577,7 +578,7 @@ Rollout
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 189-191
+.. GENERATED FROM PYTHON SOURCE LINES 195-197
 
 .. code-block:: default
 
@@ -616,7 +617,7 @@ Rollout
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.946 seconds)
+   **Total running time of the script:** ( 0 minutes  3.795 seconds)
 
 
 .. _sphx_glr_download_tutorials_multi_task.py:
