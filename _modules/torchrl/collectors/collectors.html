@@ -384,15 +384,15 @@
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">IterableDataset</span>
 
+<span class="kn">from</span> <span class="nn">torchrl._utils</span> <span class="kn">import</span> <span class="n">_check_for_faulty_process</span><span class="p">,</span> <span class="n">prod</span>
+<span class="kn">from</span> <span class="nn">torchrl.collectors.utils</span> <span class="kn">import</span> <span class="n">split_trajectories</span>
+<span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">TensorSpec</span>
+<span class="kn">from</span> <span class="nn">torchrl.data.utils</span> <span class="kn">import</span> <span class="n">CloudpickleWrapper</span><span class="p">,</span> <span class="n">DEVICE_TYPING</span>
+<span class="kn">from</span> <span class="nn">torchrl.envs.common</span> <span class="kn">import</span> <span class="n">EnvBase</span>
+
 <span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="n">TransformedEnv</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.utils</span> <span class="kn">import</span> <span class="n">set_exploration_mode</span><span class="p">,</span> <span class="n">step_mdp</span>
-
-<span class="kn">from</span> <span class="nn">.._utils</span> <span class="kn">import</span> <span class="n">_check_for_faulty_process</span><span class="p">,</span> <span class="n">prod</span>
-<span class="kn">from</span> <span class="nn">..data</span> <span class="kn">import</span> <span class="n">TensorSpec</span>
-<span class="kn">from</span> <span class="nn">..data.utils</span> <span class="kn">import</span> <span class="n">CloudpickleWrapper</span><span class="p">,</span> <span class="n">DEVICE_TYPING</span>
-<span class="kn">from</span> <span class="nn">..envs.common</span> <span class="kn">import</span> <span class="n">EnvBase</span>
-<span class="kn">from</span> <span class="nn">..envs.vec_env</span> <span class="kn">import</span> <span class="n">_BatchedEnv</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">split_trajectories</span>
+<span class="kn">from</span> <span class="nn">torchrl.envs.vec_env</span> <span class="kn">import</span> <span class="n">_BatchedEnv</span>
 
 <span class="n">_TIMEOUT</span> <span class="o">=</span> <span class="mf">1.0</span>
 <span class="n">_MIN_TIMEOUT</span> <span class="o">=</span> <span class="mf">1e-3</span>  <span class="c1"># should be several orders of magnitude inferior wrt time spent collecting a trajectory</span>
@@ -658,6 +658,48 @@
 <span class="sd">            updated. This feature should be used cautiously: if the same tensordict is added to a replay buffer for instance,</span>
 <span class="sd">            the whole content of the buffer will be identical.</span>
 <span class="sd">            Default is False.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.envs.libs.gym import GymEnv</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict.nn import TensorDictModule</span>
+<span class="sd">        &gt;&gt;&gt; from torch import nn</span>
+<span class="sd">        &gt;&gt;&gt; env_maker = lambda: GymEnv(&quot;Pendulum-v1&quot;, device=&quot;cpu&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; policy = TensorDictModule(nn.Linear(3, 1), in_keys=[&quot;observation&quot;], out_keys=[&quot;action&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; collector = SyncDataCollector(</span>
+<span class="sd">        ...     create_env_fn=env_maker,</span>
+<span class="sd">        ...     policy=policy,</span>
+<span class="sd">        ...     total_frames=2000,</span>
+<span class="sd">        ...     max_frames_per_traj=50,</span>
+<span class="sd">        ...     frames_per_batch=200,</span>
+<span class="sd">        ...     init_random_frames=-1,</span>
+<span class="sd">        ...     reset_at_each_iter=False,</span>
+<span class="sd">        ...     device=&quot;cpu&quot;,</span>
+<span class="sd">        ...     passing_device=&quot;cpu&quot;,</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; for i, data in enumerate(collector):</span>
+<span class="sd">        ...     if i == 2:</span>
+<span class="sd">        ...         print(data)</span>
+<span class="sd">        ...         break</span>
+<span class="sd">        TensorDict(</span>
+<span class="sd">            fields={</span>
+<span class="sd">                action: Tensor(torch.Size([4, 50, 1]), dtype=torch.float32),</span>
+<span class="sd">                done: Tensor(torch.Size([4, 50, 1]), dtype=torch.bool),</span>
+<span class="sd">                mask: Tensor(torch.Size([4, 50, 1]), dtype=torch.bool),</span>
+<span class="sd">                next: TensorDict(</span>
+<span class="sd">                    fields={</span>
+<span class="sd">                        observation: Tensor(torch.Size([4, 50, 3]), dtype=torch.float32)},</span>
+<span class="sd">                    batch_size=torch.Size([4, 50]),</span>
+<span class="sd">                    device=cpu,</span>
+<span class="sd">                    is_shared=False),</span>
+<span class="sd">                observation: Tensor(torch.Size([4, 50, 3]), dtype=torch.float32),</span>
+<span class="sd">                reward: Tensor(torch.Size([4, 50, 1]), dtype=torch.float32),</span>
+<span class="sd">                step_count: Tensor(torch.Size([4, 50, 1]), dtype=torch.float32),</span>
+<span class="sd">                traj_ids: Tensor(torch.Size([4, 50, 1, 1]), dtype=torch.float32)},</span>
+<span class="sd">            batch_size=torch.Size([4, 50]),</span>
+<span class="sd">            device=cpu,</span>
+<span class="sd">            is_shared=False)</span>
+<span class="sd">        &gt;&gt;&gt; del collector</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -833,8 +875,10 @@
 <span class="sd">            seed will be incremented for each of these. The resulting seed is the seed of the last environment.</span>
 
 <span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; from torchrl.envs import ParallelEnv</span>
+<span class="sd">            &gt;&gt;&gt; from torchrl.envs.libs.gym import GymEnv</span>
 <span class="sd">            &gt;&gt;&gt; env_fn = lambda: GymEnv(&quot;Pendulum-v1&quot;)</span>
-<span class="sd">            &gt;&gt;&gt; env_fn_parallel = lambda: ParallelEnv(6, env_fn)</span>
+<span class="sd">            &gt;&gt;&gt; env_fn_parallel = ParallelEnv(6, env_fn)</span>
 <span class="sd">            &gt;&gt;&gt; collector = SyncDataCollector(env_fn_parallel)</span>
 <span class="sd">            &gt;&gt;&gt; out_seed = collector.set_seed(1)  # out_seed = 6</span>
 
@@ -1086,7 +1130,7 @@
 <span class="sd">            workers only once the total number of frames has been collected on the server.</span>
 <span class="sd">        create_env_kwargs (dict, optional): A (list of) dictionaries with the arguments used to create an environment</span>
 <span class="sd">        max_frames_per_traj: Maximum steps per trajectory. Note that a trajectory can span over multiple batches</span>
-<span class="sd">            (unless reset_at_each_iter is set to True, see below). Once a trajectory reaches n_steps_max,</span>
+<span class="sd">            (unless reset_at_each_iter is set to True, see below). Once a traje tory reaches n_steps_max,</span>
 <span class="sd">            the environment is reset. If the environment wraps multiple environments together, the number of steps</span>
 <span class="sd">            is tracked for each environment independently. Negative values are allowed, in which case this argument</span>
 <span class="sd">            is ignored.</span>
@@ -1456,6 +1500,48 @@
 <span class="sd">    trajectory and the start of the next collection.</span>
 <span class="sd">    This class can be safely used with online RL algorithms.</span>
 
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.envs.libs.gym import GymEnv</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict.nn import TensorDictModule</span>
+<span class="sd">        &gt;&gt;&gt; from torch import nn</span>
+<span class="sd">        &gt;&gt;&gt; env_maker = lambda: GymEnv(&quot;Pendulum-v1&quot;, device=&quot;cpu&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; policy = TensorDictModule(nn.Linear(3, 1), in_keys=[&quot;observation&quot;], out_keys=[&quot;action&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; collector = MultiSyncDataCollector(</span>
+<span class="sd">        ...     create_env_fn=[env_maker, env_maker],</span>
+<span class="sd">        ...     policy=policy,</span>
+<span class="sd">        ...     total_frames=2000,</span>
+<span class="sd">        ...     max_frames_per_traj=50,</span>
+<span class="sd">        ...     frames_per_batch=200,</span>
+<span class="sd">        ...     init_random_frames=-1,</span>
+<span class="sd">        ...     reset_at_each_iter=False,</span>
+<span class="sd">        ...     devices=&quot;cpu&quot;,</span>
+<span class="sd">        ...     passing_devices=&quot;cpu&quot;,</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; for i, data in enumerate(collector):</span>
+<span class="sd">        ...     if i == 2:</span>
+<span class="sd">        ...         print(data)</span>
+<span class="sd">        ...         break</span>
+<span class="sd">        TensorDict(</span>
+<span class="sd">            fields={</span>
+<span class="sd">                action: Tensor(torch.Size([4, 50, 1]), dtype=torch.float32),</span>
+<span class="sd">                done: Tensor(torch.Size([4, 50, 1]), dtype=torch.bool),</span>
+<span class="sd">                mask: Tensor(torch.Size([4, 50, 1]), dtype=torch.bool),</span>
+<span class="sd">                next: TensorDict(</span>
+<span class="sd">                    fields={</span>
+<span class="sd">                        observation: Tensor(torch.Size([4, 50, 3]), dtype=torch.float32)},</span>
+<span class="sd">                    batch_size=torch.Size([4, 50]),</span>
+<span class="sd">                    device=cpu,</span>
+<span class="sd">                    is_shared=False),</span>
+<span class="sd">                observation: Tensor(torch.Size([4, 50, 3]), dtype=torch.float32),</span>
+<span class="sd">                reward: Tensor(torch.Size([4, 50, 1]), dtype=torch.float32),</span>
+<span class="sd">                step_count: Tensor(torch.Size([4, 50, 1]), dtype=torch.float32),</span>
+<span class="sd">                traj_ids: Tensor(torch.Size([4, 50, 1, 1]), dtype=torch.float32)},</span>
+<span class="sd">            batch_size=torch.Size([4, 50]),</span>
+<span class="sd">            device=cpu,</span>
+<span class="sd">            is_shared=False)</span>
+<span class="sd">        &gt;&gt;&gt; collector.shutdown()</span>
+<span class="sd">        &gt;&gt;&gt; del collector</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="vm">__doc__</span> <span class="o">+=</span> <span class="n">_MultiDataCollector</span><span class="o">.</span><span class="vm">__doc__</span>
@@ -1550,6 +1636,48 @@
 <span class="sd">    The collection keeps on occuring on all processes even between the time</span>
 <span class="sd">    the batch of rollouts is collected and the next call to the iterator.</span>
 <span class="sd">    This class can be safely used with offline RL algorithms.</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.envs.libs.gym import GymEnv</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict.nn import TensorDictModule</span>
+<span class="sd">        &gt;&gt;&gt; from torch import nn</span>
+<span class="sd">        &gt;&gt;&gt; env_maker = lambda: GymEnv(&quot;Pendulum-v1&quot;, device=&quot;cpu&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; policy = TensorDictModule(nn.Linear(3, 1), in_keys=[&quot;observation&quot;], out_keys=[&quot;action&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; collector = MultiaSyncDataCollector(</span>
+<span class="sd">        ...     create_env_fn=[env_maker, env_maker],</span>
+<span class="sd">        ...     policy=policy,</span>
+<span class="sd">        ...     total_frames=2000,</span>
+<span class="sd">        ...     max_frames_per_traj=50,</span>
+<span class="sd">        ...     frames_per_batch=200,</span>
+<span class="sd">        ...     init_random_frames=-1,</span>
+<span class="sd">        ...     reset_at_each_iter=False,</span>
+<span class="sd">        ...     devices=&quot;cpu&quot;,</span>
+<span class="sd">        ...     passing_devices=&quot;cpu&quot;,</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; for i, data in enumerate(collector):</span>
+<span class="sd">        ...     if i == 2:</span>
+<span class="sd">        ...         print(data)</span>
+<span class="sd">        ...         break</span>
+<span class="sd">        TensorDict(</span>
+<span class="sd">            fields={</span>
+<span class="sd">                action: Tensor(torch.Size([4, 50, 1]), dtype=torch.float32),</span>
+<span class="sd">                done: Tensor(torch.Size([4, 50, 1]), dtype=torch.bool),</span>
+<span class="sd">                mask: Tensor(torch.Size([4, 50, 1]), dtype=torch.bool),</span>
+<span class="sd">                next: TensorDict(</span>
+<span class="sd">                    fields={</span>
+<span class="sd">                        observation: Tensor(torch.Size([4, 50, 3]), dtype=torch.float32)},</span>
+<span class="sd">                    batch_size=torch.Size([4, 50]),</span>
+<span class="sd">                    device=cpu,</span>
+<span class="sd">                    is_shared=False),</span>
+<span class="sd">                observation: Tensor(torch.Size([4, 50, 3]), dtype=torch.float32),</span>
+<span class="sd">                reward: Tensor(torch.Size([4, 50, 1]), dtype=torch.float32),</span>
+<span class="sd">                step_count: Tensor(torch.Size([4, 50, 1]), dtype=torch.float32),</span>
+<span class="sd">                traj_ids: Tensor(torch.Size([4, 50, 1, 1]), dtype=torch.float32)},</span>
+<span class="sd">            batch_size=torch.Size([4, 50]),</span>
+<span class="sd">            device=cpu,</span>
+<span class="sd">            is_shared=False)</span>
+<span class="sd">        &gt;&gt;&gt; collector.shutdown()</span>
+<span class="sd">        &gt;&gt;&gt; del collector</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

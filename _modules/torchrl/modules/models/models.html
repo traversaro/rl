@@ -1353,13 +1353,17 @@
 <span class="sd">        &gt;&gt;&gt; batch = 7</span>
 <span class="sd">        &gt;&gt;&gt; time_steps = 6</span>
 <span class="sd">        &gt;&gt;&gt; in_features = 4</span>
+<span class="sd">        &gt;&gt;&gt; out_features = 10</span>
+<span class="sd">        &gt;&gt;&gt; hidden_size = 5</span>
 <span class="sd">        &gt;&gt;&gt; net = LSTMNet(</span>
 <span class="sd">        ...     out_features,</span>
 <span class="sd">        ...     {&quot;input_size&quot;: hidden_size, &quot;hidden_size&quot;: hidden_size},</span>
 <span class="sd">        ...     {&quot;out_features&quot;: hidden_size},</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; # test single step vs multi-step</span>
-<span class="sd">        &gt;&gt;&gt; x = torch.randn(batch, time_steps, in_features)</span>
+<span class="sd">        &gt;&gt;&gt; x = torch.randn(batch, time_steps, in_features)  # &gt;3 dims = multi-step</span>
+<span class="sd">        &gt;&gt;&gt; y, hidden0_in, hidden1_in, hidden0_out, hidden1_out = net(x)</span>
+<span class="sd">        &gt;&gt;&gt; x = torch.randn(batch, in_features)  # 2 dims = single step</span>
 <span class="sd">        &gt;&gt;&gt; y, hidden0_in, hidden1_in, hidden0_out, hidden1_out = net(x)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
