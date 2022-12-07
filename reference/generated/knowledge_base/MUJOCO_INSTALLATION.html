@@ -505,9 +505,15 @@ issues when running <code class="docutils literal notranslate"><span class="pre"
 </div>
 <p><em>Solution</em>: This should disappear once <code class="docutils literal notranslate"><span class="pre">mesalib</span></code> is installed: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-y</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">mesalib</span></code></p>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">FileNotFoundError:</span> <span class="pre">[Errno</span> <span class="pre">2]</span> <span class="pre">No</span> <span class="pre">such</span> <span class="pre">file</span> <span class="pre">or</span> <span class="pre">directory:</span> <span class="pre">'patchelf'</span>&#160; <span class="pre">_Solution_:</span> </code>pip install patchelf`</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ImportError:</span> <span class="pre">/usr/lib/x86_64-linux-gnu/libOpenGL.so.0:</span> <span class="pre">undefined</span> <span class="pre">symbol:</span> <span class="pre">_glapi_tls_Current</span></code>
-<em>Solution</em>: Link conda to the right <code class="docutils literal notranslate"><span class="pre">libOpenGL.so</span></code> file (replace <code class="docutils literal notranslate"><span class="pre">/path/to/conda</span></code> and <code class="docutils literal notranslate"><span class="pre">mujoco_env</span></code> with the proper paths and names):</p>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">FileNotFoundError</span><span class="p">:</span> <span class="p">[</span><span class="n">Errno</span> <span class="mi">2</span><span class="p">]</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span><span class="p">:</span> <span class="s1">&#39;patchelf&#39;</span>
+</pre></div>
+</div>
+<p><em>Solution</em>: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">patchelf</span></code></p>
+</li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">ImportError</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">x86_64</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">gnu</span><span class="o">/</span><span class="n">libOpenGL</span><span class="o">.</span><span class="n">so</span><span class="mf">.0</span><span class="p">:</span> <span class="n">undefined</span> <span class="n">symbol</span><span class="p">:</span> <span class="n">_glapi_tls_Current</span>
+</pre></div>
+</div>
+<p><em>Solution</em>: Link conda to the right <code class="docutils literal notranslate"><span class="pre">libOpenGL.so</span></code> file (replace <code class="docutils literal notranslate"><span class="pre">/path/to/conda</span></code> and <code class="docutils literal notranslate"><span class="pre">mujoco_env</span></code> with the proper paths and names):</p>
 <div class="highlight-shelf notranslate"><div class="highlight"><pre><span></span>conda install -y -c conda-forge libglvnd-glx-cos7-x86_64 --force-reinstall
 conda install -y -c conda-forge xvfbwrapper --force-reinstall
 conda env config vars set LD_PRELOAD=/path/to/conda/envs/mujoco_env/x86_64-conda-linux-gnu/sysroot/usr/lib64/libGLdispatch.so.0
