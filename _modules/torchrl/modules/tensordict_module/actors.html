@@ -447,7 +447,6 @@
 <span class="sd">        &gt;&gt;&gt; action_spec = NdBoundedTensorSpec(shape=torch.Size([4]),</span>
 <span class="sd">        ...    minimum=-1, maximum=1)</span>
 <span class="sd">        &gt;&gt;&gt; module = NormalParamWrapper(torch.nn.Linear(4, 8))</span>
-<span class="sd">        &gt;&gt;&gt; params = make_functional(module)</span>
 <span class="sd">        &gt;&gt;&gt; tensordict_module = SafeModule(module, in_keys=[&quot;observation&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; td_module = ProbabilisticActor(</span>
 <span class="sd">        ...    module=tensordict_module,</span>
@@ -455,6 +454,7 @@
 <span class="sd">        ...    dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
 <span class="sd">        ...    distribution_class=TanhNormal,</span>
 <span class="sd">        ...    )</span>
+<span class="sd">        &gt;&gt;&gt; params = make_functional(td_module)</span>
 <span class="sd">        &gt;&gt;&gt; td = td_module(td, params=params)</span>
 <span class="sd">        &gt;&gt;&gt; td</span>
 <span class="sd">        TensorDict(</span>
