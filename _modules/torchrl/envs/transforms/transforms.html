@@ -1753,7 +1753,21 @@
             <span class="p">)</span>
         <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">key</span>
 
+        <span class="k">def</span> <span class="nf">raise_initialization_exception</span><span class="p">(</span><span class="n">module</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">ObservationNorm</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="n">module</span><span class="o">.</span><span class="n">scale</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="ow">and</span> <span class="n">module</span><span class="o">.</span><span class="n">loc</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;ObservationNorms need to be initialized in the right order.&quot;</span>
+                    <span class="s2">&quot;Trying to initialize an ObservationNorm &quot;</span>
+                    <span class="s2">&quot;while a parent ObservationNorm transform is still uninitialized&quot;</span>
+                <span class="p">)</span>
+
         <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span>
+        <span class="n">parent</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">raise_initialization_exception</span><span class="p">)</span>
+
         <span class="n">collected_frames</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">while</span> <span class="n">collected_frames</span> <span class="o">&lt;</span> <span class="n">num_iter</span><span class="p">:</span>
@@ -1768,6 +1782,11 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">:</span>
             <span class="n">loc</span> <span class="o">=</span> <span class="n">loc</span> <span class="o">/</span> <span class="n">scale</span>
             <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">scale</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">loc</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Non-finite values found in loc&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">scale</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Non-finite values found in scale&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;scale&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">.</span><span class="n">clamp_min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">))</span></div>
