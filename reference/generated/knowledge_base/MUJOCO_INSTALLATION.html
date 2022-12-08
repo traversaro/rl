@@ -520,6 +520,13 @@ conda env config vars set LD_PRELOAD=/path/to/conda/envs/mujoco_env/x86_64-conda
 </pre></div>
 </div>
 </li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mujoco</span><span class="o">.</span><span class="n">FatalError</span><span class="p">:</span> <span class="n">gladLoadGL</span> <span class="n">error</span>
+
+<span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">conda</span><span class="o">/</span><span class="n">envs</span><span class="o">/</span><span class="n">mj_envs</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">python3</span><span class="mf">.8</span><span class="o">/</span><span class="n">site</span><span class="o">-</span><span class="n">packages</span><span class="o">/</span><span class="n">glfw</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">912</span><span class="p">:</span> <span class="n">GLFWError</span><span class="p">:</span> <span class="p">(</span><span class="mi">65537</span><span class="p">)</span> <span class="sa">b</span><span class="s1">&#39;The GLFW library is not initialized&#39;</span>
+</pre></div>
+</div>
+<p><em>Solution</em>: This can usually be sovled by setting EGL as your mujoco_gl backend: <code class="docutils literal notranslate"><span class="pre">MUJOCO_GL=egl</span> <span class="pre">python</span> <span class="pre">myscript.py</span></code></p>
+</li>
 </ol>
 <p><strong>Sanity check</strong>
 To check that your mujoco-py has been built against the GPU, run</p>
