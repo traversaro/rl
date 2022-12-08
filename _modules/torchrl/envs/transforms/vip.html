@@ -673,16 +673,16 @@
     <span class="n">init</span> <span class="o">=</span> <span class="n">_init_first</span><span class="p">(</span><span class="n">Compose</span><span class="o">.</span><span class="n">init</span><span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">VIPRewardTransform</span><span class="p">(</span><span class="n">VIPTransform</span><span class="p">):</span>
+<div class="viewcode-block" id="VIPRewardTransform"><a class="viewcode-back" href="../../../../reference/generated/torchrl.envs.transforms.VIPRewardTransform.html#torchrl.envs.transforms.VIPRewardTransform">[docs]</a><span class="k">class</span> <span class="nc">VIPRewardTransform</span><span class="p">(</span><span class="n">VIPTransform</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A VIP transform to compute rewards based on embedded similarity.</span>
 
 <span class="sd">    This class will update the reward computation</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
+<div class="viewcode-block" id="VIPRewardTransform.reset"><a class="viewcode-back" href="../../../../reference/generated/torchrl.envs.transforms.VIPRewardTransform.html#torchrl.envs.transforms.VIPRewardTransform.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
         <span class="k">if</span> <span class="s2">&quot;goal_embedding&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">tensordict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embed_goal</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_embed_goal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;goal_image&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -714,9 +714,9 @@
             <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">,</span> <span class="n">reward</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tensordict</span>
 
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">):</span>
+<div class="viewcode-block" id="VIPRewardTransform.forward"><a class="viewcode-back" href="../../../../reference/generated/torchrl.envs.transforms.VIPRewardTransform.html#torchrl.envs.transforms.VIPRewardTransform.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">):</span>
         <span class="n">tensordict</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">tensordict</span>
+        <span class="k">return</span> <span class="n">tensordict</span></div></div>
 </pre></div>
 
              </article>
