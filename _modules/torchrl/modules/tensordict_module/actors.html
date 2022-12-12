@@ -374,7 +374,10 @@
 <span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">CompositeSpec</span><span class="p">,</span> <span class="n">TensorSpec</span><span class="p">,</span> <span class="n">UnboundedContinuousTensorSpec</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.models.models</span> <span class="kn">import</span> <span class="n">DistributionalDQNnet</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.common</span> <span class="kn">import</span> <span class="n">SafeModule</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.probabilistic</span> <span class="kn">import</span> <span class="n">SafeProbabilisticModule</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.probabilistic</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">SafeProbabilisticModule</span><span class="p">,</span>
+    <span class="n">SafeProbabilisticSequential</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.sequence</span> <span class="kn">import</span> <span class="n">SafeSequential</span>
 
 
@@ -430,7 +433,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ProbabilisticActor"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.ProbabilisticActor.html#torchrl.modules.ProbabilisticActor">[docs]</a><span class="k">class</span> <span class="nc">ProbabilisticActor</span><span class="p">(</span><span class="n">SafeProbabilisticModule</span><span class="p">):</span>
+<div class="viewcode-block" id="ProbabilisticActor"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.ProbabilisticActor.html#torchrl.modules.ProbabilisticActor">[docs]</a><span class="k">class</span> <span class="nc">ProbabilisticActor</span><span class="p">(</span><span class="n">SafeProbabilisticSequential</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;General class for probabilistic actors in RL.</span>
 
 <span class="sd">    The Actor class comes with default values for the out_keys ([&quot;action&quot;])</span>
@@ -472,26 +475,25 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">module</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
-        <span class="n">dist_in_keys</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-        <span class="n">sample_out_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">in_keys</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">out_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorSpec</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="k">if</span> <span class="n">sample_out_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">sample_out_key</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">out_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="p">(</span>
-            <span class="s2">&quot;action&quot;</span> <span class="ow">in</span> <span class="n">sample_out_key</span>
+            <span class="s2">&quot;action&quot;</span> <span class="ow">in</span> <span class="n">out_keys</span>
             <span class="ow">and</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
             <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">spec</span><span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
-            <span class="n">dist_in_keys</span><span class="o">=</span><span class="n">dist_in_keys</span><span class="p">,</span>
-            <span class="n">sample_out_key</span><span class="o">=</span><span class="n">sample_out_key</span><span class="p">,</span>
-            <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="n">module</span><span class="p">,</span>
+            <span class="n">SafeProbabilisticModule</span><span class="p">(</span>
+                <span class="n">in_keys</span><span class="o">=</span><span class="n">in_keys</span><span class="p">,</span> <span class="n">out_keys</span><span class="o">=</span><span class="n">out_keys</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">),</span>
         <span class="p">)</span></div>
 
 
@@ -1014,6 +1016,8 @@
 
 <div class="viewcode-block" id="ActorValueOperator.get_policy_operator"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.ActorValueOperator.html#torchrl.modules.ActorValueOperator.get_policy_operator">[docs]</a>    <span class="k">def</span> <span class="nf">get_policy_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SafeSequential</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns a stand-alone policy operator that maps an observation to an action.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">SafeProbabilisticSequential</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">SafeProbabilisticSequential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SafeSequential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="ActorValueOperator.get_value_operator"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.ActorValueOperator.html#torchrl.modules.ActorValueOperator.get_value_operator">[docs]</a>    <span class="k">def</span> <span class="nf">get_value_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SafeSequential</span><span class="p">:</span>

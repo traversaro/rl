@@ -375,7 +375,7 @@
 <span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">SafeModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.objectives.utils</span> <span class="kn">import</span> <span class="n">distance_loss</span>
 
-<span class="kn">from</span> <span class="nn">..modules.tensordict_module</span> <span class="kn">import</span> <span class="n">SafeProbabilisticModule</span>
+<span class="kn">from</span> <span class="nn">..modules.tensordict_module</span> <span class="kn">import</span> <span class="n">SafeProbabilisticSequential</span>
 <span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">LossModule</span>
 
 
@@ -394,7 +394,7 @@
 <span class="sd">    https://arxiv.org/abs/1707.06347</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        actor (SafeProbabilisticModule): policy operator.</span>
+<span class="sd">        actor (SafeProbabilisticSequential): policy operator.</span>
 <span class="sd">        critic (ValueOperator): value operator.</span>
 <span class="sd">        advantage_key (str): the input tensordict key where the advantage is expected to be written.</span>
 <span class="sd">            default: &quot;advantage&quot;</span>
@@ -414,7 +414,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">actor</span><span class="p">:</span> <span class="n">SafeProbabilisticModule</span><span class="p">,</span>
+        <span class="n">actor</span><span class="p">:</span> <span class="n">SafeProbabilisticSequential</span><span class="p">,</span>
         <span class="n">critic</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
         <span class="n">advantage_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;advantage&quot;</span><span class="p">,</span>
         <span class="n">advantage_diff_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;value_error&quot;</span><span class="p">,</span>
@@ -469,10 +469,7 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;tensordict stored action requires grad.&quot;</span><span class="p">)</span>
         <span class="n">tensordict_clone</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">in_keys</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 
-        <span class="n">dist</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span>
-            <span class="n">tensordict_clone</span><span class="p">,</span>
-            <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span><span class="n">tensordict_clone</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">)</span>
         <span class="n">log_prob</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
         <span class="n">log_prob</span> <span class="o">=</span> <span class="n">log_prob</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
@@ -535,7 +532,7 @@
 <span class="sd">        loss = -min( weight * advantage, min(max(weight, 1-eps), 1+eps) * advantage)</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        actor (SafeProbabilisticModule): policy operator.</span>
+<span class="sd">        actor (SafeProbabilisticSequential): policy operator.</span>
 <span class="sd">        critic (ValueOperator): value operator.</span>
 <span class="sd">        advantage_key (str): the input tensordict key where the advantage is expected to be written.</span>
 <span class="sd">            default: &quot;advantage&quot;</span>
@@ -557,7 +554,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">actor</span><span class="p">:</span> <span class="n">SafeProbabilisticModule</span><span class="p">,</span>
+        <span class="n">actor</span><span class="p">:</span> <span class="n">SafeProbabilisticSequential</span><span class="p">,</span>
         <span class="n">critic</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
         <span class="n">advantage_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;advantage&quot;</span><span class="p">,</span>
         <span class="n">clip_epsilon</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
@@ -641,7 +638,7 @@
 <span class="sd">    favouring a certain level of distancing between the two while still preventing them to be too much apart.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        actor (SafeProbabilisticModule): policy operator.</span>
+<span class="sd">        actor (SafeProbabilisticSequential): policy operator.</span>
 <span class="sd">        critic (ValueOperator): value operator.</span>
 <span class="sd">        advantage_key (str): the input tensordict key where the advantage is expected to be written.</span>
 <span class="sd">            default: &quot;advantage&quot;</span>
@@ -668,7 +665,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">actor</span><span class="p">:</span> <span class="n">SafeProbabilisticModule</span><span class="p">,</span>
+        <span class="n">actor</span><span class="p">:</span> <span class="n">SafeProbabilisticSequential</span><span class="p">,</span>
         <span class="n">critic</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
         <span class="n">advantage_key</span><span class="o">=</span><span class="s2">&quot;advantage&quot;</span><span class="p">,</span>
         <span class="n">dtarg</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span>
@@ -726,10 +723,7 @@
         <span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 
         <span class="n">previous_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">build_dist_from_params</span><span class="p">(</span><span class="n">tensordict_clone</span><span class="p">)</span>
-        <span class="n">current_dist</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span>
-            <span class="n">tensordict_clone</span><span class="p">,</span>
-            <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">current_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span><span class="n">tensordict_clone</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">kl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">kl</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">(</span><span class="n">previous_dist</span><span class="p">,</span> <span class="n">current_dist</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
