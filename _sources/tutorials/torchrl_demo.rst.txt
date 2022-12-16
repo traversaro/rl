@@ -861,13 +861,13 @@ Vectorized Environments
     Traceback (most recent call last):
       File "/__w/rl/rl/docs/source/reference/generated/tutorials/torchrl_demo.py", line 366, in <module>
         env.reset()
-      File "/__w/rl/rl/torchrl/envs/common.py", line 388, in reset
+      File "/__w/rl/rl/torchrl/envs/common.py", line 384, in reset
         tensordict_reset = self._reset(tensordict, **kwargs)
       File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 458, in _reset
         out_tensordict = self.transform.reset(out_tensordict)
-      File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 682, in reset
+      File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 670, in reset
         tensordict = t.reset(tensordict)
-      File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 1968, in reset
+      File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 1956, in reset
         raise ValueError(
     ValueError: there is more than one done state in the parent environment. NoopResetEnv is designed to work on single env instances, as partial reset is currently not supported. If you feel like this is a missing feature, submit an issue on TorchRL github repo. In case you are trying to use NoopResetEnv over a batch of environments, know that you can have a transformed batch of transformed envs, such as: `TransformedEnv(ParallelEnv(3, lambda: TransformedEnv(MyEnv(), NoopResetEnv(3))), OtherTransform())`.
 
@@ -1427,7 +1427,7 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.685 seconds)
+   **Total running time of the script:** ( 0 minutes  5.772 seconds)
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:

@@ -718,9 +718,6 @@
     <span class="k">def</span> <span class="nf">reward_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">TensorSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reward_spec</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">is_done_set_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_is_done</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
-
     <span class="k">def</span> <span class="nf">_create_td</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Creates self.shared_tensordict_parent, a TensorDict used to store the most recent observations.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_single_task</span><span class="p">:</span>
@@ -1350,11 +1347,8 @@
                 <span class="n">_td</span><span class="o">.</span><span class="n">pin_memory</span><span class="p">()</span>
             <span class="n">tensordict</span><span class="o">.</span><span class="n">update_</span><span class="p">(</span><span class="n">_td</span><span class="p">)</span>
             <span class="n">child_pipe</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s2">&quot;reset_obs&quot;</span><span class="p">,</span> <span class="n">reset_keys</span><span class="p">))</span>
-            <span class="n">just_reset</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">is_done</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.is_done is </span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="n">is_done</span><span class="si">}</span><span class="s2"> after reset&quot;</span>
-                <span class="p">)</span>
+            <span class="k">if</span> <span class="n">_td</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is done after reset&quot;</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;step&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">initialized</span><span class="p">:</span>
@@ -1364,10 +1358,6 @@
                 <span class="o">*</span><span class="n">env_input_keys</span><span class="p">,</span>
                 <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">is_done</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_step_when_done</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;calling step when env is done, just reset = </span><span class="si">{</span><span class="n">just_reset</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
             <span class="n">_td</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">_step</span><span class="p">(</span><span class="n">_td</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">step_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">step_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">observation_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">.</span><span class="n">union</span><span class="p">(</span>
@@ -1382,7 +1372,6 @@
                 <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;step_result&quot;</span>
             <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">step_keys</span><span class="p">)</span>
             <span class="n">child_pipe</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-            <span class="n">just_reset</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">elif</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;close&quot;</span><span class="p">:</span>
             <span class="k">del</span> <span class="n">tensordict</span><span class="p">,</span> <span class="n">_td</span><span class="p">,</span> <span class="n">data</span>
