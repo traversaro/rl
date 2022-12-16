@@ -2322,40 +2322,48 @@
 
 <div class="viewcode-block" id="NoopResetEnv.reset"><a class="viewcode-back" href="../../../../reference/generated/torchrl.envs.transforms.NoopResetEnv.html#torchrl.envs.transforms.NoopResetEnv.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Do no-op action for a number of steps in [1, noop_max].&quot;&quot;&quot;</span>
+        <span class="n">td_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">tensordict</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># check that there is a single done state -- behaviour is undefined for multiple dones</span>
         <span class="n">parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span>
-        <span class="c1"># keys = tensordict.keys()</span>
+        <span class="k">if</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;there is more than one done state in the parent environment. &quot;</span>
+                <span class="s2">&quot;NoopResetEnv is designed to work on single env instances, as partial reset &quot;</span>
+                <span class="s2">&quot;is currently not supported. If you feel like this is a missing feature, submit &quot;</span>
+                <span class="s2">&quot;an issue on TorchRL github repo. &quot;</span>
+                <span class="s2">&quot;In case you are trying to use NoopResetEnv over a batch of environments, know &quot;</span>
+                <span class="s2">&quot;that you can have a transformed batch of transformed envs, such as: &quot;</span>
+                <span class="s2">&quot;`TransformedEnv(ParallelEnv(3, lambda: TransformedEnv(MyEnv(), NoopResetEnv(3))), OtherTransform())`.&quot;</span>
+            <span class="p">)</span>
         <span class="n">noops</span> <span class="o">=</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">noops</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">random</span> <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noops</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,))</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
         <span class="p">)</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">trial</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">noops</span><span class="p">:</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">tensordict</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">rand_step</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
-            <span class="n">tensordict</span> <span class="o">=</span> <span class="n">step_mdp</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">is_done</span><span class="p">:</span>
-                <span class="n">parent</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
-                <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">trial</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">if</span> <span class="n">trial</span> <span class="o">&gt;</span> <span class="n">_MAX_NOOPS_TRIALS</span><span class="p">:</span>
-                    <span class="n">tensordict</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
-                    <span class="n">tensordict</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">rand_step</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">noops</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">tensordict</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">rand_step</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
+                <span class="n">tensordict</span> <span class="o">=</span> <span class="n">step_mdp</span><span class="p">(</span><span class="n">tensordict</span><span class="p">,</span> <span class="n">exclude_done</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">):</span>
+                    <span class="n">tensordict</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">td_reset</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="kc">False</span><span class="p">))</span>
                     <span class="k">break</span>
-        <span class="k">if</span> <span class="n">parent</span><span class="o">.</span><span class="n">is_done</span><span class="p">:</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="n">trial</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">trial</span> <span class="o">&gt;</span> <span class="n">_MAX_NOOPS_TRIALS</span><span class="p">:</span>
+                <span class="n">tensordict</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">rand_step</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;parent is still done after a single random step (i=</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">).&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;NoopResetEnv concluded with done environment&quot;</span><span class="p">)</span>
-        <span class="c1"># td = step_mdp(</span>
-        <span class="c1">#     tensordict, exclude_done=False, exclude_reward=True, exclude_action=True</span>
-        <span class="c1"># )</span>
-
-        <span class="c1"># for k in keys:</span>
-        <span class="c1">#     if k not in td.keys():</span>
-        <span class="c1">#         td.set(k, tensordict.get(k))</span>
-
-        <span class="c1"># # replace the next_ prefix</span>
-        <span class="c1"># for out_key in parent.observation_spec:</span>
-        <span class="c1">#     td.rename_key(out_key[5:], out_key)</span>
-
         <span class="k">return</span> <span class="n">tensordict</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
