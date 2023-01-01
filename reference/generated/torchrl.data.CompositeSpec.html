@@ -388,10 +388,10 @@ effect. <cite>spec.encode</cite> cannot be used with missing values.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pixels_spec</span> <span class="o">=</span> <span class="n">NdBoundedTensorSpec</span><span class="p">(</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pixels_spec</span> <span class="o">=</span> <span class="n">BoundedTensorSpec</span><span class="p">(</span>
 <span class="gp">... </span>   <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">32</span><span class="p">),</span>
 <span class="gp">... </span>   <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">observation_vector_spec</span> <span class="o">=</span> <span class="n">NdBoundedTensorSpec</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">33</span><span class="p">),</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">observation_vector_spec</span> <span class="o">=</span> <span class="n">BoundedTensorSpec</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">33</span><span class="p">),</span>
 <span class="gp">... </span>   <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">33</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">composite_spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">pixels</span><span class="o">=</span><span class="n">pixels_spec</span><span class="p">,</span>

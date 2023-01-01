@@ -484,7 +484,7 @@ probability if needed.
             hidden: Tensor(torch.Size([3, 8]), dtype=torch.float32),
             input: Tensor(torch.Size([3, 4]), dtype=torch.float32),
             loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),
-            sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),
+            sample_log_prob: Tensor(torch.Size([3]), dtype=torch.float32),
             scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},
         batch_size=torch.Size([3]),
         device=None,
@@ -581,7 +581,7 @@ then the value according to this action.
             hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),
             loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),
             observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),
-            sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),
+            sample_log_prob: Tensor(torch.Size([3]), dtype=torch.float32),
             scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),
             state_action_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},
         batch_size=torch.Size([3]),
@@ -593,7 +593,7 @@ then the value according to this action.
             hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),
             loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),
             observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),
-            sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),
+            sample_log_prob: Tensor(torch.Size([3]), dtype=torch.float32),
             scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},
         batch_size=torch.Size([3]),
         device=None,
@@ -604,7 +604,7 @@ then the value according to this action.
             hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),
             loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),
             observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),
-            sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),
+            sample_log_prob: Tensor(torch.Size([3]), dtype=torch.float32),
             scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),
             state_action_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},
         batch_size=torch.Size([3]),
@@ -655,7 +655,14 @@ Let's first import the classical transformers blocks
 
 
 
+.. rst-class:: sphx-glr-script-out
 
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/__w/rl/rl/docs/source/reference/generated/tutorials/tensordict_module.py", line 339, in <module>
+        from tutorials.src.transformer import (
+    ModuleNotFoundError: No module named 'tutorials.src'
 
 
 
@@ -710,12 +717,6 @@ previous layers outputs, allowing us to code complicated neural architecture.
                     out_keys=[to_name],
                 ),
             )
-
-
-
-
-
-
 
 
 
@@ -795,12 +796,6 @@ thanks to ``TensorDictModule``.
                     num_heads,
                 ),
             )
-
-
-
-
-
-
 
 
 
@@ -914,12 +909,6 @@ For a decoder, we now can extract info from ``X_from`` into ``X_to``.
 
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 569-570
 
 We now test our new ``TransformerTensorDict``.
@@ -962,29 +951,6 @@ We now test our new ``TransformerTensorDict``.
     tokens
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    TensorDict(
-        fields={
-            Attn: Tensor(torch.Size([8, 2, 10, 3]), dtype=torch.float32),
-            K: Tensor(torch.Size([8, 2, 3, 5]), dtype=torch.float32),
-            Q: Tensor(torch.Size([8, 2, 10, 5]), dtype=torch.float32),
-            V: Tensor(torch.Size([8, 2, 3, 5]), dtype=torch.float32),
-            X_decode: Tensor(torch.Size([8, 10, 6]), dtype=torch.float32),
-            X_encode: Tensor(torch.Size([8, 3, 5]), dtype=torch.float32),
-            X_out: Tensor(torch.Size([8, 10, 6]), dtype=torch.float32)},
-        batch_size=torch.Size([8]),
-        device=None,
-        is_shared=False)
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 604-610
 
 We've achieved to create a transformer with ``TensorDictModule``. This
@@ -1002,12 +968,6 @@ Benchmarking
     from tutorials.src.transformer import Transformer
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 614-624
 
 .. code-block:: default
@@ -1021,12 +981,6 @@ Benchmarking
     batch_size = 8
     num_heads = 2
     num_blocks = 6
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 625-634
@@ -1043,12 +997,6 @@ Benchmarking
     )
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 635-639
 
 .. code-block:: default
@@ -1056,12 +1004,6 @@ Benchmarking
 
     X_encode = torch.randn(batch_size, to_len, to_dim)
     X_decode = torch.randn(batch_size, from_len, from_dim)
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 640-653
@@ -1082,12 +1024,6 @@ Benchmarking
     )
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 654-659
 
 .. code-block:: default
@@ -1096,12 +1032,6 @@ Benchmarking
     transformer = Transformer(
         num_blocks, to_dim, to_len, from_dim, from_len, latent_dim, num_heads
     )
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 660-661
@@ -1116,12 +1046,6 @@ Benchmarking
     import time
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 665-671
 
 .. code-block:: default
@@ -1131,18 +1055,6 @@ Benchmarking
     tokens = tdtransformer(td_tokens)
     t2 = time.time()
     print("Execution time:", t2 - t1, "seconds")
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Execution time: 0.015742778778076172 seconds
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 672-678
@@ -1156,18 +1068,6 @@ Benchmarking
     print("Execution time:", t4 - t3, "seconds")
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Execution time: 0.010911703109741211 seconds
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 679-683
 
 We can see on this minimal example that the overhead introduced by
@@ -1178,7 +1078,7 @@ Have fun with TensorDictModule!
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.129 seconds)
+   **Total running time of the script:** ( 0 minutes  0.020 seconds)
 
 
 .. _sphx_glr_download_tutorials_tensordict_module.py:

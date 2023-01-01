@@ -467,13 +467,12 @@
 
         <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span><span class="n">tensordict_clone</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">)</span>
         <span class="n">log_prob</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
-        <span class="n">log_prob</span> <span class="o">=</span> <span class="n">log_prob</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="n">prev_log_prob</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sample_log_prob&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">prev_log_prob</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;tensordict prev_log_prob requires grad.&quot;</span><span class="p">)</span>
 
-        <span class="n">log_weight</span> <span class="o">=</span> <span class="n">log_prob</span> <span class="o">-</span> <span class="n">prev_log_prob</span>
+        <span class="n">log_weight</span> <span class="o">=</span> <span class="p">(</span><span class="n">log_prob</span> <span class="o">-</span> <span class="n">prev_log_prob</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">log_weight</span><span class="p">,</span> <span class="n">dist</span>
 
     <span class="k">def</span> <span class="nf">loss_critic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>

@@ -134,14 +134,14 @@ to be of type ``CompositeSpec``. Reward and action do not have this restriction:
 
     Env observation_spec: 
      CompositeSpec(
-        observation: NdBoundedTensorSpec(
+        observation: BoundedTensorSpec(
              shape=torch.Size([3]), space=ContinuousBox(minimum=tensor([-1., -1., -8.]), maximum=tensor([1., 1., 8.])), device=cpu, dtype=torch.float32, domain=continuous))
     Env action_spec: 
-     NdBoundedTensorSpec(
+     BoundedTensorSpec(
          shape=torch.Size([1]), space=ContinuousBox(minimum=tensor([-2.]), maximum=tensor([2.])), device=cpu, dtype=torch.float32, domain=continuous)
     Env reward_spec: 
      UnboundedContinuousTensorSpec(
-         shape=torch.Size([1]), space=ContinuousBox(minimum=-inf, maximum=inf), device=cpu, dtype=torch.float32, domain=composite)
+         shape=torch.Size([1]), space=None, device=cpu, dtype=torch.float32, domain=continuous)
 
 
 
@@ -194,7 +194,7 @@ uniformly distributed) numbers in that space:
  .. code-block:: none
 
     random action: 
-     tensor([1.7064])
+     tensor([0.0961])
 
 
 
@@ -472,7 +472,7 @@ easily for a given number of steps:
         fields={
             action: Tensor(torch.Size([20, 1]), dtype=torch.float32),
             done: Tensor(torch.Size([20, 1]), dtype=torch.bool),
-            next: LazyStackedTensorDict(
+            next: TensorDict(
                 fields={
                     observation: Tensor(torch.Size([20, 3]), dtype=torch.float32)},
                 batch_size=torch.Size([20]),
@@ -615,7 +615,7 @@ argument that allows the user to quickly ask for image-based environments:
  .. code-block:: none
 
 
-    <matplotlib.image.AxesImage object at 0x7f12571fc400>
+    <matplotlib.image.AxesImage object at 0x7fec4af0e170>
 
 
 
@@ -978,8 +978,8 @@ As expected, the metadata get updated too:
  .. code-block:: none
 
     original obs spec:  CompositeSpec(
-        pixels: NdUnboundedDiscreteTensorSpec(
-             shape=(240, 320, 3), space=ContinuousBox(minimum=tensor([[[0, 0, 0],
+        pixels: UnboundedDiscreteTensorSpec(
+             shape=torch.Size([240, 320, 3]), space=ContinuousBox(minimum=tensor([[[0, 0, 0],
                  [0, 0, 0],
                  [0, 0, 0],
                  ...,
@@ -1077,7 +1077,7 @@ As expected, the metadata get updated too:
                  [255, 255, 255],
                  [255, 255, 255]]])), device=cpu, dtype=torch.uint8, domain=continuous))
     current obs spec:  CompositeSpec(
-        pixels: NdUnboundedDiscreteTensorSpec(
+        pixels: UnboundedDiscreteTensorSpec(
              shape=torch.Size([1, 32, 32]), space=ContinuousBox(minimum=tensor([[[0., 0., 0.,  ..., 0., 0., 0.],
                  [0., 0., 0.,  ..., 0., 0., 0.],
                  [0., 0., 0.,  ..., 0., 0., 0.],
@@ -1346,7 +1346,7 @@ the second the time frame. Let's check that with the ``rollout`` method:
         fields={
             action: Tensor(torch.Size([3, 20, 1]), dtype=torch.float32),
             done: Tensor(torch.Size([3, 20, 1]), dtype=torch.bool),
-            next: LazyStackedTensorDict(
+            next: TensorDict(
                 fields={
                     observation: Tensor(torch.Size([3, 20, 3]), dtype=torch.float32)},
                 batch_size=torch.Size([3, 20]),
@@ -1481,7 +1481,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    'bar_05b397fe-81f4-11ed-8c35-0242ac120002'
+    'bar_bb6195b6-89a5-11ed-a3b9-0242ac120002'
 
 
 
@@ -1530,7 +1530,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7f1244096f10>
+    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7fec3c627e50>
 
 
 
@@ -1550,7 +1550,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    ['bar_096b768c-81f4-11ed-9808-0242ac120002', 'bar_09665580-81f4-11ed-9fd1-0242ac120002', 'bar_0983d830-81f4-11ed-8c51-0242ac120002']
+    ['bar_be8b665e-89a5-11ed-9cda-0242ac120002', 'bar_be956b0e-89a5-11ed-8252-0242ac120002', 'bar_be8b8670-89a5-11ed-b89b-0242ac120002']
 
 
 
@@ -1764,8 +1764,8 @@ In regular setting, using VecNorm is quite easy:
 
  .. code-block:: none
 
-    mean: : tensor([-0.4834, -0.1168, -0.0614])
-    std: : tensor([0.9263, 1.2133, 1.1541])
+    mean: : tensor([ 0.2454, -0.1972, -0.2753])
+    std: : tensor([1.3252, 1.1842, 1.1600])
 
 
 
@@ -1812,7 +1812,7 @@ once created:
         fields={
             action: Tensor(torch.Size([3, 5, 2]), dtype=torch.int64),
             done: Tensor(torch.Size([3, 5, 1]), dtype=torch.bool),
-            next: LazyStackedTensorDict(
+            next: TensorDict(
                 fields={
                     observation: Tensor(torch.Size([3, 5, 4]), dtype=torch.float32)},
                 batch_size=torch.Size([3, 5]),
@@ -1823,8 +1823,8 @@ once created:
         batch_size=torch.Size([3, 5]),
         device=cpu,
         is_shared=False)
-    mean: : tensor([ 0.1107, -0.0630,  0.0396])
-    std: : tensor([0.9385, 0.9555, 0.9199])
+    mean: : tensor([ 0.1450, -0.1970, -0.0312])
+    std: : tensor([0.9601, 0.8977, 0.8740])
 
 
 
@@ -1864,7 +1864,7 @@ This small difference will usually be absored throughout training.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  30.868 seconds)
+   **Total running time of the script:** ( 0 minutes  25.082 seconds)
 
 
 .. _sphx_glr_download_tutorials_torch_envs.py:

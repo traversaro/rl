@@ -525,10 +525,10 @@ across values, and it must be set explicitly when instantiating a <code class="d
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
     fields={
-        a: Tensor(torch.Size([3, 4, 1]), dtype=torch.float32),
+        a: Tensor(torch.Size([3, 4]), dtype=torch.float32),
         b: TensorDict(
             fields={
-                c: Tensor(torch.Size([3, 4, 5, 1]), dtype=torch.int32),
+                c: Tensor(torch.Size([3, 4, 5]), dtype=torch.int32),
                 d: Tensor(torch.Size([3, 4, 5, 6]), dtype=torch.float32)},
             batch_size=torch.Size([3, 4, 5]),
             device=None,
@@ -552,7 +552,7 @@ across values, and it must be set explicitly when instantiating a <code class="d
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
     fields={
         a: Tensor(torch.Size([3, 4, 5]), dtype=torch.float32),
-        b: Tensor(torch.Size([3, 4, 1]), dtype=torch.float32)},
+        b: Tensor(torch.Size([3, 4]), dtype=torch.float32)},
     batch_size=torch.Size([3, 4]),
     device=None,
     is_shared=False)
@@ -617,9 +617,9 @@ generator and not a list.</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([3, 4, 5])
-torch.Size([3, 4, 1])
-torch.Size([3, 4, 1])
-torch.Size([3, 4, 1])
+torch.Size([3, 4])
+torch.Size([3, 4])
+torch.Size([3, 4])
 </pre></div>
 </div>
 </section>
@@ -788,7 +788,7 @@ than the original item.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
     fields={
         a: Tensor(torch.Size([4, 5]), dtype=torch.float32),
-        b: Tensor(torch.Size([4, 1]), dtype=torch.float32)},
+        b: Tensor(torch.Size([4]), dtype=torch.float32)},
     batch_size=torch.Size([4]),
     device=None,
     is_shared=False)
@@ -800,7 +800,7 @@ than the original item.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
     fields={
         a: Tensor(torch.Size([2, 4, 5]), dtype=torch.float32),
-        b: Tensor(torch.Size([2, 4, 1]), dtype=torch.float32)},
+        b: Tensor(torch.Size([2, 4]), dtype=torch.float32)},
     batch_size=torch.Size([2, 4]),
     device=None,
     is_shared=False)
@@ -812,7 +812,7 @@ than the original item.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
     fields={
         a: Tensor(torch.Size([3, 2, 5]), dtype=torch.float32),
-        b: Tensor(torch.Size([3, 2, 1]), dtype=torch.float32)},
+        b: Tensor(torch.Size([3, 2]), dtype=torch.float32)},
     batch_size=torch.Size([3, 2]),
     device=None,
     is_shared=False)
@@ -854,20 +854,9 @@ modifications can be achieved easily.</p>
         [[-1., -1., -1., -1., -1.],
          [-1., -1., -1., -1., -1.],
          [-1., -1., -1., -1., -1.],
-         [-1., -1., -1., -1., -1.]]]) tensor([[[0.],
-         [0.],
-         [0.],
-         [0.]],
-
-        [[0.],
-         [0.],
-         [0.],
-         [0.]],
-
-        [[0.],
-         [0.],
-         [0.],
-         [0.]]])
+         [-1., -1., -1., -1., -1.]]]) tensor([[0., 0., 0., 0.],
+        [0., 0., 0., 0.],
+        [0., 0., 0., 0.]])
 </pre></div>
 </div>
 <p><strong>Masking</strong></p>
@@ -879,7 +868,7 @@ modifications can be achieved easily.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
     fields={
         a: Tensor(torch.Size([6, 5]), dtype=torch.float32),
-        b: Tensor(torch.Size([6, 1]), dtype=torch.float32)},
+        b: Tensor(torch.Size([6]), dtype=torch.float32)},
     batch_size=torch.Size([6]),
     device=None,
     is_shared=False)
@@ -901,7 +890,7 @@ fashion, returning a <code class="docutils literal notranslate"><span class="pre
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>LazyStackedTensorDict(
     fields={
         a: Tensor(torch.Size([2, 3, 4, 5]), dtype=torch.float32),
-        b: Tensor(torch.Size([2, 3, 4, 1]), dtype=torch.float32)},
+        b: Tensor(torch.Size([2, 3, 4]), dtype=torch.float32)},
     batch_size=torch.Size([2, 3, 4]),
     device=None,
     is_shared=False)
@@ -963,7 +952,7 @@ the original tensordict.</p>
 </pre></div>
 </div>
 <p>Have fun with TensorDict!</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.027 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.020 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-tensordict-tutorial-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0cd9aa93095a82294c8fa4bfeeebfd48/tensordict_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">tensordict_tutorial.py</span></code></a></p>

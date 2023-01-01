@@ -483,10 +483,10 @@
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict.nn.functional_modules import make_functional</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.data import NdUnboundedContinuousTensorSpec</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import SafeModule</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;input&quot;: torch.randn(3, 4), &quot;hidden&quot;: torch.randn(3, 8)}, [3,])</span>
-<span class="sd">        &gt;&gt;&gt; spec = NdUnboundedContinuousTensorSpec(8)</span>
+<span class="sd">        &gt;&gt;&gt; spec = UnboundedContinuousTensorSpec(8)</span>
 <span class="sd">        &gt;&gt;&gt; module = torch.nn.GRUCell(4, 8)</span>
 <span class="sd">        &gt;&gt;&gt; td_fmodule = SafeModule(</span>
 <span class="sd">        ...    module=module,</span>

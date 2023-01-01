@@ -539,23 +539,29 @@
         <span class="p">)</span>
 
 <div class="viewcode-block" id="SACLoss.forward"><a class="viewcode-back" href="../../../reference/generated/torchrl.objectives.SACLoss.html#torchrl.objectives.SACLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">ndimension</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">tensordict</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">tensordict_reshape</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tensordict_reshape</span> <span class="o">=</span> <span class="n">tensordict</span>
 
         <span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
-        <span class="n">td_device</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">td_device</span> <span class="o">=</span> <span class="n">tensordict_reshape</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
 
         <span class="n">loss_actor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loss_actor</span><span class="p">(</span><span class="n">td_device</span><span class="p">)</span>
         <span class="n">loss_qvalue</span><span class="p">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loss_qvalue</span><span class="p">(</span><span class="n">td_device</span><span class="p">)</span>
         <span class="n">loss_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loss_value</span><span class="p">(</span><span class="n">td_device</span><span class="p">)</span>
         <span class="n">loss_alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loss_alpha</span><span class="p">(</span><span class="n">td_device</span><span class="p">)</span>
-        <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">priority_key</span><span class="p">,</span> <span class="n">priority</span><span class="p">)</span>
+        <span class="n">tensordict_reshape</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">priority_key</span><span class="p">,</span> <span class="n">priority</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">loss_actor</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">loss_qvalue</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
             <span class="n">loss_actor</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">loss_value</span><span class="o">.</span><span class="n">shape</span>
         <span class="p">):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Losses shape mismatch: </span><span class="si">{</span><span class="n">loss_actor</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">loss_qvalue</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">loss_value</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
+        <span class="k">if</span> <span class="n">shape</span><span class="p">:</span>
+            <span class="n">tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tensordict_reshape</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">shape</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">TensorDict</span><span class="p">(</span>
             <span class="p">{</span>
                 <span class="s2">&quot;loss_actor&quot;</span><span class="p">:</span> <span class="n">loss_actor</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>

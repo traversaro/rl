@@ -445,7 +445,7 @@ Replay buffers
  .. code-block:: none
 
 
-    [2, 3, 1]
+    [2, 1, 2]
 
 
 
@@ -555,7 +555,7 @@ Here are examples of using a replaybuffer with tensordicts.
     TensorDict(
         fields={
             a: Tensor(torch.Size([2, 3]), dtype=torch.float32),
-            index: Tensor(torch.Size([2, 1]), dtype=torch.int32)},
+            index: Tensor(torch.Size([2]), dtype=torch.int32)},
         batch_size=torch.Size([2]),
         device=None,
         is_shared=False)
@@ -578,8 +578,7 @@ Here are examples of using a replaybuffer with tensordicts.
  .. code-block:: none
 
 
-    tensor([[1],
-            [1]], dtype=torch.int32)
+    tensor([0, 1], dtype=torch.int32)
 
 
 
@@ -606,7 +605,7 @@ Here are examples of using a replaybuffer with tensordicts.
 
  .. code-block:: none
 
-    0 1.0
+    0 0.06984968483448029
     1 0.28791671991348267
     2 0.0
 
@@ -861,13 +860,13 @@ Vectorized Environments
     Traceback (most recent call last):
       File "/__w/rl/rl/docs/source/reference/generated/tutorials/torchrl_demo.py", line 366, in <module>
         env.reset()
-      File "/__w/rl/rl/torchrl/envs/common.py", line 384, in reset
+      File "/__w/rl/rl/torchrl/envs/common.py", line 431, in reset
         tensordict_reset = self._reset(tensordict, **kwargs)
-      File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 458, in _reset
+      File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 469, in _reset
         out_tensordict = self.transform.reset(out_tensordict)
-      File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 670, in reset
+      File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 681, in reset
         tensordict = t.reset(tensordict)
-      File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 1956, in reset
+      File "/__w/rl/rl/torchrl/envs/transforms/transforms.py", line 2004, in reset
         raise ValueError(
     ValueError: there is more than one done state in the parent environment. NoopResetEnv is designed to work on single env instances, as partial reset is currently not supported. If you feel like this is a missing feature, submit an issue on TorchRL github repo. In case you are trying to use NoopResetEnv over a batch of environments, know that you can have a transformed batch of transformed envs, such as: `TransformedEnv(ParallelEnv(3, lambda: TransformedEnv(MyEnv(), NoopResetEnv(3))), OtherTransform())`.
 
@@ -1058,10 +1057,10 @@ Specialized Classes
 
 
     torch.manual_seed(0)
-    from torchrl.data import NdBoundedTensorSpec
+    from torchrl.data import BoundedTensorSpec
     from torchrl.modules import SafeModule
 
-    spec = NdBoundedTensorSpec(-torch.ones(3), torch.ones(3))
+    spec = BoundedTensorSpec(-torch.ones(3), torch.ones(3))
     base_module = nn.Linear(5, 3)
     module = SafeModule(
         module=base_module, spec=spec, in_keys=["obs"], out_keys=["action"], safe=True
@@ -1427,7 +1426,7 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  5.347 seconds)
+   **Total running time of the script:** ( 0 minutes  4.345 seconds)
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:

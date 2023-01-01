@@ -566,7 +566,11 @@
 
             <span class="n">reward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_reward</span><span class="p">(</span><span class="n">reward</span><span class="p">,</span> <span class="n">_reward</span><span class="p">)</span>
 
-            <span class="c1"># TODO: check how to deal with np arrays</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">done</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="nb">isinstance</span><span class="p">(</span><span class="n">done</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="n">done</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">done</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
             <span class="n">done</span><span class="p">,</span> <span class="n">do_break</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_done</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">do_break</span><span class="p">:</span>
                 <span class="k">break</span>

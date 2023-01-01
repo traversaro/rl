@@ -427,14 +427,14 @@ to be of type <code class="docutils literal notranslate"><span class="pre">Compo
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Env observation_spec:
  CompositeSpec(
-    observation: NdBoundedTensorSpec(
+    observation: BoundedTensorSpec(
          shape=torch.Size([3]), space=ContinuousBox(minimum=tensor([-1., -1., -8.]), maximum=tensor([1., 1., 8.])), device=cpu, dtype=torch.float32, domain=continuous))
 Env action_spec:
- NdBoundedTensorSpec(
+ BoundedTensorSpec(
      shape=torch.Size([1]), space=ContinuousBox(minimum=tensor([-2.]), maximum=tensor([2.])), device=cpu, dtype=torch.float32, domain=continuous)
 Env reward_spec:
  UnboundedContinuousTensorSpec(
-     shape=torch.Size([1]), space=ContinuousBox(minimum=-inf, maximum=inf), device=cpu, dtype=torch.float32, domain=composite)
+     shape=torch.Size([1]), space=None, device=cpu, dtype=torch.float32, domain=continuous)
 </pre></div>
 </div>
 <p>Those spec come with a series of useful tools: one can assert whether a
@@ -456,7 +456,7 @@ projected action:
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>random action:
- tensor([1.7064])
+ tensor([0.0961])
 </pre></div>
 </div>
 <p>Envs are also packed with an <code class="docutils literal notranslate"><span class="pre">env.input_spec</span></code> attribute of type
@@ -601,7 +601,7 @@ easily for a given number of steps:</p>
     fields={
         action: Tensor(torch.Size([20, 1]), dtype=torch.float32),
         done: Tensor(torch.Size([20, 1]), dtype=torch.bool),
-        next: LazyStackedTensorDict(
+        next: TensorDict(
             fields={
                 observation: Tensor(torch.Size([20, 3]), dtype=torch.float32)},
             batch_size=torch.Size([20]),
@@ -664,7 +664,7 @@ argument that allows the user to quickly ask for image-based environments:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;pixels&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_torch_envs_001.png" srcset="../_images/sphx_glr_torch_envs_001.png" alt="torch envs" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage object at 0x7f12571fc400&gt;
+<img src="../_images/sphx_glr_torch_envs_001.png" srcset="../_images/sphx_glr_torch_envs_001.png" alt="torch envs" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.image.AxesImage object at 0x7fec4af0e170&gt;
 </pre></div>
 </div>
 <p>Let’s have a look at what the tensordict contains:</p>
@@ -854,8 +854,8 @@ reset after transform:  TensorDict(
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>original obs spec:  CompositeSpec(
-    pixels: NdUnboundedDiscreteTensorSpec(
-         shape=(240, 320, 3), space=ContinuousBox(minimum=tensor([[[0, 0, 0],
+    pixels: UnboundedDiscreteTensorSpec(
+         shape=torch.Size([240, 320, 3]), space=ContinuousBox(minimum=tensor([[[0, 0, 0],
              [0, 0, 0],
              [0, 0, 0],
              ...,
@@ -953,7 +953,7 @@ reset after transform:  TensorDict(
              [255, 255, 255],
              [255, 255, 255]]])), device=cpu, dtype=torch.uint8, domain=continuous))
 current obs spec:  CompositeSpec(
-    pixels: NdUnboundedDiscreteTensorSpec(
+    pixels: UnboundedDiscreteTensorSpec(
          shape=torch.Size([1, 32, 32]), space=ContinuousBox(minimum=tensor([[[0., 0., 0.,  ..., 0., 0., 0.],
              [0., 0., 0.,  ..., 0., 0., 0.],
              [0., 0., 0.,  ..., 0., 0., 0.],
@@ -1124,7 +1124,7 @@ the second the time frame. Let’s check that with the <code class="docutils lit
     fields={
         action: Tensor(torch.Size([3, 20, 1]), dtype=torch.float32),
         done: Tensor(torch.Size([3, 20, 1]), dtype=torch.bool),
-        next: LazyStackedTensorDict(
+        next: TensorDict(
             fields={
                 observation: Tensor(torch.Size([3, 20, 3]), dtype=torch.float32)},
             batch_size=torch.Size([3, 20]),
@@ -1191,7 +1191,7 @@ to access this attribute. Here’s an example:</p>
 <span class="n">env</span><span class="o">.</span><span class="n">foo</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;bar_05b397fe-81f4-11ed-8c35-0242ac120002&#39;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;bar_bb6195b6-89a5-11ed-a3b9-0242ac120002&#39;
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">parallel_env</span> <span class="o">=</span> <span class="n">ParallelEnv</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">env_make</span><span class="p">)</span>  <span class="c1"># -&gt; creates 3 envs in parallel</span>
@@ -1212,13 +1212,13 @@ to access this attribute. Here’s an example:</p>
 <span class="n">foo_list</span>  <span class="c1"># needs to be instantiated, for instance using list</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7f1244096f10&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7fec3c627e50&gt;
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">foo_list</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;bar_096b768c-81f4-11ed-9808-0242ac120002&#39;, &#39;bar_09665580-81f4-11ed-9fd1-0242ac120002&#39;, &#39;bar_0983d830-81f4-11ed-8c51-0242ac120002&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;bar_be8b665e-89a5-11ed-9cda-0242ac120002&#39;, &#39;bar_be956b0e-89a5-11ed-8252-0242ac120002&#39;, &#39;bar_be8b8670-89a5-11ed-b89b-0242ac120002&#39;]
 </pre></div>
 </div>
 <p>Similarly, methods can also be accessed:</p>
@@ -1349,8 +1349,8 @@ it with data normalizing given a fixed version of the normalizing constants.</p>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;std: :&quot;</span><span class="p">,</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;observation&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>  <span class="c1"># Approx 1</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>mean: : tensor([-0.4834, -0.1168, -0.0614])
-std: : tensor([0.9263, 1.2133, 1.1541])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>mean: : tensor([ 0.2454, -0.1972, -0.2753])
+std: : tensor([1.3252, 1.1842, 1.1600])
 </pre></div>
 </div>
 <p>In <strong>parallel envs</strong> things are slightly more complicated, as we need to
@@ -1380,7 +1380,7 @@ once created:</p>
     fields={
         action: Tensor(torch.Size([3, 5, 2]), dtype=torch.int64),
         done: Tensor(torch.Size([3, 5, 1]), dtype=torch.bool),
-        next: LazyStackedTensorDict(
+        next: TensorDict(
             fields={
                 observation: Tensor(torch.Size([3, 5, 4]), dtype=torch.float32)},
             batch_size=torch.Size([3, 5]),
@@ -1391,8 +1391,8 @@ once created:</p>
     batch_size=torch.Size([3, 5]),
     device=cpu,
     is_shared=False)
-mean: : tensor([ 0.1107, -0.0630,  0.0396])
-std: : tensor([0.9385, 0.9555, 0.9199])
+mean: : tensor([ 0.1450, -0.1970, -0.0312])
+std: : tensor([0.9601, 0.8977, 0.8740])
 </pre></div>
 </div>
 <p>The count is slightly higher than the number of steps (since we
@@ -1411,7 +1411,7 @@ This small difference will usually be absored throughout training.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>update counts:  tensor([18.])
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  30.868 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  25.082 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-torch-envs-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/b4027b1e6f187fa5875852cc5731ee46/torch_envs.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">torch_envs.py</span></code></a></p>

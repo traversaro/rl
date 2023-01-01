@@ -375,7 +375,7 @@
 <span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">CompositeSpec</span><span class="p">,</span>
     <span class="n">DiscreteTensorSpec</span><span class="p">,</span>
-    <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">,</span>
+    <span class="n">UnboundedContinuousTensorSpec</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torchrl.data.utils</span> <span class="kn">import</span> <span class="n">DEVICE_TYPING</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="n">TensorDictPrimer</span><span class="p">,</span> <span class="n">TransformedEnv</span>
@@ -531,7 +531,6 @@
         <span class="c1"># automatically infer in key</span>
         <span class="p">(</span><span class="n">in_key</span><span class="p">,)</span> <span class="o">=</span> <span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="n">env_specs</span><span class="p">[</span><span class="s2">&quot;observation_spec&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">out_features</span> <span class="o">=</span> <span class="n">action_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">actor_class</span> <span class="o">=</span> <span class="n">QValueActor</span>
     <span class="n">actor_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -540,6 +539,8 @@
         <span class="c1"># to the number of possible choices and also set categorical behavioural for actors.</span>
         <span class="n">actor_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;action_space&quot;</span><span class="p">:</span> <span class="s2">&quot;categorical&quot;</span><span class="p">})</span>
         <span class="n">out_features</span> <span class="o">=</span> <span class="n">env_specs</span><span class="p">[</span><span class="s2">&quot;action_spec&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">n</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_features</span> <span class="o">=</span> <span class="n">action_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">distributional</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">atoms</span><span class="p">:</span>
@@ -2012,11 +2013,11 @@
             <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">],</span>
             <span class="n">spec</span><span class="o">=</span><span class="n">CompositeSpec</span><span class="p">(</span>
                 <span class="o">**</span><span class="p">{</span>
-                    <span class="s2">&quot;loc&quot;</span><span class="p">:</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">(</span>
+                    <span class="s2">&quot;loc&quot;</span><span class="p">:</span> <span class="n">UnboundedContinuousTensorSpec</span><span class="p">(</span>
                         <span class="n">proof_environment</span><span class="o">.</span><span class="n">action_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                         <span class="n">device</span><span class="o">=</span><span class="n">proof_environment</span><span class="o">.</span><span class="n">action_spec</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                     <span class="p">),</span>
-                    <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">(</span>
+                    <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">UnboundedContinuousTensorSpec</span><span class="p">(</span>
                         <span class="n">proof_environment</span><span class="o">.</span><span class="n">action_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                         <span class="n">device</span><span class="o">=</span><span class="n">proof_environment</span><span class="o">.</span><span class="n">action_spec</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                     <span class="p">),</span>
@@ -2062,10 +2063,10 @@
                 <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">],</span>
                 <span class="n">spec</span><span class="o">=</span><span class="n">CompositeSpec</span><span class="p">(</span>
                     <span class="o">**</span><span class="p">{</span>
-                        <span class="s2">&quot;loc&quot;</span><span class="p">:</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">(</span>
+                        <span class="s2">&quot;loc&quot;</span><span class="p">:</span> <span class="n">UnboundedContinuousTensorSpec</span><span class="p">(</span>
                             <span class="n">proof_environment</span><span class="o">.</span><span class="n">action_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                         <span class="p">),</span>
-                        <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">(</span>
+                        <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="n">UnboundedContinuousTensorSpec</span><span class="p">(</span>
                             <span class="n">proof_environment</span><span class="o">.</span><span class="n">action_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
                         <span class="p">),</span>
                     <span class="p">}</span>
@@ -2159,8 +2160,8 @@
     <span class="n">model_based_env</span><span class="o">.</span><span class="n">set_specs_from_env</span><span class="p">(</span><span class="n">proof_environment</span><span class="p">)</span>
     <span class="n">model_based_env</span> <span class="o">=</span> <span class="n">TransformedEnv</span><span class="p">(</span><span class="n">model_based_env</span><span class="p">)</span>
     <span class="n">default_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">(</span><span class="n">state_dim</span><span class="p">),</span>
-        <span class="s2">&quot;belief&quot;</span><span class="p">:</span> <span class="n">NdUnboundedContinuousTensorSpec</span><span class="p">(</span><span class="n">rssm_hidden_dim</span><span class="p">),</span>
+        <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="n">UnboundedContinuousTensorSpec</span><span class="p">(</span><span class="n">state_dim</span><span class="p">),</span>
+        <span class="s2">&quot;belief&quot;</span><span class="p">:</span> <span class="n">UnboundedContinuousTensorSpec</span><span class="p">(</span><span class="n">rssm_hidden_dim</span><span class="p">),</span>
         <span class="c1"># &quot;action&quot;: proof_environment.action_spec,</span>
     <span class="p">}</span>
     <span class="n">model_based_env</span><span class="o">.</span><span class="n">append_transform</span><span class="p">(</span>

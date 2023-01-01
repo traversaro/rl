@@ -402,10 +402,10 @@
         <span class="sd">&quot;&quot;&quot;Sets the specs of the environment from the specs of the given environment.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">set_specs_from_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
         <span class="c1"># self.observation_spec = CompositeSpec(</span>
-        <span class="c1">#     next_state=NdUnboundedContinuousTensorSpec(</span>
+        <span class="c1">#     next_state=UnboundedContinuousTensorSpec(</span>
         <span class="c1">#         shape=self.prior_shape, device=self.device</span>
         <span class="c1">#     ),</span>
-        <span class="c1">#     next_belief=NdUnboundedContinuousTensorSpec(</span>
+        <span class="c1">#     next_belief=UnboundedContinuousTensorSpec(</span>
         <span class="c1">#         shape=self.belief_shape, device=self.device</span>
         <span class="c1">#     ),</span>
         <span class="c1"># )</span>

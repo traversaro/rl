@@ -391,10 +391,10 @@
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.data import NdUnboundedContinuousTensorSpec</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import Actor</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;observation&quot;: torch.randn(3, 4)}, [3,])</span>
-<span class="sd">        &gt;&gt;&gt; action_spec = NdUnboundedContinuousTensorSpec(4)</span>
+<span class="sd">        &gt;&gt;&gt; action_spec = UnboundedContinuousTensorSpec(4)</span>
 <span class="sd">        &gt;&gt;&gt; module = torch.nn.Linear(4, 4)</span>
 <span class="sd">        &gt;&gt;&gt; td_module = Actor(</span>
 <span class="sd">        ...    module=module,</span>
@@ -444,10 +444,10 @@
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict.nn.functional_modules import make_functional</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.data import NdBoundedTensorSpec</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.data import BoundedTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import ProbabilisticActor, NormalParamWrapper, SafeModule, TanhNormal</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;observation&quot;: torch.randn(3, 4)}, [3,])</span>
-<span class="sd">        &gt;&gt;&gt; action_spec = NdBoundedTensorSpec(shape=torch.Size([4]),</span>
+<span class="sd">        &gt;&gt;&gt; action_spec = BoundedTensorSpec(shape=torch.Size([4]),</span>
 <span class="sd">        ...    minimum=-1, maximum=1)</span>
 <span class="sd">        &gt;&gt;&gt; module = NormalParamWrapper(torch.nn.Linear(4, 8))</span>
 <span class="sd">        &gt;&gt;&gt; tensordict_module = SafeModule(module, in_keys=[&quot;observation&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
@@ -510,7 +510,7 @@
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict.nn.functional_modules import make_functional</span>
 <span class="sd">        &gt;&gt;&gt; from torch import nn</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.data import NdUnboundedContinuousTensorSpec</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import ValueOperator</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;observation&quot;: torch.randn(3, 4), &quot;action&quot;: torch.randn(3, 2)}, [3,])</span>
 <span class="sd">        &gt;&gt;&gt; class CustomModule(nn.Module):</span>
@@ -931,9 +931,9 @@
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import ProbabilisticActor, SafeModule</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.data import NdUnboundedContinuousTensorSpec, NdBoundedTensorSpec</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec, BoundedTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import ValueOperator, TanhNormal, ActorValueOperator, NormalParamWrapper</span>
-<span class="sd">        &gt;&gt;&gt; spec_hidden = NdUnboundedContinuousTensorSpec(4)</span>
+<span class="sd">        &gt;&gt;&gt; spec_hidden = UnboundedContinuousTensorSpec(4)</span>
 <span class="sd">        &gt;&gt;&gt; module_hidden = torch.nn.Linear(4, 4)</span>
 <span class="sd">        &gt;&gt;&gt; td_module_hidden = SafeModule(</span>
 <span class="sd">        ...    module=module_hidden,</span>
@@ -941,7 +941,7 @@
 <span class="sd">        ...    in_keys=[&quot;observation&quot;],</span>
 <span class="sd">        ...    out_keys=[&quot;hidden&quot;],</span>
 <span class="sd">        ...    )</span>
-<span class="sd">        &gt;&gt;&gt; spec_action = NdBoundedTensorSpec(-1, 1, torch.Size([8]))</span>
+<span class="sd">        &gt;&gt;&gt; spec_action = BoundedTensorSpec(-1, 1, torch.Size([8]))</span>
 <span class="sd">        &gt;&gt;&gt; module_action = SafeModule(</span>
 <span class="sd">        ...     NormalParamWrapper(torch.nn.Linear(4, 8)),</span>
 <span class="sd">        ...     in_keys=[&quot;hidden&quot;],</span>
@@ -1065,9 +1065,9 @@
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import ProbabilisticActor, SafeModule</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.data import NdUnboundedContinuousTensorSpec, NdBoundedTensorSpec</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec, BoundedTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import  ValueOperator, TanhNormal, ActorCriticOperator, NormalParamWrapper, MLP</span>
-<span class="sd">        &gt;&gt;&gt; spec_hidden = NdUnboundedContinuousTensorSpec(4)</span>
+<span class="sd">        &gt;&gt;&gt; spec_hidden = UnboundedContinuousTensorSpec(4)</span>
 <span class="sd">        &gt;&gt;&gt; module_hidden = torch.nn.Linear(4, 4)</span>
 <span class="sd">        &gt;&gt;&gt; td_module_hidden = SafeModule(</span>
 <span class="sd">        ...    module=module_hidden,</span>
@@ -1075,7 +1075,7 @@
 <span class="sd">        ...    in_keys=[&quot;observation&quot;],</span>
 <span class="sd">        ...    out_keys=[&quot;hidden&quot;],</span>
 <span class="sd">        ...    )</span>
-<span class="sd">        &gt;&gt;&gt; spec_action = NdBoundedTensorSpec(-1, 1, torch.Size([8]))</span>
+<span class="sd">        &gt;&gt;&gt; spec_action = BoundedTensorSpec(-1, 1, torch.Size([8]))</span>
 <span class="sd">        &gt;&gt;&gt; module_action = NormalParamWrapper(torch.nn.Linear(4, 8))</span>
 <span class="sd">        &gt;&gt;&gt; module_action = SafeModule(module_action, in_keys=[&quot;hidden&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; td_module_action = ProbabilisticActor(</span>
@@ -1194,7 +1194,7 @@
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.data import NdUnboundedContinuousTensorSpec, NdBoundedTensorSpec</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec, BoundedTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import (</span>
 <span class="sd">                ActorCriticWrapper,</span>
 <span class="sd">                ProbabilisticActor,</span>
@@ -1203,7 +1203,7 @@
 <span class="sd">                TanhNormal,</span>
 <span class="sd">                ValueOperator,</span>
 <span class="sd">            )</span>
-<span class="sd">        &gt;&gt;&gt; action_spec = NdBoundedTensorSpec(-1, 1, torch.Size([8]))</span>
+<span class="sd">        &gt;&gt;&gt; action_spec = BoundedTensorSpec(-1, 1, torch.Size([8]))</span>
 <span class="sd">        &gt;&gt;&gt; action_module = SafeModule(</span>
 <span class="sd">                NormalParamWrapper(torch.nn.Linear(4, 8)),</span>
 <span class="sd">                in_keys=[&quot;observation&quot;],</span>
