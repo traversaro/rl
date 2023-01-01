@@ -1039,7 +1039,14 @@
         <span class="c1"># if del occurs before env has been set up, we don&#39;t want a recursion</span>
         <span class="c1"># error</span>
         <span class="k">if</span> <span class="s2">&quot;is_closed&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_closed</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="c1"># a TypeError will typically be raised if the env is deleted when the program ends.</span>
+                <span class="c1"># In the future, insignificant changes to the close method may change the error type.</span>
+                <span class="c1"># We excplicitely assume that any error raised during closure in</span>
+                <span class="c1"># __del__ will not affect the program.</span>
+                <span class="k">pass</span>
 
 <div class="viewcode-block" id="EnvBase.to"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.to">[docs]</a>    <span class="k">def</span> <span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="n">DEVICE_TYPING</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnvBase</span><span class="p">:</span>
         <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>

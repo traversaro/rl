@@ -365,6 +365,7 @@
 <span class="c1"># This source code is licensed under the MIT license found in the</span>
 <span class="c1"># LICENSE file in the root directory of this source tree.</span>
 
+<span class="kn">import</span> <span class="nn">_pickle</span>
 <span class="kn">import</span> <span class="nn">abc</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -1070,7 +1071,14 @@
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span></div>
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>  <span class="c1"># make sure env is closed</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># an AttributeError will typically be raised if the collector is deleted when the program ends.</span>
+            <span class="c1"># In the future, insignificant changes to the close method may change the error type.</span>
+            <span class="c1"># We excplicitely assume that any error raised during closure in</span>
+            <span class="c1"># __del__ will not affect the program.</span>
+            <span class="k">pass</span>
 
 <div class="viewcode-block" id="SyncDataCollector.state_dict"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.SyncDataCollector.html#torchrl.collectors.SyncDataCollector.state_dict">[docs]</a>    <span class="k">def</span> <span class="nf">state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OrderedDict</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Returns the local state_dict of the data collector (environment and policy).</span>
@@ -1378,7 +1386,19 @@
             <span class="p">}</span>
             <span class="n">proc</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_main_async_collector</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="c1"># proc.daemon can&#39;t be set as daemonic processes may be launched by the process itself</span>
-            <span class="n">proc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">proc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">_pickle</span><span class="o">.</span><span class="n">PicklingError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;&lt;lambda&gt;&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                        <span class="sd">&quot;&quot;&quot;Can&#39;t open a process with doubly cloud-pickled lambda function.</span>
+<span class="sd">This error is likely due to an attempt to use a ParallelEnv in a</span>
+<span class="sd">multiprocessed data collector. To do this, consider wrapping your</span>
+<span class="sd">lambda function in an `torchrl.envs.EnvCreator` wrapper as follows:</span>
+<span class="sd">`env = ParallelEnv(N, EnvCreator(my_lambda_function))`.</span>
+<span class="sd">This will not only ensure that your lambda function is cloud-pickled once, but</span>
+<span class="sd">also that the state dict is synchronised across processes if needed.&quot;&quot;&quot;</span>
+                    <span class="p">)</span>
             <span class="n">pipe_child</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">procs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pipe_parent</span><span class="p">)</span>
@@ -1389,7 +1409,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># an AttributeError will typically be raised if the collector is deleted when the program ends.</span>
+            <span class="c1"># In the future, insignificant changes to the close method may change the error type.</span>
+            <span class="c1"># We excplicitely assume that any error raised during closure in</span>
+            <span class="c1"># __del__ will not affect the program.</span>
+            <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Shuts down all processes. This operation is irreversible.&quot;&quot;&quot;</span>
@@ -1986,8 +2013,8 @@
                         <span class="sa">f</span><span class="s2">&quot;without receiving a command from main. Consider increasing the maximum idle count &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;if this is expected via the environment variable MAX_IDLE_COUNT &quot;</span>
                         <span class="sa">f</span><span class="s2">&quot;(current value is </span><span class="si">{</span><span class="n">_MAX_IDLE_COUNT</span><span class="si">}</span><span class="s2">).&quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">If this occurs at the end of a function, it means that your collector has not been &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;collected, consider calling `collector.shutdown()` or `del collector` at the end of the function.&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">If this occurs at the end of a function or program, it means that your collector has not been &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;collected, consider calling `collector.shutdown()` or `del collector` before ending the program.&quot;</span>
                     <span class="p">)</span>
                 <span class="k">continue</span>
         <span class="k">if</span> <span class="n">msg</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;continue&quot;</span><span class="p">,</span> <span class="s2">&quot;continue_random&quot;</span><span class="p">):</span>
