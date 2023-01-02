@@ -387,7 +387,7 @@
 
 
 <div class="viewcode-block" id="Storage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.storages.Storage.html#torchrl.data.replay_buffers.storages.Storage">[docs]</a><span class="k">class</span> <span class="nc">Storage</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A Storage is the container of a replay buffer.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Storage is the container of a replay buffer.</span>
 
 <span class="sd">    Every storage must have a set, get and __len__ methods implemented.</span>
 <span class="sd">    Get and set should support integers as well as list of integers.</span>
@@ -412,7 +412,7 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
 <div class="viewcode-block" id="Storage.attach"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.storages.Storage.html#torchrl.data.replay_buffers.storages.Storage.attach">[docs]</a>    <span class="k">def</span> <span class="nf">attach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;This function attaches a sampler to this storage.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function attaches a sampler to this storage.</span>
 
 <span class="sd">        Buffers that read from this storage must be included as an attached</span>
 <span class="sd">        entity by calling this method. This guarantees that when data</span>
@@ -449,7 +449,7 @@
 
 
 <div class="viewcode-block" id="ListStorage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.storages.ListStorage.html#torchrl.data.replay_buffers.storages.ListStorage">[docs]</a><span class="k">class</span> <span class="nc">ListStorage</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A storage stored in a list.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A storage stored in a list.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        max_size (int): the maximum number of elements stored in the storage.</span>
@@ -518,7 +518,7 @@
 
 
 <div class="viewcode-block" id="LazyTensorStorage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.storages.LazyTensorStorage.html#torchrl.data.replay_buffers.storages.LazyTensorStorage">[docs]</a><span class="k">class</span> <span class="nc">LazyTensorStorage</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A pre-allocated tensor storage for tensors and tensordicts.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A pre-allocated tensor storage for tensors and tensordicts.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        size (int): size of the storage, i.e. maximum number of elements stored</span>
@@ -639,7 +639,7 @@
 
 
 <div class="viewcode-block" id="LazyMemmapStorage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.storages.LazyMemmapStorage.html#torchrl.data.replay_buffers.storages.LazyMemmapStorage">[docs]</a><span class="k">class</span> <span class="nc">LazyMemmapStorage</span><span class="p">(</span><span class="n">LazyTensorStorage</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A memory-mapped storage for tensors and tensordicts.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A memory-mapped storage for tensors and tensordicts.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        max_size (int): size of the storage, i.e. maximum number of elements stored</span>

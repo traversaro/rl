@@ -393,22 +393,22 @@ Of these, glfw will not work in headless environments. On the other hand, osmesa
 will not run on GPU. Therefore, our advice is to use the egl backend.</p>
 <p>If you have a sudo access on your machine, you can install the following dependencies
 to enable fast rendering:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ sudo apt-get install libglfw3 libglew2.0 libgl1-mesa-glx libosmesa6
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>libglfw3<span class="w"> </span>libglew2.0<span class="w"> </span>libgl1-mesa-glx<span class="w"> </span>libosmesa6
 </pre></div>
 </div>
 <p>If you don’t, these libraries can be installed via conda but be aware of the fact
 that this is not the indented workflow and things may not work as expected:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda activate mujoco_env
-$ conda install -c conda-forge glew
-$ conda install -c conda-forge mesalib
-$ conda install -c anaconda mesa-libgl-cos6-x86_64
-$ conda install -c menpo glfw3
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>mujoco_env
+$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>glew
+$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>mesalib
+$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>anaconda<span class="w"> </span>mesa-libgl-cos6-x86_64
+$<span class="w"> </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>menpo<span class="w"> </span>glfw3
 </pre></div>
 </div>
 <p>In both cases, when running your code, you will want to tell mujoco which backend to use.
 This can be done by setting the appropriate environment variables.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda env config vars <span class="nb">set</span> <span class="nv">MUJOCO_GL</span><span class="o">=</span>egl <span class="nv">PYOPENGL_PLATFORM</span><span class="o">=</span>egl
-$ conda deactivate <span class="o">&amp;&amp;</span> conda activate mujoco_env
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>env<span class="w"> </span>config<span class="w"> </span>vars<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">MUJOCO_GL</span><span class="o">=</span>egl<span class="w"> </span><span class="nv">PYOPENGL_PLATFORM</span><span class="o">=</span>egl
+$<span class="w"> </span>conda<span class="w"> </span>deactivate<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>mujoco_env
 </pre></div>
 </div>
 </section>
@@ -417,9 +417,9 @@ $ conda deactivate <span class="o">&amp;&amp;</span> conda activate mujoco_env
 <p>You can install the pre-built binaries from the <a class="reference external" href="https://github.com/deepmind/mujoco/releases">mujoco release page</a>.
 However, in most cases, you will only need the python bindings.
 These can be installed via pip.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda create -n mujoco_env <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
-$ conda activate mujoco_env
-$ pip install mujoco
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>mujoco_env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
+$<span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>mujoco_env
+$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>mujoco
 </pre></div>
 </div>
 </section>
@@ -430,25 +430,25 @@ be the case when using some legacy code that used mujoco-py instead of the new
 bindings, because of cluster requirements etc.
 Refer to the <a class="reference external" href="https://github.com/openai/mujoco-py#install-mujoco">mujoco-py README.md</a>.
 Using <code class="docutils literal notranslate"><span class="pre">conda</span></code>, your setup should look like this:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda create -n mujoco_env <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
-$ conda activate mujoco_env
-$ mkdir ~/.mujoco
-$ <span class="nb">cd</span> ~/.mujoco
-$ <span class="c1"># check here for 2.1.0 versions https://github.com/deepmind/mujoco/releases/tag/2.1.0</span>
-$ <span class="c1"># check here for earlier versions http://roboti.us/download.html</span>
-$ wget https://github.com/deepmind/mujoco/releases/download/2.1.0/mujoco210-linux-x86_64.tar.gz
-$ tar -xf mujoco210-linux-x86_64.tar.gz
-$ <span class="c1"># for versions &lt; 2.1.0, we need a licence file. Since mujoco is now free of</span>
-$ <span class="c1"># of charge, this can obtained easily</span>
-$ wget http://roboti.us/file/mjkey.txt
-$ <span class="c1"># let&#39;s tell conda about our mujoco repo</span>
-$ conda env config vars <span class="nb">set</span> <span class="nv">MJLIB_PATH</span><span class="o">=</span>/path/to/home/.mujoco/mujoco210/bin/libmujoco210.so <span class="se">\</span>
-$ &gt; <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/path/to/home/.mujoco/mujoco210/bin <span class="se">\</span>
-$ &gt; <span class="nv">MUJOCO_PY_MUJOCO_PATH</span><span class="o">=</span>/path/to/home/.mujoco/mujoco210
-$ <span class="c1"># For versions &lt; 2.1.0, we must link the key too</span>
-$ conda env config vars <span class="nb">set</span> <span class="nv">MUJOCO_PY_MJKEY_PATH</span><span class="o">=</span>/path/to/home/.mujoco/mjkey.txt
-$ <span class="c1"># reload the env</span>
-$ conda deactivate <span class="o">&amp;&amp;</span> conda activate mujoco_env
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>mujoco_env<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
+$<span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>mujoco_env
+$<span class="w"> </span>mkdir<span class="w"> </span>~/.mujoco
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/.mujoco
+$<span class="w"> </span><span class="c1"># check here for 2.1.0 versions https://github.com/deepmind/mujoco/releases/tag/2.1.0</span>
+$<span class="w"> </span><span class="c1"># check here for earlier versions http://roboti.us/download.html</span>
+$<span class="w"> </span>wget<span class="w"> </span>https://github.com/deepmind/mujoco/releases/download/2.1.0/mujoco210-linux-x86_64.tar.gz
+$<span class="w"> </span>tar<span class="w"> </span>-xf<span class="w"> </span>mujoco210-linux-x86_64.tar.gz
+$<span class="w"> </span><span class="c1"># for versions &lt; 2.1.0, we need a licence file. Since mujoco is now free of</span>
+$<span class="w"> </span><span class="c1"># of charge, this can obtained easily</span>
+$<span class="w"> </span>wget<span class="w"> </span>http://roboti.us/file/mjkey.txt
+$<span class="w"> </span><span class="c1"># let&#39;s tell conda about our mujoco repo</span>
+$<span class="w"> </span>conda<span class="w"> </span>env<span class="w"> </span>config<span class="w"> </span>vars<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">MJLIB_PATH</span><span class="o">=</span>/path/to/home/.mujoco/mujoco210/bin/libmujoco210.so<span class="w"> </span><span class="se">\</span>
+$<span class="w"> </span>&gt;<span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/path/to/home/.mujoco/mujoco210/bin<span class="w"> </span><span class="se">\</span>
+$<span class="w"> </span>&gt;<span class="w"> </span><span class="nv">MUJOCO_PY_MUJOCO_PATH</span><span class="o">=</span>/path/to/home/.mujoco/mujoco210
+$<span class="w"> </span><span class="c1"># For versions &lt; 2.1.0, we must link the key too</span>
+$<span class="w"> </span>conda<span class="w"> </span>env<span class="w"> </span>config<span class="w"> </span>vars<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">MUJOCO_PY_MJKEY_PATH</span><span class="o">=</span>/path/to/home/.mujoco/mjkey.txt
+$<span class="w"> </span><span class="c1"># reload the env</span>
+$<span class="w"> </span>conda<span class="w"> </span>deactivate<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>mujoco_env
 </pre></div>
 </div>
 <section id="option-1-installing-mujoco-py-with-pip">
@@ -456,8 +456,8 @@ $ conda deactivate <span class="o">&amp;&amp;</span> conda activate mujoco_env
 <p>We <strong>do not</strong> recommend this as it may be hard to change code later on, since
 there are known issues when trying to use GPUs for rendering with native mujoco-py
 code. Refer to Option 2 here below if that is the intended usage.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda activate mujoco_env
-$ pip install mujoco-py
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>mujoco_env
+$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>mujoco-py
 </pre></div>
 </div>
 </section>
@@ -467,13 +467,13 @@ $ pip install mujoco-py
 locally. In case one must force mujoco-py to install against cuda or modify the
 path to the nvidia driver (especially with older versions of mujoco-py), cloning
 the repo will facilitate those hacks.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ conda activate mujoco_env
-$ <span class="nb">cd</span> path/to/where/mujoco-py/must/be/cloned
-$ git clone https://github.com/openai/mujoco-py
-$ <span class="nb">cd</span> mujoco-py
-$ python setup.py develop
-$ <span class="c1"># the following line of code needs to be adatped, depending on where nvidia drivers are located</span>
-$ conda env config vars <span class="nb">set</span> <span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/usr/lib/nvidia
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>conda<span class="w"> </span>activate<span class="w"> </span>mujoco_env
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>path/to/where/mujoco-py/must/be/cloned
+$<span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/openai/mujoco-py
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>mujoco-py
+$<span class="w"> </span>python<span class="w"> </span>setup.py<span class="w"> </span>develop
+$<span class="w"> </span><span class="c1"># the following line of code needs to be adatped, depending on where nvidia drivers are located</span>
+$<span class="w"> </span>conda<span class="w"> </span>env<span class="w"> </span>config<span class="w"> </span>vars<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$LD_LIBRARY_PATH</span>:/usr/lib/nvidia
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">mujoco-py</span></code> will execute some building operations the first time it is imported
@@ -481,8 +481,8 @@ in a python script.
 This means that compatibility issues may go unnoticed until  you actually run
 your script for the first time.
 To complete the installation, run the following commands:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ python
-&gt;&gt;&gt; import mujoco_py
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>python
+&gt;&gt;&gt;<span class="w"> </span>import<span class="w"> </span>mujoco_py
 </pre></div>
 </div>
 <p>This should trigger the building pipeline.</p>

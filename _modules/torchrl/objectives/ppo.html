@@ -380,7 +380,7 @@
 
 
 <div class="viewcode-block" id="PPOLoss"><a class="viewcode-back" href="../../../reference/generated/torchrl.objectives.PPOLoss.html#torchrl.objectives.PPOLoss">[docs]</a><span class="k">class</span> <span class="nc">PPOLoss</span><span class="p">(</span><span class="n">LossModule</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A parent PPO loss class.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A parent PPO loss class.</span>
 
 <span class="sd">    PPO (Proximal Policy Optimisation) is a model-free, online RL algorithm that makes use of a recorded (batch of)</span>
 <span class="sd">    trajectories to perform several optimization steps, while actively preventing the updated policy to deviate too</span>
@@ -515,7 +515,7 @@
 
 
 <div class="viewcode-block" id="ClipPPOLoss"><a class="viewcode-back" href="../../../reference/generated/torchrl.objectives.ClipPPOLoss.html#torchrl.objectives.ClipPPOLoss">[docs]</a><span class="k">class</span> <span class="nc">ClipPPOLoss</span><span class="p">(</span><span class="n">PPOLoss</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Clipped PPO loss.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clipped PPO loss.</span>
 
 <span class="sd">    The clipped importance weighted loss is computed as follows:</span>
 <span class="sd">        loss = -min( weight * advantage, min(max(weight, 1-eps), 1+eps) * advantage)</span>
@@ -617,7 +617,7 @@
 
 
 <div class="viewcode-block" id="KLPENPPOLoss"><a class="viewcode-back" href="../../../reference/generated/torchrl.objectives.KLPENPPOLoss.html#torchrl.objectives.KLPENPPOLoss">[docs]</a><span class="k">class</span> <span class="nc">KLPENPPOLoss</span><span class="p">(</span><span class="n">PPOLoss</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;KL Penalty PPO loss.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;KL Penalty PPO loss.</span>
 
 <span class="sd">    The KL penalty loss has the following formula:</span>
 <span class="sd">        loss = loss - beta * KL(old_policy, new_policy)</span>

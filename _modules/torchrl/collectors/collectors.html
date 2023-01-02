@@ -403,10 +403,10 @@
 
 
 <span class="k">class</span> <span class="nc">RandomPolicy</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A random policy for data collectors.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A random policy for data collectors.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action_spec</span><span class="p">:</span> <span class="n">TensorSpec</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Random policy for a given action_spec.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Random policy for a given action_spec.</span>
 
 <span class="sd">        This is a wrapper around the action_spec.rand method.</span>
 
@@ -431,7 +431,7 @@
 
 
 <span class="k">def</span> <span class="nf">recursive_map_to_cpu</span><span class="p">(</span><span class="n">dictionary</span><span class="p">:</span> <span class="n">OrderedDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OrderedDict</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Maps the tensors to CPU through a nested dictionary.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maps the tensors to CPU through a nested dictionary.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">(</span>
         <span class="o">**</span><span class="p">{</span>
             <span class="n">k</span><span class="p">:</span> <span class="n">recursive_map_to_cpu</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
@@ -486,7 +486,7 @@
         <span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DEVICE_TYPING</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">observation_spec</span><span class="p">:</span> <span class="n">TensorSpec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="nb">dict</span><span class="p">]]]:</span>
-        <span class="sd">&quot;&quot;&quot;Util method to get a policy and its device given the collector __init__ inputs.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Util method to get a policy and its device given the collector __init__ inputs.</span>
 
 <span class="sd">        From a policy and a device, assigns the self.device attribute to</span>
 <span class="sd">        the desired device and maps the policy onto it or (if the device is</span>
@@ -577,7 +577,7 @@
         <span class="k">return</span> <span class="n">policy</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">get_weights_fn</span>
 
     <span class="k">def</span> <span class="nf">update_policy_weights_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Update the policy weights if the policy of the data collector and the trained policy live on different devices.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the policy weights if the policy of the data collector and the trained policy live on different devices.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_weights_fn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_weights_fn</span><span class="p">())</span>
 
@@ -606,7 +606,7 @@
 
 
 <div class="viewcode-block" id="SyncDataCollector"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.SyncDataCollector.html#torchrl.collectors.SyncDataCollector">[docs]</a><span class="k">class</span> <span class="nc">SyncDataCollector</span><span class="p">(</span><span class="n">_DataCollector</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generic data collector for RL problems. Requires and environment constructor and a policy.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generic data collector for RL problems. Requires and environment constructor and a policy.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        create_env_fn (Callable), returns an instance of EnvBase class.</span>
@@ -861,7 +861,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_private_keys</span> <span class="o">=</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="SyncDataCollector.set_seed"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.SyncDataCollector.html#torchrl.collectors.SyncDataCollector.set_seed">[docs]</a>    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">static_seed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Sets the seeds of the environments stored in the DataCollector.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the seeds of the environments stored in the DataCollector.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            seed (int): integer representing the seed to be used for the environment.</span>
@@ -884,7 +884,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">,</span> <span class="n">static_seed</span><span class="o">=</span><span class="n">static_seed</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SyncDataCollector.iterator"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.SyncDataCollector.html#torchrl.collectors.SyncDataCollector.iterator">[docs]</a>    <span class="k">def</span> <span class="nf">iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;Iterates through the DataCollector.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterates through the DataCollector.</span>
 
 <span class="sd">        Yields: TensorDictBase objects containing (chunks of) trajectories</span>
 
@@ -995,7 +995,7 @@
 
 <div class="viewcode-block" id="SyncDataCollector.rollout"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.SyncDataCollector.html#torchrl.collectors.SyncDataCollector.rollout">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">rollout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Computes a rollout in the environment using the provided policy.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes a rollout in the environment using the provided policy.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            TensorDictBase containing the computed rollout.</span>
@@ -1038,7 +1038,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span></div>
 
 <div class="viewcode-block" id="SyncDataCollector.reset"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.SyncDataCollector.html#torchrl.collectors.SyncDataCollector.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Resets the environments to a new initial state.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets the environments to a new initial state.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># check that the env supports partial reset</span>
             <span class="k">if</span> <span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1062,7 +1062,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="s2">&quot;step_count&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SyncDataCollector.shutdown"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.SyncDataCollector.html#torchrl.collectors.SyncDataCollector.shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Shuts down all workers and/or closes the local environment.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Shuts down all workers and/or closes the local environment.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span>
@@ -1081,7 +1081,7 @@
             <span class="k">pass</span>
 
 <div class="viewcode-block" id="SyncDataCollector.state_dict"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.SyncDataCollector.html#torchrl.collectors.SyncDataCollector.state_dict">[docs]</a>    <span class="k">def</span> <span class="nf">state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OrderedDict</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the local state_dict of the data collector (environment and policy).</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the local state_dict of the data collector (environment and policy).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            an ordered dictionary with fields :obj:`&quot;policy_state_dict&quot;` and</span>
@@ -1107,7 +1107,7 @@
         <span class="k">return</span> <span class="n">state_dict</span></div>
 
 <div class="viewcode-block" id="SyncDataCollector.load_state_dict"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.SyncDataCollector.html#torchrl.collectors.SyncDataCollector.load_state_dict">[docs]</a>    <span class="k">def</span> <span class="nf">load_state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_dict</span><span class="p">:</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Loads a state_dict on the environment and policy.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads a state_dict on the environment and policy.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            state_dict (OrderedDict): ordered dictionary containing the fields</span>
@@ -1135,7 +1135,7 @@
 
 
 <span class="k">class</span> <span class="nc">_MultiDataCollector</span><span class="p">(</span><span class="n">_DataCollector</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Runs a given number of DataCollectors on separate processes.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs a given number of DataCollectors on separate processes.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        create_env_fn (list of Callabled): list of Callables, each returning an instance of EnvBase</span>
@@ -1391,7 +1391,7 @@
             <span class="k">except</span> <span class="n">_pickle</span><span class="o">.</span><span class="n">PicklingError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
                 <span class="k">if</span> <span class="s2">&quot;&lt;lambda&gt;&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                        <span class="sd">&quot;&quot;&quot;Can&#39;t open a process with doubly cloud-pickled lambda function.</span>
+<span class="w">                        </span><span class="sd">&quot;&quot;&quot;Can&#39;t open a process with doubly cloud-pickled lambda function.</span>
 <span class="sd">This error is likely due to an attempt to use a ParallelEnv in a</span>
 <span class="sd">multiprocessed data collector. To do this, consider wrapping your</span>
 <span class="sd">lambda function in an `torchrl.envs.EnvCreator` wrapper as follows:</span>
@@ -1419,7 +1419,7 @@
             <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Shuts down all processes. This operation is irreversible.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Shuts down all processes. This operation is irreversible.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_shutdown_main</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_shutdown_main</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1443,7 +1443,7 @@
             <span class="n">pipe</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">static_seed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Sets the seeds of the environments stored in the DataCollector.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the seeds of the environments stored in the DataCollector.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            seed: integer representing the seed to be used for the environment.</span>
@@ -1474,7 +1474,7 @@
         <span class="k">return</span> <span class="n">seed</span>
 
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reset_idx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Resets the environments to a new initial state.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets the environments to a new initial state.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            reset_idx: Optional. Sequence indicating which environments have</span>
@@ -1495,7 +1495,7 @@
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected msg=&#39;reset&#39;, got </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OrderedDict</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Returns the state_dict of the data collector.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the state_dict of the data collector.</span>
 
 <span class="sd">        Each field represents a worker containing its own state_dict.</span>
 
@@ -1512,7 +1512,7 @@
         <span class="k">return</span> <span class="n">state_dict</span>
 
     <span class="k">def</span> <span class="nf">load_state_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state_dict</span><span class="p">:</span> <span class="n">OrderedDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Loads the state_dict on the workers.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads the state_dict on the workers.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            state_dict (OrderedDict): state_dict of the form</span>
@@ -1528,7 +1528,7 @@
 
 
 <div class="viewcode-block" id="MultiSyncDataCollector"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.MultiSyncDataCollector.html#torchrl.collectors.MultiSyncDataCollector">[docs]</a><span class="k">class</span> <span class="nc">MultiSyncDataCollector</span><span class="p">(</span><span class="n">_MultiDataCollector</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Runs a given number of DataCollectors on separate processes synchronously.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs a given number of DataCollectors on separate processes synchronously.</span>
 
 <span class="sd">    The collection starts when the next item of the collector is queried,</span>
 <span class="sd">    and no environment step is computed in between the reception of a batch of</span>
@@ -1674,7 +1674,7 @@
 
 
 <div class="viewcode-block" id="MultiaSyncDataCollector"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.MultiaSyncDataCollector.html#torchrl.collectors.MultiaSyncDataCollector">[docs]</a><span class="k">class</span> <span class="nc">MultiaSyncDataCollector</span><span class="p">(</span><span class="n">_MultiDataCollector</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Runs a given number of DataCollectors on separate processes asynchronously.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs a given number of DataCollectors on separate processes asynchronously.</span>
 
 <span class="sd">    The collection keeps on occuring on all processes even between the time</span>
 <span class="sd">    the batch of rollouts is collected and the next call to the iterator.</span>
@@ -1826,7 +1826,7 @@
 
 
 <div class="viewcode-block" id="aSyncDataCollector"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.aSyncDataCollector.html#torchrl.collectors.aSyncDataCollector">[docs]</a><span class="k">class</span> <span class="nc">aSyncDataCollector</span><span class="p">(</span><span class="n">MultiaSyncDataCollector</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Runs a single DataCollector on a separate process.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Runs a single DataCollector on a separate process.</span>
 
 <span class="sd">    This is mostly useful for offline RL paradigms where the policy being</span>
 <span class="sd">    trained can differ from the policy used to collect data. In online</span>

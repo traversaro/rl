@@ -433,7 +433,7 @@
 
 
 <span class="k">class</span> <span class="nc">_BatchedEnv</span><span class="p">(</span><span class="n">EnvBase</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Batched environments allow the user to query an arbitrary method / attribute of the environment running remotely.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Batched environments allow the user to query an arbitrary method / attribute of the environment running remotely.</span>
 
 <span class="sd">    Those queries will return a list of length equal to the number of workers containing the</span>
 <span class="sd">    values resulting from those queries.</span>
@@ -623,7 +623,7 @@
     <span class="c1">#                     raise err</span>
 
     <span class="k">def</span> <span class="nf">update_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Updates the kwargs of each environment given a dictionary or a list of dictionaries.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the kwargs of each environment given a dictionary or a list of dictionaries.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            kwargs (dict or list of dict): new kwargs to use with the environments</span>
@@ -736,7 +736,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;_reward_spec&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">_create_td</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Creates self.shared_tensordict_parent, a TensorDict used to store the most recent observations.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates self.shared_tensordict_parent, a TensorDict used to store the most recent observations.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_single_task</span><span class="p">:</span>
             <span class="n">shared_tensordict_parent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_env_tensordict</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_env_tensordict</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span><span class="p">:</span>
@@ -850,7 +850,7 @@
                 <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_start_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Starts the various envs.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Starts the various envs.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -878,7 +878,7 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
     <span class="k">def</span> <span class="nf">_set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]):</span>
-        <span class="sd">&quot;&quot;&quot;This method is not used in batched envs.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This method is not used in batched envs.&quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
     <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -914,7 +914,7 @@
 
 
 <div class="viewcode-block" id="SerialEnv"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv">[docs]</a><span class="k">class</span> <span class="nc">SerialEnv</span><span class="p">(</span><span class="n">_BatchedEnv</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Creates a series of environments in the same process.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a series of environments in the same process.&quot;&quot;&quot;</span>
 
     <span class="vm">__doc__</span> <span class="o">+=</span> <span class="n">_BatchedEnv</span><span class="o">.</span><span class="vm">__doc__</span>
 
@@ -1048,7 +1048,7 @@
 
 
 <div class="viewcode-block" id="ParallelEnv"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv">[docs]</a><span class="k">class</span> <span class="nc">ParallelEnv</span><span class="p">(</span><span class="n">_BatchedEnv</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Creates one environment per process.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates one environment per process.</span>
 
 <span class="sd">    TensorDicts are passed via shared memory or memory map.</span>
 

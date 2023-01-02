@@ -449,7 +449,7 @@
 <div class="viewcode-block" id="make_dqn_actor"><a class="viewcode-back" href="../../../../reference/generated/torchrl.trainers.helpers.make_dqn_actor.html#torchrl.trainers.helpers.make_dqn_actor">[docs]</a><span class="k">def</span> <span class="nf">make_dqn_actor</span><span class="p">(</span>
     <span class="n">proof_environment</span><span class="p">:</span> <span class="n">EnvBase</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="s2">&quot;DictConfig&quot;</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span>  <span class="c1"># noqa: F821</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Actor</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;DQN constructor helper function.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DQN constructor helper function.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        proof_environment (EnvBase): a dummy environment to retrieve the observation and action spec.</span>
@@ -583,7 +583,7 @@
     <span class="n">value_net_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">device</span><span class="p">:</span> <span class="n">DEVICE_TYPING</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;DDPG constructor helper function.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DDPG constructor helper function.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        proof_environment (EnvBase): a dummy environment to retrieve the observation and action spec</span>
@@ -783,7 +783,7 @@
     <span class="n">observation_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActorValueOperator</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Actor-value model constructor helper function.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Actor-value model constructor helper function.</span>
 
 <span class="sd">    Currently constructs MLP networks with immutable default arguments as described in &quot;Proximal Policy Optimization</span>
 <span class="sd">    Algorithms&quot;, https://arxiv.org/abs/1707.06347</span>
@@ -1078,7 +1078,7 @@
     <span class="n">observation_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActorValueOperator</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Actor-value model constructor helper function.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Actor-value model constructor helper function.</span>
 
 <span class="sd">    Currently constructs MLP networks with immutable default arguments as described in &quot;Proximal Policy Optimization</span>
 <span class="sd">    Algorithms&quot;, https://arxiv.org/abs/1707.06347</span>
@@ -1376,7 +1376,7 @@
     <span class="n">observation_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Actor, Q-value and value model constructor helper function for SAC.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Actor, Q-value and value model constructor helper function for SAC.</span>
 
 <span class="sd">    Follows default parameters proposed in SAC original paper: https://arxiv.org/pdf/1801.01290.pdf.</span>
 <span class="sd">    Other configurations can easily be implemented by modifying this function at will.</span>
@@ -1595,7 +1595,7 @@
     <span class="n">observation_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Actor and Q-value model constructor helper function for REDQ.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Actor and Q-value model constructor helper function for REDQ.</span>
 
 <span class="sd">    Follows default parameters proposed in REDQ original paper: https://openreview.net/pdf?id=AY8zfZm0tDd.</span>
 <span class="sd">    Other configurations can easily be implemented by modifying this function at will.</span>
@@ -1831,7 +1831,7 @@
     <span class="n">use_decoder_in_env</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">obs_norm_state_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Create Dreamer components.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create Dreamer components.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        cfg (DictConfig): Config object.</span>
@@ -2172,7 +2172,7 @@
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">DreamerConfig</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Dreamer model config struct.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dreamer model config struct.&quot;&quot;&quot;</span>
 
     <span class="n">batch_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span>
     <span class="n">state_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">30</span>
@@ -2190,7 +2190,7 @@
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">PPOModelConfig</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;PPO model config struct.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PPO model config struct.&quot;&quot;&quot;</span>
 
     <span class="n">gSDE</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="c1"># if True, exploration is achieved using the gSDE technique.</span>
@@ -2209,7 +2209,7 @@
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">A2CModelConfig</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A2C model config struct.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A2C model config struct.&quot;&quot;&quot;</span>
 
     <span class="n">gSDE</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="c1"># if True, exploration is achieved using the gSDE technique.</span>
@@ -2228,7 +2228,7 @@
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">SACModelConfig</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;SAC model config struct.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;SAC model config struct.&quot;&quot;&quot;</span>
 
     <span class="n">annealing_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span>
     <span class="c1"># float of frames used for annealing of the OrnsteinUhlenbeckProcess. Default=1e6.</span>
@@ -2270,7 +2270,7 @@
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">DDPGModelConfig</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;DDPG model config struct.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;DDPG model config struct.&quot;&quot;&quot;</span>
 
     <span class="n">annealing_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span>
     <span class="c1"># float of frames used for annealing of the OrnsteinUhlenbeckProcess. Default=1e6.</span>
@@ -2295,7 +2295,7 @@
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">REDQModelConfig</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;REDQ model config struct.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;REDQ model config struct.&quot;&quot;&quot;</span>
 
     <span class="n">annealing_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span>
     <span class="c1"># float of frames used for annealing of the OrnsteinUhlenbeckProcess. Default=1e6.</span>
@@ -2335,7 +2335,7 @@
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">ContinuousModelConfig</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Continuous control model config struct.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Continuous control model config struct.&quot;&quot;&quot;</span>
 
     <span class="n">annealing_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span>
     <span class="c1"># float of frames used for annealing of the OrnsteinUhlenbeckProcess. Default=1e6.</span>
@@ -2379,7 +2379,7 @@
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">DiscreteModelConfig</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Discrete model config struct.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Discrete model config struct.&quot;&quot;&quot;</span>
 
     <span class="n">annealing_frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span>
     <span class="c1"># Number of frames used for annealing of the EGreedy exploration. Default=1e6.</span>

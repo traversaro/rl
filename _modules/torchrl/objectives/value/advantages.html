@@ -395,7 +395,7 @@
 
 
 <div class="viewcode-block" id="TDEstimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.TDEstimate.html#torchrl.objectives.value.TDEstimate">[docs]</a><span class="k">class</span> <span class="nc">TDEstimate</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Temporal Difference estimate of advantage function.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Temporal Difference estimate of advantage function.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        gamma (scalar): exponential mean discount.</span>
@@ -464,7 +464,7 @@
         <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">target_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Computes the TDEstimate given the data in tensordict.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the TDEstimate given the data in tensordict.</span>
 
 <span class="sd">        If a functional module is provided, a nested TensorDict containing the parameters</span>
 <span class="sd">        (and if relevant the target parameters) can be passed to the module.</span>
@@ -562,7 +562,7 @@
 
 
 <div class="viewcode-block" id="TDLambdaEstimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.TDLambdaEstimate.html#torchrl.objectives.value.TDLambdaEstimate">[docs]</a><span class="k">class</span> <span class="nc">TDLambdaEstimate</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;TD-Lambda estimate of advantage function.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TD-Lambda estimate of advantage function.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        gamma (scalar): exponential mean discount.</span>
@@ -638,7 +638,7 @@
         <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">target_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Computes the TDLambdaEstimate given the data in tensordict.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the TDLambdaEstimate given the data in tensordict.</span>
 
 <span class="sd">        If a functional module is provided, a nested TensorDict containing the parameters</span>
 <span class="sd">        (and if relevant the target parameters) can be passed to the module.</span>
@@ -748,7 +748,7 @@
 
 
 <div class="viewcode-block" id="GAE"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.GAE.html#torchrl.objectives.value.GAE">[docs]</a><span class="k">class</span> <span class="nc">GAE</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A class wrapper around the generalized advantage estimate functional.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class wrapper around the generalized advantage estimate functional.</span>
 
 <span class="sd">    Refer to &quot;HIGH-DIMENSIONAL CONTINUOUS CONTROL USING GENERALIZED ADVANTAGE ESTIMATION&quot;</span>
 <span class="sd">    https://arxiv.org/pdf/1506.02438.pdf for more context.</span>
@@ -831,7 +831,7 @@
         <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">target_params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;Computes the GAE given the data in tensordict.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Computes the GAE given the data in tensordict.</span>
 
 <span class="sd">        If a functional module is provided, a nested TensorDict containing the parameters</span>
 <span class="sd">        (and if relevant the target parameters) can be passed to the module.</span>

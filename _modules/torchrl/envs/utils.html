@@ -390,7 +390,7 @@
     <span class="n">exclude_action</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
     <span class="n">_run_check</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Creates a new tensordict that reflects a step in time of the input tensordict.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a new tensordict that reflects a step in time of the input tensordict.</span>
 
 <span class="sd">    Given a tensordict retrieved after a step, returns the :obj:`&quot;next&quot;` indexed-tensordict.</span>
 
@@ -456,34 +456,34 @@
 
 
 <div class="viewcode-block" id="get_available_libraries"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.utils.get_available_libraries.html#torchrl.envs.utils.get_available_libraries">[docs]</a><span class="k">def</span> <span class="nf">get_available_libraries</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Returns all the supported libraries.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns all the supported libraries.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">SUPPORTED_LIBRARIES</span></div>
 
 
 <span class="k">def</span> <span class="nf">_check_gym</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Returns True if the gym library is installed.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if the gym library is installed.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;gym&quot;</span> <span class="ow">in</span> <span class="n">AVAILABLE_LIBRARIES</span>
 
 
 <span class="k">def</span> <span class="nf">_check_gym_atari</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Returns True if the gym library is installed and atari envs can be found.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if the gym library is installed and atari envs can be found.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_check_gym</span><span class="p">():</span>
         <span class="k">return</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="s2">&quot;atari-py&quot;</span> <span class="ow">in</span> <span class="n">AVAILABLE_LIBRARIES</span>
 
 
 <span class="k">def</span> <span class="nf">_check_mario</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Returns True if the &quot;gym-super-mario-bros&quot; library is installed.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if the &quot;gym-super-mario-bros&quot; library is installed.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;gym-super-mario-bros&quot;</span> <span class="ow">in</span> <span class="n">AVAILABLE_LIBRARIES</span>
 
 
 <span class="k">def</span> <span class="nf">_check_dmcontrol</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Returns True if the &quot;dm-control&quot; library is installed.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if the &quot;dm-control&quot; library is installed.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;dm-control&quot;</span> <span class="ow">in</span> <span class="n">AVAILABLE_LIBRARIES</span>
 
 
 <span class="k">def</span> <span class="nf">_check_dmlab</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Returns True if the &quot;deepmind-lab&quot; library is installed.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True if the &quot;deepmind-lab&quot; library is installed.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;deepmind-lab&quot;</span> <span class="ow">in</span> <span class="n">AVAILABLE_LIBRARIES</span>
 
 
@@ -517,7 +517,7 @@
 
 
 <div class="viewcode-block" id="check_env_specs"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.utils.check_env_specs.html#torchrl.envs.utils.check_env_specs">[docs]</a><span class="k">def</span> <span class="nf">check_env_specs</span><span class="p">(</span><span class="n">env</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Tests an environment specs against the results of short rollout.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests an environment specs against the results of short rollout.</span>
 
 <span class="sd">    This test function should be used as a sanity check for an env wrapped with</span>
 <span class="sd">    torchrl&#39;s EnvBase subclasses: any discrepency between the expected data and</span>

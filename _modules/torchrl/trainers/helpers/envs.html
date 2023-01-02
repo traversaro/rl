@@ -402,7 +402,7 @@
 
 
 <div class="viewcode-block" id="correct_for_frame_skip"><a class="viewcode-back" href="../../../../reference/generated/torchrl.trainers.helpers.correct_for_frame_skip.html#torchrl.trainers.helpers.correct_for_frame_skip">[docs]</a><span class="k">def</span> <span class="nf">correct_for_frame_skip</span><span class="p">(</span><span class="n">cfg</span><span class="p">:</span> <span class="s2">&quot;DictConfig&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DictConfig&quot;</span><span class="p">:</span>  <span class="c1"># noqa: F821</span>
-    <span class="sd">&quot;&quot;&quot;Correct the arguments for the input frame_skip, by dividing all the arguments that reflect a count of frames by the frame_skip.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Correct the arguments for the input frame_skip, by dividing all the arguments that reflect a count of frames by the frame_skip.</span>
 
 <span class="sd">    This is aimed at avoiding unknowingly over-sampling from the environment, i.e. targetting a total number of frames</span>
 <span class="sd">    of 1M but actually collecting frame_skip * 1M frames.</span>
@@ -448,7 +448,7 @@
     <span class="n">batch_dims</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">obs_norm_state_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Creates the typical transforms for and env.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates the typical transforms for and env.&quot;&quot;&quot;</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">TransformedEnv</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
 
     <span class="n">from_pixels</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">from_pixels</span>
@@ -595,7 +595,7 @@
     <span class="n">batch_dims</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
     <span class="n">obs_norm_state_dict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">EnvCreator</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Returns an environment creator from an argparse.Namespace built with the appropriate parser constructor.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns an environment creator from an argparse.Namespace built with the appropriate parser constructor.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        cfg (DictConfig): a DictConfig containing the arguments of the script.</span>
@@ -696,7 +696,7 @@
 <div class="viewcode-block" id="parallel_env_constructor"><a class="viewcode-back" href="../../../../reference/generated/torchrl.trainers.helpers.parallel_env_constructor.html#torchrl.trainers.helpers.parallel_env_constructor">[docs]</a><span class="k">def</span> <span class="nf">parallel_env_constructor</span><span class="p">(</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="s2">&quot;DictConfig&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>  <span class="c1"># noqa: F821</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">ParallelEnv</span><span class="p">,</span> <span class="n">EnvCreator</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Returns a parallel environment from an argparse.Namespace built with the appropriate parser constructor.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a parallel environment from an argparse.Namespace built with the appropriate parser constructor.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        cfg (DictConfig): config containing user-defined arguments</span>
@@ -737,7 +737,7 @@
     <span class="n">proof_environment</span><span class="p">:</span> <span class="n">EnvBase</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Gathers stas (loc and scale) from an environment using random rollouts.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gathers stas (loc and scale) from an environment using random rollouts.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        cfg (DictConfig): a config object with `init_env_steps` field, indicating</span>
@@ -774,7 +774,7 @@
         <span class="n">key</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;More than one key exists in the observation_specs: </span><span class="si">{</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="n">keys</span><span class="si">}</span><span class="s2"> were found, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;More than one key exists in the observation_specs: </span><span class="si">{</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">keys</span><span class="si">}</span><span class="s2"> were found, &quot;</span>
                 <span class="s2">&quot;thus get_stats_random_rollout cannot infer which to compute the stats of.&quot;</span>
             <span class="p">)</span>
 
@@ -813,7 +813,7 @@
     <span class="n">num_iter</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
     <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Calls :obj:`ObservationNorm.init_stats` on all uninitialized :obj:`ObservationNorm` instances of a :obj:`TransformedEnv`.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calls :obj:`ObservationNorm.init_stats` on all uninitialized :obj:`ObservationNorm` instances of a :obj:`TransformedEnv`.</span>
 
 <span class="sd">    If an :obj:`ObservationNorm` already has non-null :obj:`loc` or :obj:`scale`, a call to :obj:`initialize_observation_norm_transforms` will be a no-op.</span>
 <span class="sd">    Similarly, if the transformed environment does not contain any :obj:`ObservationNorm`, a call to this function will have no effect.</span>
@@ -839,7 +839,7 @@
         <span class="n">key</span> <span class="o">=</span> <span class="n">keys</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;More than one key exists in the observation_specs: </span><span class="si">{</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="n">keys</span><span class="si">}</span><span class="s2"> were found, &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;More than one key exists in the observation_specs: </span><span class="si">{</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">keys</span><span class="si">}</span><span class="s2"> were found, &quot;</span>
                 <span class="s2">&quot;thus initialize_observation_norm_transforms cannot infer which to compute the stats of.&quot;</span>
             <span class="p">)</span>
 
@@ -859,7 +859,7 @@
 
 
 <span class="k">def</span> <span class="nf">retrieve_observation_norms_state_dict</span><span class="p">(</span><span class="n">proof_environment</span><span class="p">:</span> <span class="n">TransformedEnv</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Traverses the transforms of the environment and retrieves the :obj:`ObservationNorm` state dicts.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Traverses the transforms of the environment and retrieves the :obj:`ObservationNorm` state dicts.</span>
 
 <span class="sd">    Returns a list of tuple (idx, state_dict) for each :obj:`ObservationNorm` transform in proof_environment</span>
 <span class="sd">    If the environment transforms do not contain any :obj:`ObservationNorm`, returns an empty list</span>
@@ -883,7 +883,7 @@
 
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">EnvConfig</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Environment config struct.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Environment config struct.&quot;&quot;&quot;</span>
 
     <span class="n">env_library</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;gym&quot;</span>
     <span class="c1"># env_library used for the simulated environment. Default=gym</span>
