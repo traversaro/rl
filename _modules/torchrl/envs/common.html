@@ -254,8 +254,7 @@
               
             
             
-              <p class="caption" role="heading"><span class="caption-text">Tutorials:</span></p>
-<ul>
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tensordict_module.html">TensorDictModule</a></li>
@@ -264,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">References:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/index.html">API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/knowledge_base.html">Knowledge Base</a></li>
@@ -397,7 +395,7 @@
 <span class="p">}</span>
 
 
-<span class="k">class</span> <span class="nc">EnvMetaData</span><span class="p">:</span>
+<div class="viewcode-block" id="EnvMetaData"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.EnvMetaData.html#torchrl.envs.EnvMetaData">[docs]</a><span class="k">class</span> <span class="nc">EnvMetaData</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for environment meta-data storage and passing in multiprocessed settings.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -455,10 +453,10 @@
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">state</span><span class="p">[</span><span class="s2">&quot;tensordict&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;tensordict&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
         <span class="n">state</span><span class="p">[</span><span class="s2">&quot;specs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;specs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">state</span>
+        <span class="k">return</span> <span class="n">state</span></div>
 
 
-<span class="k">class</span> <span class="nc">Specs</span><span class="p">:</span>
+<div class="viewcode-block" id="Specs"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.Specs.html#torchrl.envs.Specs">[docs]</a><span class="k">class</span> <span class="nc">Specs</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Container for action, observation and reward specs.</span>
 
 <span class="sd">    This class allows one to create an environment, retrieve all of the specs</span>
@@ -489,7 +487,7 @@
     <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span>
 
-    <span class="k">def</span> <span class="nf">build_tensordict</span><span class="p">(</span>
+<div class="viewcode-block" id="Specs.build_tensordict"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.Specs.html#torchrl.envs.Specs.build_tensordict">[docs]</a>    <span class="k">def</span> <span class="nf">build_tensordict</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">next_observation</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a TensorDict with empty tensors of the desired shape.</span>
@@ -535,7 +533,7 @@
                 <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">reward_placeholder</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
             <span class="p">)</span>  <span class="c1"># we assume log_prob to be of type float32</span>
         <span class="n">td</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span> <span class="n">done_placeholder</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">td</span>
+        <span class="k">return</span> <span class="n">td</span></div></div>
 
 
 <div class="viewcode-block" id="EnvBase"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase">[docs]</a><span class="k">class</span> <span class="nc">EnvBase</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
