@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Overview" href="../overview.html" />
+    <link rel="next" title="Using tensorclasses for datasets" href="tensorclass_fashion.html" />
     <link rel="prev" title="Welcome to the TensorDict Documentation!" href="../index.html" />
   <!-- Google Analytics -->
   
@@ -237,6 +237,7 @@
             
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using TensorDict for datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tensorclass_fashion.html">Using tensorclasses for datasets</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../overview.html">Overview</a></li>
@@ -321,8 +322,11 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="using-tensordict-for-datasets">
 <span id="sphx-glr-tutorials-data-fashion-py"></span><h1>Using TensorDict for datasets<a class="headerlink" href="#using-tensordict-for-datasets" title="Permalink to this heading">¶</a></h1>
-<p>In this tutorial we demonstrate how <cite>TensorDict</cite> can be used to efficiently
-and transparently load and manage data inside a training pipeline. The tutorial is based heavily on the [PyTorch Quickstart Tutorial](<a class="reference external" href="https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html">https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html</a>), but modified to demonstrate use of <cite>TensorDict</cite>.</p>
+<p>In this tutorial we demonstrate how <code class="docutils literal notranslate"><span class="pre">TensorDict</span></code> can be used to
+efficiently and transparently load and manage data inside a training
+pipeline. The tutorial is based heavily on the <a class="reference external" href="https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html">PyTorch Quickstart
+Tutorial</a>,
+but modified to demonstrate use of <code class="docutils literal notranslate"><span class="pre">TensorDict</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">MemmapTensor</span><span class="p">,</span> <a href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="collections.abc.Mapping" class="sphx-glr-backref-module-collections-abc sphx-glr-backref-type-py-class"><span class="n">TensorDict</span></a>
@@ -337,7 +341,10 @@ and transparently load and manage data inside a training pipeline. The tutorial 
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Using device: cpu
 </pre></div>
 </div>
-<p>The <cite>torchvision.datasets</cite> module contains a number of convenient pre-prepared datasets. In this tutorial we’ll use the relatively simple FashionMNIST dataset. Each image is an item of clothing, the objective is to classify the type of clothing in the image (e.g. “Bag”, “Sneaker” etc.).”””</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">torchvision.datasets</span></code> module contains a number of convenient pre-prepared
+datasets. In this tutorial we’ll use the relatively simple FashionMNIST dataset. Each
+image is an item of clothing, the objective is to classify the type of clothing in
+the image (e.g. “Bag”, “Sneaker” etc.).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">training_data</span> <span class="o">=</span> <a href="https://pytorch.org/docs/stable/data.html#torch.utils.data.Dataset" title="torch.utils.data.Dataset" class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class"><span class="n">datasets</span><span class="o">.</span><span class="n">FashionMNIST</span></a><span class="p">(</span>
     <span class="n">root</span><span class="o">=</span><span class="s2">&quot;data&quot;</span><span class="p">,</span>
     <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1317,8 +1324,11 @@ Downloading http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/t10k-labe
 Extracting data/FashionMNIST/raw/t10k-labels-idx1-ubyte.gz to data/FashionMNIST/raw
 </pre></div>
 </div>
-<p>We will create two tensordicts, one each for the training and test data. We create memory-mapped tensors to hold the data. This will allow us to efficiently load batches of transformed data from disk rather than repeatedly load and transform individual images.</p>
-<p>First we create the <cite>MemmapTensor</cite> containers.</p>
+<p>We will create two tensordicts, one each for the training and test data. We create
+memory-mapped tensors to hold the data. This will allow us to efficiently load
+batches of transformed data from disk rather than repeatedly load and transform
+individual images.</p>
+<p>First we create the <code class="docutils literal notranslate"><span class="pre">MemmapTensor</span></code> containers.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">training_data_td</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="collections.abc.Mapping" class="sphx-glr-backref-module-collections-abc sphx-glr-backref-type-py-class"><span class="n">TensorDict</span></a><span class="p">(</span>
     <span class="p">{</span>
         <span class="s2">&quot;images&quot;</span><span class="p">:</span> <span class="n">MemmapTensor</span><span class="p">(</span>
@@ -1343,8 +1353,9 @@ Extracting data/FashionMNIST/raw/t10k-labels-idx1-ubyte.gz to data/FashionMNIST/
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>Then we can iterate over the data to populate the memory-mapped tensors.
-This takes a bit of time, but performing the transforms up-front will save repeated effort during training later.</p>
+<p>Then we can iterate over the data to populate the memory-mapped tensors. This takes a
+bit of time, but performing the transforms up-front will save repeated effort during
+training later.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a><span class="p">,</span> <span class="p">(</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">img</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">label</span></a><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">training_data</span><span class="p">):</span>
     <span class="n">training_data_td</span><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i</span></a><span class="p">]</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Mapping" title="collections.abc.Mapping" class="sphx-glr-backref-module-collections-abc sphx-glr-backref-type-py-class"><span class="n">TensorDict</span></a><span class="p">({</span><span class="s2">&quot;images&quot;</span><span class="p">:</span> <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">img</span></a><span class="p">,</span> <span class="s2">&quot;targets&quot;</span><span class="p">:</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">label</span></a><span class="p">},</span> <span class="p">[])</span>
 
@@ -1354,8 +1365,12 @@ This takes a bit of time, but performing the transforms up-front will save repea
 </div>
 <section id="dataloaders">
 <h2>DataLoaders<a class="headerlink" href="#dataloaders" title="Permalink to this heading">¶</a></h2>
-<p>We’ll create DataLoaders from the <cite>torchvision</cite>-provided Datasets, as well as from our memory-mapped TensorDicts.</p>
-<p>Since <cite>TensorDict</cite> implements <cite>__len__</cite> and <cite>__getitem__</cite> (and also <cite>__getitems__</cite>) we can use it like a map-style Dataset and create a <cite>DataLoader</cite> directly from it. Note that because <cite>TensorDict</cite> can already handle batched indices, there is no need for collation, so we pass the identity function as <cite>collate_fn</cite>.</p>
+<p>We’ll create DataLoaders from the <code class="docutils literal notranslate"><span class="pre">torchvision</span></code>-provided Datasets, as well as from
+our memory-mapped TensorDicts.</p>
+<p>Since <code class="docutils literal notranslate"><span class="pre">TensorDict</span></code> implements <code class="docutils literal notranslate"><span class="pre">__len__</span></code> and <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> (and also
+<code class="docutils literal notranslate"><span class="pre">__getitems__</span></code>) we can use it like a map-style Dataset and create a <code class="docutils literal notranslate"><span class="pre">DataLoader</span></code>
+directly from it. Note that because <code class="docutils literal notranslate"><span class="pre">TensorDict</span></code> can already handle batched indices,
+there is no need for collation, so we pass the identity function as <code class="docutils literal notranslate"><span class="pre">collate_fn</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">batch_size</span></a> <span class="o">=</span> <span class="mi">64</span>
 
 <a href="https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="torch.utils.data.DataLoader" class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_dataloader</span></a> <span class="o">=</span> <a href="https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader" title="torch.utils.data.DataLoader" class="sphx-glr-backref-module-torch-utils-data sphx-glr-backref-type-py-class"><span class="n">DataLoader</span></a><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">batch_size</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">batch_size</span></a><span class="p">)</span>
@@ -1372,7 +1387,8 @@ This takes a bit of time, but performing the transforms up-front will save repea
 </section>
 <section id="model">
 <h2>Model<a class="headerlink" href="#model" title="Permalink to this heading">¶</a></h2>
-<p>We use the same model from the [Quickstart Tutorial](<a class="reference external" href="https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html">https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html</a>).</p>
+<p>We use the same model from the
+<a class="reference external" href="https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html">Quickstart Tutorial</a>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="torch.nn.Module" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class"><span class="n">nn</span><span class="o">.</span><span class="n">Module</span></a><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -1420,7 +1436,8 @@ This takes a bit of time, but performing the transforms up-front will save repea
 </section>
 <section id="optimizing-the-parameters">
 <h2>Optimizing the parameters<a class="headerlink" href="#optimizing-the-parameters" title="Permalink to this heading">¶</a></h2>
-<p>We’ll optimise the parameters of the model using stochastic gradient descent and cross-entropy loss.</p>
+<p>We’ll optimise the parameters of the model using stochastic gradient descent and
+cross-entropy loss.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">loss_fn</span></a> <span class="o">=</span> <a href="https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class"><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span></a><span class="p">()</span>
 <a href="https://pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD" title="torch.optim.SGD" class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">optimizer</span></a> <span class="o">=</span> <a href="https://pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD" title="torch.optim.SGD" class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class"><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span></a><span class="p">(</span><a href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.parameters" title="torch.nn.Module.parameters" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method"><span class="n">model</span><span class="o">.</span><span class="n">parameters</span></a><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
 <a href="https://pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD" title="torch.optim.SGD" class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">optimizer_td</span></a> <span class="o">=</span> <a href="https://pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD" title="torch.optim.SGD" class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class"><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span></a><span class="p">(</span><a href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.parameters" title="torch.nn.Module.parameters" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method"><span class="n">model_td</span><span class="o">.</span><span class="n">parameters</span></a><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
@@ -1445,14 +1462,9 @@ This takes a bit of time, but performing the transforms up-front will save repea
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;loss: </span><span class="si">{</span><span class="n">loss</span><span class="si">:</span><span class="s2">&gt;7f</span><span class="si">}</span><span class="s2"> [</span><span class="si">{</span><span class="n">current</span><span class="si">:</span><span class="s2">&gt;5d</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">size</span><span class="si">:</span><span class="s2">&gt;5d</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The training loop for our <cite>TensorDict</cite>-based DataLoader is very similar, we just adjust how we unpack the data to the more explicit key-based retrieval offered by <cite>TensorDict</cite>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">`diff</span>
-<span class="pre">-</span> <span class="pre">for</span> <span class="pre">batch,</span> <span class="pre">(X,</span> <span class="pre">y)</span> <span class="pre">in</span> <span class="pre">enumerate(dataloader):</span>
-<span class="pre">-</span>&#160;&#160;&#160;&#160; <span class="pre">X,</span> <span class="pre">y</span> <span class="pre">=</span> <span class="pre">X.to(device),</span> <span class="pre">y.to(device)</span>
-<span class="pre">+</span> <span class="pre">for</span> <span class="pre">batch,</span> <span class="pre">data</span> <span class="pre">in</span> <span class="pre">enumerate(dataloader):</span>
-<span class="pre">+</span>&#160;&#160;&#160;&#160; <span class="pre">X,</span> <span class="pre">y</span> <span class="pre">=</span> <span class="pre">data[&quot;images&quot;].contiguous(),</span> <span class="pre">data[&quot;targets&quot;].contiguous()</span>
-<span class="pre">`</span></code></p>
-<p>The <cite>.contiguous()</cite> method loads the data stored in the memmap tensor.</p>
+<p>The training loop for our <code class="docutils literal notranslate"><span class="pre">TensorDict</span></code>-based DataLoader is very similar, we just
+adjust how we unpack the data to the more explicit key-based retrieval offered by
+<code class="docutils literal notranslate"><span class="pre">TensorDict</span></code>. The <code class="docutils literal notranslate"><span class="pre">.contiguous()</span></code> method loads the data stored in the memmap tensor.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">train_td</span><span class="p">(</span><span class="n">dataloader</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <a href="https://pytorch.org/docs/stable/generated/torch.nn.CrossEntropyLoss.html#torch.nn.CrossEntropyLoss" title="torch.nn.CrossEntropyLoss" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">loss_fn</span></a><span class="p">,</span> <a href="https://pytorch.org/docs/stable/generated/torch.optim.SGD.html#torch.optim.SGD" title="torch.optim.SGD" class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">optimizer</span></a><span class="p">):</span>
     <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataloader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
     <a href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.train" title="torch.nn.Module.train" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method"><span class="n">model</span><span class="o">.</span><span class="n">train</span></a><span class="p">()</span>
@@ -1548,159 +1560,159 @@ This takes a bit of time, but performing the transforms up-front will save repea
     is_shared=False)
 Epoch 1
 -------------------------
-loss: 2.304706 [    0/60000]
-loss: 2.283544 [ 6400/60000]
-loss: 2.265168 [12800/60000]
-loss: 2.259971 [19200/60000]
-loss: 2.239366 [25600/60000]
-loss: 2.221750 [32000/60000]
-loss: 2.221876 [38400/60000]
-loss: 2.190310 [44800/60000]
-loss: 2.190696 [51200/60000]
-loss: 2.152594 [57600/60000]
+loss: 2.303584 [    0/60000]
+loss: 2.291382 [ 6400/60000]
+loss: 2.270396 [12800/60000]
+loss: 2.265401 [19200/60000]
+loss: 2.250066 [25600/60000]
+loss: 2.226218 [32000/60000]
+loss: 2.226113 [38400/60000]
+loss: 2.200067 [44800/60000]
+loss: 2.196561 [51200/60000]
+loss: 2.156809 [57600/60000]
 Test Error:
- Accuracy: 47.9%, Avg loss: 2.140894
+ Accuracy: 56.9%, Avg loss: 2.156106
 
 Epoch 2
 -------------------------
-loss: 2.155116 [    0/60000]
-loss: 2.140902 [ 6400/60000]
-loss: 2.078921 [12800/60000]
-loss: 2.094014 [19200/60000]
-loss: 2.041767 [25600/60000]
-loss: 1.986108 [32000/60000]
-loss: 2.012464 [38400/60000]
-loss: 1.931393 [44800/60000]
-loss: 1.939896 [51200/60000]
-loss: 1.849982 [57600/60000]
+loss: 2.162167 [    0/60000]
+loss: 2.156567 [ 6400/60000]
+loss: 2.100287 [12800/60000]
+loss: 2.119954 [19200/60000]
+loss: 2.068600 [25600/60000]
+loss: 2.008493 [32000/60000]
+loss: 2.032886 [38400/60000]
+loss: 1.959758 [44800/60000]
+loss: 1.960780 [51200/60000]
+loss: 1.884906 [57600/60000]
 Test Error:
- Accuracy: 55.9%, Avg loss: 1.852267
+ Accuracy: 58.8%, Avg loss: 1.888735
 
 Epoch 3
 -------------------------
-loss: 1.894542 [    0/60000]
-loss: 1.856888 [ 6400/60000]
-loss: 1.734309 [12800/60000]
-loss: 1.771554 [19200/60000]
-loss: 1.667249 [25600/60000]
-loss: 1.624644 [32000/60000]
-loss: 1.647976 [38400/60000]
-loss: 1.548803 [44800/60000]
-loss: 1.573012 [51200/60000]
-loss: 1.460030 [57600/60000]
+loss: 1.912175 [    0/60000]
+loss: 1.892560 [ 6400/60000]
+loss: 1.776199 [12800/60000]
+loss: 1.821670 [19200/60000]
+loss: 1.710900 [25600/60000]
+loss: 1.653524 [32000/60000]
+loss: 1.678001 [38400/60000]
+loss: 1.581832 [44800/60000]
+loss: 1.602914 [51200/60000]
+loss: 1.495260 [57600/60000]
 Test Error:
- Accuracy: 60.9%, Avg loss: 1.484650
+ Accuracy: 60.9%, Avg loss: 1.517868
 
 Epoch 4
 -------------------------
-loss: 1.556193 [    0/60000]
-loss: 1.519088 [ 6400/60000]
-loss: 1.364001 [12800/60000]
-loss: 1.434852 [19200/60000]
-loss: 1.332114 [25600/60000]
-loss: 1.329664 [32000/60000]
-loss: 1.348120 [38400/60000]
-loss: 1.269679 [44800/60000]
-loss: 1.302226 [51200/60000]
-loss: 1.205695 [57600/60000]
+loss: 1.575616 [    0/60000]
+loss: 1.552959 [ 6400/60000]
+loss: 1.400419 [12800/60000]
+loss: 1.479685 [19200/60000]
+loss: 1.360397 [25600/60000]
+loss: 1.343087 [32000/60000]
+loss: 1.367332 [38400/60000]
+loss: 1.287984 [44800/60000]
+loss: 1.324468 [51200/60000]
+loss: 1.224424 [57600/60000]
 Test Error:
- Accuracy: 63.1%, Avg loss: 1.232253
+ Accuracy: 63.3%, Avg loss: 1.251100
 
 Epoch 5
 -------------------------
-loss: 1.308034 [    0/60000]
-loss: 1.291536 [ 6400/60000]
-loss: 1.118955 [12800/60000]
-loss: 1.224183 [19200/60000]
-loss: 1.115001 [25600/60000]
-loss: 1.140620 [32000/60000]
-loss: 1.167787 [38400/60000]
-loss: 1.099280 [44800/60000]
-loss: 1.134316 [51200/60000]
-loss: 1.057629 [57600/60000]
+loss: 1.320829 [    0/60000]
+loss: 1.314322 [ 6400/60000]
+loss: 1.142842 [12800/60000]
+loss: 1.257416 [19200/60000]
+loss: 1.133903 [25600/60000]
+loss: 1.143080 [32000/60000]
+loss: 1.176813 [38400/60000]
+loss: 1.105158 [44800/60000]
+loss: 1.148491 [51200/60000]
+loss: 1.064116 [57600/60000]
 Test Error:
- Accuracy: 64.5%, Avg loss: 1.076541
+ Accuracy: 65.0%, Avg loss: 1.084982
 
-TensorDict training done! time:  16.1701 s
+TensorDict training done! time:  13.1661 s
 Epoch 1
 -------------------------
-loss: 2.311538 [    0/60000]
-loss: 2.291357 [ 6400/60000]
-loss: 2.277052 [12800/60000]
-loss: 2.263685 [19200/60000]
-loss: 2.251753 [25600/60000]
-loss: 2.225920 [32000/60000]
-loss: 2.231514 [38400/60000]
-loss: 2.203527 [44800/60000]
-loss: 2.194252 [51200/60000]
-loss: 2.156180 [57600/60000]
+loss: 2.305735 [    0/60000]
+loss: 2.292175 [ 6400/60000]
+loss: 2.276465 [12800/60000]
+loss: 2.269908 [19200/60000]
+loss: 2.243026 [25600/60000]
+loss: 2.219779 [32000/60000]
+loss: 2.230284 [38400/60000]
+loss: 2.196707 [44800/60000]
+loss: 2.201938 [51200/60000]
+loss: 2.152555 [57600/60000]
 Test Error:
- Accuracy: 47.6%, Avg loss: 2.156969
+ Accuracy: 44.1%, Avg loss: 2.153360
 
 Epoch 2
 -------------------------
-loss: 2.167621 [    0/60000]
-loss: 2.155706 [ 6400/60000]
-loss: 2.104753 [12800/60000]
-loss: 2.112451 [19200/60000]
-loss: 2.068072 [25600/60000]
-loss: 2.012061 [32000/60000]
-loss: 2.034371 [38400/60000]
-loss: 1.962712 [44800/60000]
-loss: 1.963073 [51200/60000]
-loss: 1.881877 [57600/60000]
+loss: 2.174907 [    0/60000]
+loss: 2.153797 [ 6400/60000]
+loss: 2.100919 [12800/60000]
+loss: 2.105266 [19200/60000]
+loss: 2.047655 [25600/60000]
+loss: 2.000163 [32000/60000]
+loss: 2.018755 [38400/60000]
+loss: 1.945116 [44800/60000]
+loss: 1.951925 [51200/60000]
+loss: 1.854682 [57600/60000]
 Test Error:
- Accuracy: 58.3%, Avg loss: 1.890330
+ Accuracy: 56.7%, Avg loss: 1.868198
 
 Epoch 3
 -------------------------
-loss: 1.922755 [    0/60000]
-loss: 1.895209 [ 6400/60000]
-loss: 1.786155 [12800/60000]
-loss: 1.811652 [19200/60000]
-loss: 1.711860 [25600/60000]
-loss: 1.665309 [32000/60000]
-loss: 1.674729 [38400/60000]
-loss: 1.584450 [44800/60000]
-loss: 1.608798 [51200/60000]
-loss: 1.489697 [57600/60000]
+loss: 1.916375 [    0/60000]
+loss: 1.870276 [ 6400/60000]
+loss: 1.759918 [12800/60000]
+loss: 1.781833 [19200/60000]
+loss: 1.681779 [25600/60000]
+loss: 1.641682 [32000/60000]
+loss: 1.649910 [38400/60000]
+loss: 1.568124 [44800/60000]
+loss: 1.589286 [51200/60000]
+loss: 1.464348 [57600/60000]
 Test Error:
- Accuracy: 59.8%, Avg loss: 1.519313
+ Accuracy: 62.1%, Avg loss: 1.501341
 
 Epoch 4
 -------------------------
-loss: 1.589224 [    0/60000]
-loss: 1.553390 [ 6400/60000]
-loss: 1.412850 [12800/60000]
-loss: 1.466789 [19200/60000]
-loss: 1.356746 [25600/60000]
-loss: 1.357334 [32000/60000]
-loss: 1.359812 [38400/60000]
-loss: 1.290640 [44800/60000]
-loss: 1.327043 [51200/60000]
-loss: 1.216614 [57600/60000]
+loss: 1.577442 [    0/60000]
+loss: 1.531819 [ 6400/60000]
+loss: 1.390960 [12800/60000]
+loss: 1.445716 [19200/60000]
+loss: 1.342882 [25600/60000]
+loss: 1.337004 [32000/60000]
+loss: 1.344187 [38400/60000]
+loss: 1.287900 [44800/60000]
+loss: 1.317498 [51200/60000]
+loss: 1.202354 [57600/60000]
 Test Error:
- Accuracy: 62.4%, Avg loss: 1.252670
+ Accuracy: 63.9%, Avg loss: 1.242324
 
 Epoch 5
 -------------------------
-loss: 1.335429 [    0/60000]
-loss: 1.310837 [ 6400/60000]
-loss: 1.159372 [12800/60000]
-loss: 1.245337 [19200/60000]
-loss: 1.127548 [25600/60000]
-loss: 1.161916 [32000/60000]
-loss: 1.173712 [38400/60000]
-loss: 1.112569 [44800/60000]
-loss: 1.152345 [51200/60000]
-loss: 1.061879 [57600/60000]
+loss: 1.322809 [    0/60000]
+loss: 1.295974 [ 6400/60000]
+loss: 1.137960 [12800/60000]
+loss: 1.230530 [19200/60000]
+loss: 1.117373 [25600/60000]
+loss: 1.136087 [32000/60000]
+loss: 1.155337 [38400/60000]
+loss: 1.110600 [44800/60000]
+loss: 1.146272 [51200/60000]
+loss: 1.046213 [57600/60000]
 Test Error:
- Accuracy: 64.1%, Avg loss: 1.091027
+ Accuracy: 65.1%, Avg loss: 1.079461
 
-Training done! time:  45.5797 s
+Training done! time:  36.8047 s
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  23.633 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  7.232 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-data-fashion-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/e87c2bc1479664c90c050249ea50d202/data_fashion.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">data_fashion.py</span></code></a></p>
@@ -1721,7 +1733,7 @@ Training done! time:  45.5797 s
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../overview.html" class="btn btn-neutral float-right" title="Overview" accesskey="n" rel="next">Next <img src="../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="tensorclass_fashion.html" class="btn btn-neutral float-right" title="Using tensorclasses for datasets" accesskey="n" rel="next">Next <img src="../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
         <a href="../index.html" class="btn btn-neutral" title="Welcome to the TensorDict Documentation!" accesskey="p" rel="prev"><img src="../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
