@@ -408,12 +408,9 @@ this algorithm.</p>
 <span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">optim</span>
 <span class="kn">from</span> <span class="nn">torchrl.collectors</span> <span class="kn">import</span> <span class="n">MultiaSyncDataCollector</span>
-<span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CompositeSpec</span><span class="p">,</span>
-    <span class="n">TensorDictPrioritizedReplayBuffer</span><span class="p">,</span>
-    <span class="n">TensorDictReplayBuffer</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">CompositeSpec</span><span class="p">,</span> <span class="n">TensorDictReplayBuffer</span>
 <span class="kn">from</span> <span class="nn">torchrl.data.postprocs</span> <span class="kn">import</span> <span class="n">MultiStep</span>
+<span class="kn">from</span> <span class="nn">torchrl.data.replay_buffers.samplers</span> <span class="kn">import</span> <span class="n">PrioritizedSampler</span><span class="p">,</span> <span class="n">RandomSampler</span>
 <span class="kn">from</span> <span class="nn">torchrl.data.replay_buffers.storages</span> <span class="kn">import</span> <span class="n">LazyMemmapStorage</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">CatTensors</span><span class="p">,</span>
@@ -722,29 +719,23 @@ function takes care of creating the replay buffer with the desired
 hyperparameters:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_replay_buffer</span><span class="p">(</span><span class="n">make_replay_buffer</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">prb</span><span class="p">:</span>
-        <span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">TensorDictPrioritizedReplayBuffer</span><span class="p">(</span>
-            <span class="n">buffer_size</span><span class="p">,</span>
+        <span class="n">sampler</span> <span class="o">=</span> <span class="n">PrioritizedSampler</span><span class="p">(</span>
+            <span class="n">max_capacity</span><span class="o">=</span><span class="n">buffer_size</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
             <span class="n">beta</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-            <span class="n">pin_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">prefetch</span><span class="o">=</span><span class="n">make_replay_buffer</span><span class="p">,</span>
-            <span class="n">storage</span><span class="o">=</span><span class="n">LazyMemmapStorage</span><span class="p">(</span>
-                <span class="n">buffer_size</span><span class="p">,</span>
-                <span class="n">scratch_dir</span><span class="o">=</span><span class="n">buffer_scratch_dir</span><span class="p">,</span>
-                <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
-            <span class="p">),</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">TensorDictReplayBuffer</span><span class="p">(</span>
+        <span class="n">sampler</span> <span class="o">=</span> <span class="n">RandomSampler</span><span class="p">()</span>
+    <span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">TensorDictReplayBuffer</span><span class="p">(</span>
+        <span class="n">storage</span><span class="o">=</span><span class="n">LazyMemmapStorage</span><span class="p">(</span>
             <span class="n">buffer_size</span><span class="p">,</span>
-            <span class="n">pin_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">prefetch</span><span class="o">=</span><span class="n">make_replay_buffer</span><span class="p">,</span>
-            <span class="n">storage</span><span class="o">=</span><span class="n">LazyMemmapStorage</span><span class="p">(</span>
-                <span class="n">buffer_size</span><span class="p">,</span>
-                <span class="n">scratch_dir</span><span class="o">=</span><span class="n">buffer_scratch_dir</span><span class="p">,</span>
-                <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
+            <span class="n">scratch_dir</span><span class="o">=</span><span class="n">buffer_scratch_dir</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">sampler</span><span class="o">=</span><span class="n">sampler</span><span class="p">,</span>
+        <span class="n">pin_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">prefetch</span><span class="o">=</span><span class="n">make_replay_buffer</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">replay_buffer</span>
 </pre></div>
 </div>
@@ -1044,7 +1035,7 @@ async settings, and at the end of it in sync settings).</p></li>
 
             <span class="c1"># update priority</span>
             <span class="k">if</span> <span class="n">prb</span><span class="p">:</span>
-                <span class="n">replay_buffer</span><span class="o">.</span><span class="n">update_priority</span><span class="p">(</span><span class="n">sampled_tensordict</span><span class="p">)</span>
+                <span class="n">replay_buffer</span><span class="o">.</span><span class="n">update_tensordict_priority</span><span class="p">(</span><span class="n">sampled_tensordict</span><span class="p">)</span>
 
     <span class="n">rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
         <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">/</span> <span class="n">norm_factor_training</span> <span class="o">/</span> <span class="n">frame_skip</span><span class="p">)</span>
@@ -1067,42 +1058,32 @@ async settings, and at the end of it in sync settings).</p></li>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/2500 [00:00&lt;?, ?it/s]
-
- 20%|##        | 500/2500 [00:01&lt;00:06, 324.09it/s]Creating a MemmapStorage...
+ 20%|##        | 500/2500 [00:01&lt;00:05, 366.91it/s]Creating a MemmapStorage...
 The storage is being created:
-        action: /tmp/lw5ifm1l, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
-        done: /tmp/1uv5fwej, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
-        gamma: /tmp/v23bwf5m, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-        index: /tmp/kmao1dh9, 0.0095367431640625 Mb of storage (size: torch.Size([2500])).
-        mask: /tmp/s1qcc034, 0.002384185791015625 Mb of storage (size: torch.Size([2500])).
-        nonterminal: /tmp/3qwqkusy, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
-        observation_vector: /tmp/o79bjar4, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
-        original_reward: /tmp/qcc5chqu, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-        param: /tmp/297d512f, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
-        reward: /tmp/xa7rphr5, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-        step_count: /tmp/hq_x64ag, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
-        steps_to_next_obs: /tmp/ws8azq57, 0.019073486328125 Mb of storage (size: torch.Size([2500, 1])).
-        traj_ids: /tmp/pclu6fzd, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
-        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/tmpiy5pn3zq, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
+        action: /tmp/ekhffg7s, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
+        done: /tmp/b0pic_7w, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
+        gamma: /tmp/l2tmkc85, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        index: /tmp/q0u554jz, 0.0095367431640625 Mb of storage (size: torch.Size([2500])).
+        mask: /tmp/yc642tly, 0.002384185791015625 Mb of storage (size: torch.Size([2500])).
+        nonterminal: /tmp/t05iznrr, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
+        observation_vector: /tmp/q6w766qd, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
+        original_reward: /tmp/05a9u4c1, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        param: /tmp/96w3zz4a, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
+        reward: /tmp/utzx5ch1, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        step_count: /tmp/m4v9vc27, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
+        steps_to_next_obs: /tmp/lht8chfo, 0.019073486328125 Mb of storage (size: torch.Size([2500, 1])).
+        traj_ids: /tmp/159mxcuo, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
+        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/tmpyh7wvpqj, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
 
-
-reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7564:  20%|##        | 500/2500 [00:05&lt;00:06, 324.09it/s]
-
-reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7564:  40%|####      | 1000/2500 [00:05&lt;00:09, 161.89it/s]
-
-reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7564:  40%|####      | 1000/2500 [00:07&lt;00:09, 161.89it/s]
-
-reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7564:  60%|######    | 1500/2500 [00:07&lt;00:04, 219.45it/s]
-
-reward: -1.4040 (r0 = -1.3075), reward eval: reward: -0.7564:  60%|######    | 1500/2500 [00:08&lt;00:04, 219.45it/s]
-
-reward: -1.4040 (r0 = -1.3075), reward eval: reward: -0.7564:  80%|########  | 2000/2500 [00:09&lt;00:02, 230.18it/s]
-
-reward: -1.1746 (r0 = -1.3075), reward eval: reward: -0.7564:  80%|########  | 2000/2500 [00:10&lt;00:02, 230.18it/s]
-
-reward: -1.1746 (r0 = -1.3075), reward eval: reward: -0.7564: 100%|##########| 2500/2500 [00:10&lt;00:00, 273.15it/s]
-
-reward: -2.2419 (r0 = -1.3075), reward eval: reward: -0.7564: 100%|##########| 2500/2500 [00:11&lt;00:00, 273.15it/s]
+reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7548:  20%|##        | 500/2500 [00:06&lt;00:05, 366.91it/s]
+reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7548:  40%|####      | 1000/2500 [00:06&lt;00:10, 140.36it/s]
+reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7548:  40%|####      | 1000/2500 [00:09&lt;00:10, 140.36it/s]
+reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7548:  60%|######    | 1500/2500 [00:09&lt;00:06, 156.60it/s]
+reward: -1.5003 (r0 = -1.3075), reward eval: reward: -0.7548:  60%|######    | 1500/2500 [00:11&lt;00:06, 156.60it/s]
+reward: -1.5003 (r0 = -1.3075), reward eval: reward: -0.7548:  80%|########  | 2000/2500 [00:11&lt;00:02, 186.82it/s]
+reward: -1.3822 (r0 = -1.3075), reward eval: reward: -0.7548:  80%|########  | 2000/2500 [00:12&lt;00:02, 186.82it/s]
+reward: -1.3822 (r0 = -1.3075), reward eval: reward: -0.7548: 100%|##########| 2500/2500 [00:12&lt;00:00, 217.38it/s]
+reward: -2.8820 (r0 = -1.3075), reward eval: reward: -0.7548: 100%|##########| 2500/2500 [00:14&lt;00:00, 217.38it/s]
 </pre></div>
 </div>
 </section>
@@ -1225,6 +1206,8 @@ loc = tensor([-3.9152e-01,  2.3728e+00,  1.6790e-02, -5.8100e-03,  2.0432e-02,
          1.7317e-01,  6.3022e-02]),
 scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
         0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
+
+reward: -2.8820 (r0 = -1.3075), reward eval: reward: -0.7548: 100%|##########| 2500/2500 [00:30&lt;00:00, 217.38it/s]
 </pre></div>
 </div>
 <p>The training loop needs to be modified. First, whereas before extending the
@@ -1352,7 +1335,7 @@ batch size to <code class="docutils literal notranslate"><span class="pre">torch
             <span class="n">sampled_tensordict</span><span class="p">[</span><span class="s2">&quot;td_error&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">advantage</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">sampled_tensordict</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
             <span class="k">if</span> <span class="n">prb</span><span class="p">:</span>
-                <span class="n">replay_buffer</span><span class="o">.</span><span class="n">update_priority</span><span class="p">(</span><span class="n">sampled_tensordict</span><span class="p">)</span>
+                <span class="n">replay_buffer</span><span class="o">.</span><span class="n">update_tensordict_priority</span><span class="p">(</span><span class="n">sampled_tensordict</span><span class="p">)</span>
 
     <span class="n">rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
         <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">/</span> <span class="n">norm_factor_training</span> <span class="o">/</span> <span class="n">frame_skip</span><span class="p">)</span>
@@ -1374,19 +1357,16 @@ batch size to <code class="docutils literal notranslate"><span class="pre">torch
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating a MemmapStorage...
 The storage is being created:
-        action: /tmp/pgvjt0f0, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-        done: /tmp/4ma70w1c, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
-        index: /tmp/uhe31l6k, 0.000762939453125 Mb of storage (size: torch.Size([200])).
-        mask: /tmp/_ho95roa, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250])).
-        observation_vector: /tmp/tdftzuzl, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
-        param: /tmp/oqwpj4rz, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-        reward: /tmp/x1t88ukf, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
-        step_count: /tmp/4oc0ndud, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
-        traj_ids: /tmp/9r5est98, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
-        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/tmpg5pmwuqm, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
-
-
-reward: -2.2419 (r0 = -1.3075), reward eval: reward: -0.7564: 100%|##########| 2500/2500 [00:29&lt;00:00, 273.15it/s]
+        action: /tmp/bo50h1xc, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
+        done: /tmp/0e3gfq8_, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
+        index: /tmp/_52cn1dr, 0.000762939453125 Mb of storage (size: torch.Size([200])).
+        mask: /tmp/qgguk7r8, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250])).
+        observation_vector: /tmp/8mewab5z, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
+        param: /tmp/tw6wsi2i, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
+        reward: /tmp/p6egvip9, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
+        step_count: /tmp/wqx0vmmh, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
+        traj_ids: /tmp/uoetwvaq, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
+        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/tmpe6wetu2w, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
 </pre></div>
 </div>
 <p>We can observe that using TD(lambda) made our results considerably more
@@ -1406,7 +1386,7 @@ use a greater value for <code class="docutils literal notranslate"><span class="
 <img src="../_images/sphx_glr_coding_ddpg_002.png" srcset="../_images/sphx_glr_coding_ddpg_002.png" alt="TD-labmda DDPG results" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;TD-labmda DDPG results&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  3.740 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  4.192 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-ddpg-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0dfdb6ef4cc9782fdb39c4a9d0900d37/coding_ddpg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_ddpg.py</span></code></a></p>

@@ -542,7 +542,7 @@ with two parameters computed from a random rollout in the environment.</p></li>
 <span class="n">m</span><span class="p">,</span> <span class="n">s</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(0.9915987253189087, 0.08324037492275238)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(0.9907662272453308, 0.08460042625665665)
 </pre></div>
 </div>
 </section>
@@ -680,7 +680,6 @@ We place the storage on disk using <code class="docutils literal notranslate"><s
 of this storage is that the data given to it must always have the same
 shape. This storage will be instantiated later.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">TensorDictReplayBuffer</span><span class="p">(</span>
-    <span class="n">buffer_size</span><span class="p">,</span>
     <span class="n">storage</span><span class="o">=</span><span class="n">LazyMemmapStorage</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">),</span>
     <span class="n">prefetch</span><span class="o">=</span><span class="n">n_optim</span><span class="p">,</span>
 <span class="p">)</span>
@@ -865,7 +864,7 @@ the optimization is taking place.</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py&quot;</span>, line <span class="m">382</span>, in <span class="n">&lt;module&gt;</span>
+  File <span class="nb">&quot;/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py&quot;</span>, line <span class="m">381</span>, in <span class="n">&lt;module&gt;</span>
 <span class="w">    </span><span class="n">traj_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">][</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
 <span class="gr">IndexError</span>: <span class="n">too many indices for tensor of dimension 2</span>
 </pre></div>
@@ -930,8 +929,7 @@ to the RB, we’ll be creating a replay buffer of size
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">max_size</span> <span class="o">=</span> <span class="n">frames_per_batch</span> <span class="o">//</span> <span class="n">n_workers</span>
 
 <span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">TensorDictReplayBuffer</span><span class="p">(</span>
-    <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">buffer_size</span> <span class="o">//</span> <span class="n">max_size</span><span class="p">),</span>
-    <span class="n">storage</span><span class="o">=</span><span class="n">LazyMemmapStorage</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">),</span>
+    <span class="n">storage</span><span class="o">=</span><span class="n">LazyMemmapStorage</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">buffer_size</span> <span class="o">//</span> <span class="n">max_size</span><span class="p">)),</span>
     <span class="n">prefetch</span><span class="o">=</span><span class="n">n_optim</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -1255,7 +1253,7 @@ for more information).</p></li>
 (check <code class="docutils literal notranslate"><span class="pre">torchrl.modules.NoisyLinear</span></code>, which is fully compatible with the
 <code class="docutils literal notranslate"><span class="pre">MLP</span></code> class used in our Dueling DQN).</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  15.425 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  15.909 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-dqn-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/be66e8850a06844c91f6264538ad69e8/coding_dqn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_dqn.py</span></code></a></p>
