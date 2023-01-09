@@ -1389,10 +1389,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Flatten adjacent dimensions of a tensor.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        first_dim (int, optional): first dimension of the dimensions to flatten.</span>
-<span class="sd">            Default is 0.</span>
-<span class="sd">        last_dim (int, optional): last dimension of the dimensions to flatten.</span>
-<span class="sd">            Default is -3.</span>
+<span class="sd">        first_dim (int): first dimension of the dimensions to flatten.</span>
+<span class="sd">        last_dim (int): last dimension of the dimensions to flatten.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">inplace</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1400,7 +1398,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">first_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">last_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">last_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">in_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">out_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
