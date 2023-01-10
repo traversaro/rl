@@ -259,6 +259,7 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="torchrl_demo.html">Introduction to TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pretrained_models.html">Using pretrained models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tensordict_tutorial.html">TensorDict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tensordict_module.html">TensorDictModule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="torch_envs.html">TorchRL envs</a></li>
@@ -542,7 +543,7 @@ with two parameters computed from a random rollout in the environment.</p></li>
 <span class="n">m</span><span class="p">,</span> <span class="n">s</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(0.9927790760993958, 0.0761055275797844)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(0.9926152229309082, 0.0762312114238739)
 </pre></div>
 </div>
 </section>
@@ -753,7 +754,8 @@ the optimization is taking place.</p>
         <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_frames</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-        <span class="n">traj_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">][</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">traj_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">][</span><span class="n">done</span><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
 
     <span class="c1"># check that we have enough data to start training</span>
     <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">init_random_frames</span><span class="p">:</span>
@@ -863,10 +865,54 @@ the optimization is taking place.</p>
     <span class="n">display</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py&quot;</span>, line <span class="m">381</span>, in <span class="n">&lt;module&gt;</span>
-<span class="w">    </span><span class="n">traj_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">][</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-<span class="gr">IndexError</span>: <span class="n">too many indices for tensor of dimension 2</span>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_coding_dqn_001.png" srcset="../_images/sphx_glr_coding_dqn_001.png" alt="coding dqn" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_coding_dqn_002.png" srcset="../_images/sphx_glr_coding_dqn_002.png" alt="loss, value, grad norm, traj length (training)" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/500 [00:00&lt;?, ?it/s]
+  6%|6         | 32/500 [00:03&lt;00:47,  9.90it/s]Creating a MemmapStorage...
+The storage is being created:
+        action: /tmp/tmpkb98gs9m, 0.00762939453125 Mb of storage (size: torch.Size([500, 2])).
+        action_value: /tmp/tmpd2ha8_vm, 0.003814697265625 Mb of storage (size: torch.Size([500, 2])).
+        chosen_action_value: /tmp/tmpk0jgqosm, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+        done: /tmp/tmpr_u1kq1a, 0.000476837158203125 Mb of storage (size: torch.Size([500, 1])).
+        index: /tmp/tmpqp6oz228, 0.0019073486328125 Mb of storage (size: torch.Size([500])).
+        mask: /tmp/tmp0expmtrg, 0.000476837158203125 Mb of storage (size: torch.Size([500])).
+        pixels: /tmp/tmpus0lh1a8, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
+        reward: /tmp/tmps91ope9c, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+        step_count: /tmp/tmpicx8_ddy, 0.003814697265625 Mb of storage (size: torch.Size([500])).
+        traj_ids: /tmp/tmphg2pezsl, 0.003814697265625 Mb of storage (size: torch.Size([500])).
+        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmpog0rtgjc, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
+
+ 13%|#2        | 64/500 [00:04&lt;00:28, 15.19it/s]
+ 19%|#9        | 96/500 [00:06&lt;00:27, 14.67it/s]
+error:  12.8566, value:  19.1685:  19%|#9        | 96/500 [00:07&lt;00:27, 14.67it/s]
+error:  12.8566, value:  19.1685:  26%|##5       | 128/500 [00:07&lt;00:18, 19.91it/s]
+error:  33.4224, value:  19.6949:  26%|##5       | 128/500 [00:08&lt;00:18, 19.91it/s]
+error:  33.4224, value:  19.6949:  32%|###2      | 160/500 [00:09&lt;00:19, 17.23it/s]
+error:  22.5023, value:  18.5314:  32%|###2      | 160/500 [00:10&lt;00:19, 17.23it/s]
+error:  22.5023, value:  18.5314:  38%|###8      | 192/500 [00:10&lt;00:14, 21.90it/s]
+error:  50.8528, value:  17.5550:  38%|###8      | 192/500 [00:11&lt;00:14, 21.90it/s]
+error:  50.8528, value:  17.5550:  45%|####4     | 224/500 [00:15&lt;00:23, 11.99it/s]
+error:  19.8569, value:  20.4621:  45%|####4     | 224/500 [00:16&lt;00:23, 11.99it/s]
+error:  19.8569, value:  20.4621:  51%|#####1    | 256/500 [00:16&lt;00:16, 15.08it/s]
+error:  41.7486, value:  20.2225:  51%|#####1    | 256/500 [00:17&lt;00:16, 15.08it/s]
+error:  41.7486, value:  20.2225:  58%|#####7    | 288/500 [00:19&lt;00:15, 13.27it/s]
+error:  23.5818, value:  18.6749:  58%|#####7    | 288/500 [00:20&lt;00:15, 13.27it/s]
+error:  23.5818, value:  18.6749:  64%|######4   | 320/500 [00:20&lt;00:11, 16.07it/s]
+error:  33.0302, value:  18.9935:  64%|######4   | 320/500 [00:21&lt;00:11, 16.07it/s]
+error:  33.0302, value:  18.9935:  70%|#######   | 352/500 [00:24&lt;00:11, 12.37it/s]
+error:  9.8075, value:  18.7624:  70%|#######   | 352/500 [00:25&lt;00:11, 12.37it/s]
+error:  9.8075, value:  18.7624:  77%|#######6  | 384/500 [00:26&lt;00:08, 14.12it/s]
+error:  3.0430, value:  19.8362:  77%|#######6  | 384/500 [00:26&lt;00:08, 14.12it/s]
+error:  3.0430, value:  19.8362:  83%|########3 | 416/500 [00:28&lt;00:06, 13.65it/s]
+error:  22.1990, value:  19.1537:  83%|########3 | 416/500 [00:29&lt;00:06, 13.65it/s]
+error:  22.1990, value:  19.1537:  90%|########9 | 448/500 [00:31&lt;00:04, 12.41it/s]
+error:  38.7065, value:  19.0986:  90%|########9 | 448/500 [00:32&lt;00:04, 12.41it/s]
+error:  38.7065, value:  19.0986:  96%|#########6| 480/500 [00:32&lt;00:01, 15.12it/s]
+error:  15.7375, value:  20.2201:  96%|#########6| 480/500 [00:33&lt;00:01, 15.12it/s]
+error:  15.7375, value:  20.2201: : 512it [00:36, 12.47it/s]
+error:  17.1136, value:  19.3630: : 512it [00:37, 12.47it/s]
 </pre></div>
 </div>
 <p><strong>Note</strong>: As already mentioned above, to get a more reasonable performance,
@@ -875,6 +921,9 @@ use a greater value for <code class="docutils literal notranslate"><span class="
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;dqn_td0.png&quot;</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_coding_dqn_003.png" srcset="../_images/sphx_glr_coding_dqn_003.png" alt="coding dqn" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(-0.5, 1499.5, 1499.5, -0.5)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># save results</span>
@@ -926,6 +975,25 @@ to the RB, we’ll be creating a replay buffer of size
 <span class="n">params_target_flat</span> <span class="o">=</span> <span class="n">params_target</span><span class="o">.</span><span class="n">flatten_keys</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>reset results: TensorDict(
+    fields={
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
+Q-value network results: TensorDict(
+    fields={
+        action: Tensor(torch.Size([2]), dtype=torch.int64),
+        action_value: Tensor(torch.Size([2]), dtype=torch.float32),
+        chosen_action_value: Tensor(torch.Size([1]), dtype=torch.float32),
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
+</pre></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">max_size</span> <span class="o">=</span> <span class="n">frames_per_batch</span> <span class="o">//</span> <span class="n">n_workers</span>
 
 <span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">TensorDictReplayBuffer</span><span class="p">(</span>
@@ -944,9 +1012,24 @@ to the RB, we’ll be creating a replay buffer of size
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>error:  17.1136, value:  19.3630: : 512it [00:48, 12.47it/s]
+</pre></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">optim</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">params_flat</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">lr</span><span class="p">)</span>
 <span class="n">dummy_env</span> <span class="o">=</span> <span class="n">make_env</span><span class="p">(</span><span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">actor_explore</span><span class="p">(</span><span class="n">dummy_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        action: Tensor(torch.Size([2]), dtype=torch.int64),
+        action_value: Tensor(torch.Size([2]), dtype=torch.float32),
+        chosen_action_value: Tensor(torch.Size([1]), dtype=torch.float32),
+        done: Tensor(torch.Size([1]), dtype=torch.bool),
+        pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32)},
+    batch_size=torch.Size([]),
+    device=cpu,
+    is_shared=False)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">evals</span> <span class="o">=</span> <span class="p">[]</span>
@@ -984,7 +1067,8 @@ desired shape (such that all tensordicts have the same shape of
         <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_frames</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-        <span class="n">traj_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">][</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">traj_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">][</span><span class="n">done</span><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">init_random_frames</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_optim</span><span class="p">):</span>
@@ -1101,12 +1185,97 @@ desired shape (such that all tensordicts have the same shape of
     <span class="n">display</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">())</span>
 </pre></div>
 </div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_coding_dqn_004.png" srcset="../_images/sphx_glr_coding_dqn_004.png" alt="coding dqn" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_coding_dqn_005.png" srcset="../_images/sphx_glr_coding_dqn_005.png" alt="loss, value, grad norm, traj length (training)" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/500 [00:00&lt;?, ?it/s]
+error:  17.1136, value:  19.3630: : 512it [00:50, 10.05it/s]
+
+
+  6%|6         | 32/500 [00:04&lt;01:01,  7.65it/s]Creating a MemmapStorage...
+The storage is being created:
+        action: /tmp/tmpfs5x0nr4, 0.0078125 Mb of storage (size: torch.Size([16, 32, 2])).
+        action_value: /tmp/tmpn_tem_g1, 0.00390625 Mb of storage (size: torch.Size([16, 32, 2])).
+        chosen_action_value: /tmp/tmprqkod2zp, 0.001953125 Mb of storage (size: torch.Size([16, 32, 1])).
+        done: /tmp/tmp0bt7mcmn, 0.00048828125 Mb of storage (size: torch.Size([16, 32, 1])).
+        index: /tmp/tmpyxi4mmhz, 6.103515625e-05 Mb of storage (size: torch.Size([16])).
+        mask: /tmp/tmpahrhtclq, 0.00048828125 Mb of storage (size: torch.Size([16, 32])).
+        pixels: /tmp/tmpne4ychvt, 32.0 Mb of storage (size: torch.Size([16, 32, 4, 64, 64])).
+        reward: /tmp/tmpu651q6_1, 0.001953125 Mb of storage (size: torch.Size([16, 32, 1])).
+        step_count: /tmp/tmp0_8885rt, 0.00390625 Mb of storage (size: torch.Size([16, 32])).
+        traj_ids: /tmp/tmpot7t61hg, 0.00390625 Mb of storage (size: torch.Size([16, 32])).
+        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmptewrnmp0, 32.0 Mb of storage (size: torch.Size([16, 32, 4, 64, 64])).
+
+
+ 13%|#2        | 64/500 [00:05&lt;00:35, 12.31it/s]
+
+ 19%|#9        | 96/500 [00:07&lt;00:26, 15.18it/s]
+
+error:  4.4545, value:  5.9328:  19%|#9        | 96/500 [00:07&lt;00:26, 15.18it/s]
+
+error:  4.4545, value:  5.9328:  26%|##5       | 128/500 [00:08&lt;00:21, 17.27it/s]
+
+error:  2.9575, value:  2.9443:  26%|##5       | 128/500 [00:09&lt;00:21, 17.27it/s]
+
+error:  2.9575, value:  2.9443:  32%|###2      | 160/500 [00:11&lt;00:21, 15.55it/s]
+
+error:  5.3308, value:  6.7589:  32%|###2      | 160/500 [00:11&lt;00:21, 15.55it/s]
+
+error:  5.3308, value:  6.7589:  38%|###8      | 192/500 [00:12&lt;00:18, 17.10it/s]
+
+error:  4.7392, value:  2.0243:  38%|###8      | 192/500 [00:13&lt;00:18, 17.10it/s]
+
+error:  4.7392, value:  2.0243:  45%|####4     | 224/500 [00:14&lt;00:17, 15.67it/s]
+
+error:  3.5918, value:  6.0433:  45%|####4     | 224/500 [00:15&lt;00:17, 15.67it/s]
+
+error:  3.5918, value:  6.0433:  51%|#####1    | 256/500 [00:18&lt;00:18, 12.86it/s]
+
+error:  3.8570, value:  7.1627:  51%|#####1    | 256/500 [00:19&lt;00:18, 12.86it/s]
+
+error:  3.8570, value:  7.1627:  58%|#####7    | 288/500 [00:19&lt;00:12, 16.35it/s]
+
+error:  6.8470, value:  8.2880:  58%|#####7    | 288/500 [00:19&lt;00:12, 16.35it/s]
+
+error:  6.8470, value:  8.2880:  64%|######4   | 320/500 [00:23&lt;00:15, 11.61it/s]
+
+error:  3.8251, value:  7.3496:  64%|######4   | 320/500 [00:24&lt;00:15, 11.61it/s]
+
+error:  3.8251, value:  7.3496:  70%|#######   | 352/500 [00:24&lt;00:10, 14.76it/s]
+
+error:  3.8178, value:  4.2274:  70%|#######   | 352/500 [00:25&lt;00:10, 14.76it/s]
+
+error:  3.8178, value:  4.2274:  77%|#######6  | 384/500 [00:26&lt;00:07, 15.62it/s]
+
+error:  0.8124, value:  6.3755:  77%|#######6  | 384/500 [00:27&lt;00:07, 15.62it/s]
+
+error:  0.8124, value:  6.3755:  83%|########3 | 416/500 [00:28&lt;00:05, 15.83it/s]
+
+error:  0.0503, value:  3.6714:  83%|########3 | 416/500 [00:29&lt;00:05, 15.83it/s]
+
+error:  0.0503, value:  3.6714:  90%|########9 | 448/500 [00:29&lt;00:03, 17.27it/s]
+
+error:  2.6040, value:  6.6686:  90%|########9 | 448/500 [00:30&lt;00:03, 17.27it/s]
+
+error:  2.6040, value:  6.6686:  96%|#########6| 480/500 [00:32&lt;00:01, 14.70it/s]
+
+error:  14.3085, value:  12.4356:  96%|#########6| 480/500 [00:33&lt;00:01, 14.70it/s]
+
+error:  14.3085, value:  12.4356: : 512it [00:33, 17.48it/s]
+
+error:  1.4128, value:  3.3357: : 512it [00:34, 17.48it/s]
+</pre></div>
+</div>
 <p><strong>Note</strong>: As already mentioned above, to get a more reasonable performance,
 use a greater value for <code class="docutils literal notranslate"><span class="pre">total_frames</span></code> e.g. 500000.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">plt</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="s2">&quot;dqn_tdlambda.png&quot;</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../_images/sphx_glr_coding_dqn_006.png" srcset="../_images/sphx_glr_coding_dqn_006.png" alt="coding dqn" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(-0.5, 1499.5, 1499.5, -0.5)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># save results</span>
@@ -1210,12 +1379,32 @@ use a greater value for <code class="docutils literal notranslate"><span class="
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;episode length (training)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Finally, we generate a new video to check what the algorithm has learnt.
+<img src="../_images/sphx_glr_coding_dqn_007.png" srcset="../_images/sphx_glr_coding_dqn_007.png" alt="loss, value, grad norm, episode length (training)" class = "sphx-glr-single-img"/><p>Finally, we generate a new video to check what the algorithm has learnt.
 If all goes well, the duration should be significantly longer than with the
 initial, random rollout.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dummy_env</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">CatTensors</span><span class="p">([</span><span class="s2">&quot;pixels&quot;</span><span class="p">],</span> <span class="s2">&quot;pixels_save&quot;</span><span class="p">,</span> <span class="n">del_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 <span class="n">eval_rollout</span> <span class="o">=</span> <span class="n">dummy_env</span><span class="o">.</span><span class="n">rollout</span><span class="p">(</span><span class="n">max_steps</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">policy</span><span class="o">=</span><span class="n">actor</span><span class="p">,</span> <span class="n">auto_reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
 <span class="n">eval_rollout</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
+    fields={
+        action: Tensor(torch.Size([9, 2]), dtype=torch.int64),
+        action_value: Tensor(torch.Size([9, 2]), dtype=torch.float32),
+        chosen_action_value: Tensor(torch.Size([9, 1]), dtype=torch.float32),
+        done: Tensor(torch.Size([9, 1]), dtype=torch.bool),
+        next: TensorDict(
+            fields={
+                pixels: Tensor(torch.Size([9, 4, 64, 64]), dtype=torch.float32)},
+            batch_size=torch.Size([9]),
+            device=cpu,
+            is_shared=False),
+        pixels: Tensor(torch.Size([9, 4, 64, 64]), dtype=torch.float32),
+        pixels_save: Tensor(torch.Size([9, 400, 600, 3]), dtype=torch.uint8),
+        reward: Tensor(torch.Size([9, 1]), dtype=torch.float32)},
+    batch_size=torch.Size([9]),
+    device=cpu,
+    is_shared=False)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># imageio.mimwrite(&#39;cartpole.mp4&#39;, eval_rollout[&quot;pixels_save&quot;].numpy(), fps=30);</span>
@@ -1253,7 +1442,7 @@ for more information).</p></li>
 (check <code class="docutils literal notranslate"><span class="pre">torchrl.modules.NoisyLinear</span></code>, which is fully compatible with the
 <code class="docutils literal notranslate"><span class="pre">MLP</span></code> class used in our Dueling DQN).</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  15.069 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  36.503 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-dqn-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/be66e8850a06844c91f6264538ad69e8/coding_dqn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_dqn.py</span></code></a></p>
