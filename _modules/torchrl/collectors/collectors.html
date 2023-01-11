@@ -385,13 +385,11 @@
 <span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span><span class="p">,</span> <span class="n">TensorDictBase</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">IterableDataset</span>
-
 <span class="kn">from</span> <span class="nn">torchrl._utils</span> <span class="kn">import</span> <span class="n">_check_for_faulty_process</span><span class="p">,</span> <span class="n">prod</span>
 <span class="kn">from</span> <span class="nn">torchrl.collectors.utils</span> <span class="kn">import</span> <span class="n">split_trajectories</span>
 <span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">TensorSpec</span>
 <span class="kn">from</span> <span class="nn">torchrl.data.utils</span> <span class="kn">import</span> <span class="n">CloudpickleWrapper</span><span class="p">,</span> <span class="n">DEVICE_TYPING</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.common</span> <span class="kn">import</span> <span class="n">EnvBase</span>
-
 <span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="n">TransformedEnv</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.utils</span> <span class="kn">import</span> <span class="n">set_exploration_mode</span><span class="p">,</span> <span class="n">step_mdp</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.vec_env</span> <span class="kn">import</span> <span class="n">_BatchedEnv</span>
@@ -978,7 +976,7 @@
             <span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">masked_fill_</span><span class="p">(</span><span class="n">done_or_terminated</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;reset_workers&quot;</span><span class="p">,</span> <span class="n">done_or_terminated</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;_reset&quot;</span><span class="p">,</span> <span class="n">done_or_terminated</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">)</span>
@@ -987,8 +985,6 @@
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Got </span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;done&#39;</span><span class="p">))</span><span class="si">}</span><span class="s2"> done envs after reset.&quot;</span>
                 <span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">del_</span><span class="p">(</span><span class="s2">&quot;reset_workers&quot;</span><span class="p">)</span>
             <span class="n">traj_ids</span><span class="p">[</span><span class="n">done_or_terminated</span><span class="p">]</span> <span class="o">=</span> <span class="n">traj_ids</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
                 <span class="mi">1</span><span class="p">,</span> <span class="n">done_or_terminated</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">traj_ids</span><span class="o">.</span><span class="n">device</span>
             <span class="p">)</span>
@@ -1046,15 +1042,16 @@
             <span class="c1"># check that the env supports partial reset</span>
             <span class="k">if</span> <span class="n">prod</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;resetting unique env with index is not permitted.&quot;</span><span class="p">)</span>
-            <span class="n">reset_workers</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">_reset</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
                 <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span>
                 <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
             <span class="p">)</span>
-            <span class="n">reset_workers</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">td_in</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s2">&quot;reset_workers&quot;</span><span class="p">:</span> <span class="n">reset_workers</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+            <span class="n">_reset</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">td_in</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s2">&quot;_reset&quot;</span><span class="p">:</span> <span class="n">_reset</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="n">_reset</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">td_in</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
 
@@ -1062,7 +1059,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">td_in</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="s2">&quot;step_count&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">_reset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">][</span><span class="n">_reset</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="s2">&quot;step_count&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SyncDataCollector.shutdown"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.collectors.SyncDataCollector.html#torchrl.collectors.collectors.SyncDataCollector.shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Shuts down all workers and/or closes the local environment.&quot;&quot;&quot;</span>

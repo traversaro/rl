@@ -377,7 +377,6 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span><span class="p">,</span> <span class="n">TensorDictBase</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
-
 <span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">BinaryDiscreteTensorSpec</span><span class="p">,</span>
     <span class="n">BoundedTensorSpec</span><span class="p">,</span>
@@ -2877,18 +2876,17 @@
 
         <span class="c1"># Batched environments</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">reset_workers</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-                <span class="s2">&quot;reset_workers&quot;</span><span class="p">,</span>
+            <span class="n">_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;_reset&quot;</span><span class="p">,</span>
                 <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
-                    <span class="o">*</span><span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
-                    <span class="mi">1</span><span class="p">,</span>
+                    <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span>
                     <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                 <span class="p">),</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">out_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">out_key</span> <span class="ow">in</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="n">tensordict</span><span class="p">[</span><span class="n">out_key</span><span class="p">][</span><span class="n">reset_workers</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+                    <span class="n">tensordict</span><span class="p">[</span><span class="n">out_key</span><span class="p">][</span><span class="n">_reset</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
 
         <span class="k">return</span> <span class="n">tensordict</span></div>
 
@@ -2978,20 +2976,19 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">([])</span>
 
 <div class="viewcode-block" id="StepCounter.reset"><a class="viewcode-back" href="../../../../reference/generated/torchrl.envs.transforms.StepCounter.html#torchrl.envs.transforms.StepCounter.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-        <span class="n">workers</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s2">&quot;reset_workers&quot;</span><span class="p">,</span>
+        <span class="n">_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;_reset&quot;</span><span class="p">,</span>
             <span class="n">default</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
-                <span class="o">*</span><span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span>
+                <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
             <span class="s2">&quot;step_count&quot;</span><span class="p">,</span>
-            <span class="p">(</span><span class="o">~</span><span class="n">workers</span><span class="p">)</span>
+            <span class="p">(</span><span class="o">~</span><span class="n">_reset</span><span class="p">)</span>
             <span class="o">*</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="s2">&quot;step_count&quot;</span><span class="p">,</span>
                 <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                    <span class="o">*</span><span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
-                    <span class="mi">1</span><span class="p">,</span>
+                    <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
                     <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                 <span class="p">),</span>
@@ -3004,8 +3001,7 @@
             <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="s2">&quot;step_count&quot;</span><span class="p">,</span>
                 <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                    <span class="o">*</span><span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
-                    <span class="mi">1</span><span class="p">,</span>
+                    <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
                     <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                 <span class="p">),</span>
@@ -3016,7 +3012,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
                 <span class="s2">&quot;done&quot;</span><span class="p">,</span>
-                <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span> <span class="o">|</span> <span class="n">next_step_count</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span><span class="p">,</span>
+                <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span>
+                <span class="o">|</span> <span class="p">(</span><span class="n">next_step_count</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">tensordict</span>
 
@@ -3028,7 +3025,7 @@
                 <span class="sa">f</span><span class="s2">&quot;observation_spec was expected to be of type CompositeSpec. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">observation_spec</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
             <span class="p">)</span>
         <span class="n">observation_spec</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">UnboundedDiscreteTensorSpec</span><span class="p">(</span>
-            <span class="n">shape</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">observation_spec</span><span class="o">.</span><span class="n">device</span>
+            <span class="n">shape</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">observation_spec</span><span class="o">.</span><span class="n">device</span>
         <span class="p">)</span>
         <span class="n">observation_spec</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">minimum</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="n">observation_spec</span></div></div>
