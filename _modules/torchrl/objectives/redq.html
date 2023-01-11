@@ -448,9 +448,7 @@
         <span class="n">gSDE</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_functorch</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Failed to import functorch with error message:</span><span class="se">\n</span><span class="si">{</span><span class="n">FUNCTORCH_ERR</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Failed to import functorch.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">FUNCTORCH_ERR</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">convert_to_functional</span><span class="p">(</span>

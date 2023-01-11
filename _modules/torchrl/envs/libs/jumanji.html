@@ -503,6 +503,10 @@
         <span class="k">return</span> <span class="n">jumanji</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="s2">&quot;jumanji.env.Environment&quot;</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_jumanji</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="s2">&quot;jumanji is not installed or importing it failed. Consider checking your installation.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">IMPORT_ERR</span>
         <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;env&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -694,8 +698,8 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;jumanji not found, unable to create </span><span class="si">{</span><span class="n">env_name</span><span class="si">}</span><span class="s2">. &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;Consider installing jumanji. More info:&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">git_url</span><span class="si">}</span><span class="s2">. (Original error message during import: </span><span class="si">{</span><span class="n">IMPORT_ERR</span><span class="si">}</span><span class="s2">).&quot;</span>
-            <span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">git_url</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">IMPORT_ERR</span>
         <span class="n">from_pixels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;from_pixels&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">pixels_only</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;pixels_only&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">kwargs</span>

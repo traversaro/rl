@@ -1401,7 +1401,7 @@
 <span class="sd">`env = ParallelEnv(N, EnvCreator(my_lambda_function))`.</span>
 <span class="sd">This will not only ensure that your lambda function is cloud-pickled once, but</span>
 <span class="sd">also that the state dict is synchronised across processes if needed.&quot;&quot;&quot;</span>
-                    <span class="p">)</span>
+                    <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
             <span class="n">pipe_child</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">procs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">proc</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pipe_parent</span><span class="p">)</span>

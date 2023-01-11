@@ -1345,9 +1345,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">cmd</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">child_pipe</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">EOFError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">EOFError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;proc </span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s2"> failed, last command: </span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="s2">. &quot;</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Err=</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">EOFError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;proc </span><span class="si">{</span><span class="n">pid</span><span class="si">}</span><span class="s2"> failed, last command: </span><span class="si">{</span><span class="n">cmd</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
         <span class="k">if</span> <span class="n">cmd</span> <span class="o">==</span> <span class="s2">&quot;seed&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">initialized</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;call &#39;init&#39; before closing&quot;</span><span class="p">)</span>
@@ -1450,9 +1448,7 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">result</span> <span class="o">=</span> <span class="n">attr</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;querying </span><span class="si">{</span><span class="n">err_msg</span><span class="si">}</span><span class="s2"> resulted in the following error: &quot;</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;querying </span><span class="si">{</span><span class="n">err_msg</span><span class="si">}</span><span class="s2"> resulted in an error.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
             <span class="k">if</span> <span class="n">cmd</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;to&quot;</span><span class="p">):</span>
                 <span class="n">child_pipe</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">cmd</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">]),</span> <span class="n">result</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>

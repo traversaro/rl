@@ -413,8 +413,8 @@
             <span class="k">return</span> <span class="p">[</span><span class="n">_check_all_str</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">list_of_str</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Expected a list of strings but got: </span><span class="si">{</span><span class="n">list_of_str</span><span class="si">}</span><span class="s2"> that raised the following error: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected a list of strings but got: </span><span class="si">{</span><span class="n">list_of_str</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
 
 
 <span class="k">def</span> <span class="nf">_forward_hook_safe_action</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">tensordict_in</span><span class="p">,</span> <span class="n">tensordict_out</span><span class="p">):</span>
@@ -452,8 +452,8 @@
         <span class="p">):</span>
             <span class="c1"># &quot;_is_stateless&quot; in module.__dict__ and module._is_stateless:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;vmap cannot be used with safe=True, consider turning the safe mode off. (original error message: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">)&quot;</span>
-            <span class="p">)</span>
+                <span class="s2">&quot;vmap cannot be used with safe=True, consider turning the safe mode off.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">err</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">err</span>
 

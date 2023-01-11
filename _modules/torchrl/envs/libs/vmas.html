@@ -743,8 +743,8 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_vmas</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;vmas python package was not found. Please install this dependency. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;More info: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">git_url</span><span class="si">}</span><span class="s2"> (ImportError: </span><span class="si">{</span><span class="n">IMPORT_ERR</span><span class="si">}</span><span class="s2">)&quot;</span>
-            <span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;More info: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">git_url</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">IMPORT_ERR</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;scenario_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scenario_name</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;num_envs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">num_envs</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;continuous_actions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">continuous_actions</span>

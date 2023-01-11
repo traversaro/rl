@@ -664,7 +664,7 @@
                 <span class="sa">f</span><span class="s2">&quot;brax not found, unable to create </span><span class="si">{</span><span class="n">env_name</span><span class="si">}</span><span class="s2">. &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;Consider downloading and installing brax from&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">git_url</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+            <span class="p">)</span> <span class="kn">from</span> <span class="nn">IMPORT_ERR</span>
         <span class="n">from_pixels</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;from_pixels&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">pixels_only</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;pixels_only&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">requires_grad</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;requires_grad&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>

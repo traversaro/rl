@@ -668,8 +668,11 @@
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">device</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;device&quot;</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="n">env</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;device&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">device</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">TransformedEnv</span><span class="p">):</span>
@@ -705,7 +708,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_env</span><span class="o">.</span><span class="n">batch_size</span>
 
     <span class="k">def</span> <span class="nf">_set_env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="n">EnvBase</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">base_env</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">device</span> <span class="o">!=</span> <span class="n">env</span><span class="o">.</span><span class="n">device</span><span class="p">:</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_env</span> <span class="o">=</span> <span class="n">env</span>
         <span class="c1"># updates need not be inplace, as transforms may modify values out-place</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">base_env</span><span class="o">.</span><span class="n">_inplace_update</span> <span class="o">=</span> <span class="kc">False</span>
 
