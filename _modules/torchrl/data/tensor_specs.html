@@ -1768,7 +1768,8 @@
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">TensorSpec</span><span class="p">)</span> <span class="ow">and</span> <span class="n">item</span><span class="o">.</span><span class="n">device</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">:</span>
                 <span class="n">item</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span></div>
+            <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
 
 
 <span class="k">def</span> <span class="nf">_keys_to_empty_composite_spec</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>

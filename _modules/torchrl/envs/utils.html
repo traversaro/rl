@@ -517,7 +517,7 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="check_env_specs"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.utils.check_env_specs.html#torchrl.envs.utils.check_env_specs">[docs]</a><span class="k">def</span> <span class="nf">check_env_specs</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">return_contiguous</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="check_env_specs"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.utils.check_env_specs.html#torchrl.envs.utils.check_env_specs">[docs]</a><span class="k">def</span> <span class="nf">check_env_specs</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">return_contiguous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check_dtype</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests an environment specs against the results of short rollout.</span>
 
 <span class="sd">    This test function should be used as a sanity check for an env wrapped with</span>
@@ -527,6 +527,13 @@
 <span class="sd">    A broken environment spec will likely make it impossible to use parallel</span>
 <span class="sd">    environments.</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        env (EnvBase): the env for which the specs have to be checked against data.</span>
+<span class="sd">        return_contiguous (bool, optional): if True, the random rollout will be called with</span>
+<span class="sd">            return_contiguous=True. This will fail in some cases (e.g. heterogeneous shapes</span>
+<span class="sd">            of inputs/outputs). Defaults to True.</span>
+<span class="sd">        check_dtype (bool, optional): if False, dtype checks will be skipped.</span>
+<span class="sd">            Defaults to True.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fake_tensordict</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">fake_tensordict</span><span class="p">()</span><span class="o">.</span><span class="n">flatten_keys</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
     <span class="n">real_tensordict</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">rollout</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">return_contiguous</span><span class="o">=</span><span class="n">return_contiguous</span><span class="p">)</span><span class="o">.</span><span class="n">flatten_keys</span><span class="p">(</span>
@@ -535,35 +542,60 @@
 
     <span class="n">keys1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">fake_tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
     <span class="n">keys2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">real_tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="k">assert</span> <span class="n">keys1</span> <span class="o">==</span> <span class="n">keys2</span>
+    <span class="k">if</span> <span class="n">keys1</span> <span class="o">!=</span> <span class="n">keys2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+            <span class="s2">&quot;The keys of the fake tensordict and the one collected during rollout do not match:&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Got fake-real: </span><span class="si">{</span><span class="n">keys1</span><span class="o">-</span><span class="n">keys2</span><span class="si">}</span><span class="s2"> and real-fake: </span><span class="si">{</span><span class="n">keys2</span><span class="o">-</span><span class="n">keys1</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
     <span class="n">fake_tensordict</span> <span class="o">=</span> <span class="n">fake_tensordict</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="n">real_tensordict</span><span class="o">.</span><span class="n">batch_dims</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">fake_tensordict</span> <span class="o">=</span> <span class="n">fake_tensordict</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="o">*</span><span class="n">real_tensordict</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">fake_tensordict</span> <span class="o">=</span> <span class="n">fake_tensordict</span><span class="o">.</span><span class="n">to_tensordict</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="p">(</span>
+    <span class="k">if</span> <span class="p">(</span>
         <span class="n">fake_tensordict</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-        <span class="o">==</span> <span class="n">real_tensordict</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="o">!=</span> <span class="n">real_tensordict</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+            <span class="s2">&quot;zeroing the two tensordicts did not make them identical. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Check for discrepancies:</span><span class="se">\n</span><span class="s2">Fake=</span><span class="se">\n</span><span class="si">{</span><span class="n">fake_tensordict</span><span class="si">}</span><span class="se">\n</span><span class="s2">Real=</span><span class="se">\n</span><span class="si">{</span><span class="n">real_tensordict</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys2</span><span class="p">:</span>
-        <span class="k">assert</span> <span class="n">fake_tensordict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">real_tensordict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">if</span> <span class="n">fake_tensordict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">real_tensordict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The shapes of the real and fake tensordict don&#39;t match for key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Got fake=</span><span class="si">{</span><span class="n">fake_tensordict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> and real=</span><span class="si">{</span><span class="n">real_tensordict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">check_dtype</span> <span class="ow">and</span> <span class="p">(</span><span class="n">fake_tensordict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">real_tensordict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The dtypes of the real and fake tensordict don&#39;t match for key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Got fake=</span><span class="si">{</span><span class="n">fake_tensordict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2"> and real=</span><span class="si">{</span><span class="n">real_tensordict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
 
     <span class="c1"># test dtypes</span>
     <span class="n">real_tensordict</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">rollout</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># keep empty structures, for example dict()</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">real_tensordict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">_check_dtype</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">observation_spec</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">input_spec</span><span class="p">)</span></div>
+        <span class="n">_check_isin</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">observation_spec</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">input_spec</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_check_dtype</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">obs_spec</span><span class="p">,</span> <span class="n">input_spec</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_check_isin</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">obs_spec</span><span class="p">,</span> <span class="n">input_spec</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;reward&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">}:</span>
         <span class="k">return</span>
     <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;next&quot;</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">_key</span><span class="p">,</span> <span class="n">_value</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">_check_dtype</span><span class="p">(</span><span class="n">_key</span><span class="p">,</span> <span class="n">_value</span><span class="p">,</span> <span class="n">obs_spec</span><span class="p">,</span> <span class="n">input_spec</span><span class="p">)</span>
+            <span class="n">_check_isin</span><span class="p">(</span><span class="n">_key</span><span class="p">,</span> <span class="n">_value</span><span class="p">,</span> <span class="n">obs_spec</span><span class="p">,</span> <span class="n">input_spec</span><span class="p">)</span>
         <span class="k">return</span>
     <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">input_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="n">yield_nesting_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">input_spec</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="p">(</span><span class="n">input_spec</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">input_spec</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;input_spec.is_in failed for key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Got input_spec=</span><span class="si">{</span><span class="n">input_spec</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2"> and real=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
         <span class="k">return</span>
     <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">obs_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="n">yield_nesting_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="k">assert</span> <span class="n">obs_spec</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="p">(</span><span class="n">input_spec</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">obs_spec</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;obs_spec.is_in failed for key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Got obs_spec=</span><span class="si">{</span><span class="n">obs_spec</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="si">}</span><span class="s2"> and real=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
         <span class="k">return</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
