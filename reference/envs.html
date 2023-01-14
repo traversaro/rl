@@ -581,8 +581,14 @@ in the environment. The keys to be included in this inverse transform are passed
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose" title="torchrl.envs.transforms.Compose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Compose</span></code></a>(*transforms)</p></td>
 <td><p>Composes a chain of transforms.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.DoubleToFloat.html#torchrl.envs.transforms.DoubleToFloat" title="torchrl.envs.transforms.DoubleToFloat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DoubleToFloat</span></code></a>([in_keys, in_keys_inv])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.DiscreteActionProjection.html#torchrl.envs.transforms.DiscreteActionProjection" title="torchrl.envs.transforms.DiscreteActionProjection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DiscreteActionProjection</span></code></a>(max_n, m[, action_key])</p></td>
+<td><p>Projects discrete actions from a high dimensional space to a low dimensional space.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.DoubleToFloat.html#torchrl.envs.transforms.DoubleToFloat" title="torchrl.envs.transforms.DoubleToFloat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DoubleToFloat</span></code></a>([in_keys, in_keys_inv])</p></td>
 <td><p>Maps actions float to double before they are called on the environment.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.ExcludeTransform.html#torchrl.envs.transforms.ExcludeTransform" title="torchrl.envs.transforms.ExcludeTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExcludeTransform</span></code></a>(*excluded_keys)</p></td>
+<td><p>Excludes keys from the input tensordict.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.FiniteTensorDictCheck.html#torchrl.envs.transforms.FiniteTensorDictCheck" title="torchrl.envs.transforms.FiniteTensorDictCheck"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FiniteTensorDictCheck</span></code></a>()</p></td>
 <td><p>This transform will check that all the items of the tensordict are finite, and raise an exception if they are not.</p></td>
@@ -611,17 +617,23 @@ in the environment. The keys to be included in this inverse transform are passed
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.PinMemoryTransform.html#torchrl.envs.transforms.PinMemoryTransform" title="torchrl.envs.transforms.PinMemoryTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PinMemoryTransform</span></code></a>()</p></td>
 <td><p>Calls pin_memory on the tensordict to facilitate writing on CUDA devices.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.Resize.html#torchrl.envs.transforms.Resize" title="torchrl.envs.transforms.Resize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Resize</span></code></a>(w, h[, interpolation, in_keys, out_keys])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.R3MTransform.html#torchrl.envs.transforms.R3MTransform" title="torchrl.envs.transforms.R3MTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R3MTransform</span></code></a>(*args, **kwargs)</p></td>
+<td><p>R3M Transform class.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.Resize.html#torchrl.envs.transforms.Resize" title="torchrl.envs.transforms.Resize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Resize</span></code></a>(w, h[, interpolation, in_keys, out_keys])</p></td>
 <td><p>Resizes an pixel observation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.RewardClipping.html#torchrl.envs.transforms.RewardClipping" title="torchrl.envs.transforms.RewardClipping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RewardClipping</span></code></a>([clamp_min, clamp_max, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.RewardClipping.html#torchrl.envs.transforms.RewardClipping" title="torchrl.envs.transforms.RewardClipping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RewardClipping</span></code></a>([clamp_min, clamp_max, ...])</p></td>
 <td><p>Clips the reward between <cite>clamp_min</cite> and <cite>clamp_max</cite>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.RewardScaling.html#torchrl.envs.transforms.RewardScaling" title="torchrl.envs.transforms.RewardScaling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RewardScaling</span></code></a>(loc, scale[, in_keys, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.RewardScaling.html#torchrl.envs.transforms.RewardScaling" title="torchrl.envs.transforms.RewardScaling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RewardScaling</span></code></a>(loc, scale[, in_keys, ...])</p></td>
 <td><p>Affine transform of the reward.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.RewardSum.html#torchrl.envs.transforms.RewardSum" title="torchrl.envs.transforms.RewardSum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RewardSum</span></code></a>([in_keys, out_keys])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.RewardSum.html#torchrl.envs.transforms.RewardSum" title="torchrl.envs.transforms.RewardSum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RewardSum</span></code></a>([in_keys, out_keys])</p></td>
 <td><p>Tracks episode cumulative rewards.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.SelectTransform.html#torchrl.envs.transforms.SelectTransform" title="torchrl.envs.transforms.SelectTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SelectTransform</span></code></a>(*selected_keys)</p></td>
+<td><p>Select keys from the input tensordict.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.SqueezeTransform.html#torchrl.envs.transforms.SqueezeTransform" title="torchrl.envs.transforms.SqueezeTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SqueezeTransform</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Removes a dimension of size one at the specified position.</p></td>
@@ -641,14 +653,11 @@ in the environment. The keys to be included in this inverse transform are passed
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.VecNorm.html#torchrl.envs.transforms.VecNorm" title="torchrl.envs.transforms.VecNorm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VecNorm</span></code></a>([in_keys, shared_td, lock, decay, eps])</p></td>
 <td><p>Moving average normalization layer for torchrl environments.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.R3MTransform.html#torchrl.envs.transforms.R3MTransform" title="torchrl.envs.transforms.R3MTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R3MTransform</span></code></a>(*args, **kwargs)</p></td>
-<td><p>R3M Transform class.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.VIPRewardTransform.html#torchrl.envs.transforms.VIPRewardTransform" title="torchrl.envs.transforms.VIPRewardTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VIPRewardTransform</span></code></a>(*args, **kwargs)</p></td>
+<td><p>A VIP transform to compute rewards based on embedded similarity.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.VIPTransform.html#torchrl.envs.transforms.VIPTransform" title="torchrl.envs.transforms.VIPTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VIPTransform</span></code></a>(*args, **kwargs)</p></td>
 <td><p>VIP Transform class.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.VIPRewardTransform.html#torchrl.envs.transforms.VIPRewardTransform" title="torchrl.envs.transforms.VIPRewardTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VIPRewardTransform</span></code></a>(*args, **kwargs)</p></td>
-<td><p>A VIP transform to compute rewards based on embedded similarity.</p></td>
 </tr>
 </tbody>
 </table>
