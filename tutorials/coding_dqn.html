@@ -543,7 +543,7 @@ with two parameters computed from a random rollout in the environment.</p></li>
 <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">m</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">s</span></a>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(0.991818904876709, 0.08038202673196793)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(0.9915441274642944, 0.08083156496286392)
 </pre></div>
 </div>
 </section>
@@ -648,20 +648,20 @@ We print the resulting tensordict instance to get an idea of what
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>reset results: TensorDict(
     fields={
-        done: Tensor(torch.Size([1]), dtype=torch.bool),
-        pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32),
-        pixels_save: Tensor(torch.Size([400, 600, 3]), dtype=torch.uint8)},
+        done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+        pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False),
+        pixels_save: Tensor(shape=torch.Size([400, 600, 3]), device=cpu, dtype=torch.uint8, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
 Q-value network results: TensorDict(
     fields={
-        action: Tensor(torch.Size([2]), dtype=torch.int64),
-        action_value: Tensor(torch.Size([2]), dtype=torch.float32),
-        chosen_action_value: Tensor(torch.Size([1]), dtype=torch.float32),
-        done: Tensor(torch.Size([1]), dtype=torch.bool),
-        pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32),
-        pixels_save: Tensor(torch.Size([400, 600, 3]), dtype=torch.uint8)},
+        action: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.int64, is_shared=False),
+        action_value: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
+        chosen_action_value: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
+        done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+        pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False),
+        pixels_save: Tensor(shape=torch.Size([400, 600, 3]), device=cpu, dtype=torch.uint8, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -712,11 +712,11 @@ the optimization is taking place.</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
     fields={
-        action: Tensor(torch.Size([2]), dtype=torch.int64),
-        action_value: Tensor(torch.Size([2]), dtype=torch.float32),
-        chosen_action_value: Tensor(torch.Size([1]), dtype=torch.float32),
-        done: Tensor(torch.Size([1]), dtype=torch.bool),
-        pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32)},
+        action: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.int64, is_shared=False),
+        action_value: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
+        chosen_action_value: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
+        done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+        pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -870,49 +870,49 @@ the optimization is taking place.</p>
 <li><img src="../_images/sphx_glr_coding_dqn_002.png" srcset="../_images/sphx_glr_coding_dqn_002.png" alt="loss, value, grad norm, traj length (training)" class = "sphx-glr-multi-img"/></li>
 </ul>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/500 [00:00&lt;?, ?it/s]
-  6%|6         | 32/500 [00:04&lt;01:04,  7.30it/s]Creating a MemmapStorage...
+  6%|6         | 32/500 [00:03&lt;00:45, 10.21it/s]Creating a MemmapStorage...
 The storage is being created:
-        action: /tmp/tmpdcfmvyv5, 0.00762939453125 Mb of storage (size: torch.Size([500, 2])).
-        action_value: /tmp/tmpxoxaw4bp, 0.003814697265625 Mb of storage (size: torch.Size([500, 2])).
-        chosen_action_value: /tmp/tmpajig3isp, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
-        done: /tmp/tmp98nim2_6, 0.000476837158203125 Mb of storage (size: torch.Size([500, 1])).
-        index: /tmp/tmp7976zxkw, 0.0019073486328125 Mb of storage (size: torch.Size([500])).
-        mask: /tmp/tmph1t4yoxl, 0.000476837158203125 Mb of storage (size: torch.Size([500])).
-        pixels: /tmp/tmp3_81btxd, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
-        reward: /tmp/tmp_f6zpw1b, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
-        step_count: /tmp/tmp_921q94f, 0.003814697265625 Mb of storage (size: torch.Size([500])).
-        traj_ids: /tmp/tmpk_2lfi3t, 0.003814697265625 Mb of storage (size: torch.Size([500])).
-        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmpa6ed9s8b, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
+        action: /tmp/tmpfm1z9y_j, 0.00762939453125 Mb of storage (size: torch.Size([500, 2])).
+        action_value: /tmp/tmpv45gcv5m, 0.003814697265625 Mb of storage (size: torch.Size([500, 2])).
+        chosen_action_value: /tmp/tmp7_tnf2a_, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+        done: /tmp/tmpxe0y_reb, 0.000476837158203125 Mb of storage (size: torch.Size([500, 1])).
+        index: /tmp/tmpozepvy0f, 0.0019073486328125 Mb of storage (size: torch.Size([500])).
+        mask: /tmp/tmpn656c9zo, 0.000476837158203125 Mb of storage (size: torch.Size([500])).
+        pixels: /tmp/tmpj768agut, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
+        reward: /tmp/tmp_7yfzwtx, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+        step_count: /tmp/tmpuvskiobf, 0.003814697265625 Mb of storage (size: torch.Size([500])).
+        traj_ids: /tmp/tmp5cntafau, 0.003814697265625 Mb of storage (size: torch.Size([500])).
+        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmppk4kjd0x, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
 
- 13%|#2        | 64/500 [00:04&lt;00:28, 15.19it/s]
- 19%|#9        | 96/500 [00:12&lt;00:56,  7.20it/s]
-error:  34.1863, value:  19.9237:  19%|#9        | 96/500 [00:12&lt;00:56,  7.20it/s]
-error:  34.1863, value:  19.9237:  26%|##5       | 128/500 [00:13&lt;00:37,  9.99it/s]
-error:  32.2416, value:  19.2485:  26%|##5       | 128/500 [00:14&lt;00:37,  9.99it/s]
-error:  32.2416, value:  19.2485:  32%|###2      | 160/500 [00:20&lt;00:47,  7.19it/s]
-error:  28.2124, value:  18.0052:  32%|###2      | 160/500 [00:20&lt;00:47,  7.19it/s]
-error:  28.2124, value:  18.0052:  38%|###8      | 192/500 [00:20&lt;00:31,  9.85it/s]
-error:  31.8545, value:  19.8214:  38%|###8      | 192/500 [00:21&lt;00:31,  9.85it/s]
-error:  31.8545, value:  19.8214:  45%|####4     | 224/500 [00:24&lt;00:29,  9.39it/s]
-error:  29.5417, value:  18.6065:  45%|####4     | 224/500 [00:25&lt;00:29,  9.39it/s]
-error:  29.5417, value:  18.6065:  51%|#####1    | 256/500 [00:25&lt;00:19, 12.25it/s]
-error:  15.5106, value:  19.6637:  51%|#####1    | 256/500 [00:26&lt;00:19, 12.25it/s]
-error:  15.5106, value:  19.6637:  58%|#####7    | 288/500 [00:27&lt;00:16, 12.64it/s]
-error:  15.3802, value:  19.1220:  58%|#####7    | 288/500 [00:28&lt;00:16, 12.64it/s]
-error:  15.3802, value:  19.1220:  64%|######4   | 320/500 [00:29&lt;00:12, 14.94it/s]
-error:  20.2791, value:  19.8831:  64%|######4   | 320/500 [00:29&lt;00:12, 14.94it/s]
-error:  20.2791, value:  19.8831:  70%|#######   | 352/500 [00:34&lt;00:14, 10.49it/s]
-error:  41.6213, value:  19.1315:  70%|#######   | 352/500 [00:35&lt;00:14, 10.49it/s]
-error:  41.6213, value:  19.1315:  77%|#######6  | 384/500 [00:36&lt;00:10, 11.30it/s]
-error:  21.9048, value:  18.9139:  77%|#######6  | 384/500 [00:37&lt;00:10, 11.30it/s]
-error:  21.9048, value:  18.9139:  83%|########3 | 416/500 [00:40&lt;00:08,  9.90it/s]
-error:  15.9637, value:  18.6933:  83%|########3 | 416/500 [00:41&lt;00:08,  9.90it/s]
-error:  15.9637, value:  18.6933:  90%|########9 | 448/500 [00:42&lt;00:04, 12.27it/s]
-error:  9.8401, value:  19.8890:  90%|########9 | 448/500 [00:42&lt;00:04, 12.27it/s]
-error:  9.8401, value:  19.8890:  96%|#########6| 480/500 [00:45&lt;00:01, 11.00it/s]
-error:  16.4255, value:  18.5787:  96%|#########6| 480/500 [00:46&lt;00:01, 11.00it/s]
-error:  16.4255, value:  18.5787: : 512it [00:47, 12.90it/s]
-error:  24.5355, value:  19.7555: : 512it [00:47, 12.90it/s]
+ 13%|#2        | 64/500 [00:05&lt;00:33, 13.13it/s]
+ 19%|#9        | 96/500 [00:08&lt;00:33, 12.00it/s]
+error:  32.9679, value:  19.2002:  19%|#9        | 96/500 [00:08&lt;00:33, 12.00it/s]
+error:  32.9679, value:  19.2002:  26%|##5       | 128/500 [00:09&lt;00:25, 14.64it/s]
+error:  32.1232, value:  18.5084:  26%|##5       | 128/500 [00:10&lt;00:25, 14.64it/s]
+error:  32.1232, value:  18.5084:  32%|###2      | 160/500 [00:12&lt;00:26, 12.77it/s]
+error:  22.0024, value:  19.8373:  32%|###2      | 160/500 [00:13&lt;00:26, 12.77it/s]
+error:  22.0024, value:  19.8373:  38%|###8      | 192/500 [00:13&lt;00:18, 16.64it/s]
+error:  32.0070, value:  20.3243:  38%|###8      | 192/500 [00:13&lt;00:18, 16.64it/s]
+error:  32.0070, value:  20.3243:  45%|####4     | 224/500 [00:15&lt;00:16, 17.13it/s]
+error:  10.1567, value:  19.6018:  45%|####4     | 224/500 [00:15&lt;00:16, 17.13it/s]
+error:  10.1567, value:  19.6018:  51%|#####1    | 256/500 [00:17&lt;00:14, 16.46it/s]
+error:  15.7974, value:  20.5074:  51%|#####1    | 256/500 [00:17&lt;00:14, 16.46it/s]
+error:  15.7974, value:  20.5074:  58%|#####7    | 288/500 [00:18&lt;00:12, 17.41it/s]
+error:  33.5325, value:  16.8739:  58%|#####7    | 288/500 [00:19&lt;00:12, 17.41it/s]
+error:  33.5325, value:  16.8739:  64%|######4   | 320/500 [00:24&lt;00:16, 10.65it/s]
+error:  49.9963, value:  20.1645:  64%|######4   | 320/500 [00:24&lt;00:16, 10.65it/s]
+error:  49.9963, value:  20.1645:  70%|#######   | 352/500 [00:25&lt;00:10, 13.81it/s]
+error:  32.1935, value:  18.6751:  70%|#######   | 352/500 [00:25&lt;00:10, 13.81it/s]
+error:  32.1935, value:  18.6751:  77%|#######6  | 384/500 [00:28&lt;00:09, 12.36it/s]
+error:  22.6432, value:  19.7454:  77%|#######6  | 384/500 [00:29&lt;00:09, 12.36it/s]
+error:  22.6432, value:  19.7454:  83%|########3 | 416/500 [00:29&lt;00:05, 14.62it/s]
+error:  0.6346, value:  20.5995:  83%|########3 | 416/500 [00:30&lt;00:05, 14.62it/s]
+error:  0.6346, value:  20.5995:  90%|########9 | 448/500 [00:33&lt;00:04, 11.78it/s]
+error:  10.7424, value:  19.3095:  90%|########9 | 448/500 [00:34&lt;00:04, 11.78it/s]
+error:  10.7424, value:  19.3095:  96%|#########6| 480/500 [00:35&lt;00:01, 13.11it/s]
+error:  25.9486, value:  18.7321:  96%|#########6| 480/500 [00:36&lt;00:01, 13.11it/s]
+error:  25.9486, value:  18.7321: : 512it [00:39, 10.78it/s]
+error:  22.2336, value:  18.5031: : 512it [00:40, 10.78it/s]
 </pre></div>
 </div>
 <p><strong>Note</strong>: As already mentioned above, to get a more reasonable performance,
@@ -977,18 +977,18 @@ to the RB, we’ll be creating a replay buffer of size
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>reset results: TensorDict(
     fields={
-        done: Tensor(torch.Size([1]), dtype=torch.bool),
-        pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32)},
+        done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+        pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
 Q-value network results: TensorDict(
     fields={
-        action: Tensor(torch.Size([2]), dtype=torch.int64),
-        action_value: Tensor(torch.Size([2]), dtype=torch.float32),
-        chosen_action_value: Tensor(torch.Size([1]), dtype=torch.float32),
-        done: Tensor(torch.Size([1]), dtype=torch.bool),
-        pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32)},
+        action: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.int64, is_shared=False),
+        action_value: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
+        chosen_action_value: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
+        done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+        pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -1012,7 +1012,7 @@ Q-value network results: TensorDict(
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>error:  24.5355, value:  19.7555: : 512it [00:57, 12.90it/s]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>error:  22.2336, value:  18.5031: : 512it [00:50, 10.78it/s]
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pytorch.org/docs/stable/generated/torch.optim.Adam.html#torch.optim.Adam" title="torch.optim.Adam" class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">optim</span></a> <span class="o">=</span> <a href="https://pytorch.org/docs/stable/generated/torch.optim.Adam.html#torch.optim.Adam" title="torch.optim.Adam" class="sphx-glr-backref-module-torch-optim sphx-glr-backref-type-py-class"><span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span></a><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">params_flat</span><span class="o">.</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">values</span></a><span class="p">()),</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lr</span></a><span class="p">)</span>
@@ -1022,11 +1022,11 @@ Q-value network results: TensorDict(
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
     fields={
-        action: Tensor(torch.Size([2]), dtype=torch.int64),
-        action_value: Tensor(torch.Size([2]), dtype=torch.float32),
-        chosen_action_value: Tensor(torch.Size([1]), dtype=torch.float32),
-        done: Tensor(torch.Size([1]), dtype=torch.bool),
-        pixels: Tensor(torch.Size([4, 64, 64]), dtype=torch.float32)},
+        action: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.int64, is_shared=False),
+        action_value: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
+        chosen_action_value: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
+        done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+        pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -1190,81 +1190,81 @@ desired shape (such that all tensordicts have the same shape of
 <li><img src="../_images/sphx_glr_coding_dqn_005.png" srcset="../_images/sphx_glr_coding_dqn_005.png" alt="loss, value, grad norm, traj length (training)" class = "sphx-glr-multi-img"/></li>
 </ul>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/500 [00:00&lt;?, ?it/s]
-error:  24.5355, value:  19.7555: : 512it [01:01,  8.37it/s]
+error:  22.2336, value:  18.5031: : 512it [00:52,  9.73it/s]
 
 
-  6%|6         | 32/500 [00:05&lt;01:21,  5.72it/s]Creating a MemmapStorage...
+  6%|6         | 32/500 [00:04&lt;01:03,  7.32it/s]Creating a MemmapStorage...
 The storage is being created:
-        action: /tmp/tmp5poz9asr, 0.0078125 Mb of storage (size: torch.Size([16, 32, 2])).
-        action_value: /tmp/tmpd2pbly7z, 0.00390625 Mb of storage (size: torch.Size([16, 32, 2])).
-        chosen_action_value: /tmp/tmpu1wq6ltp, 0.001953125 Mb of storage (size: torch.Size([16, 32, 1])).
-        done: /tmp/tmp7_vhecrp, 0.00048828125 Mb of storage (size: torch.Size([16, 32, 1])).
-        index: /tmp/tmpda2bumze, 6.103515625e-05 Mb of storage (size: torch.Size([16])).
-        mask: /tmp/tmpxkndyd2h, 0.00048828125 Mb of storage (size: torch.Size([16, 32])).
-        pixels: /tmp/tmpdui5_pu4, 32.0 Mb of storage (size: torch.Size([16, 32, 4, 64, 64])).
-        reward: /tmp/tmp6rihuhse, 0.001953125 Mb of storage (size: torch.Size([16, 32, 1])).
-        step_count: /tmp/tmp2628m_lm, 0.00390625 Mb of storage (size: torch.Size([16, 32])).
-        traj_ids: /tmp/tmpxeqgci_q, 0.00390625 Mb of storage (size: torch.Size([16, 32])).
-        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmp74a92k4o, 32.0 Mb of storage (size: torch.Size([16, 32, 4, 64, 64])).
+        action: /tmp/tmpw4kwi6b4, 0.0078125 Mb of storage (size: torch.Size([16, 32, 2])).
+        action_value: /tmp/tmpdj6jslqj, 0.00390625 Mb of storage (size: torch.Size([16, 32, 2])).
+        chosen_action_value: /tmp/tmpvhh8zpvp, 0.001953125 Mb of storage (size: torch.Size([16, 32, 1])).
+        done: /tmp/tmppngz4hcf, 0.00048828125 Mb of storage (size: torch.Size([16, 32, 1])).
+        index: /tmp/tmp0nhe62oq, 6.103515625e-05 Mb of storage (size: torch.Size([16])).
+        mask: /tmp/tmpcco9qooa, 0.00048828125 Mb of storage (size: torch.Size([16, 32])).
+        pixels: /tmp/tmpa6dgef4z, 32.0 Mb of storage (size: torch.Size([16, 32, 4, 64, 64])).
+        reward: /tmp/tmp85_b_bkz, 0.001953125 Mb of storage (size: torch.Size([16, 32, 1])).
+        step_count: /tmp/tmpq7y7dvk1, 0.00390625 Mb of storage (size: torch.Size([16, 32])).
+        traj_ids: /tmp/tmp1dt5vcy4, 0.00390625 Mb of storage (size: torch.Size([16, 32])).
+        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmp992bpqlp, 32.0 Mb of storage (size: torch.Size([16, 32, 4, 64, 64])).
 
 
- 13%|#2        | 64/500 [00:07&lt;00:43, 10.09it/s]
+ 13%|#2        | 64/500 [00:05&lt;00:34, 12.56it/s]
 
- 19%|#9        | 96/500 [00:09&lt;00:37, 10.76it/s]
+ 19%|#9        | 96/500 [00:08&lt;00:36, 11.00it/s]
 
-error:  0.9077, value:  1.2100:  19%|#9        | 96/500 [00:10&lt;00:37, 10.76it/s]
+error:  5.8633, value:  6.2695:  19%|#9        | 96/500 [00:09&lt;00:36, 11.00it/s]
 
-error:  0.9077, value:  1.2100:  26%|##5       | 128/500 [00:11&lt;00:27, 13.51it/s]
+error:  5.8633, value:  6.2695:  26%|##5       | 128/500 [00:09&lt;00:24, 15.41it/s]
 
-error:  8.9818, value:  6.6985:  26%|##5       | 128/500 [00:11&lt;00:27, 13.51it/s]
+error:  42.6163, value:  13.7155:  26%|##5       | 128/500 [00:10&lt;00:24, 15.41it/s]
 
-error:  8.9818, value:  6.6985:  32%|###2      | 160/500 [00:15&lt;00:33, 10.12it/s]
+error:  42.6163, value:  13.7155:  32%|###2      | 160/500 [00:14&lt;00:32, 10.42it/s]
 
-error:  2.0953, value:  3.7227:  32%|###2      | 160/500 [00:16&lt;00:33, 10.12it/s]
+error:  3.7179, value:  0.6344:  32%|###2      | 160/500 [00:15&lt;00:32, 10.42it/s]
 
-error:  2.0953, value:  3.7227:  38%|###8      | 192/500 [00:16&lt;00:23, 13.26it/s]
+error:  3.7179, value:  0.6344:  38%|###8      | 192/500 [00:15&lt;00:21, 14.22it/s]
 
-error:  5.9902, value:  6.2435:  38%|###8      | 192/500 [00:17&lt;00:23, 13.26it/s]
+error:  71.3542, value:  20.2286:  38%|###8      | 192/500 [00:15&lt;00:21, 14.22it/s]
 
-error:  5.9902, value:  6.2435:  45%|####4     | 224/500 [00:21&lt;00:28,  9.75it/s]
+error:  71.3542, value:  20.2286:  45%|####4     | 224/500 [00:20&lt;00:27, 10.09it/s]
 
-error:  3.4699, value:  5.1229:  45%|####4     | 224/500 [00:22&lt;00:28,  9.75it/s]
+error:  5.2738, value:  6.4784:  45%|####4     | 224/500 [00:20&lt;00:27, 10.09it/s]
 
-error:  3.4699, value:  5.1229:  51%|#####1    | 256/500 [00:22&lt;00:19, 12.84it/s]
+error:  5.2738, value:  6.4784:  51%|#####1    | 256/500 [00:20&lt;00:17, 13.57it/s]
 
-error:  4.7081, value:  5.9827:  51%|#####1    | 256/500 [00:23&lt;00:19, 12.84it/s]
+error:  12.6528, value:  8.2418:  51%|#####1    | 256/500 [00:21&lt;00:17, 13.57it/s]
 
-error:  4.7081, value:  5.9827:  58%|#####7    | 288/500 [00:24&lt;00:15, 13.90it/s]
+error:  12.6528, value:  8.2418:  58%|#####7    | 288/500 [00:26&lt;00:22,  9.45it/s]
 
-error:  4.4792, value:  5.9866:  58%|#####7    | 288/500 [00:25&lt;00:15, 13.90it/s]
+error:  7.4615, value:  6.5081:  58%|#####7    | 288/500 [00:27&lt;00:22,  9.45it/s]
 
-error:  4.4792, value:  5.9866:  64%|######4   | 320/500 [00:27&lt;00:14, 12.64it/s]
+error:  7.4615, value:  6.5081:  64%|######4   | 320/500 [00:27&lt;00:14, 12.35it/s]
 
-error:  30.4687, value:  13.2781:  64%|######4   | 320/500 [00:28&lt;00:14, 12.64it/s]
+error:  11.7767, value:  5.8096:  64%|######4   | 320/500 [00:28&lt;00:14, 12.35it/s]
 
-error:  30.4687, value:  13.2781:  70%|#######   | 352/500 [00:28&lt;00:09, 15.41it/s]
+error:  11.7767, value:  5.8096:  70%|#######   | 352/500 [00:29&lt;00:11, 12.52it/s]
 
-error:  4.6004, value:  6.6092:  70%|#######   | 352/500 [00:29&lt;00:09, 15.41it/s]
+error:  7.7746, value:  5.7876:  70%|#######   | 352/500 [00:30&lt;00:11, 12.52it/s]
 
-error:  4.6004, value:  6.6092:  77%|#######6  | 384/500 [00:31&lt;00:08, 13.17it/s]
+error:  7.7746, value:  5.7876:  77%|#######6  | 384/500 [00:31&lt;00:08, 13.38it/s]
 
-error:  2.0927, value:  4.2565:  77%|#######6  | 384/500 [00:32&lt;00:08, 13.17it/s]
+error:  22.2473, value:  11.4371:  77%|#######6  | 384/500 [00:32&lt;00:08, 13.38it/s]
 
-error:  2.0927, value:  4.2565:  83%|########3 | 416/500 [00:34&lt;00:06, 13.28it/s]
+error:  22.2473, value:  11.4371:  83%|########3 | 416/500 [00:33&lt;00:05, 14.33it/s]
 
-error:  4.4777, value:  6.3397:  83%|########3 | 416/500 [00:34&lt;00:06, 13.28it/s]
+error:  14.0208, value:  7.1437:  83%|########3 | 416/500 [00:34&lt;00:05, 14.33it/s]
 
-error:  4.4777, value:  6.3397:  90%|########9 | 448/500 [00:35&lt;00:03, 15.86it/s]
+error:  14.0208, value:  7.1437:  90%|########9 | 448/500 [00:37&lt;00:04, 11.72it/s]
 
-error:  6.9804, value:  6.9880:  90%|########9 | 448/500 [00:36&lt;00:03, 15.86it/s]
+error:  1.5741, value:  3.9127:  90%|########9 | 448/500 [00:38&lt;00:04, 11.72it/s]
 
-error:  6.9804, value:  6.9880:  96%|#########6| 480/500 [00:37&lt;00:01, 14.94it/s]
+error:  1.5741, value:  3.9127:  96%|#########6| 480/500 [00:39&lt;00:01, 13.27it/s]
 
-error:  5.0749, value:  7.5878:  96%|#########6| 480/500 [00:38&lt;00:01, 14.94it/s]
+error:  5.4201, value:  6.5494:  96%|#########6| 480/500 [00:40&lt;00:01, 13.27it/s]
 
-error:  5.0749, value:  7.5878: : 512it [00:39, 14.82it/s]
+error:  5.4201, value:  6.5494: : 512it [00:41, 13.24it/s]
 
-error:  3.9703, value:  1.5661: : 512it [00:40, 14.82it/s]
+error:  10.4748, value:  8.8637: : 512it [00:42, 13.24it/s]
 </pre></div>
 </div>
 <p><strong>Note</strong>: As already mentioned above, to get a more reasonable performance,
@@ -1389,20 +1389,20 @@ initial, random rollout.</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TensorDict(
     fields={
-        action: Tensor(torch.Size([10, 2]), dtype=torch.int64),
-        action_value: Tensor(torch.Size([10, 2]), dtype=torch.float32),
-        chosen_action_value: Tensor(torch.Size([10, 1]), dtype=torch.float32),
-        done: Tensor(torch.Size([10, 1]), dtype=torch.bool),
+        action: Tensor(shape=torch.Size([11, 2]), device=cpu, dtype=torch.int64, is_shared=False),
+        action_value: Tensor(shape=torch.Size([11, 2]), device=cpu, dtype=torch.float32, is_shared=False),
+        chosen_action_value: Tensor(shape=torch.Size([11, 1]), device=cpu, dtype=torch.float32, is_shared=False),
+        done: Tensor(shape=torch.Size([11, 1]), device=cpu, dtype=torch.bool, is_shared=False),
         next: TensorDict(
             fields={
-                pixels: Tensor(torch.Size([10, 4, 64, 64]), dtype=torch.float32)},
-            batch_size=torch.Size([10]),
+                pixels: Tensor(shape=torch.Size([11, 4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False)},
+            batch_size=torch.Size([11]),
             device=cpu,
             is_shared=False),
-        pixels: Tensor(torch.Size([10, 4, 64, 64]), dtype=torch.float32),
-        pixels_save: Tensor(torch.Size([10, 400, 600, 3]), dtype=torch.uint8),
-        reward: Tensor(torch.Size([10, 1]), dtype=torch.float32)},
-    batch_size=torch.Size([10]),
+        pixels: Tensor(shape=torch.Size([11, 4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False),
+        pixels_save: Tensor(shape=torch.Size([11, 400, 600, 3]), device=cpu, dtype=torch.uint8, is_shared=False),
+        reward: Tensor(shape=torch.Size([11, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
+    batch_size=torch.Size([11]),
     device=cpu,
     is_shared=False)
 </pre></div>
@@ -1442,7 +1442,7 @@ for more information).</p></li>
 (check <code class="docutils literal notranslate"><span class="pre">torchrl.modules.NoisyLinear</span></code>, which is fully compatible with the
 <code class="docutils literal notranslate"><span class="pre">MLP</span></code> class used in our Dueling DQN).</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  52.775 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  45.671 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-dqn-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/be66e8850a06844c91f6264538ad69e8/coding_dqn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_dqn.py</span></code></a></p>
