@@ -1910,6 +1910,15 @@
         <span class="k">if</span> <span class="n">cat_dim</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_CAT_DIM_ERR</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cat_dim</span> <span class="o">=</span> <span class="n">cat_dim</span>
+        <span class="k">for</span> <span class="n">in_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_keys</span><span class="p">:</span>
+            <span class="n">buffer_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_cat_buffers_</span><span class="si">{</span><span class="n">in_key</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="nb">setattr</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">buffer_name</span><span class="p">,</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">UninitializedBuffer</span><span class="p">(</span>
+                    <span class="n">device</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">get_default_dtype</span><span class="p">()</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
 
 <div class="viewcode-block" id="CatFrames.reset"><a class="viewcode-back" href="../../../../reference/generated/torchrl.envs.transforms.CatFrames.html#torchrl.envs.transforms.CatFrames.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets _buffers.&quot;&quot;&quot;</span>
@@ -1917,12 +1926,10 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">in_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_keys</span><span class="p">:</span>
                 <span class="n">buffer_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_cat_buffers_</span><span class="si">{</span><span class="n">in_key</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">buffer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
-                    <span class="n">buffer</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
-                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                    <span class="c1"># we&#39;ll instantiate later, when needed</span>
-                    <span class="k">pass</span>
+                <span class="n">buffer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">UninitializedBuffer</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">buffer</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
 
         <span class="c1"># Batched environments</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1936,12 +1943,10 @@
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">in_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_keys</span><span class="p">:</span>
                 <span class="n">buffer_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_cat_buffers_</span><span class="si">{</span><span class="n">in_key</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">buffer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
-                    <span class="n">buffer</span><span class="p">[</span><span class="n">_reset</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
-                <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                    <span class="c1"># we&#39;ll instantiate later, when needed</span>
-                    <span class="k">pass</span>
+                <span class="n">buffer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">UninitializedBuffer</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">buffer</span><span class="p">[</span><span class="n">_reset</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
 
         <span class="k">return</span> <span class="n">tensordict</span></div>
 
@@ -1950,15 +1955,9 @@
         <span class="n">d</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cat_dim</span><span class="p">]</span>
         <span class="n">shape</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">cat_dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">N</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
-            <span class="n">buffer_name</span><span class="p">,</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                <span class="n">shape</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
-                <span class="n">device</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-        <span class="n">buffer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span><span class="o">.</span><span class="n">materialize</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">buffer</span>
 
     <span class="k">def</span> <span class="nf">_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
@@ -1968,12 +1967,12 @@
             <span class="n">buffer_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_cat_buffers_</span><span class="si">{</span><span class="n">in_key</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">tensordict</span><span class="p">[</span><span class="n">in_key</span><span class="p">]</span>
             <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cat_dim</span><span class="p">)</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">buffer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
+            <span class="n">buffer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">UninitializedBuffer</span><span class="p">):</span>
+                <span class="n">buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_missing_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># shift obs 1 position to the right</span>
                 <span class="n">buffer</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">shifts</span><span class="o">=-</span><span class="n">d</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cat_dim</span><span class="p">))</span>
-            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="n">buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_missing_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
             <span class="c1"># add new obs</span>
             <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cat_dim</span>
             <span class="k">if</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
