@@ -135,10 +135,10 @@ to be of type ``CompositeSpec``. Reward and action do not have this restriction:
     Env observation_spec: 
      CompositeSpec(
         observation: BoundedTensorSpec(
-             shape=torch.Size([3]), space=ContinuousBox(minimum=tensor([-1., -1., -8.]), maximum=tensor([1., 1., 8.])), device=cpu, dtype=torch.float32, domain=continuous))
+             shape=torch.Size([3]), space=ContinuousBox(minimum=Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, contiguous=True), maximum=Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, contiguous=True)), device=cpu, dtype=torch.float32, domain=continuous), device=cpu, shape=torch.Size([]))
     Env action_spec: 
      BoundedTensorSpec(
-         shape=torch.Size([1]), space=ContinuousBox(minimum=tensor([-2.]), maximum=tensor([2.])), device=cpu, dtype=torch.float32, domain=continuous)
+         shape=torch.Size([1]), space=ContinuousBox(minimum=Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, contiguous=True), maximum=Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, contiguous=True)), device=cpu, dtype=torch.float32, domain=continuous)
     Env reward_spec: 
      UnboundedContinuousTensorSpec(
          shape=torch.Size([1]), space=None, device=cpu, dtype=torch.float32, domain=continuous)
@@ -194,7 +194,7 @@ uniformly distributed) numbers in that space:
  .. code-block:: none
 
     random action: 
-     tensor([-1.5482])
+     tensor([1.7561])
 
 
 
@@ -615,7 +615,7 @@ argument that allows the user to quickly ask for image-based environments:
  .. code-block:: none
 
 
-    <matplotlib.image.AxesImage object at 0x7ff86209d990>
+    <matplotlib.image.AxesImage object at 0x7fa144a48d60>
 
 
 
@@ -979,118 +979,10 @@ As expected, the metadata get updated too:
 
     original obs spec:  CompositeSpec(
         pixels: UnboundedDiscreteTensorSpec(
-             shape=torch.Size([240, 320, 3]), space=ContinuousBox(minimum=tensor([[[0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 ...,
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0]],
-
-                [[0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 ...,
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0]],
-
-                [[0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 ...,
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0]],
-
-                ...,
-
-                [[0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 ...,
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0]],
-
-                [[0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 ...,
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0]],
-
-                [[0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 ...,
-                 [0, 0, 0],
-                 [0, 0, 0],
-                 [0, 0, 0]]]), maximum=tensor([[[255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 ...,
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255]],
-
-                [[255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 ...,
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255]],
-
-                [[255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 ...,
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255]],
-
-                ...,
-
-                [[255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 ...,
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255]],
-
-                [[255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 ...,
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255]],
-
-                [[255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 ...,
-                 [255, 255, 255],
-                 [255, 255, 255],
-                 [255, 255, 255]]])), device=cpu, dtype=torch.uint8, domain=continuous))
+             shape=torch.Size([240, 320, 3]), space=ContinuousBox(minimum=Tensor(shape=torch.Size([240, 320, 3]), device=cpu, dtype=torch.int64, contiguous=True), maximum=Tensor(shape=torch.Size([240, 320, 3]), device=cpu, dtype=torch.int64, contiguous=True)), device=cpu, dtype=torch.uint8, domain=continuous), device=cpu, shape=torch.Size([]))
     current obs spec:  CompositeSpec(
         pixels: UnboundedDiscreteTensorSpec(
-             shape=torch.Size([1, 32, 32]), space=ContinuousBox(minimum=tensor([[[0., 0., 0.,  ..., 0., 0., 0.],
-                 [0., 0., 0.,  ..., 0., 0., 0.],
-                 [0., 0., 0.,  ..., 0., 0., 0.],
-                 ...,
-                 [0., 0., 0.,  ..., 0., 0., 0.],
-                 [0., 0., 0.,  ..., 0., 0., 0.],
-                 [0., 0., 0.,  ..., 0., 0., 0.]]]), maximum=tensor([[[0.9999, 0.9999, 0.9999,  ..., 0.9999, 0.9999, 0.9999],
-                 [0.9999, 0.9999, 0.9999,  ..., 0.9999, 0.9999, 0.9999],
-                 [0.9999, 0.9999, 0.9999,  ..., 0.9999, 0.9999, 0.9999],
-                 ...,
-                 [0.9999, 0.9999, 0.9999,  ..., 0.9999, 0.9999, 0.9999],
-                 [0.9999, 0.9999, 0.9999,  ..., 0.9999, 0.9999, 0.9999],
-                 [0.9999, 0.9999, 0.9999,  ..., 0.9999, 0.9999, 0.9999]]])), device=cpu, dtype=torch.float32, domain=continuous))
+             shape=torch.Size([1, 32, 32]), space=ContinuousBox(minimum=Tensor(shape=torch.Size([1, 32, 32]), device=cpu, dtype=torch.float32, contiguous=True), maximum=Tensor(shape=torch.Size([1, 32, 32]), device=cpu, dtype=torch.float32, contiguous=True)), device=cpu, dtype=torch.float32, domain=continuous), device=cpu, shape=torch.Size([]))
 
 
 
@@ -1481,7 +1373,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    'bar_3ec547a2-9a51-11ed-b4f6-0242ac120002'
+    'bar_f018fb70-9b46-11ed-98dc-0242ac120002'
 
 
 
@@ -1530,7 +1422,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7ff85f997d90>
+    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7fa0f8639b70>
 
 
 
@@ -1550,7 +1442,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    ['bar_4298fe3c-9a51-11ed-8c78-0242ac120002', 'bar_42accb1a-9a51-11ed-b04b-0242ac120002', 'bar_42852894-9a51-11ed-81f1-0242ac120002']
+    ['bar_f3583602-9b46-11ed-8b85-0242ac120002', 'bar_f3808ee0-9b46-11ed-85ac-0242ac120002', 'bar_f386f4ec-9b46-11ed-a6ca-0242ac120002']
 
 
 
@@ -1764,8 +1656,8 @@ In regular setting, using VecNorm is quite easy:
 
  .. code-block:: none
 
-    mean: : tensor([-0.2228, -0.0467, -0.5792])
-    std: : tensor([1.1400, 1.1710, 1.0994])
+    mean: : tensor([ 0.1218, -0.2597, -0.3479])
+    std: : tensor([1.1909, 1.1248, 1.1513])
 
 
 
@@ -1823,8 +1715,8 @@ once created:
         batch_size=torch.Size([3, 5]),
         device=cpu,
         is_shared=False)
-    mean: : tensor([ 0.0917, -0.0177, -0.1486])
-    std: : tensor([1.1659, 1.1069, 1.2638])
+    mean: : tensor([ 0.0531, -0.2799, -0.2082])
+    std: : tensor([1.2007, 1.0894, 1.2862])
 
 
 
@@ -1864,7 +1756,7 @@ This small difference will usually be absored throughout training.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  30.962 seconds)
+   **Total running time of the script:** ( 0 minutes  26.673 seconds)
 
 
 .. _sphx_glr_download_tutorials_torch_envs.py:
