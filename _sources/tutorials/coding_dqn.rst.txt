@@ -255,7 +255,7 @@ Compute normalizing constants:
  .. code-block:: none
 
 
-    (0.9919026494026184, 0.08024954050779343)
+    (0.990597128868103, 0.08267423510551453)
 
 
 
@@ -409,6 +409,7 @@ We print the resulting tensordict instance to get an idea of what
 
     reset results: TensorDict(
         fields={
+            _reset: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.bool, is_shared=False),
             done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
             pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False),
             pixels_save: Tensor(shape=torch.Size([400, 600, 3]), device=cpu, dtype=torch.uint8, is_shared=False)},
@@ -417,6 +418,7 @@ We print the resulting tensordict instance to get an idea of what
         is_shared=False)
     Q-value network results: TensorDict(
         fields={
+            _reset: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.bool, is_shared=False),
             action: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.int64, is_shared=False),
             action_value: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
             chosen_action_value: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
@@ -518,6 +520,7 @@ Our *optimizer* and the env used for evaluation
 
     TensorDict(
         fields={
+            _reset: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.bool, is_shared=False),
             action: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.int64, is_shared=False),
             action_value: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
             chosen_action_value: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
@@ -1189,7 +1192,7 @@ algorithm. Other possible improvements could include:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  14.220 seconds)
+   **Total running time of the script:** ( 0 minutes  12.365 seconds)
 
 
 .. _sphx_glr_download_tutorials_coding_dqn.py:
