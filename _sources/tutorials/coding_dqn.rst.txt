@@ -255,7 +255,7 @@ Compute normalizing constants:
  .. code-block:: none
 
 
-    (0.9927785992622375, 0.0761081725358963)
+    (0.9915987849235535, 0.08324037492275238)
 
 
 
@@ -706,11 +706,11 @@ Training loop
     Traceback (most recent call last):
       File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py", line 382, in <module>
         traj_lengths.append(data["step_count"][done].float().mean().item())
-      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 1924, in __getitem__
+      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 1929, in __getitem__
         return self.get(idx)
-      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 2657, in get
+      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 2662, in get
         return self._default_get(key, default)
-      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 547, in _default_get
+      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 548, in _default_get
         raise KeyError(
     KeyError: 'key "step_count" not found in TensorDict with keys [\'action\', \'action_value\', \'chosen_action_value\', \'collector\', \'done\', \'next\', \'pixels\', \'reward\']'
 
@@ -1192,7 +1192,7 @@ algorithm. Other possible improvements could include:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  14.103 seconds)
+   **Total running time of the script:** ( 0 minutes  12.566 seconds)
 
 
 .. _sphx_glr_download_tutorials_coding_dqn.py:
