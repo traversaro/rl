@@ -530,7 +530,7 @@ with two parameters computed from a random rollout in the environment.</p></li>
             <span class="n">GrayScale</span><span class="p">(),</span>
             <span class="n">Resize</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
             <span class="n">ObservationNorm</span><span class="p">(</span><span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pixels&quot;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="n">m</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">standard_normal</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-            <span class="n">CatFrames</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pixels&quot;</span><span class="p">]),</span>
+            <span class="n">CatFrames</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;pixels&quot;</span><span class="p">],</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">3</span><span class="p">),</span>
         <span class="p">),</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">env</span>
@@ -543,7 +543,7 @@ with two parameters computed from a random rollout in the environment.</p></li>
 <span class="n">m</span><span class="p">,</span> <span class="n">s</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(0.9927785992622375, 0.0761081725358963)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(0.990932822227478, 0.08190404623746872)
 </pre></div>
 </div>
 </section>
@@ -871,11 +871,11 @@ the optimization is taking place.</p>
 <div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
   File <span class="nb">&quot;/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py&quot;</span>, line <span class="m">382</span>, in <span class="n">&lt;module&gt;</span>
 <span class="w">    </span><span class="n">traj_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">][</span><span class="n">done</span><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">1883</span>, in <span class="n">__getitem__</span>
+  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">1924</span>, in <span class="n">__getitem__</span>
 <span class="w">    </span><span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
-  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">2616</span>, in <span class="n">get</span>
+  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">2657</span>, in <span class="n">get</span>
 <span class="w">    </span><span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
-  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">541</span>, in <span class="n">_default_get</span>
+  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">547</span>, in <span class="n">_default_get</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
 <span class="gr">KeyError</span>: <span class="n">&#39;key &quot;step_count&quot; not found in TensorDict with keys [\&#39;action\&#39;, \&#39;action_value\&#39;, \&#39;chosen_action_value\&#39;, \&#39;collector\&#39;, \&#39;done\&#39;, \&#39;next\&#39;, \&#39;pixels\&#39;, \&#39;reward\&#39;]&#39;</span>
 </pre></div>
@@ -1265,7 +1265,7 @@ for more information).</p></li>
 (check <code class="docutils literal notranslate"><span class="pre">torchrl.modules.NoisyLinear</span></code>, which is fully compatible with the
 <code class="docutils literal notranslate"><span class="pre">MLP</span></code> class used in our Dueling DQN).</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  12.054 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  11.576 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-dqn-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/be66e8850a06844c91f6264538ad69e8/coding_dqn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_dqn.py</span></code></a></p>

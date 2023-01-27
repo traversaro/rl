@@ -1059,32 +1059,32 @@ async settings, and at the end of it in sync settings).</p></li>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/2500 [00:00&lt;?, ?it/s]
- 20%|##        | 500/2500 [00:01&lt;00:04, 428.20it/s]Creating a MemmapStorage...
+ 20%|##        | 500/2500 [00:00&lt;00:03, 520.23it/s]Creating a MemmapStorage...
 The storage is being created:
-        action: /tmp/6p0hoe1t, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
-        done: /tmp/6aeh45ec, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
-        gamma: /tmp/m7pr2eam, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-        index: /tmp/16x8ayhs, 0.0095367431640625 Mb of storage (size: torch.Size([2500])).
-        nonterminal: /tmp/pdx58n84, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
-        observation_vector: /tmp/davxi6vq, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
-        original_reward: /tmp/p_76k9d1, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-        param: /tmp/qqcn746z, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
-        reward: /tmp/rz525mxj, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-        steps_to_next_obs: /tmp/1nawr9hz, 0.019073486328125 Mb of storage (size: torch.Size([2500, 1])).
-        (&#39;collector&#39;, &#39;mask&#39;): /tmp/tmpztnyc0v1, 0.002384185791015625 Mb of storage (size: torch.Size([2500])).
-        (&#39;collector&#39;, &#39;step_count&#39;): /tmp/tmpc9b5ebz6, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
-        (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/tmpuuq9kpet, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
-        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/tmpvhtih47a, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
+        action: /tmp/b0qiyns7, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
+        done: /tmp/8j2xpg_s, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
+        gamma: /tmp/r1cwpbtd, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        index: /tmp/koh5uu86, 0.0095367431640625 Mb of storage (size: torch.Size([2500])).
+        nonterminal: /tmp/bopgkcac, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
+        observation_vector: /tmp/1x17kmq1, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
+        original_reward: /tmp/gtekahhj, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        param: /tmp/bsqpxrn_, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
+        reward: /tmp/6e70hrdh, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
+        steps_to_next_obs: /tmp/t9bn83hw, 0.019073486328125 Mb of storage (size: torch.Size([2500, 1])).
+        (&#39;collector&#39;, &#39;mask&#39;): /tmp/tmplue6gm93, 0.002384185791015625 Mb of storage (size: torch.Size([2500])).
+        (&#39;collector&#39;, &#39;step_count&#39;): /tmp/tmpo7iu9etv, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
+        (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/tmpj2u89oby, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
+        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/tmpt_p3wez2, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
 
-reward: -0.1951 (r0 = -1.1591), reward eval: reward: -0.9125:  20%|##        | 500/2500 [00:04&lt;00:04, 428.20it/s]
-reward: -0.1951 (r0 = -1.1591), reward eval: reward: -0.9125:  40%|####      | 1000/2500 [00:04&lt;00:07, 201.07it/s]
-reward: -0.2201 (r0 = -1.1591), reward eval: reward: -0.9125:  40%|####      | 1000/2500 [00:05&lt;00:07, 201.07it/s]
-reward: -0.2201 (r0 = -1.1591), reward eval: reward: -0.9125:  60%|######    | 1500/2500 [00:05&lt;00:03, 268.12it/s]
-reward: -1.4416 (r0 = -1.1591), reward eval: reward: -0.9125:  60%|######    | 1500/2500 [00:06&lt;00:03, 268.12it/s]
-reward: -1.4416 (r0 = -1.1591), reward eval: reward: -0.9125:  80%|########  | 2000/2500 [00:06&lt;00:01, 317.06it/s]
-reward: -1.4070 (r0 = -1.1591), reward eval: reward: -0.9125:  80%|########  | 2000/2500 [00:07&lt;00:01, 317.06it/s]
-reward: -1.4070 (r0 = -1.1591), reward eval: reward: -0.9125: 100%|##########| 2500/2500 [00:07&lt;00:00, 359.25it/s]
-reward: -1.8953 (r0 = -1.1591), reward eval: reward: -0.9125: 100%|##########| 2500/2500 [00:08&lt;00:00, 359.25it/s]
+reward: -0.1951 (r0 = -1.1591), reward eval: reward: -0.9077:  20%|##        | 500/2500 [00:04&lt;00:03, 520.23it/s]
+reward: -0.1951 (r0 = -1.1591), reward eval: reward: -0.9077:  40%|####      | 1000/2500 [00:04&lt;00:07, 208.76it/s]
+reward: -0.2201 (r0 = -1.1591), reward eval: reward: -0.9077:  40%|####      | 1000/2500 [00:05&lt;00:07, 208.76it/s]
+reward: -0.2201 (r0 = -1.1591), reward eval: reward: -0.9077:  60%|######    | 1500/2500 [00:05&lt;00:03, 267.24it/s]
+reward: -1.3857 (r0 = -1.1591), reward eval: reward: -0.9077:  60%|######    | 1500/2500 [00:06&lt;00:03, 267.24it/s]
+reward: -1.3857 (r0 = -1.1591), reward eval: reward: -0.9077:  80%|########  | 2000/2500 [00:06&lt;00:01, 301.10it/s]
+reward: -1.2668 (r0 = -1.1591), reward eval: reward: -0.9077:  80%|########  | 2000/2500 [00:07&lt;00:01, 301.10it/s]
+reward: -1.2668 (r0 = -1.1591), reward eval: reward: -0.9077: 100%|##########| 2500/2500 [00:07&lt;00:00, 348.40it/s]
+reward: -1.9208 (r0 = -1.1591), reward eval: reward: -0.9077: 100%|##########| 2500/2500 [00:09&lt;00:00, 348.40it/s]
 </pre></div>
 </div>
 </section>
@@ -1208,7 +1208,7 @@ loc = tensor([-3.9152e-01,  2.3728e+00,  1.6790e-02, -5.8100e-03,  2.0432e-02,
 scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
         0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
 
-reward: -1.8953 (r0 = -1.1591), reward eval: reward: -0.9125: 100%|##########| 2500/2500 [00:18&lt;00:00, 359.25it/s]
+reward: -1.9208 (r0 = -1.1591), reward eval: reward: -0.9077: 100%|##########| 2500/2500 [00:18&lt;00:00, 348.40it/s]
 </pre></div>
 </div>
 <p>The training loop needs to be modified. First, whereas before extending the
@@ -1358,16 +1358,16 @@ batch size to <code class="docutils literal notranslate"><span class="pre">torch
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating a MemmapStorage...
 The storage is being created:
-        action: /tmp/x63l4q09, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-        done: /tmp/fnbiwvmj, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
-        index: /tmp/19v75852, 0.000762939453125 Mb of storage (size: torch.Size([200])).
-        observation_vector: /tmp/ozzoiysb, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
-        param: /tmp/r9icq46f, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-        reward: /tmp/sc84c8k6, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
-        (&#39;collector&#39;, &#39;mask&#39;): /tmp/tmp24ookkei, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250])).
-        (&#39;collector&#39;, &#39;step_count&#39;): /tmp/tmpuh5ibjb3, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
-        (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/tmpni69kff1, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
-        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/tmph0lut4c_, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
+        action: /tmp/j63u9bux, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
+        done: /tmp/m1mwhq21, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
+        index: /tmp/7cqp05k6, 0.000762939453125 Mb of storage (size: torch.Size([200])).
+        observation_vector: /tmp/wpia9g_y, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
+        param: /tmp/vzqf47w_, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
+        reward: /tmp/10f8pxc4, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
+        (&#39;collector&#39;, &#39;mask&#39;): /tmp/tmptu823pjg, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250])).
+        (&#39;collector&#39;, &#39;step_count&#39;): /tmp/tmpsq06_00_, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
+        (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/tmp89fdvxml, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
+        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/tmppqki485u, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
 </pre></div>
 </div>
 <p>We can observe that using TD(lambda) made our results considerably more
@@ -1387,7 +1387,7 @@ use a greater value for <code class="docutils literal notranslate"><span class="
 <img src="../_images/sphx_glr_coding_ddpg_002.png" srcset="../_images/sphx_glr_coding_ddpg_002.png" alt="TD-labmda DDPG results" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;TD-labmda DDPG results&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  50.145 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  43.563 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-ddpg-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0dfdb6ef4cc9782fdb39c4a9d0900d37/coding_ddpg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_ddpg.py</span></code></a></p>
