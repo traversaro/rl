@@ -1137,7 +1137,7 @@
             <span class="p">},</span>
             <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
             <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-            <span class="n">_run_checks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">_run_checks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># this method should not be run very often. This facilitates debugging</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">fake_td</span></div></div>
 
