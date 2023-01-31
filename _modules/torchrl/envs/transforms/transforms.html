@@ -3101,7 +3101,9 @@
             <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
             <span class="n">device</span><span class="o">=</span><span class="n">observation_spec</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">observation_spec</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">minimum</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">observation_spec</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">minimum</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">observation_spec</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">space</span><span class="o">.</span><span class="n">minimum</span> <span class="o">*</span> <span class="mi">0</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">observation_spec</span></div></div>
 
 
