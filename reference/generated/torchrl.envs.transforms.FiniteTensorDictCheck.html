@@ -375,6 +375,12 @@
 <dt class="sig sig-object py" id="torchrl.envs.transforms.FiniteTensorDictCheck">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></span><span class="sig-name descname"><span class="pre">FiniteTensorDictCheck</span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#FiniteTensorDictCheck"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.FiniteTensorDictCheck" title="Permalink to this definition">¶</a></dt>
 <dd><p>This transform will check that all the items of the tensordict are finite, and raise an exception if they are not.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.FiniteTensorDictCheck.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="headerlink" href="#torchrl.envs.transforms.FiniteTensorDictCheck.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the input tensordict, and for the selected keys, applies the transform.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -423,7 +429,10 @@
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
 <li><a class="reference internal" href="#">FiniteTensorDictCheck</a><ul>
-<li><a class="reference internal" href="#torchrl.envs.transforms.FiniteTensorDictCheck"><code class="docutils literal notranslate"><span class="pre">FiniteTensorDictCheck</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.FiniteTensorDictCheck"><code class="docutils literal notranslate"><span class="pre">FiniteTensorDictCheck</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.FiniteTensorDictCheck.forward"><code class="docutils literal notranslate"><span class="pre">FiniteTensorDictCheck.forward()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

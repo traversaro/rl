@@ -1337,7 +1337,8 @@ if it is in a done state when the rollout is initiated.
 Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>.</p></li>
 <li><p><strong>auto_cast_to_device</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the device of the tensordict is automatically cast to the
 policy device before the policy is used. Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
-<li><p><strong>break_when_any_done</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – breaks if any of the done state is True. Default is True.</p></li>
+<li><p><strong>break_when_any_done</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – breaks if any of the done state is True. If False, a reset() is
+called on the sub-envs that are done. Default is True.</p></li>
 <li><p><strong>return_contiguous</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if False, a LazyStackedTensorDict will be returned. Default is True.</p></li>
 <li><p><strong>tensordict</strong> (<em>TensorDict</em><em>, </em><em>optional</em>) – if auto_reset is False, an initial
 tensordict must be provided.</p></li>

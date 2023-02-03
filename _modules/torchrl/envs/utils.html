@@ -365,6 +365,7 @@
 <span class="c1">#</span>
 <span class="c1"># This source code is licensed under the MIT license found in the</span>
 <span class="c1"># LICENSE file in the root directory of this source tree.</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">pkg_resources</span>
 <span class="kn">import</span> <span class="nn">torch</span>
@@ -517,7 +518,7 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="check_env_specs"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.utils.check_env_specs.html#torchrl.envs.utils.check_env_specs">[docs]</a><span class="k">def</span> <span class="nf">check_env_specs</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">return_contiguous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check_dtype</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="check_env_specs"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.utils.check_env_specs.html#torchrl.envs.utils.check_env_specs">[docs]</a><span class="k">def</span> <span class="nf">check_env_specs</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="n">return_contiguous</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check_dtype</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Tests an environment specs against the results of short rollout.</span>
 
 <span class="sd">    This test function should be used as a sanity check for an env wrapped with</span>
@@ -534,20 +535,29 @@
 <span class="sd">            of inputs/outputs). Defaults to True.</span>
 <span class="sd">        check_dtype (bool, optional): if False, dtype checks will be skipped.</span>
 <span class="sd">            Defaults to True.</span>
+<span class="sd">        seed (int, optional): for reproducibility, a seed is set.</span>
+
+<span class="sd">    Caution: this function resets the env seed. It should be used &quot;offline&quot; to</span>
+<span class="sd">    check that an env is adequately constructed, but it may affect the seeding</span>
+<span class="sd">    of an experiment and as such should be kept out of training scripts.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
     <span class="n">fake_tensordict</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">fake_tensordict</span><span class="p">()</span><span class="o">.</span><span class="n">flatten_keys</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
     <span class="n">real_tensordict</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">rollout</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">return_contiguous</span><span class="o">=</span><span class="n">return_contiguous</span><span class="p">)</span>
-    <span class="c1"># remove private keys</span>
-    <span class="n">real_tensordict</span> <span class="o">=</span> <span class="n">real_tensordict</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span>
-        <span class="o">*</span><span class="p">[</span>
-            <span class="n">key</span>
-            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">real_tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">))</span>
-            <span class="ow">or</span> <span class="p">(</span>
-                <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">subkey</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">subkey</span> <span class="ow">in</span> <span class="n">key</span><span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">]</span>
-    <span class="p">)</span>
+    <span class="c1"># # remove private keys</span>
+    <span class="c1"># real_tensordict = real_tensordict.exclude(</span>
+    <span class="c1">#     *[</span>
+    <span class="c1">#         key</span>
+    <span class="c1">#         for key in real_tensordict.keys(True)</span>
+    <span class="c1">#         if (isinstance(key, str) and key.startswith(&quot;_&quot;))</span>
+    <span class="c1">#         or (</span>
+    <span class="c1">#             isinstance(key, tuple) and any(subkey.startswith(&quot;_&quot;) for subkey in key)</span>
+    <span class="c1">#         )</span>
+    <span class="c1">#     ]</span>
+    <span class="c1"># )</span>
     <span class="n">real_tensordict</span> <span class="o">=</span> <span class="n">real_tensordict</span><span class="o">.</span><span class="n">flatten_keys</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
 
     <span class="n">keys1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">fake_tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
@@ -583,16 +593,16 @@
 
     <span class="c1"># test dtypes</span>
     <span class="n">real_tensordict</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">rollout</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># keep empty structures, for example dict()</span>
-    <span class="n">real_tensordict</span> <span class="o">=</span> <span class="n">real_tensordict</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span>
-        <span class="o">*</span><span class="p">[</span>
-            <span class="n">key</span>
-            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">real_tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">))</span>
-            <span class="ow">or</span> <span class="p">(</span>
-                <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">subkey</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">subkey</span> <span class="ow">in</span> <span class="n">key</span><span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">]</span>
-    <span class="p">)</span>
+    <span class="c1"># real_tensordict = real_tensordict.exclude(</span>
+    <span class="c1">#     *[</span>
+    <span class="c1">#         key</span>
+    <span class="c1">#         for key in real_tensordict.keys(True)</span>
+    <span class="c1">#         if (isinstance(key, str) and key.startswith(&quot;_&quot;))</span>
+    <span class="c1">#         or (</span>
+    <span class="c1">#             isinstance(key, tuple) and any(subkey.startswith(&quot;_&quot;) for subkey in key)</span>
+    <span class="c1">#         )</span>
+    <span class="c1">#     ]</span>
+    <span class="c1"># )</span>
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">real_tensordict</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">_check_isin</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">observation_spec</span><span class="p">,</span> <span class="n">env</span><span class="o">.</span><span class="n">input_spec</span><span class="p">)</span></div>
 
@@ -650,6 +660,12 @@
 
     <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">owner_self</span><span class="p">,</span> <span class="n">owner_cls</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fget</span><span class="p">(</span><span class="n">owner_cls</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_sort_keys</span><span class="p">(</span><span class="n">element</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;_-|-_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">element</span>
 </pre></div>
 
              </article>

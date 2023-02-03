@@ -412,6 +412,12 @@ Default is False.</p></li>
 </pre></div>
 </div>
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.CatTensors.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="headerlink" href="#torchrl.envs.transforms.CatTensors.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the input tensordict, and for the selected keys, applies the transform.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.CatTensors.transform_observation_spec">
 <span class="sig-name descname"><span class="pre">transform_observation_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#CatTensors.transform_observation_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.CatTensors.transform_observation_spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms the observation spec such that the resulting spec matches transform mapping.</p>
@@ -474,6 +480,7 @@ Default is False.</p></li>
               <ul>
 <li><a class="reference internal" href="#">CatTensors</a><ul>
 <li><a class="reference internal" href="#torchrl.envs.transforms.CatTensors"><code class="docutils literal notranslate"><span class="pre">CatTensors</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.CatTensors.forward"><code class="docutils literal notranslate"><span class="pre">CatTensors.forward()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.CatTensors.transform_observation_spec"><code class="docutils literal notranslate"><span class="pre">CatTensors.transform_observation_spec()</span></code></a></li>
 </ul>
 </li>

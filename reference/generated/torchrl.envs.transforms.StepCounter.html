@@ -387,9 +387,29 @@
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.StepCounter.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#StepCounter.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.StepCounter.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the input tensordict, and for the selected keys, applies the transform.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.StepCounter.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#StepCounter.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.StepCounter.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets a tranform if it is stateful.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.StepCounter.transform_input_spec">
+<span class="sig-name descname"><span class="pre">transform_input_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec" title="torchrl.data.tensor_specs.CompositeSpec"><span class="pre">CompositeSpec</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec" title="torchrl.data.tensor_specs.CompositeSpec"><span class="pre">CompositeSpec</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#StepCounter.transform_input_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.StepCounter.transform_input_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the input spec such that the resulting spec matches transform mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – spec before the transform</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>expected spec after the transform</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -455,7 +475,9 @@
               <ul>
 <li><a class="reference internal" href="#">StepCounter</a><ul>
 <li><a class="reference internal" href="#torchrl.envs.transforms.StepCounter"><code class="docutils literal notranslate"><span class="pre">StepCounter</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.StepCounter.forward"><code class="docutils literal notranslate"><span class="pre">StepCounter.forward()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.StepCounter.reset"><code class="docutils literal notranslate"><span class="pre">StepCounter.reset()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.StepCounter.transform_input_spec"><code class="docutils literal notranslate"><span class="pre">StepCounter.transform_input_spec()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.StepCounter.transform_observation_spec"><code class="docutils literal notranslate"><span class="pre">StepCounter.transform_observation_spec()</span></code></a></li>
 </ul>
 </li>

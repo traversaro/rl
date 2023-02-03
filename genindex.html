@@ -873,13 +873,33 @@
 </li>
         <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.forward">(torchrl.envs.SerialEnv method)</a>
 </li>
+        <li><a href="reference/generated/torchrl.envs.transforms.CatFrames.html#torchrl.envs.transforms.CatFrames.forward">(torchrl.envs.transforms.CatFrames method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.CatTensors.html#torchrl.envs.transforms.CatTensors.forward">(torchrl.envs.transforms.CatTensors method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose.forward">(torchrl.envs.transforms.Compose method)</a>
 </li>
-        <li><a href="reference/generated/torchrl.envs.transforms.SqueezeTransform.html#torchrl.envs.transforms.SqueezeTransform.forward">(torchrl.envs.transforms.SqueezeTransform method)</a>
+        <li><a href="reference/generated/torchrl.envs.transforms.ExcludeTransform.html#torchrl.envs.transforms.ExcludeTransform.forward">(torchrl.envs.transforms.ExcludeTransform method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.FiniteTensorDictCheck.html#torchrl.envs.transforms.FiniteTensorDictCheck.forward">(torchrl.envs.transforms.FiniteTensorDictCheck method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.FlattenObservation.html#torchrl.envs.transforms.FlattenObservation.forward">(torchrl.envs.transforms.FlattenObservation method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.FrameSkipTransform.html#torchrl.envs.transforms.FrameSkipTransform.forward">(torchrl.envs.transforms.FrameSkipTransform method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.PinMemoryTransform.html#torchrl.envs.transforms.PinMemoryTransform.forward">(torchrl.envs.transforms.PinMemoryTransform method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.SelectTransform.html#torchrl.envs.transforms.SelectTransform.forward">(torchrl.envs.transforms.SelectTransform method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.StepCounter.html#torchrl.envs.transforms.StepCounter.forward">(torchrl.envs.transforms.StepCounter method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.TensorDictPrimer.html#torchrl.envs.transforms.TensorDictPrimer.forward">(torchrl.envs.transforms.TensorDictPrimer method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.TimeMaxPool.html#torchrl.envs.transforms.TimeMaxPool.forward">(torchrl.envs.transforms.TimeMaxPool method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform.forward">(torchrl.envs.transforms.Transform method)</a>
 </li>
-        <li><a href="reference/generated/torchrl.envs.transforms.UnsqueezeTransform.html#torchrl.envs.transforms.UnsqueezeTransform.forward">(torchrl.envs.transforms.UnsqueezeTransform method)</a>
+        <li><a href="reference/generated/torchrl.envs.transforms.VecNorm.html#torchrl.envs.transforms.VecNorm.forward">(torchrl.envs.transforms.VecNorm method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.VIPRewardTransform.html#torchrl.envs.transforms.VIPRewardTransform.forward">(torchrl.envs.transforms.VIPRewardTransform method)</a>
 </li>
@@ -1775,8 +1795,6 @@
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.ExcludeTransform.html#torchrl.envs.transforms.ExcludeTransform.reset">(torchrl.envs.transforms.ExcludeTransform method)</a>
 </li>
-        <li><a href="reference/generated/torchrl.envs.transforms.gSDENoise.html#torchrl.envs.transforms.gSDENoise.reset">(torchrl.envs.transforms.gSDENoise method)</a>
-</li>
         <li><a href="reference/generated/torchrl.envs.transforms.NoopResetEnv.html#torchrl.envs.transforms.NoopResetEnv.reset">(torchrl.envs.transforms.NoopResetEnv method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.RewardSum.html#torchrl.envs.transforms.RewardSum.reset">(torchrl.envs.transforms.RewardSum method)</a>
@@ -2136,16 +2154,22 @@
         <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.train">(torchrl.envs.transforms.TransformedEnv method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/torchrl.trainers.Trainer.html#torchrl.trainers.Trainer">Trainer (class in torchrl.trainers)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform">Transform (class in torchrl.envs.transforms)</a>
 </li>
       <li><a href="reference/generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose.transform_input_spec">transform_input_spec() (torchrl.envs.transforms.Compose method)</a>
 
       <ul>
+        <li><a href="reference/generated/torchrl.envs.transforms.DiscreteActionProjection.html#torchrl.envs.transforms.DiscreteActionProjection.transform_input_spec">(torchrl.envs.transforms.DiscreteActionProjection method)</a>
+</li>
         <li><a href="reference/generated/torchrl.envs.transforms.DoubleToFloat.html#torchrl.envs.transforms.DoubleToFloat.transform_input_spec">(torchrl.envs.transforms.DoubleToFloat method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.ObservationNorm.html#torchrl.envs.transforms.ObservationNorm.transform_input_spec">(torchrl.envs.transforms.ObservationNorm method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.transforms.StepCounter.html#torchrl.envs.transforms.StepCounter.transform_input_spec">(torchrl.envs.transforms.StepCounter method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform.transform_input_spec">(torchrl.envs.transforms.Transform method)</a>
 </li>

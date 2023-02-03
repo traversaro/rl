@@ -452,6 +452,12 @@ will be placed in shared memory.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.VecNorm.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="headerlink" href="#torchrl.envs.transforms.VecNorm.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the input tensordict, and for the selected keys, applies the transform.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.VecNorm.get_extra_state">
 <span class="sig-name descname"><span class="pre">get_extra_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.OrderedDict" title="(in Python v3.11)"><span class="pre">OrderedDict</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#VecNorm.get_extra_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.VecNorm.get_extra_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns any extra state to include in the module’s state_dict.
@@ -542,6 +548,7 @@ found within the <cite>state_dict</cite>. Implement this function and a correspo
 <li><a class="reference internal" href="#">VecNorm</a><ul>
 <li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm"><code class="docutils literal notranslate"><span class="pre">VecNorm</span></code></a><ul>
 <li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm.build_td_for_shared_vecnorm"><code class="docutils literal notranslate"><span class="pre">VecNorm.build_td_for_shared_vecnorm()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm.forward"><code class="docutils literal notranslate"><span class="pre">VecNorm.forward()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm.get_extra_state"><code class="docutils literal notranslate"><span class="pre">VecNorm.get_extra_state()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm.set_extra_state"><code class="docutils literal notranslate"><span class="pre">VecNorm.set_extra_state()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.VecNorm.to_observation_norm"><code class="docutils literal notranslate"><span class="pre">VecNorm.to_observation_norm()</span></code></a></li>

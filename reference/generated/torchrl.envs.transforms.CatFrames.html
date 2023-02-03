@@ -395,6 +395,12 @@ has to be written. Defaults to the value of <cite>in_keys</cite>.</p></li>
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.CatFrames.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#CatFrames.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.CatFrames.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the input tensordict, and for the selected keys, applies the transform.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.CatFrames.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#CatFrames.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.CatFrames.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets _buffers.</p>
@@ -463,6 +469,7 @@ has to be written. Defaults to the value of <cite>in_keys</cite>.</p></li>
               <ul>
 <li><a class="reference internal" href="#">CatFrames</a><ul>
 <li><a class="reference internal" href="#torchrl.envs.transforms.CatFrames"><code class="docutils literal notranslate"><span class="pre">CatFrames</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.CatFrames.forward"><code class="docutils literal notranslate"><span class="pre">CatFrames.forward()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.CatFrames.reset"><code class="docutils literal notranslate"><span class="pre">CatFrames.reset()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.CatFrames.transform_observation_spec"><code class="docutils literal notranslate"><span class="pre">CatFrames.transform_observation_spec()</span></code></a></li>
 </ul>

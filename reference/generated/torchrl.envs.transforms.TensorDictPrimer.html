@@ -373,15 +373,20 @@
 <h1>TensorDictPrimer<a class="headerlink" href="#tensordictprimer" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.TensorDictPrimer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></span><span class="sig-name descname"><span class="pre">TensorDictPrimer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">random</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#TensorDictPrimer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.TensorDictPrimer" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></span><span class="sig-name descname"><span class="pre">TensorDictPrimer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">primers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><span class="pre">dict</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#TensorDictPrimer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.TensorDictPrimer" title="Permalink to this definition">¶</a></dt>
 <dd><p>A primer for TensorDict initialization at reset time.</p>
 <p>This transform will populate the tensordict at reset with values drawn from
-the relative tensorspecs provided at initialization.</p>
+the relative tensorspecs provided at initialization.
+If the transform is used out of the env context (e.g. as an nn.Module or
+appended to a replay buffer), a call to <cite>forward</cite> will also populate the
+tensordict with the desired features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>primers</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – a dictionary containing key-spec pairs which will
+be used to populate the input tensordict.</p></li>
 <li><p><strong>random</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the values will be drawn randomly from
-the TensorSpec domain. Otherwise a fixed value will be assumed.
+the TensorSpec domain (or a unit Gaussian if unbounded). Otherwise a fixed value will be assumed.
 Defaults to <cite>False</cite>.</p></li>
 <li><p><strong>default_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.11)"><em>float</em></a><em>, </em><em>optional</em>) – if non-random filling is chosen, this
 value will be used to populate the tensors. Defaults to <cite>0.0</cite>.</p></li>
@@ -391,11 +396,16 @@ what the value must be.</p></li>
 </ul>
 </dd>
 </dl>
+<p>When used in a TransfomedEnv, the spec shapes must match the envs shape if
+the parent env is batch-locked (<code class="xref py py-obj docutils literal notranslate"><span class="pre">env.batch_locked=True</span></code>).
+If the env is not batch-locked (e.g. model-based envs), it is assumed that the batch is
+given by the input tensordict instead.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymEnv</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">base_env</span> <span class="o">=</span> <span class="n">GymEnv</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">base_env</span> <span class="o">=</span> <span class="n">SerialEnv</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">GymEnv</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">TransformedEnv</span><span class="p">(</span><span class="n">base_env</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span><span class="o">.</span><span class="n">append_transform</span><span class="p">(</span><span class="n">TensorDictPrimer</span><span class="p">(</span><span class="n">mykey</span><span class="o">=</span><span class="n">UnboundedContinuousTensorSpec</span><span class="p">([</span><span class="mi">3</span><span class="p">])))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the env is batch-locked, so the leading dims of the spec must match those of the env</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span><span class="o">.</span><span class="n">append_transform</span><span class="p">(</span><span class="n">TensorDictPrimer</span><span class="p">(</span><span class="n">mykey</span><span class="o">=</span><span class="n">UnboundedContinuousTensorSpec</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">())</span>
 <span class="go">TensorDict(</span>
 <span class="go">    fields={</span>
@@ -408,9 +418,18 @@ what the value must be.</p></li>
 </pre></div>
 </div>
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.TensorDictPrimer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#TensorDictPrimer.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.TensorDictPrimer.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the input tensordict, and for the selected keys, applies the transform.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.TensorDictPrimer.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#TensorDictPrimer.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.TensorDictPrimer.reset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resets a tranform if it is stateful.</p>
+<dd><p>Sets the default values in the input tensordict.</p>
+<p>If the parent is batch-locked, we assume that the specs have the appropriate leading
+shape. We allow for execution when the parent is missing, in which case the
+spec shape is assumed to match the tensordict’s.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -577,6 +596,7 @@ only argument)</p></li>
               <ul>
 <li><a class="reference internal" href="#">TensorDictPrimer</a><ul>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TensorDictPrimer"><code class="docutils literal notranslate"><span class="pre">TensorDictPrimer</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.TensorDictPrimer.forward"><code class="docutils literal notranslate"><span class="pre">TensorDictPrimer.forward()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TensorDictPrimer.reset"><code class="docutils literal notranslate"><span class="pre">TensorDictPrimer.reset()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TensorDictPrimer.to"><code class="docutils literal notranslate"><span class="pre">TensorDictPrimer.to()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TensorDictPrimer.transform_observation_spec"><code class="docutils literal notranslate"><span class="pre">TensorDictPrimer.transform_observation_spec()</span></code></a></li>
