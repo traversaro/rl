@@ -194,7 +194,7 @@ uniformly distributed) numbers in that space:
  .. code-block:: none
 
     random action: 
-     tensor([0.3098])
+     tensor([1.8708])
 
 
 
@@ -615,7 +615,7 @@ argument that allows the user to quickly ask for image-based environments:
  .. code-block:: none
 
 
-    <matplotlib.image.AxesImage object at 0x7f4c0f348910>
+    <matplotlib.image.AxesImage object at 0x7f0380094a30>
 
 
 
@@ -752,7 +752,7 @@ The ``available_envs`` now returns a dict of envs and possible tasks:
  .. code-block:: none
 
 
-    {'acrobot': ['swingup', 'swingup_sparse'], 'ball_in_cup': ['catch'], 'cartpole': ['balance', 'balance_sparse', 'swingup', 'swingup_sparse', 'three_poles', 'two_poles'], 'cheetah': ['run'], 'finger': ['spin', 'turn_easy', 'turn_hard'], 'fish': ['upright', 'swim'], 'hopper': ['stand', 'hop'], 'humanoid': ['stand', 'walk', 'run', 'run_pure_state'], 'manipulator': ['bring_ball', 'bring_peg', 'insert_ball', 'insert_peg'], 'pendulum': ['swingup'], 'point_mass': ['easy', 'hard'], 'reacher': ['easy', 'hard'], 'swimmer': ['swimmer6', 'swimmer15'], 'walker': ['stand', 'walk', 'run'], 'dog': ['fetch', 'run', 'stand', 'trot', 'walk'], 'humanoid_CMU': ['run', 'stand'], 'lqr': ['lqr_2_1', 'lqr_6_2'], 'quadruped': ['escape', 'fetch', 'run', 'walk'], 'stacker': ['stack_2', 'stack_4']}
+    {'acrobot': ['swingup', 'swingup_sparse'], 'ball_in_cup': ['catch'], 'cartpole': ['balance', 'balance_sparse', 'swingup', 'swingup_sparse', 'three_poles', 'two_poles'], 'cheetah': ['run'], 'finger': ['spin', 'turn_easy', 'turn_hard'], 'fish': ['upright', 'swim'], 'hopper': ['stand', 'hop'], 'humanoid': ['stand', 'walk', 'run', 'run_pure_state'], 'manipulator': ['bring_ball', 'bring_peg', 'insert_ball', 'insert_peg'], 'pendulum': ['swingup'], 'point_mass': ['easy', 'hard'], 'reacher': ['easy', 'hard'], 'swimmer': ['swimmer6', 'swimmer15'], 'walker': ['stand', 'walk', 'run'], 'dog': ['fetch', 'run', 'stand', 'trot', 'walk'], 'humanoid_CMU': ['run', 'stand', 'walk'], 'lqr': ['lqr_2_1', 'lqr_6_2'], 'quadruped': ['escape', 'fetch', 'run', 'walk'], 'stacker': ['stack_2', 'stack_4']}
 
 
 
@@ -1373,7 +1373,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    'bar_e5b2feee-a70b-11ed-9034-0242ac120002'
+    'bar_3cd78228-a72d-11ed-a65c-0242ac120002'
 
 
 
@@ -1422,7 +1422,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7f4c06ffebf0>
+    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7f037b85aa70>
 
 
 
@@ -1442,7 +1442,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    ['bar_e96f8606-a70b-11ed-9564-0242ac120002', 'bar_e975f810-a70b-11ed-9153-0242ac120002', 'bar_e94f183a-a70b-11ed-8070-0242ac120002']
+    ['bar_412b7c76-a72d-11ed-8d7b-0242ac120002', 'bar_4108730c-a72d-11ed-bbcc-0242ac120002', 'bar_40f72fd4-a72d-11ed-96fa-0242ac120002']
 
 
 
@@ -1656,8 +1656,8 @@ In regular setting, using VecNorm is quite easy:
 
  .. code-block:: none
 
-    mean: : tensor([0.1152, 0.3002, 0.2603])
-    std: : tensor([1.1937, 1.1140, 1.2299])
+    mean: : tensor([-0.3601,  0.1197, -0.4974])
+    std: : tensor([1.1691, 1.2240, 0.9826])
 
 
 
@@ -1715,8 +1715,8 @@ once created:
         batch_size=torch.Size([3, 5]),
         device=cpu,
         is_shared=False)
-    mean: : tensor([-0.0123, -0.0074, -0.1984])
-    std: : tensor([1.2299, 1.1003, 1.2948])
+    mean: : tensor([ 0.1601, -0.0284, -0.2488])
+    std: : tensor([1.1282, 1.1703, 1.2777])
 
 
 
@@ -1756,7 +1756,7 @@ This small difference will usually be absored throughout training.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  30.504 seconds)
+   **Total running time of the script:** ( 0 minutes  35.656 seconds)
 
 
 .. _sphx_glr_download_tutorials_torch_envs.py:
