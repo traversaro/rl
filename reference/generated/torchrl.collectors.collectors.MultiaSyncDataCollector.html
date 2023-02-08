@@ -393,7 +393,7 @@ This class can be safely used with offline RL algorithms.</p>
 <span class="gp">... </span>    <span class="n">init_random_frames</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">reset_at_each_iter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="gp">... </span>    <span class="n">devices</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">passing_devices</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">storing_devices</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">collector</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
@@ -462,10 +462,10 @@ If it differs from the input policy device, the update_policy_weights_() method 
 at appropriate times during the training loop to accommodate for the lag between parameter configuration
 at various times.
 default = None (i.e. policy is kept on its original device)</p></li>
-<li><p><strong>passing_devices</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v1.13)"><em>torch.device</em></a><em> or </em><em>sequence</em><em> of </em><em>such</em><em>, </em><em>optional</em>) – The devices on which the output
-TensorDict will be stored. For long trajectories, it may be necessary to store the data on a different
-device than the one where the policy is stored.
-default = None</p></li>
+<li><p><strong>storing_devices</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v1.13)"><em>torch.device</em></a><em> or </em><em>sequence</em><em> of </em><em>such</em><em>, </em><em>optional</em>) – The devices on which the output TensorDict will be stored.
+For long trajectories, it may be necessary to store the data on a different device than the one where
+the policy and env are executed.
+default = None (ie cpu)</p></li>
 <li><p><strong>update_at_each_batch</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a>) – if True, the policy weights will be updated every time a batch of trajectories
 is collected.
 default=False</p></li>

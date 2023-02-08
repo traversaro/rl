@@ -382,7 +382,7 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
-<span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span><span class="p">,</span> <span class="n">TensorDictBase</span>
+<span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDictBase</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span>
 <span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="n">IterableDataset</span>
 
@@ -642,10 +642,10 @@
 <span class="sd">            default = None (i.e. policy is kept on its original device)</span>
 <span class="sd">        seed (int, optional): seed to be used for torch and numpy.</span>
 <span class="sd">        pin_memory (bool): whether pin_memory() should be called on the outputs.</span>
-<span class="sd">        passing_device (int, str or torch.device, optional): The device on which the output TensorDict will be stored.</span>
+<span class="sd">        storing_device (int, str or torch.device, optional): The device on which the output TensorDict will be stored.</span>
 <span class="sd">            For long trajectories, it may be necessary to store the data on a different device than the one where</span>
-<span class="sd">            the policy is stored.</span>
-<span class="sd">            default = None</span>
+<span class="sd">            the policy and env are executed.</span>
+<span class="sd">            default = None (ie cpu)</span>
 <span class="sd">        exploration_mode (str, optional): interaction mode to be used when collecting data. Must be one of &quot;random&quot;,</span>
 <span class="sd">            &quot;mode&quot; or &quot;mean&quot;.</span>
 <span class="sd">            default = &quot;random&quot;</span>
@@ -672,7 +672,7 @@
 <span class="sd">        ...     init_random_frames=-1,</span>
 <span class="sd">        ...     reset_at_each_iter=False,</span>
 <span class="sd">        ...     device=&quot;cpu&quot;,</span>
-<span class="sd">        ...     passing_device=&quot;cpu&quot;,</span>
+<span class="sd">        ...     storing_device=&quot;cpu&quot;,</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; for i, data in enumerate(collector):</span>
 <span class="sd">        ...     if i == 2:</span>
@@ -725,7 +725,7 @@
         <span class="n">postproc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">TensorDictBase</span><span class="p">],</span> <span class="n">TensorDictBase</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">split_trajs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">device</span><span class="p">:</span> <span class="n">DEVICE_TYPING</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">passing_device</span><span class="p">:</span> <span class="n">DEVICE_TYPING</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">storing_device</span><span class="p">:</span> <span class="n">DEVICE_TYPING</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">pin_memory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">exploration_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_EXPLORATION_MODE</span><span class="p">,</span>
@@ -752,20 +752,20 @@
                     <span class="p">)</span>
                 <span class="n">env</span><span class="o">.</span><span class="n">update_kwargs</span><span class="p">(</span><span class="n">create_env_kwargs</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">passing_device</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">storing_device</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">passing_device</span> <span class="o">=</span> <span class="n">device</span>
+                <span class="n">storing_device</span> <span class="o">=</span> <span class="n">device</span>
             <span class="k">elif</span> <span class="n">policy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">policy_device</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">policy</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span><span class="o">.</span><span class="n">device</span>
                 <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">StopIteration</span><span class="p">):</span>
                     <span class="n">policy_device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
-                <span class="n">passing_device</span> <span class="o">=</span> <span class="n">policy_device</span>
+                <span class="n">storing_device</span> <span class="o">=</span> <span class="n">policy_device</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">passing_device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+                <span class="n">storing_device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">passing_device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">passing_device</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">:</span> <span class="n">EnvBase</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">passing_device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">storing_device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">storing_device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">:</span> <span class="n">EnvBase</span> <span class="o">=</span> <span class="n">env</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_when_done</span> <span class="o">=</span> <span class="n">reset_when_done</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
@@ -775,8 +775,8 @@
             <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
             <span class="n">observation_spec</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">observation_spec</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">:</span> <span class="n">EnvBase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">env_device</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">device</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">total_frames</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">total_frames</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">total_frames</span> <span class="o">=</span> <span class="n">total_frames</span>
@@ -784,7 +784,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_random_frames</span> <span class="o">=</span> <span class="n">init_random_frames</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">postproc</span> <span class="o">=</span> <span class="n">postproc</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">postproc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">postproc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">passing_device</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">postproc</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">storing_device</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_frames_per_traj</span> <span class="o">=</span> <span class="n">max_frames_per_traj</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frames_per_batch</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">frames_per_batch</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_env</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pin_memory</span> <span class="o">=</span> <span class="n">pin_memory</span>
@@ -799,6 +799,12 @@
             <span class="p">(</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">),</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">device</span><span class="p">),</span>
         <span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="n">traj_ids</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">env</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+            <span class="p">(</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;traj_ids&quot;</span><span class="p">),</span>
+            <span class="n">traj_ids</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">)</span>
@@ -810,8 +816,6 @@
             <span class="c1"># match the out_keys we assume the user has given all relevant information</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">fake_tensordict</span><span class="p">()</span><span class="o">.</span><span class="n">to_tensordict</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">zero</span><span class="p">())</span>
-            <span class="k">if</span> <span class="n">env</span><span class="o">.</span><span class="n">device</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
                 <span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames_per_batch</span><span class="p">)</span>
@@ -825,7 +829,6 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">fake_tensordict</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env_device</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="o">*</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames_per_batch</span><span class="p">)</span>
                 <span class="o">.</span><span class="n">to_tensordict</span><span class="p">()</span>
@@ -833,12 +836,13 @@
             <span class="p">)</span>
         <span class="c1"># in addition to outputs of the policy, we add traj_ids and step_count to</span>
         <span class="c1"># _tensordict_out which will be collected during rollout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">storing_device</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
             <span class="p">(</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;traj_ids&quot;</span><span class="p">),</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                 <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
                 <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
-                <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">env_device</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storing_device</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
@@ -846,7 +850,7 @@
             <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                 <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
                 <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
-                <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">env_device</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">storing_device</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
@@ -860,8 +864,6 @@
                 <span class="s2">&quot;Cannot split trajectories when reset_when_done is False.&quot;</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">split_trajs</span> <span class="o">=</span> <span class="n">split_trajs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_td_env</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_td_policy</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_private_keys</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -929,35 +931,8 @@
                 <span class="c1"># &gt;&gt;&gt; assert data0[&quot;done&quot;] is not data1[&quot;done&quot;]</span>
                 <span class="k">yield</span> <span class="n">tensordict_out</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 
-            <span class="k">del</span> <span class="n">tensordict_out</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_frames</span><span class="p">:</span>
                 <span class="k">break</span></div>
-
-    <span class="k">def</span> <span class="nf">_cast_to_policy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">td</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-        <span class="n">policy_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span> <span class="s2">&quot;in_keys&quot;</span><span class="p">):</span>
-            <span class="c1"># some keys may be absent -- TensorDictModule is resilient to missing keys</span>
-            <span class="n">td</span> <span class="o">=</span> <span class="n">td</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">in_keys</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_td_policy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_td_policy</span> <span class="o">=</span> <span class="n">td</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">policy_device</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">td</span><span class="o">.</span><span class="n">device</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">pin_memory</span><span class="p">:</span>
-                <span class="n">td</span><span class="o">.</span><span class="n">pin_memory</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_td_policy</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_td_policy</span>
-
-    <span class="k">def</span> <span class="nf">_cast_to_env</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">td</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-        <span class="n">env_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_device</span>
-        <span class="k">if</span> <span class="n">dest</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_td_env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_td_env</span> <span class="o">=</span> <span class="n">td</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">env_device</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_td_env</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_td_env</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">dest</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_reset_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">done</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span>
@@ -965,16 +940,20 @@
             <span class="n">done</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>
         <span class="n">steps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">))</span>
         <span class="n">done_or_terminated</span> <span class="o">=</span> <span class="n">done</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">steps</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_frames_per_traj</span><span class="p">)</span>
+        <span class="c1"># keep track of envs that have been done at least once</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span> <span class="o">=</span> <span class="n">done_or_terminated</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span> <span class="o">|</span> <span class="n">done_or_terminated</span>
+        <span class="c1"># init_with_lag instructs to restart randomly envs after init to dephase them.</span>
+        <span class="c1"># Until all envs have been done, we&#39;ll reset randomly some envs.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span><span class="o">.</span><span class="n">all</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_with_lag</span><span class="p">:</span>
             <span class="n">_reset</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">done_or_terminated</span><span class="p">)</span><span class="o">.</span><span class="n">bernoulli_</span><span class="p">(</span>
                 <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_frames_per_traj</span>
             <span class="p">)</span>
             <span class="n">_reset</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">done_or_terminated</span> <span class="o">=</span> <span class="n">done_or_terminated</span> <span class="o">|</span> <span class="n">_reset</span>
+
         <span class="k">if</span> <span class="n">done_or_terminated</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="n">traj_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;traj_ids&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
             <span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
@@ -1014,21 +993,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(),</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">fill_</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
-            <span class="p">(</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;traj_ids&quot;</span><span class="p">),</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">[:</span><span class="mi">1</span><span class="p">]),</span>
-        <span class="p">)</span>
-
         <span class="k">with</span> <span class="n">set_exploration_mode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">exploration_mode</span><span class="p">):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frames_per_batch</span><span class="p">):</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_random_frames</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">rand_step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">td_cast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cast_to_policy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">)</span>
-                    <span class="n">td_cast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">(</span><span class="n">td_cast</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_cast_to_env</span><span class="p">(</span><span class="n">td_cast</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">))</span>
 
                 <span class="n">step_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">set_</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">),</span> <span class="n">step_count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
@@ -1061,17 +1031,14 @@
                 <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">_reset</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">td_in</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s2">&quot;_reset&quot;</span><span class="p">:</span> <span class="n">_reset</span><span class="p">},</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">[</span><span class="s2">&quot;_reset&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_reset</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_reset</span> <span class="o">=</span> <span class="kc">None</span>
-            <span class="n">td_in</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">td_in</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">td_in</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># self.env.reset(self._tensordict, **kwargs)</span>
         <span class="k">if</span> <span class="n">_reset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">step_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">[(</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">)]</span>
             <span class="n">step_count</span><span class="p">[</span><span class="n">_reset</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1188,10 +1155,10 @@
 <span class="sd">            at appropriate times during the training loop to accommodate for the lag between parameter configuration</span>
 <span class="sd">            at various times.</span>
 <span class="sd">            default = None (i.e. policy is kept on its original device)</span>
-<span class="sd">        passing_devices (int, str, torch.device or sequence of such, optional): The devices on which the output</span>
-<span class="sd">            TensorDict will be stored. For long trajectories, it may be necessary to store the data on a different</span>
-<span class="sd">            device than the one where the policy is stored.</span>
-<span class="sd">            default = None</span>
+<span class="sd">        storing_devices (int, str, torch.device or sequence of such, optional): The devices on which the output TensorDict will be stored.</span>
+<span class="sd">            For long trajectories, it may be necessary to store the data on a different device than the one where</span>
+<span class="sd">            the policy and env are executed.</span>
+<span class="sd">            default = None (ie cpu)</span>
 <span class="sd">        update_at_each_batch (bool): if True, the policy weights will be updated every time a batch of trajectories</span>
 <span class="sd">            is collected.</span>
 <span class="sd">            default=False</span>
@@ -1231,7 +1198,7 @@
         <span class="n">devices</span><span class="p">:</span> <span class="n">DEVICE_TYPING</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">pin_memory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">passing_devices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">DEVICE_TYPING</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DEVICE_TYPING</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">storing_devices</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">DEVICE_TYPING</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">DEVICE_TYPING</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">update_at_each_batch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">init_with_lag</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">exploration_mode</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">DEFAULT_EXPLORATION_MODE</span><span class="p">,</span>
@@ -1262,7 +1229,7 @@
                 <span class="sa">f</span><span class="s2">&quot;The length of the </span><span class="si">{</span><span class="n">device_name</span><span class="si">}</span><span class="s2"> argument should match the &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;number of workers of the collector. Got len(&quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;create_env_fn)=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span><span class="si">}</span><span class="s2"> and len(&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;passing_devices)=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">devices_list</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;storing_devices)=</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">devices_list</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">devices</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">)):</span>
@@ -1305,25 +1272,25 @@
             <span class="n">devices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_device</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">devices</span> <span class="o">=</span> <span class="n">devices</span>
 
-        <span class="k">if</span> <span class="n">passing_devices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">passing_devices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">devices</span>
+        <span class="k">if</span> <span class="n">storing_devices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">storing_devices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">devices</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">passing_devices</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">)):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">passing_devices</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">passing_devices</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">storing_devices</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">storing_devices</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">storing_devices</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span><span class="p">)</span>
                 <span class="p">]</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">passing_devices</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">passing_devices</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">storing_devices</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">storing_devices</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                        <span class="n">device_err_msg</span><span class="p">(</span><span class="s2">&quot;passing_devices&quot;</span><span class="p">,</span> <span class="n">passing_devices</span><span class="p">)</span>
+                        <span class="n">device_err_msg</span><span class="p">(</span><span class="s2">&quot;storing_devices&quot;</span><span class="p">,</span> <span class="n">storing_devices</span><span class="p">)</span>
                     <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">passing_devices</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">_passing_device</span><span class="p">)</span> <span class="k">for</span> <span class="n">_passing_device</span> <span class="ow">in</span> <span class="n">passing_devices</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">storing_devices</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="n">_storing_device</span><span class="p">)</span> <span class="k">for</span> <span class="n">_storing_device</span> <span class="ow">in</span> <span class="n">storing_devices</span>
                 <span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;passing_devices should be either a torch.device or equivalent or an iterable of devices. &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">passing_devices</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+                    <span class="s2">&quot;storing_devices should be either a torch.device or equivalent or an iterable of devices. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">storing_devices</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
                 <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">total_frames</span> <span class="o">=</span> <span class="n">total_frames</span> <span class="k">if</span> <span class="n">total_frames</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
@@ -1375,7 +1342,7 @@
             <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">create_env_fn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_env_kwargs</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">devices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">_passing_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">passing_devices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">_storing_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">storing_devices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="n">pipe_parent</span><span class="p">,</span> <span class="n">pipe_child</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pipe</span><span class="p">()</span>  <span class="c1"># send messages to procs</span>
             <span class="k">if</span> <span class="n">env_fun</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">!=</span> <span class="s2">&quot;EnvCreator&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
                 <span class="n">env_fun</span><span class="p">,</span> <span class="n">EnvBase</span>
@@ -1394,7 +1361,7 @@
                 <span class="s2">&quot;frames_per_batch&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">frames_per_batch_worker</span><span class="p">,</span>
                 <span class="s2">&quot;reset_at_each_iter&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_at_each_iter</span><span class="p">,</span>
                 <span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="n">_device</span><span class="p">,</span>
-                <span class="s2">&quot;passing_device&quot;</span><span class="p">:</span> <span class="n">_passing_device</span><span class="p">,</span>
+                <span class="s2">&quot;storing_device&quot;</span><span class="p">:</span> <span class="n">_storing_device</span><span class="p">,</span>
                 <span class="s2">&quot;seed&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span>
                 <span class="s2">&quot;pin_memory&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pin_memory</span><span class="p">,</span>
                 <span class="s2">&quot;init_with_lag&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">init_with_lag</span><span class="p">,</span>
@@ -1568,7 +1535,7 @@
 <span class="sd">        ...     init_random_frames=-1,</span>
 <span class="sd">        ...     reset_at_each_iter=False,</span>
 <span class="sd">        ...     devices=&quot;cpu&quot;,</span>
-<span class="sd">        ...     passing_devices=&quot;cpu&quot;,</span>
+<span class="sd">        ...     storing_devices=&quot;cpu&quot;,</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; for i, data in enumerate(collector):</span>
 <span class="sd">        ...     if i == 2:</span>
@@ -1718,7 +1685,7 @@
 <span class="sd">        ...     init_random_frames=-1,</span>
 <span class="sd">        ...     reset_at_each_iter=False,</span>
 <span class="sd">        ...     devices=&quot;cpu&quot;,</span>
-<span class="sd">        ...     passing_devices=&quot;cpu&quot;,</span>
+<span class="sd">        ...     storing_devices=&quot;cpu&quot;,</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; for i, data in enumerate(collector):</span>
 <span class="sd">        ...     if i == 2:</span>
@@ -1762,7 +1729,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">postprocs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">postproc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">postprocs</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">postprocs</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">_device</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">passing_devices</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_device</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">storing_devices</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">_device</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">postprocs</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">postprocs</span><span class="p">[</span><span class="n">_device</span><span class="p">]</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">postproc</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">_device</span><span class="p">)</span>
 
@@ -1901,7 +1868,7 @@
 <span class="sd">            at appropriate times during the training loop to accommodate for</span>
 <span class="sd">            the lag between parameter configuration at various times.</span>
 <span class="sd">            Default is `None` (i.e. policy is kept on its original device)</span>
-<span class="sd">        passing_device (int, str, torch.device, optional): The device on which</span>
+<span class="sd">        storing_device (int, str, torch.device, optional): The device on which</span>
 <span class="sd">            the output TensorDict will be stored. For long trajectories,</span>
 <span class="sd">            it may be necessary to store the data on a different.</span>
 <span class="sd">            device than the one where the policy is stored. Default is None.</span>
@@ -1932,7 +1899,7 @@
         <span class="n">postproc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">TensorDictBase</span><span class="p">],</span> <span class="n">TensorDictBase</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">split_trajs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">passing_device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">storing_device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">pin_memory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
@@ -1949,7 +1916,7 @@
             <span class="n">postproc</span><span class="o">=</span><span class="n">postproc</span><span class="p">,</span>
             <span class="n">split_trajs</span><span class="o">=</span><span class="n">split_trajs</span><span class="p">,</span>
             <span class="n">devices</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">]</span> <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="n">passing_devices</span><span class="o">=</span><span class="p">[</span><span class="n">passing_device</span><span class="p">]</span> <span class="k">if</span> <span class="n">passing_device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">storing_devices</span><span class="o">=</span><span class="p">[</span><span class="n">storing_device</span><span class="p">]</span> <span class="k">if</span> <span class="n">storing_device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
             <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
             <span class="n">pin_memory</span><span class="o">=</span><span class="n">pin_memory</span><span class="p">,</span>
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
@@ -1968,7 +1935,7 @@
     <span class="n">frames_per_batch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">reset_at_each_iter</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
-    <span class="n">passing_device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
+    <span class="n">storing_device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
     <span class="n">seed</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">],</span>
     <span class="n">pin_memory</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">idx</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
@@ -1994,7 +1961,7 @@
         <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
         <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
         <span class="n">pin_memory</span><span class="o">=</span><span class="n">pin_memory</span><span class="p">,</span>
-        <span class="n">passing_device</span><span class="o">=</span><span class="n">passing_device</span><span class="p">,</span>
+        <span class="n">storing_device</span><span class="o">=</span><span class="n">storing_device</span><span class="p">,</span>
         <span class="n">init_with_lag</span><span class="o">=</span><span class="n">init_with_lag</span><span class="p">,</span>
         <span class="n">exploration_mode</span><span class="o">=</span><span class="n">exploration_mode</span><span class="p">,</span>
         <span class="n">reset_when_done</span><span class="o">=</span><span class="n">reset_when_done</span><span class="p">,</span>
@@ -2059,9 +2026,9 @@
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">tensordict</span> <span class="o">=</span> <span class="n">d</span>
-                <span class="k">if</span> <span class="n">passing_device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">device</span> <span class="o">!=</span> <span class="n">passing_device</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">storing_device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">device</span> <span class="o">!=</span> <span class="n">storing_device</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;expected device to be </span><span class="si">{</span><span class="n">passing_device</span><span class="si">}</span><span class="s2"> but got </span><span class="si">{</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;expected device to be </span><span class="si">{</span><span class="n">storing_device</span><span class="si">}</span><span class="s2"> but got </span><span class="si">{</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">&quot;</span>
                     <span class="p">)</span>
                 <span class="n">tensordict</span><span class="o">.</span><span class="n">share_memory_</span><span class="p">()</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">tensordict</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>

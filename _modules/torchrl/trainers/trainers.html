@@ -957,7 +957,7 @@
         <span class="n">trainer</span><span class="o">.</span><span class="n">register_module</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">ReplayBufferTrainer</span><span class="p">(</span><span class="n">TrainerHookBase</span><span class="p">):</span>
+<div class="viewcode-block" id="ReplayBufferTrainer"><a class="viewcode-back" href="../../../reference/generated/torchrl.trainers.ReplayBufferTrainer.html#torchrl.trainers.ReplayBufferTrainer">[docs]</a><span class="k">class</span> <span class="nc">ReplayBufferTrainer</span><span class="p">(</span><span class="n">TrainerHookBase</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Replay buffer hook provider.</span>
 
 <span class="sd">    Args:</span>
@@ -1048,7 +1048,7 @@
         <span class="n">trainer</span><span class="o">.</span><span class="n">register_op</span><span class="p">(</span><span class="s2">&quot;batch_process&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">extend</span><span class="p">)</span>
         <span class="n">trainer</span><span class="o">.</span><span class="n">register_op</span><span class="p">(</span><span class="s2">&quot;process_optim_batch&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span>
         <span class="n">trainer</span><span class="o">.</span><span class="n">register_op</span><span class="p">(</span><span class="s2">&quot;post_loss&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_priority</span><span class="p">)</span>
-        <span class="n">trainer</span><span class="o">.</span><span class="n">register_module</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="n">register_module</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="OptimizerHook"><a class="viewcode-back" href="../../../reference/generated/torchrl.trainers.OptimizerHook.html#torchrl.trainers.OptimizerHook">[docs]</a><span class="k">class</span> <span class="nc">OptimizerHook</span><span class="p">(</span><span class="n">TrainerHookBase</span><span class="p">):</span>

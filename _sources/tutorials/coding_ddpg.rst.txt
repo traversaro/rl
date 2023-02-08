@@ -697,7 +697,7 @@ observation is changed to be the n-step forward observation.
         else None,
         split_trajs=True,
         devices=[device, device],  # device for execution
-        passing_devices=[device, device],  # device where data will be stored and passed
+        storing_devices=[device, device],  # device where data will be stored and passed
         seed=None,
         pin_memory=False,
         update_at_each_batch=False,
@@ -923,7 +923,7 @@ Some notes about the following cell:
 
  .. code-block:: none
 
-      0%|          | 0/2500 [00:00<?, ?it/s]     20%|##        | 500/2500 [00:01<00:06, 327.50it/s]Creating a MemmapStorage...
+      0%|          | 0/2500 [00:00<?, ?it/s]     20%|##        | 500/2500 [00:00<00:03, 534.03it/s]Creating a MemmapStorage...
     The storage is being created: 
             action: /tmp/action.memmap, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
             done: /tmp/done.memmap, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
@@ -939,7 +939,7 @@ Some notes about the following cell:
             ('collector', 'step_count'): /tmp/collector/step_count.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
             ('collector', 'traj_ids'): /tmp/collector/traj_ids.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
             ('next', 'observation_vector'): /tmp/next/observation_vector.memmap, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
-    reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7622:  20%|##        | 500/2500 [00:06<00:06, 327.50it/s]    reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7622:  40%|####      | 1000/2500 [00:06<00:11, 135.06it/s]    reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7622:  40%|####      | 1000/2500 [00:09<00:11, 135.06it/s]    reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7622:  60%|######    | 1500/2500 [00:09<00:06, 147.42it/s]    reward: -1.5353 (r0 = -1.3075), reward eval: reward: -0.7622:  60%|######    | 1500/2500 [00:12<00:06, 147.42it/s]    reward: -1.5353 (r0 = -1.3075), reward eval: reward: -0.7622:  80%|########  | 2000/2500 [00:12<00:02, 168.47it/s]    reward: -1.3239 (r0 = -1.3075), reward eval: reward: -0.7622:  80%|########  | 2000/2500 [00:14<00:02, 168.47it/s]    reward: -1.3239 (r0 = -1.3075), reward eval: reward: -0.7622: 100%|##########| 2500/2500 [00:14<00:00, 186.55it/s]    reward: -2.7695 (r0 = -1.3075), reward eval: reward: -0.7622: 100%|##########| 2500/2500 [00:16<00:00, 186.55it/s]
+    reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7561:  20%|##        | 500/2500 [00:03<00:03, 534.03it/s]    reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7561:  40%|####      | 1000/2500 [00:03<00:06, 233.78it/s]    reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7561:  40%|####      | 1000/2500 [00:04<00:06, 233.78it/s]    reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7561:  60%|######    | 1500/2500 [00:04<00:03, 328.38it/s]    reward: -1.4115 (r0 = -1.3128), reward eval: reward: -0.7561:  60%|######    | 1500/2500 [00:05<00:03, 328.38it/s]    reward: -1.4115 (r0 = -1.3128), reward eval: reward: -0.7561:  80%|########  | 2000/2500 [00:05<00:01, 351.08it/s]    reward: -1.8058 (r0 = -1.3128), reward eval: reward: -0.7561:  80%|########  | 2000/2500 [00:06<00:01, 351.08it/s]    reward: -1.8058 (r0 = -1.3128), reward eval: reward: -0.7561: 100%|##########| 2500/2500 [00:06<00:00, 428.64it/s]    reward: -2.2114 (r0 = -1.3128), reward eval: reward: -0.7561: 100%|##########| 2500/2500 [00:07<00:00, 428.64it/s]
 
 
 
@@ -1084,7 +1084,7 @@ The following code is identical to the initialization we made earlier:
         else None,
         split_trajs=True,
         devices=[device, device],  # device for execution
-        passing_devices=[device, device],  # device where data will be stored and passed
+        storing_devices=[device, device],  # device where data will be stored and passed
         seed=None,
         pin_memory=False,
         update_at_each_batch=False,
@@ -1126,7 +1126,7 @@ The following code is identical to the initialization we made earlier:
              1.7317e-01,  6.3022e-02]), 
     scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
             0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
-    reward: -2.7695 (r0 = -1.3075), reward eval: reward: -0.7622: 100%|##########| 2500/2500 [00:30<00:00, 186.55it/s]
+    reward: -2.2114 (r0 = -1.3128), reward eval: reward: -0.7561: 100%|##########| 2500/2500 [00:19<00:00, 428.64it/s]
 
 
 
@@ -1153,7 +1153,7 @@ anymore. To understand why, let's check the output shape of the data collector:
 
  .. code-block:: none
 
-    torch.Size([2, 250])
+    torch.Size([1, 500])
 
 
 
@@ -1317,24 +1317,20 @@ batch size to ``torch.Size([batch])``.
 
 
 
-
-
 .. rst-class:: sphx-glr-script-out
 
- .. code-block:: none
+.. code-block:: pytb
 
-    Creating a MemmapStorage...
-    The storage is being created: 
-            action: /tmp/action.memmap, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-            done: /tmp/done.memmap, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
-            index: /tmp/index.memmap, 0.0095367431640625 Mb of storage (size: torch.Size([200])).
-            observation_vector: /tmp/observation_vector.memmap, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
-            param: /tmp/param.memmap, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-            reward: /tmp/reward.memmap, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
-            ('collector', 'mask'): /tmp/collector/mask.memmap, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250])).
-            ('collector', 'step_count'): /tmp/collector/step_count.memmap, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
-            ('collector', 'traj_ids'): /tmp/collector/traj_ids.memmap, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
-            ('next', 'observation_vector'): /tmp/next/observation_vector.memmap, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
+    Traceback (most recent call last):
+      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py", line 896, in <module>
+        sampled_tensordict.batch_size = [batch_size_traj, 250]
+      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 2360, in batch_size
+        return self._batch_size_setter(new_size)
+      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 350, in _batch_size_setter
+        self._check_new_batch_size(new_batch_size)
+      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 1313, in _check_new_batch_size
+        raise RuntimeError(
+    RuntimeError: the tensor action has shape torch.Size([4, 500, 6]) which is incompatible with the new shape torch.Size([4, 250]).
 
 
 
@@ -1362,26 +1358,9 @@ use a greater value for ``total_frames`` e.g. 1000000.
     plt.title("TD-labmda DDPG results")
 
 
-
-.. image-sg:: /tutorials/images/sphx_glr_coding_ddpg_002.png
-   :alt: TD-labmda DDPG results
-   :srcset: /tutorials/images/sphx_glr_coding_ddpg_002.png
-   :class: sphx-glr-single-img
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-    Text(0.5, 1.0, 'TD-labmda DDPG results')
-
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  8.963 seconds)
+   **Total running time of the script:** ( 0 minutes  32.303 seconds)
 
 
 .. _sphx_glr_download_tutorials_coding_ddpg.py:

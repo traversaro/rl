@@ -881,7 +881,7 @@ observation is changed to be the n-step forward observation.</p>
     <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">split_trajs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">devices</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">,</span> <span class="n">device</span><span class="p">],</span>  <span class="c1"># device for execution</span>
-    <span class="n">passing_devices</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">,</span> <span class="n">device</span><span class="p">],</span>  <span class="c1"># device where data will be stored and passed</span>
+    <span class="n">storing_devices</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">,</span> <span class="n">device</span><span class="p">],</span>  <span class="c1"># device where data will be stored and passed</span>
     <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">pin_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">update_at_each_batch</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -1059,7 +1059,7 @@ async settings, and at the end of it in sync settings).</p></li>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/2500 [00:00&lt;?, ?it/s]
- 20%|##        | 500/2500 [00:01&lt;00:06, 327.50it/s]Creating a MemmapStorage...
+ 20%|##        | 500/2500 [00:00&lt;00:03, 534.03it/s]Creating a MemmapStorage...
 The storage is being created:
         action: /tmp/action.memmap, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
         done: /tmp/done.memmap, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
@@ -1076,15 +1076,15 @@ The storage is being created:
         (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/collector/traj_ids.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
         (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/next/observation_vector.memmap, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
 
-reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7622:  20%|##        | 500/2500 [00:06&lt;00:06, 327.50it/s]
-reward: -0.2201 (r0 = -1.3075), reward eval: reward: -0.7622:  40%|####      | 1000/2500 [00:06&lt;00:11, 135.06it/s]
-reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7622:  40%|####      | 1000/2500 [00:09&lt;00:11, 135.06it/s]
-reward: -0.1951 (r0 = -1.3075), reward eval: reward: -0.7622:  60%|######    | 1500/2500 [00:09&lt;00:06, 147.42it/s]
-reward: -1.5353 (r0 = -1.3075), reward eval: reward: -0.7622:  60%|######    | 1500/2500 [00:12&lt;00:06, 147.42it/s]
-reward: -1.5353 (r0 = -1.3075), reward eval: reward: -0.7622:  80%|########  | 2000/2500 [00:12&lt;00:02, 168.47it/s]
-reward: -1.3239 (r0 = -1.3075), reward eval: reward: -0.7622:  80%|########  | 2000/2500 [00:14&lt;00:02, 168.47it/s]
-reward: -1.3239 (r0 = -1.3075), reward eval: reward: -0.7622: 100%|##########| 2500/2500 [00:14&lt;00:00, 186.55it/s]
-reward: -2.7695 (r0 = -1.3075), reward eval: reward: -0.7622: 100%|##########| 2500/2500 [00:16&lt;00:00, 186.55it/s]
+reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7561:  20%|##        | 500/2500 [00:03&lt;00:03, 534.03it/s]
+reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7561:  40%|####      | 1000/2500 [00:03&lt;00:06, 233.78it/s]
+reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7561:  40%|####      | 1000/2500 [00:04&lt;00:06, 233.78it/s]
+reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7561:  60%|######    | 1500/2500 [00:04&lt;00:03, 328.38it/s]
+reward: -1.4115 (r0 = -1.3128), reward eval: reward: -0.7561:  60%|######    | 1500/2500 [00:05&lt;00:03, 328.38it/s]
+reward: -1.4115 (r0 = -1.3128), reward eval: reward: -0.7561:  80%|########  | 2000/2500 [00:05&lt;00:01, 351.08it/s]
+reward: -1.8058 (r0 = -1.3128), reward eval: reward: -0.7561:  80%|########  | 2000/2500 [00:06&lt;00:01, 351.08it/s]
+reward: -1.8058 (r0 = -1.3128), reward eval: reward: -0.7561: 100%|##########| 2500/2500 [00:06&lt;00:00, 428.64it/s]
+reward: -2.2114 (r0 = -1.3128), reward eval: reward: -0.7561: 100%|##########| 2500/2500 [00:07&lt;00:00, 428.64it/s]
 </pre></div>
 </div>
 </section>
@@ -1172,7 +1172,7 @@ the new batch size for trajectories is 4
     <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">split_trajs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">devices</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">,</span> <span class="n">device</span><span class="p">],</span>  <span class="c1"># device for execution</span>
-    <span class="n">passing_devices</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">,</span> <span class="n">device</span><span class="p">],</span>  <span class="c1"># device where data will be stored and passed</span>
+    <span class="n">storing_devices</span><span class="o">=</span><span class="p">[</span><span class="n">device</span><span class="p">,</span> <span class="n">device</span><span class="p">],</span>  <span class="c1"># device where data will be stored and passed</span>
     <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">pin_memory</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">update_at_each_batch</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -1208,7 +1208,7 @@ loc = tensor([-3.9152e-01,  2.3728e+00,  1.6790e-02, -5.8100e-03,  2.0432e-02,
 scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
         0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
 
-reward: -2.7695 (r0 = -1.3075), reward eval: reward: -0.7622: 100%|##########| 2500/2500 [00:30&lt;00:00, 186.55it/s]
+reward: -2.2114 (r0 = -1.3128), reward eval: reward: -0.7561: 100%|##########| 2500/2500 [00:19&lt;00:00, 428.64it/s]
 </pre></div>
 </div>
 <p>The training loop needs to be modified. First, whereas before extending the
@@ -1219,7 +1219,7 @@ anymore. To understand why, let’s check the output shape of the data collector
     <span class="k">break</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([2, 250])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>torch.Size([1, 500])
 </pre></div>
 </div>
 <p>We see that our data has shape <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">250]</span></code> as expected: 2 envs, each
@@ -1356,18 +1356,16 @@ batch size to <code class="docutils literal notranslate"><span class="pre">torch
 <span class="n">collector</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating a MemmapStorage...
-The storage is being created:
-        action: /tmp/action.memmap, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-        done: /tmp/done.memmap, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
-        index: /tmp/index.memmap, 0.0095367431640625 Mb of storage (size: torch.Size([200])).
-        observation_vector: /tmp/observation_vector.memmap, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
-        param: /tmp/param.memmap, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-        reward: /tmp/reward.memmap, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
-        (&#39;collector&#39;, &#39;mask&#39;): /tmp/collector/mask.memmap, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250])).
-        (&#39;collector&#39;, &#39;step_count&#39;): /tmp/collector/step_count.memmap, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
-        (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/collector/traj_ids.memmap, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
-        (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/next/observation_vector.memmap, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
+<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py&quot;</span>, line <span class="m">896</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="n">sampled_tensordict</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="p">[</span><span class="n">batch_size_traj</span><span class="p">,</span> <span class="mi">250</span><span class="p">]</span>
+  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">2360</span>, in <span class="n">batch_size</span>
+<span class="w">    </span><span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_size_setter</span><span class="p">(</span><span class="n">new_size</span><span class="p">)</span>
+  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">350</span>, in <span class="n">_batch_size_setter</span>
+<span class="w">    </span><span class="bp">self</span><span class="o">.</span><span class="n">_check_new_batch_size</span><span class="p">(</span><span class="n">new_batch_size</span><span class="p">)</span>
+  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">1313</span>, in <span class="n">_check_new_batch_size</span>
+<span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+<span class="gr">RuntimeError</span>: <span class="n">the tensor action has shape torch.Size([4, 500, 6]) which is incompatible with the new shape torch.Size([4, 250]).</span>
 </pre></div>
 </div>
 <p>We can observe that using TD(lambda) made our results considerably more
@@ -1384,10 +1382,7 @@ use a greater value for <code class="docutils literal notranslate"><span class="
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;TD-labmda DDPG results&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_coding_ddpg_002.png" srcset="../_images/sphx_glr_coding_ddpg_002.png" alt="TD-labmda DDPG results" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;TD-labmda DDPG results&#39;)
-</pre></div>
-</div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  8.963 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  32.303 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-ddpg-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0dfdb6ef4cc9782fdb39c4a9d0900d37/coding_ddpg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_ddpg.py</span></code></a></p>

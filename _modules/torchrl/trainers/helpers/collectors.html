@@ -506,8 +506,8 @@
     <span class="k">if</span> <span class="n">num_collectors</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">if</span> <span class="s2">&quot;devices&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;device&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;devices&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;passing_devices&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;passing_device&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;passing_devices&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;storing_devices&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;storing_device&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;storing_devices&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_make_collector</span><span class="p">(</span>
             <span class="n">SyncDataCollector</span><span class="p">,</span>
             <span class="n">env_fns</span><span class="o">=</span><span class="n">env_fns</span><span class="p">,</span>
@@ -660,7 +660,7 @@
         <span class="c1"># we already took care of building the make_parallel_env function</span>
         <span class="s2">&quot;num_collectors&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">cfg</span><span class="o">.</span><span class="n">num_workers</span> <span class="o">//</span> <span class="o">-</span><span class="n">cfg</span><span class="o">.</span><span class="n">env_per_collector</span><span class="p">,</span>
         <span class="s2">&quot;devices&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">collector_devices</span><span class="p">,</span>
-        <span class="s2">&quot;passing_devices&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">collector_devices</span><span class="p">,</span>
+        <span class="s2">&quot;storing_devices&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">collector_devices</span><span class="p">,</span>
         <span class="s2">&quot;init_random_frames&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">init_random_frames</span><span class="p">,</span>
         <span class="s2">&quot;pin_memory&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">pin_memory</span><span class="p">,</span>
         <span class="s2">&quot;split_trajs&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
@@ -715,7 +715,7 @@
         <span class="c1"># we already took care of building the make_parallel_env function</span>
         <span class="s2">&quot;num_collectors&quot;</span><span class="p">:</span> <span class="o">-</span><span class="n">cfg</span><span class="o">.</span><span class="n">num_workers</span> <span class="o">//</span> <span class="o">-</span><span class="n">cfg</span><span class="o">.</span><span class="n">env_per_collector</span><span class="p">,</span>
         <span class="s2">&quot;devices&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">collector_devices</span><span class="p">,</span>
-        <span class="s2">&quot;passing_devices&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">collector_devices</span><span class="p">,</span>
+        <span class="s2">&quot;storing_devices&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">collector_devices</span><span class="p">,</span>
         <span class="s2">&quot;pin_memory&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">pin_memory</span><span class="p">,</span>
         <span class="s2">&quot;split_trajs&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="c1"># trajectories must be separated in online settings</span>

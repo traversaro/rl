@@ -255,7 +255,7 @@ Compute normalizing constants:
  .. code-block:: none
 
 
-    (0.9927790760993958, 0.0761055275797844)
+    (0.9925832748413086, 0.07640724629163742)
 
 
 
@@ -485,7 +485,7 @@ the optimization is taking place.
         total_frames=total_frames,
         exploration_mode="random",  # this is the default behaviour: the collector runs in `"random"` (or explorative) mode
         devices=[device, device],  # each collector can sit on a different device
-        passing_devices=[device, device],
+        storing_devices=[device, device],
     )
 
 
@@ -821,7 +821,7 @@ We reset the actor, the RB and the collector
         total_frames=total_frames,
         exploration_mode="random",
         devices=[device, device],
-        passing_devices=[device, device],
+        storing_devices=[device, device],
     )
 
 
@@ -1189,7 +1189,7 @@ algorithm. Other possible improvements could include:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  15.318 seconds)
+   **Total running time of the script:** ( 0 minutes  11.229 seconds)
 
 
 .. _sphx_glr_download_tutorials_coding_dqn.py:
