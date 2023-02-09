@@ -365,6 +365,7 @@
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
 
@@ -551,6 +552,9 @@
 <span class="sd">    will lead to the explicit error.</span>
 <span class="sd">    In case of intersected ranges, first fitting implementation is used.</span>
 
+<span class="sd">    This wrapper also works to implement different backends for a same function (eg. gym vs gymnasium,</span>
+<span class="sd">    numpy vs jax-numpy etc).</span>
+
 <span class="sd">    Args:</span>
 <span class="sd">        module_name: version is checked for the module with this name (e.g. &quot;gym&quot;).</span>
 <span class="sd">        from_version: version from which implementation is compatible. Can be open (None).</span>
@@ -559,6 +563,19 @@
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; @implement_for(“gym”, “0.13”, “0.14”)</span>
 <span class="sd">        &gt;&gt;&gt; def fun(self, x):</span>
+<span class="sd">        ...     # Older gym versions will return x + 1</span>
+<span class="sd">        ...     return x + 1</span>
+<span class="sd">        ...</span>
+<span class="sd">        &gt;&gt;&gt; @implement_for(“gym”, “0.14”, None)</span>
+<span class="sd">        &gt;&gt;&gt; def fun(self, x):</span>
+<span class="sd">        ...     # More recent gym versions will return x + 2</span>
+<span class="sd">        ...     return x + 2</span>
+<span class="sd">        ...</span>
+<span class="sd">        &gt;&gt;&gt; @implement_for(“gymnasium”, “0.27”, None)</span>
+<span class="sd">        &gt;&gt;&gt; def fun(self, x):</span>
+<span class="sd">        ...     # If gymnasium is to be used instead of gym, x+3 will be returned</span>
+<span class="sd">        ...     return x + 3</span>
+<span class="sd">        ...</span>
 
 <span class="sd">        This indicates that the function is compatible with gym 0.13+, but doesn&#39;t with gym 0.14+.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -574,32 +591,48 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">to_version</span> <span class="o">=</span> <span class="n">to_version</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="p">):</span>
-        <span class="nd">@wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
-        <span class="k">def</span> <span class="nf">unsupported</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Supported version of &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">module_name</span><span class="si">}</span><span class="s2">&#39; has not been found.&quot;</span>
-            <span class="p">)</span>
 
         <span class="c1"># If the module is missing replace the function with the mock.</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">module</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module_name</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">unsupported</span>
-
         <span class="n">func_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fn</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">implementations</span> <span class="o">=</span> <span class="n">implement_for</span><span class="o">.</span><span class="n">_implementations</span>
 
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">unsupported</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ModuleNotFoundError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Supported version of &#39;</span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">&#39; has not been found.&quot;</span>
+            <span class="p">)</span>
+
         <span class="c1"># Return fitting implementation if it was encountered before.</span>
         <span class="k">if</span> <span class="n">func_name</span> <span class="ow">in</span> <span class="n">implementations</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">implementations</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># check that backends don&#39;t conflict</span>
+                <span class="n">module</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module_name</span><span class="p">)</span>
+                <span class="n">version</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">__version__</span>
 
-        <span class="n">version</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">__version__</span>
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">from_version</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">version</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_version</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">to_version</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">version</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_version</span>
+                <span class="p">):</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Got multiple backends for </span><span class="si">{</span><span class="n">func_name</span><span class="si">}</span><span class="s2">. &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Using the last queried (</span><span class="si">{</span><span class="n">module</span><span class="si">}</span><span class="s2"> with version </span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">).&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">implementations</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+                <span class="c1"># then it&#39;s ok, there is no conflict</span>
+                <span class="k">return</span> <span class="n">implementations</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">module</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module_name</span><span class="p">)</span>
+            <span class="n">version</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">__version__</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">from_version</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">version</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_version</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">to_version</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">version</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_version</span>
-        <span class="p">):</span>
-            <span class="n">implementations</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span>
-            <span class="k">return</span> <span class="n">fn</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">from_version</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">version</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">from_version</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">to_version</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">version</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_version</span>
+            <span class="p">):</span>
+                <span class="n">implementations</span><span class="p">[</span><span class="n">func_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span>
+                <span class="k">return</span> <span class="n">fn</span>
+
+        <span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">unsupported</span>
 
         <span class="k">return</span> <span class="n">unsupported</span></div>
 </pre></div>

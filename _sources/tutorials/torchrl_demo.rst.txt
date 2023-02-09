@@ -580,7 +580,7 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 273-284
+.. GENERATED FROM PYTHON SOURCE LINES 273-287
 
 .. code-block:: default
 
@@ -593,7 +593,10 @@ Here are examples of using a replaybuffer with tensordicts.
         if i == len(rb):
             break
 
-    import gym
+    try:
+        import gymnasium as gym
+    except ModuleNotFoundError:
+        import gym
 
 
 
@@ -610,12 +613,12 @@ Here are examples of using a replaybuffer with tensordicts.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 285-287
+.. GENERATED FROM PYTHON SOURCE LINES 288-290
 
 Envs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 287-294
+.. GENERATED FROM PYTHON SOURCE LINES 290-297
 
 .. code-block:: default
 
@@ -633,7 +636,7 @@ Envs
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 295-299
+.. GENERATED FROM PYTHON SOURCE LINES 298-302
 
 .. code-block:: default
 
@@ -668,12 +671,12 @@ Envs
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 300-302
+.. GENERATED FROM PYTHON SOURCE LINES 303-305
 
 Changing environments config
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 302-306
+.. GENERATED FROM PYTHON SOURCE LINES 305-309
 
 .. code-block:: default
 
@@ -701,7 +704,7 @@ Changing environments config
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 307-311
+.. GENERATED FROM PYTHON SOURCE LINES 310-314
 
 .. code-block:: default
 
@@ -716,7 +719,7 @@ Changing environments config
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 312-325
+.. GENERATED FROM PYTHON SOURCE LINES 315-328
 
 .. code-block:: default
 
@@ -740,12 +743,12 @@ Changing environments config
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 326-328
+.. GENERATED FROM PYTHON SOURCE LINES 329-331
 
 Transforms
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 328-342
+.. GENERATED FROM PYTHON SOURCE LINES 331-345
 
 .. code-block:: default
 
@@ -770,7 +773,7 @@ Transforms
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 343-346
+.. GENERATED FROM PYTHON SOURCE LINES 346-349
 
 .. code-block:: default
 
@@ -797,7 +800,7 @@ Transforms
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 347-351
+.. GENERATED FROM PYTHON SOURCE LINES 350-354
 
 .. code-block:: default
 
@@ -828,12 +831,12 @@ Transforms
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 352-354
+.. GENERATED FROM PYTHON SOURCE LINES 355-357
 
 Vectorized Environments
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 354-367
+.. GENERATED FROM PYTHON SOURCE LINES 357-370
 
 .. code-block:: default
 
@@ -871,7 +874,7 @@ Vectorized Environments
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 368-371
+.. GENERATED FROM PYTHON SOURCE LINES 371-374
 
 .. code-block:: default
 
@@ -892,7 +895,7 @@ Vectorized Environments
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 372-379
+.. GENERATED FROM PYTHON SOURCE LINES 375-382
 
 Modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -902,7 +905,7 @@ Models
 
 Example of a MLP model:
 
-.. GENERATED FROM PYTHON SOURCE LINES 379-382
+.. GENERATED FROM PYTHON SOURCE LINES 382-385
 
 .. code-block:: default
 
@@ -916,7 +919,7 @@ Example of a MLP model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 383-391
+.. GENERATED FROM PYTHON SOURCE LINES 386-394
 
 .. code-block:: default
 
@@ -948,11 +951,11 @@ Example of a MLP model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 392-393
+.. GENERATED FROM PYTHON SOURCE LINES 395-396
 
 Example of a CNN model:
 
-.. GENERATED FROM PYTHON SOURCE LINES 393-403
+.. GENERATED FROM PYTHON SOURCE LINES 396-406
 
 .. code-block:: default
 
@@ -986,12 +989,12 @@ Example of a CNN model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 404-406
+.. GENERATED FROM PYTHON SOURCE LINES 407-409
 
 TensorDictModules
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 406-415
+.. GENERATED FROM PYTHON SOURCE LINES 409-418
 
 .. code-block:: default
 
@@ -1023,12 +1026,12 @@ TensorDictModules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 416-418
+.. GENERATED FROM PYTHON SOURCE LINES 419-421
 
 Sequences of Modules
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 418-433
+.. GENERATED FROM PYTHON SOURCE LINES 421-436
 
 .. code-block:: default
 
@@ -1086,7 +1089,7 @@ Sequences of Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 434-437
+.. GENERATED FROM PYTHON SOURCE LINES 437-440
 
 .. code-block:: default
 
@@ -1106,7 +1109,7 @@ Sequences of Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 438-447
+.. GENERATED FROM PYTHON SOURCE LINES 441-450
 
 .. code-block:: default
 
@@ -1140,7 +1143,7 @@ Sequences of Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 448-456
+.. GENERATED FROM PYTHON SOURCE LINES 451-459
 
 .. code-block:: default
 
@@ -1173,12 +1176,12 @@ Sequences of Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 457-459
+.. GENERATED FROM PYTHON SOURCE LINES 460-462
 
 Functional Programming (Ensembling / Meta-RL)
 ----------------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 459-465
+.. GENERATED FROM PYTHON SOURCE LINES 462-468
 
 .. code-block:: default
 
@@ -1201,7 +1204,7 @@ Functional Programming (Ensembling / Meta-RL)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 466-469
+.. GENERATED FROM PYTHON SOURCE LINES 469-472
 
 .. code-block:: default
 
@@ -1229,7 +1232,7 @@ Functional Programming (Ensembling / Meta-RL)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 470-477
+.. GENERATED FROM PYTHON SOURCE LINES 473-480
 
 .. code-block:: default
 
@@ -1261,12 +1264,12 @@ Functional Programming (Ensembling / Meta-RL)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 478-480
+.. GENERATED FROM PYTHON SOURCE LINES 481-483
 
 Specialized Classes
 ------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 480-493
+.. GENERATED FROM PYTHON SOURCE LINES 483-496
 
 .. code-block:: default
 
@@ -1296,7 +1299,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 494-498
+.. GENERATED FROM PYTHON SOURCE LINES 497-501
 
 .. code-block:: default
 
@@ -1317,7 +1320,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 499-512
+.. GENERATED FROM PYTHON SOURCE LINES 502-515
 
 .. code-block:: default
 
@@ -1341,7 +1344,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 513-532
+.. GENERATED FROM PYTHON SOURCE LINES 516-535
 
 .. code-block:: default
 
@@ -1385,7 +1388,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 533-548
+.. GENERATED FROM PYTHON SOURCE LINES 536-551
 
 .. code-block:: default
 
@@ -1426,7 +1429,7 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 549-568
+.. GENERATED FROM PYTHON SOURCE LINES 552-571
 
 .. code-block:: default
 
@@ -1470,12 +1473,12 @@ Specialized Classes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 569-571
+.. GENERATED FROM PYTHON SOURCE LINES 572-574
 
 Using Environments and Modules
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 571-599
+.. GENERATED FROM PYTHON SOURCE LINES 574-602
 
 .. code-block:: default
 
@@ -1535,7 +1538,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 600-618
+.. GENERATED FROM PYTHON SOURCE LINES 603-621
 
 .. code-block:: default
 
@@ -1585,7 +1588,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 619-622
+.. GENERATED FROM PYTHON SOURCE LINES 622-625
 
 .. code-block:: default
 
@@ -1605,7 +1608,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 623-630
+.. GENERATED FROM PYTHON SOURCE LINES 626-633
 
 .. code-block:: default
 
@@ -1643,7 +1646,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 631-641
+.. GENERATED FROM PYTHON SOURCE LINES 634-644
 
 .. code-block:: default
 
@@ -1664,7 +1667,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 642-666
+.. GENERATED FROM PYTHON SOURCE LINES 645-669
 
 .. code-block:: default
 
@@ -1699,7 +1702,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 667-676
+.. GENERATED FROM PYTHON SOURCE LINES 670-679
 
 .. code-block:: default
 
@@ -1748,7 +1751,7 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 677-697
+.. GENERATED FROM PYTHON SOURCE LINES 680-700
 
 .. code-block:: default
 
@@ -1808,12 +1811,12 @@ Using Environments and Modules
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 698-700
+.. GENERATED FROM PYTHON SOURCE LINES 701-703
 
 Objectives
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 700-721
+.. GENERATED FROM PYTHON SOURCE LINES 703-724
 
 .. code-block:: default
 
@@ -1845,7 +1848,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 722-736
+.. GENERATED FROM PYTHON SOURCE LINES 725-739
 
 .. code-block:: default
 
@@ -1870,7 +1873,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 737-740
+.. GENERATED FROM PYTHON SOURCE LINES 740-743
 
 .. code-block:: default
 
@@ -1900,7 +1903,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 741-744
+.. GENERATED FROM PYTHON SOURCE LINES 744-747
 
 .. code-block:: default
 
@@ -1935,7 +1938,7 @@ Objectives
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 745-764
+.. GENERATED FROM PYTHON SOURCE LINES 748-767
 
 State of the Library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1957,7 +1960,7 @@ RL (or just curious), try it! Give us feedback: what will make the success of
 TorchRL is how well it covers researchers needs. To do that, we need their input!
 Since the library is nascent, it is a great time for you to shape it the way you want!
 
-.. GENERATED FROM PYTHON SOURCE LINES 766-770
+.. GENERATED FROM PYTHON SOURCE LINES 769-773
 
 Installing the Library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1967,7 +1970,7 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  29.206 seconds)
+   **Total running time of the script:** ( 0 minutes  29.542 seconds)
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:

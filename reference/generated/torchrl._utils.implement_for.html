@@ -378,6 +378,8 @@
 <p>If specified module is missing or there is no fitting implementation, call of the decorated function
 will lead to the explicit error.
 In case of intersected ranges, first fitting implementation is used.</p>
+<p>This wrapper also works to implement different backends for a same function (eg. gym vs gymnasium,
+numpy vs jax-numpy etc).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -390,6 +392,19 @@ In case of intersected ranges, first fitting implementation is used.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; @implement_for(“gym”, “0.13”, “0.14”)
 &gt;&gt;&gt; def fun(self, x):
+...     # Older gym versions will return x + 1
+...     return x + 1
+...
+&gt;&gt;&gt; @implement_for(“gym”, “0.14”, None)
+&gt;&gt;&gt; def fun(self, x):
+...     # More recent gym versions will return x + 2
+...     return x + 2
+...
+&gt;&gt;&gt; @implement_for(“gymnasium”, “0.27”, None)
+&gt;&gt;&gt; def fun(self, x):
+...     # If gymnasium is to be used instead of gym, x+3 will be returned
+...     return x + 3
+...
 </pre></div>
 </div>
 <p>This indicates that the function is compatible with gym 0.13+, but doesn’t with gym 0.14+.</p>
