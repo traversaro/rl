@@ -923,7 +923,7 @@ Some notes about the following cell:
 
  .. code-block:: none
 
-      0%|          | 0/2500 [00:00<?, ?it/s]     20%|##        | 500/2500 [00:00<00:03, 565.94it/s]Creating a MemmapStorage...
+      0%|          | 0/2500 [00:00<?, ?it/s]     20%|##        | 500/2500 [00:00<00:03, 537.04it/s]Creating a MemmapStorage...
     The storage is being created: 
             action: /tmp/action.memmap, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
             done: /tmp/done.memmap, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
@@ -939,7 +939,7 @@ Some notes about the following cell:
             ('collector', 'step_count'): /tmp/collector/step_count.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
             ('collector', 'traj_ids'): /tmp/collector/traj_ids.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
             ('next', 'observation_vector'): /tmp/next/observation_vector.memmap, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
-    reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7565:  20%|##        | 500/2500 [00:03<00:03, 565.94it/s]    reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7565:  40%|####      | 1000/2500 [00:03<00:06, 236.54it/s]    reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7565:  40%|####      | 1000/2500 [00:04<00:06, 236.54it/s]    reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7565:  60%|######    | 1500/2500 [00:04<00:03, 307.38it/s]    reward: -1.4141 (r0 = -1.3128), reward eval: reward: -0.7565:  60%|######    | 1500/2500 [00:06<00:03, 307.38it/s]    reward: -1.4141 (r0 = -1.3128), reward eval: reward: -0.7565:  80%|########  | 2000/2500 [00:06<00:01, 323.75it/s]    reward: -1.7103 (r0 = -1.3128), reward eval: reward: -0.7565:  80%|########  | 2000/2500 [00:07<00:01, 323.75it/s]    reward: -1.7103 (r0 = -1.3128), reward eval: reward: -0.7565: 100%|##########| 2500/2500 [00:07<00:00, 355.63it/s]    reward: -2.1579 (r0 = -1.3128), reward eval: reward: -0.7565: 100%|##########| 2500/2500 [00:08<00:00, 355.63it/s]
+    reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7541:  20%|##        | 500/2500 [00:03<00:03, 537.04it/s]    reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7541:  40%|####      | 1000/2500 [00:03<00:06, 232.03it/s]    reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7541:  40%|####      | 1000/2500 [00:04<00:06, 232.03it/s]    reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7541:  60%|######    | 1500/2500 [00:04<00:03, 319.70it/s]    reward: -1.4120 (r0 = -1.3128), reward eval: reward: -0.7541:  60%|######    | 1500/2500 [00:05<00:03, 319.70it/s]    reward: -1.4120 (r0 = -1.3128), reward eval: reward: -0.7541:  80%|########  | 2000/2500 [00:05<00:01, 380.04it/s]    reward: -1.7664 (r0 = -1.3128), reward eval: reward: -0.7541:  80%|########  | 2000/2500 [00:06<00:01, 380.04it/s]    reward: -1.7664 (r0 = -1.3128), reward eval: reward: -0.7541: 100%|##########| 2500/2500 [00:06<00:00, 436.18it/s]    reward: -2.2152 (r0 = -1.3128), reward eval: reward: -0.7541: 100%|##########| 2500/2500 [00:07<00:00, 436.18it/s]
 
 
 
@@ -1126,7 +1126,7 @@ The following code is identical to the initialization we made earlier:
              1.7317e-01,  6.3022e-02]), 
     scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
             0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
-    reward: -2.1579 (r0 = -1.3128), reward eval: reward: -0.7565: 100%|##########| 2500/2500 [00:20<00:00, 355.63it/s]
+    reward: -2.2152 (r0 = -1.3128), reward eval: reward: -0.7541: 100%|##########| 2500/2500 [00:20<00:00, 436.18it/s]
 
 
 
@@ -1324,11 +1324,11 @@ batch size to ``torch.Size([batch])``.
     Traceback (most recent call last):
       File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py", line 896, in <module>
         sampled_tensordict.batch_size = [batch_size_traj, 250]
-      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 2360, in batch_size
+      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 2369, in batch_size
         return self._batch_size_setter(new_size)
-      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 350, in _batch_size_setter
+      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 351, in _batch_size_setter
         self._check_new_batch_size(new_batch_size)
-      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 1313, in _check_new_batch_size
+      File "/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py", line 1322, in _check_new_batch_size
         raise RuntimeError(
     RuntimeError: the tensor action has shape torch.Size([4, 500, 6]) which is incompatible with the new shape torch.Size([4, 250]).
 
@@ -1360,7 +1360,7 @@ use a greater value for ``total_frames`` e.g. 1000000.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  30.684 seconds)
+   **Total running time of the script:** ( 0 minutes  31.833 seconds)
 
 
 .. _sphx_glr_download_tutorials_coding_ddpg.py:
