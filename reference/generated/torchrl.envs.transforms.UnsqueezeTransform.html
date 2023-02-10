@@ -378,9 +378,9 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>unsqueeze_dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a>) – dimension to unsqueeze. Must be negative (or allow_positive_dim
+<li><p><strong>unsqueeze_dim</strong> (<em>int</em>) – dimension to unsqueeze. Must be negative (or allow_positive_dim
 must be turned on).</p></li>
-<li><p><strong>allow_positive_dim</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, positive dimensions are accepted.
+<li><p><strong>allow_positive_dim</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, positive dimensions are accepted.
 <a class="reference internal" href="#torchrl.envs.transforms.UnsqueezeTransform" title="torchrl.envs.transforms.UnsqueezeTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UnsqueezeTransform</span></code></a> will map these to the n^th feature dimension
 (ie n^th dimension after batch size of parent env) of the input tensor,
 independently from the tensordict batch size (ie positive dims may be

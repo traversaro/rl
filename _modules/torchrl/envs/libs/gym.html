@@ -431,6 +431,12 @@
 <span class="k">def</span> <span class="nf">_gym_to_torchrl_spec_transform</span><span class="p">(</span>
     <span class="n">spec</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">,</span> <span class="n">categorical_action_encoding</span><span class="o">=</span><span class="kc">False</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorSpec</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maps the gym specs to the TorchRL specs.</span>
+
+<span class="sd">    By convention, &#39;state&#39; keys of Dict specs will be renamed &quot;observation&quot; to match the</span>
+<span class="sd">    default TorchRL keys.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">tuple</span><span class="o">.</span><span class="n">Tuple</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;gym.spaces.tuple.Tuple mapping not yet implemented&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">discrete</span><span class="o">.</span><span class="n">Discrete</span><span class="p">):</span>
@@ -483,7 +489,14 @@
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="p">(</span><span class="n">Dict</span><span class="p">,)):</span>
         <span class="n">spec_out</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">spec_out</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">_gym_to_torchrl_spec_transform</span><span class="p">(</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">k</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;state&quot;</span> <span class="ow">and</span> <span class="s2">&quot;observation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="c1"># we rename &quot;state&quot; in &quot;observation&quot; as &quot;observation&quot; is the conventional name</span>
+                <span class="c1"># for single observation in torchrl.</span>
+                <span class="c1"># naming it &#39;state&#39; will result in envs that have a different name for the state vector</span>
+                <span class="c1"># when queried with and without pixels</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="s2">&quot;observation&quot;</span>
+            <span class="n">spec_out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_gym_to_torchrl_spec_transform</span><span class="p">(</span>
                 <span class="n">spec</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
                 <span class="n">categorical_action_encoding</span><span class="o">=</span><span class="n">categorical_action_encoding</span><span class="p">,</span>
@@ -810,9 +823,10 @@
                 <span class="n">made_env</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">ACCEPTED_TYPE_ERRORS</span><span class="p">[</span><span class="s2">&quot;frame_skip&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
-                    <span class="n">warn</span><span class="p">(</span>
-                        <span class="s2">&quot;Discarding frameskip arg. This will be taken care of by TorchRL env wrapper.&quot;</span>
-                    <span class="p">)</span>
+                    <span class="c1"># we can disable this, not strictly indispensable to know</span>
+                    <span class="c1"># warn(</span>
+                    <span class="c1">#     &quot;Discarding frameskip arg. This will be taken care of by TorchRL env wrapper.&quot;</span>
+                    <span class="c1"># )</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">wrapper_frame_skip</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;frameskip&quot;</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">ACCEPTED_TYPE_ERRORS</span><span class="p">[</span><span class="s2">&quot;render_mode&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
                     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Discarding render_mode from the env constructor.&quot;</span><span class="p">)</span>

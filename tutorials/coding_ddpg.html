@@ -1059,7 +1059,7 @@ async settings, and at the end of it in sync settings).</p></li>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/2500 [00:00&lt;?, ?it/s]
- 20%|##        | 500/2500 [00:00&lt;00:03, 537.04it/s]Creating a MemmapStorage...
+ 20%|##        | 500/2500 [00:00&lt;00:03, 543.16it/s]Creating a MemmapStorage...
 The storage is being created:
         action: /tmp/action.memmap, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
         done: /tmp/done.memmap, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
@@ -1076,15 +1076,15 @@ The storage is being created:
         (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/collector/traj_ids.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
         (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/next/observation_vector.memmap, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
 
-reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7541:  20%|##        | 500/2500 [00:03&lt;00:03, 537.04it/s]
-reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7541:  40%|####      | 1000/2500 [00:03&lt;00:06, 232.03it/s]
-reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7541:  40%|####      | 1000/2500 [00:04&lt;00:06, 232.03it/s]
-reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7541:  60%|######    | 1500/2500 [00:04&lt;00:03, 319.70it/s]
-reward: -1.4120 (r0 = -1.3128), reward eval: reward: -0.7541:  60%|######    | 1500/2500 [00:05&lt;00:03, 319.70it/s]
-reward: -1.4120 (r0 = -1.3128), reward eval: reward: -0.7541:  80%|########  | 2000/2500 [00:05&lt;00:01, 380.04it/s]
-reward: -1.7664 (r0 = -1.3128), reward eval: reward: -0.7541:  80%|########  | 2000/2500 [00:06&lt;00:01, 380.04it/s]
-reward: -1.7664 (r0 = -1.3128), reward eval: reward: -0.7541: 100%|##########| 2500/2500 [00:06&lt;00:00, 436.18it/s]
-reward: -2.2152 (r0 = -1.3128), reward eval: reward: -0.7541: 100%|##########| 2500/2500 [00:07&lt;00:00, 436.18it/s]
+reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7573:  20%|##        | 500/2500 [00:03&lt;00:03, 543.16it/s]
+reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7573:  40%|####      | 1000/2500 [00:03&lt;00:05, 254.63it/s]
+reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7573:  40%|####      | 1000/2500 [00:04&lt;00:05, 254.63it/s]
+reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7573:  60%|######    | 1500/2500 [00:04&lt;00:03, 295.12it/s]
+reward: -1.4284 (r0 = -1.3128), reward eval: reward: -0.7573:  60%|######    | 1500/2500 [00:05&lt;00:03, 295.12it/s]
+reward: -1.4284 (r0 = -1.3128), reward eval: reward: -0.7573:  80%|########  | 2000/2500 [00:05&lt;00:01, 374.31it/s]
+reward: -1.3624 (r0 = -1.3128), reward eval: reward: -0.7573:  80%|########  | 2000/2500 [00:07&lt;00:01, 374.31it/s]
+reward: -1.3624 (r0 = -1.3128), reward eval: reward: -0.7573: 100%|##########| 2500/2500 [00:07&lt;00:00, 361.35it/s]
+reward: -2.2390 (r0 = -1.3128), reward eval: reward: -0.7573: 100%|##########| 2500/2500 [00:08&lt;00:00, 361.35it/s]
 </pre></div>
 </div>
 </section>
@@ -1208,7 +1208,7 @@ loc = tensor([-3.9152e-01,  2.3728e+00,  1.6790e-02, -5.8100e-03,  2.0432e-02,
 scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
         0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
 
-reward: -2.2152 (r0 = -1.3128), reward eval: reward: -0.7541: 100%|##########| 2500/2500 [00:20&lt;00:00, 436.18it/s]
+reward: -2.2390 (r0 = -1.3128), reward eval: reward: -0.7573: 100%|##########| 2500/2500 [00:17&lt;00:00, 361.35it/s]
 </pre></div>
 </div>
 <p>The training loop needs to be modified. First, whereas before extending the
@@ -1359,11 +1359,11 @@ batch size to <code class="docutils literal notranslate"><span class="pre">torch
 <div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
   File <span class="nb">&quot;/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py&quot;</span>, line <span class="m">896</span>, in <span class="n">&lt;module&gt;</span>
 <span class="w">    </span><span class="n">sampled_tensordict</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="p">[</span><span class="n">batch_size_traj</span><span class="p">,</span> <span class="mi">250</span><span class="p">]</span>
-  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">2369</span>, in <span class="n">batch_size</span>
+  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">2409</span>, in <span class="n">batch_size</span>
 <span class="w">    </span><span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_batch_size_setter</span><span class="p">(</span><span class="n">new_size</span><span class="p">)</span>
   File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">351</span>, in <span class="n">_batch_size_setter</span>
 <span class="w">    </span><span class="bp">self</span><span class="o">.</span><span class="n">_check_new_batch_size</span><span class="p">(</span><span class="n">new_batch_size</span><span class="p">)</span>
-  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">1322</span>, in <span class="n">_check_new_batch_size</span>
+  File <span class="nb">&quot;/github/home/miniconda/lib/python3.10/site-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">1326</span>, in <span class="n">_check_new_batch_size</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
 <span class="gr">RuntimeError</span>: <span class="n">the tensor action has shape torch.Size([4, 500, 6]) which is incompatible with the new shape torch.Size([4, 250]).</span>
 </pre></div>
@@ -1382,7 +1382,7 @@ use a greater value for <code class="docutils literal notranslate"><span class="
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;TD-labmda DDPG results&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  31.833 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  32.681 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-ddpg-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0dfdb6ef4cc9782fdb39c4a9d0900d37/coding_ddpg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_ddpg.py</span></code></a></p>

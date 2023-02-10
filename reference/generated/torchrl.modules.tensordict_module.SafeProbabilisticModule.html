@@ -397,26 +397,26 @@ a deterministic mapping function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>in_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>iterable</em><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – key(s) that will be read from the
+<li><p><strong>in_keys</strong> (<em>str</em><em> or </em><em>iterable</em><em> of </em><em>str</em><em> or </em><em>dict</em>) – key(s) that will be read from the
 input TensorDict and used to build the distribution. Importantly, if it’s an
 iterable of string or a string, those keys must match the keywords used by
 the distribution class of interest, e.g. <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;loc&quot;</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;scale&quot;</span></code> for
 the Normal distribution and similar. If in_keys is a dictionary,, the keys
 are the keys of the distribution and the values are the keys in the
 tensordict that will get match to the corresponding distribution keys.</p></li>
-<li><p><strong>out_keys</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em> or </em><em>iterable</em><em> of </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – keys where the sampled values will be
+<li><p><strong>out_keys</strong> (<em>str</em><em> or </em><em>iterable</em><em> of </em><em>str</em>) – keys where the sampled values will be
 written. Importantly, if these keys are found in the input TensorDict, the
 sampling step will be skipped.</p></li>
 <li><p><strong>spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – specs of the first output tensor. Used when calling
 td_module.random() to generate random values in the target space.</p></li>
-<li><p><strong>safe</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the value of the sample is checked against the
+<li><p><strong>safe</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, the value of the sample is checked against the
 input spec. Out-of-domain sampling can occur because of exploration policies
 or numerical under/overflow issues. As for the <code class="xref py py-obj docutils literal notranslate"><span class="pre">spec</span></code> argument, this
 check will only occur for the distribution sample, but not the other tensors
 returned by the input module. If the sample is out of bounds, it is
 projected back onto the desired space using the <cite>TensorSpec.project</cite> method.
-Default is <a class="reference external" href="https://docs.python.org/3/library/constants.html#False" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code></a>.</p></li>
-<li><p><strong>default_interaction_mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a><em>, </em><em>optional</em>) – default method to be used to retrieve
+Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>default_interaction_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – default method to be used to retrieve
 the output value. Should be one of: ‘mode’, ‘median’, ‘mean’ or ‘random’
 (in which case the value is sampled randomly from the distribution). Default
 is ‘mode’.
@@ -428,17 +428,17 @@ used. Note that DataCollector instances will use <cite>set_interaction_mode</cit
 <cite>“random”</cite> by default.</p></li>
 <li><p><strong>distribution_class</strong> (<em>Type</em><em>, </em><em>optional</em>) – a torch.distributions.Distribution class to
 be used for sampling. Default is Delta.</p></li>
-<li><p><strong>distribution_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a><em>, </em><em>optional</em>) – kwargs to be passed to the distribution.</p></li>
-<li><p><strong>return_log_prob</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – if True, the log-probability of the
+<li><p><strong>distribution_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – kwargs to be passed to the distribution.</p></li>
+<li><p><strong>return_log_prob</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, the log-probability of the
 distribution sample will be written in the tensordict with the key
 <cite>‘sample_log_prob’</cite>. Default is <cite>False</cite>.</p></li>
-<li><p><strong>cache_dist</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – EXPERIMENTAL: if True, the parameters of the
+<li><p><strong>cache_dist</strong> (<em>bool</em><em>, </em><em>optional</em>) – EXPERIMENTAL: if True, the parameters of the
 distribution (i.e. the output of the module) will be written to the
 tensordict along with the sample. Those parameters can be used to re-compute
 the original distribution later on (e.g. to compute the divergence between
 the distribution used to sample the action and the updated distribution in
 PPO). Default is <cite>False</cite>.</p></li>
-<li><p><strong>n_empirical_estimate</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – number of samples to compute the empirical
+<li><p><strong>n_empirical_estimate</strong> (<em>int</em><em>, </em><em>optional</em>) – number of samples to compute the empirical
 mean when it is not available. Default is 1000</p></li>
 </ul>
 </dd>

@@ -413,8 +413,8 @@ is being passed.</p>
 <li><p>max_frames_per_traj: the number of frames after which a <code class="xref py py-obj docutils literal notranslate"><span class="pre">env.reset()</span></code> is called</p></li>
 <li><p>frames_per_batch: the number of frames delivered at each iteration over the collector</p></li>
 <li><p>init_random_frames: the number of random steps (steps where <code class="xref py py-obj docutils literal notranslate"><span class="pre">env.rand_step()</span></code> is being called)</p></li>
-<li><p>reset_at_each_iter: if <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the environment(s) will be reset after each batch collection</p></li>
-<li><p>split_trajs: if <a class="reference external" href="https://docs.python.org/3/library/constants.html#True" title="(in Python v3.11)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code></a>, the trajectories will be split and delivered in a padded tensordict
+<li><p>reset_at_each_iter: if <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the environment(s) will be reset after each batch collection</p></li>
+<li><p>split_trajs: if <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>, the trajectories will be split and delivered in a padded tensordict
 along with a <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;mask&quot;</span></code> key that will point to a boolean mask representing the valid values.</p></li>
 <li><p>exploration_mode: the exploration strategy to be used with the policy.</p></li>
 <li><p>reset_when_done: whether environments should be reset when reaching a done state.</p></li>

@@ -375,8 +375,8 @@ The goal is to be able to swap environments in an experiment with little or no e
 even if these environments are simulated using different libraries.
 TorchRL offers some out-of-the-box environment wrappers under <code class="xref py py-obj docutils literal notranslate"><span class="pre">torchrl.envs.libs</span></code>,
 which we hope can be easily imitated for other libraries.
-The parent class <a class="reference internal" href="generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.EnvBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EnvBase</span></code></a> is a <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v1.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> subclass that implements
-some typical environment methods using <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDict</span></code> as a data organiser. This allows this
+The parent class <a class="reference internal" href="generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.EnvBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.envs.EnvBase</span></code></a> is a <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v1.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> subclass that implements
+some typical environment methods using <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2a+3535d18 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> as a data organiser. This allows this
 class to be generic and to handle an arbitrary number of input and outputs, as well as
 nested or batched data structures.</p>
 <p>Each env will have the following attributes:</p>
@@ -390,10 +390,10 @@ environment or retrieved from it. TorchRL takes care of mapping the data to the 
 This is especially useful for transforms (see below). For parametric environments (e.g.
 model-based environments), the device does represent the hardware that will be used to
 compute the operations.</p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.observation_spec</span></code>: a <code class="xref py py-obj docutils literal notranslate"><span class="pre">CompositeSpec</span></code> object containing all the observation key-spec pairs.</p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.input_spec</span></code>: a <code class="xref py py-obj docutils literal notranslate"><span class="pre">CompositeSpec</span></code> object containing all the input keys (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;action&quot;</span></code> and others).</p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.action_spec</span></code>: a <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorSpec</span></code> object representing the action spec.</p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.reward_spec</span></code>: a <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorSpec</span></code> object representing the reward spec.</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.observation_spec</span></code>: a <a class="reference internal" href="generated/torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec" title="torchrl.data.CompositeSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.data.CompositeSpec</span></code></a> object containing all the observation key-spec pairs.</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.input_spec</span></code>: a <a class="reference internal" href="generated/torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec" title="torchrl.data.CompositeSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.data.CompositeSpec</span></code></a> object containing all the input keys (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;action&quot;</span></code> and others).</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.action_spec</span></code>: a <a class="reference internal" href="generated/torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.data.TensorSpec</span></code></a> object representing the action spec.</p></li>
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.reward_spec</span></code>: a <a class="reference internal" href="generated/torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.data.TensorSpec</span></code></a> object representing the reward spec.</p></li>
 </ul>
 <p>Importantly, the environment spec shapes should <em>not</em> contain the batch size, e.g.
 an environment with <code class="xref py py-obj docutils literal notranslate"><span class="pre">env.batch_size</span> <span class="pre">==</span> <span class="pre">torch.Size([4])</span></code> should not have
@@ -402,9 +402,9 @@ an <code class="xref py py-obj docutils literal notranslate"><span class="pre">e
 <p>With these, the following methods are implemented:</p>
 <ul class="simple">
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.reset(tensordict)</span></code>: a reset method that may (but not necessarily requires to) take
-a <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDict</span></code> input. It return the first tensordict of a rollout, usually
+a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2a+3535d18 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> input. It return the first tensordict of a rollout, usually
 containing a <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;done&quot;</span></code> state and a set of observations.</p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.step(tensordict)</span></code>: a step method that takes a <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDict</span></code> input
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.step(tensordict)</span></code>: a step method that takes a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2a+3535d18 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> input
 containing an input action as well as other inputs (for model-based or stateless
 environments, for instance).</p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.set_seed(integer)</span></code>: a seeding method that will return the next seed
@@ -415,7 +415,7 @@ having reproducible results.</p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.rollout(max_steps,</span> <span class="pre">policy)</span></code>: executes a rollout in the environment for
 a maximum number of steps <code class="xref py py-obj docutils literal notranslate"><span class="pre">max_steps</span></code> and using a policy <code class="xref py py-obj docutils literal notranslate"><span class="pre">policy</span></code>.
 The policy should be coded using a <code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeModule</span></code> (or any other
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDict</span></code>-compatible module).</p></li>
+<a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2a+3535d18 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a>-compatible module).</p></li>
 </ul>
 <table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
 <tbody>
@@ -567,6 +567,47 @@ in the environment. The keys to be included in this inverse transform are passed
 </pre></div>
 </div>
 </div>
+<section id="cloning-transforms">
+<h3>Cloning transforms<a class="headerlink" href="#cloning-transforms" title="Permalink to this heading">¶</a></h3>
+<p>Because transforms appended to an environment are “registered” to this environment
+through the <code class="docutils literal notranslate"><span class="pre">transform.parent</span></code> property, when manipulating transforms we should keep
+in mind that the parent may come and go following what is being done with the transform.
+Here are some examples: if we get a single transform from a <a class="reference internal" href="generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose" title="torchrl.envs.transforms.Compose"><code class="xref py py-class docutils literal notranslate"><span class="pre">Compose</span></code></a> object,
+this transform will keep its parent:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">third_transform</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">third_transform</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>This means that using this transform for another environment is prohibited, as
+the other environment would replace the parent and this may lead to unexpected
+behviours. Fortunately, the <a class="reference internal" href="generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform" title="torchrl.envs.transforms.Transform"><code class="xref py py-class docutils literal notranslate"><span class="pre">Transform</span></code></a> class comes with a <code class="xref py py-func docutils literal notranslate"><span class="pre">clone()</span></code>
+method that will erase the parent while keeping the identity of all the
+registered buffers:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">TransformedEnv</span><span class="p">(</span><span class="n">base_env</span><span class="p">,</span> <span class="n">third_transform</span><span class="p">)</span>  <span class="c1"># raises an Exception as third_transform already has a parent</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TransformedEnv</span><span class="p">(</span><span class="n">base_env</span><span class="p">,</span> <span class="n">third_transform</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>  <span class="c1"># works</span>
+</pre></div>
+</div>
+<p>On a single process or if the buffers are placed in shared memory, this will
+result in all the clone transforms to keep the same behaviour even if the
+buffers are changed in place (which is what will happen with the <a class="reference internal" href="generated/torchrl.envs.transforms.CatFrames.html#torchrl.envs.transforms.CatFrames" title="torchrl.envs.transforms.CatFrames"><code class="xref py py-class docutils literal notranslate"><span class="pre">CatFrames</span></code></a>
+transform, for instance). In distributed settings, this may not hold and one
+should be careful about the expected behaviour of the cloned transforms in this
+context.
+Finally, notice that indexing multiple transforms from a <a class="reference internal" href="generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose" title="torchrl.envs.transforms.Compose"><code class="xref py py-class docutils literal notranslate"><span class="pre">Compose</span></code></a> transform
+may also result in loss of parenthood for these transforms: the reason is that
+indexing a <a class="reference internal" href="generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose" title="torchrl.envs.transforms.Compose"><code class="xref py py-class docutils literal notranslate"><span class="pre">Compose</span></code></a> transform results in another <a class="reference internal" href="generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose" title="torchrl.envs.transforms.Compose"><code class="xref py py-class docutils literal notranslate"><span class="pre">Compose</span></code></a> transform
+that does not have a parent environment. Hence, we have to clone the sub-transforms
+to be able to create this other composition:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">TransformedEnv</span><span class="p">(</span><span class="n">base_env</span><span class="p">,</span> <span class="n">Compose</span><span class="p">(</span><span class="n">transform1</span><span class="p">,</span> <span class="n">transform2</span><span class="p">,</span> <span class="n">transform3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">last_two</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">last_two</span><span class="p">,</span> <span class="n">Compose</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">last_two</span><span class="o">.</span><span class="n">parent</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">last_two</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">transform2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">last_two</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">transform2</span><span class="p">)</span>  <span class="c1"># and the buffers will match</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">last_two</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">transform3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">last_two</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">transform3</span><span class="p">)</span>  <span class="c1"># and the buffers will match</span>
+</pre></div>
+</div>
 <table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform" title="torchrl.envs.transforms.Transform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Transform</span></code></a>(in_keys[, out_keys, in_keys_inv, ...])</p></td>
@@ -674,6 +715,7 @@ in the environment. The keys to be included in this inverse transform are passed
 </tbody>
 </table>
 </section>
+</section>
 <section id="recorders">
 <h2>Recorders<a class="headerlink" href="#recorders" title="Permalink to this heading">¶</a></h2>
 <p>Recorders are transforms that register data as they come in, for logging purposes.</p>
@@ -699,7 +741,7 @@ in the environment. The keys to be included in this inverse transform are passed
 <td><p>Returns all the supported libraries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.utils.set_exploration_mode.html#torchrl.envs.utils.set_exploration_mode" title="torchrl.envs.utils.set_exploration_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_exploration_mode</span></code></a></p></td>
-<td><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">set_interaction_mode</span></code></p></td>
+<td><p>alias of <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.set_interaction_mode.html#tensordict.nn.set_interaction_mode" title="(in tensordict vmain (0.0.2a+3535d18 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">set_interaction_mode</span></code></a></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.utils.exploration_mode.html#torchrl.envs.utils.exploration_mode" title="torchrl.envs.utils.exploration_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exploration_mode</span></code></a>()</p></td>
 <td><p>Returns the current sampling mode.</p></td>
@@ -810,7 +852,10 @@ in the environment. The keys to be included in this inverse transform are passed
               <ul>
 <li><a class="reference internal" href="#">torchrl.envs package</a><ul>
 <li><a class="reference internal" href="#vectorized-envs">Vectorized envs</a></li>
-<li><a class="reference internal" href="#transforms">Transforms</a></li>
+<li><a class="reference internal" href="#transforms">Transforms</a><ul>
+<li><a class="reference internal" href="#cloning-transforms">Cloning transforms</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#recorders">Recorders</a></li>
 <li><a class="reference internal" href="#helpers">Helpers</a></li>
 <li><a class="reference internal" href="#domain-specific">Domain-specific</a></li>
