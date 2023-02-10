@@ -495,8 +495,11 @@
 <span class="sd">        alpha (float): exponent α determines how much prioritization is used,</span>
 <span class="sd">            with α = 0 corresponding to the uniform case.</span>
 <span class="sd">        beta (float): importance sampling negative exponent.</span>
-<span class="sd">        eps (float): delta added to the priorities to ensure that the buffer</span>
-<span class="sd">            does not contain null priorities.</span>
+<span class="sd">        eps (float, optional): delta added to the priorities to ensure that the buffer</span>
+<span class="sd">            does not contain null priorities. Defaults to 1e-8.</span>
+<span class="sd">        reduction (str, optional): the reduction method for multidimensional</span>
+<span class="sd">            tensordicts (ie stored trajectories). Can be one of &quot;max&quot;, &quot;min&quot;,</span>
+<span class="sd">            &quot;median&quot; or &quot;mean&quot;.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -507,6 +510,7 @@
         <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span><span class="p">,</span>
         <span class="n">dtype</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">,</span>
+        <span class="n">reduction</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">alpha</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
@@ -519,6 +523,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_beta</span> <span class="o">=</span> <span class="n">beta</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span> <span class="o">=</span> <span class="n">eps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reduction</span> <span class="o">=</span> <span class="n">reduction</span>
         <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">float</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatType</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sum_tree</span> <span class="o">=</span> <span class="n">SumSegmentTreeFp32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_capacity</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_min_tree</span> <span class="o">=</span> <span class="n">MinSegmentTreeFp32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_max_capacity</span><span class="p">)</span>

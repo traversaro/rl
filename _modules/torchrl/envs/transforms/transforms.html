@@ -370,6 +370,7 @@
 
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
 <span class="kn">from</span> <span class="nn">textwrap</span> <span class="kn">import</span> <span class="n">indent</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">OrderedDict</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
@@ -3547,6 +3548,102 @@
             <span class="s2">&quot;(ie as LSTM would work over a whole sequence of data), file an issue on &quot;</span>
             <span class="s2">&quot;TorchRL requesting that feature.&quot;</span>
         <span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="RandomCropTensorDict"><a class="viewcode-back" href="../../../../reference/generated/torchrl.envs.transforms.RandomCropTensorDict.html#torchrl.envs.transforms.RandomCropTensorDict">[docs]</a><span class="k">class</span> <span class="nc">RandomCropTensorDict</span><span class="p">(</span><span class="n">Transform</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A trajectory sub-sampler for ReplayBuffer and modules.</span>
+
+<span class="sd">    Gathers a sub-sequence of a defined length along the last dimension of the input</span>
+<span class="sd">    tensordict.</span>
+<span class="sd">    This can be used to get cropped trajectories from trajectories sampled</span>
+<span class="sd">    from a ReplayBuffer.</span>
+
+<span class="sd">    This transform is primarily designed to be used with replay buffers and modules.</span>
+<span class="sd">    Currently, it cannot be used as an environment transform.</span>
+<span class="sd">    Do not hesitate to request for this behaviour through an issue if this is</span>
+<span class="sd">    desired.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        sub_seq_len (int): the length of the sub-trajectory to sample</span>
+<span class="sd">        sample_dim (int, optional): the dimension along which the cropping</span>
+<span class="sd">            should occur. Negative dimensions should be preferred to make</span>
+<span class="sd">            the transform robust to tensordicts of varying batch dimensions.</span>
+<span class="sd">            Defaults to -1 (the default time dimension in TorchRL).</span>
+<span class="sd">        mask_key (str): If provided, this represents the mask key to be looked</span>
+<span class="sd">            for when doing the sampling. If provided, it only valid elements will</span>
+<span class="sd">            be returned. It is assumed that the mask is a boolean tensor with</span>
+<span class="sd">            first True values and then False values, not mixed together.</span>
+<span class="sd">            :class:`RandomCropTensorDict` will NOT check that this is respected</span>
+<span class="sd">            hence any error caused by an improper mask risks to go unnoticed.</span>
+<span class="sd">            Defaults: None (no mask key).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">sub_seq_len</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">sample_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">mask_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sub_seq_len</span> <span class="o">=</span> <span class="n">sub_seq_len</span>
+        <span class="k">if</span> <span class="n">sample_dim</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;A positive shape has been passed to the RandomCropTensorDict &quot;</span>
+                <span class="s2">&quot;constructor. This may have unexpected behaviours when the &quot;</span>
+                <span class="s2">&quot;passed tensordicts have inconsistent batch dimensions. &quot;</span>
+                <span class="s2">&quot;For context, by convention, TorchRL concatenates time steps &quot;</span>
+                <span class="s2">&quot;along the last dimension of the tensordict.&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_dim</span> <span class="o">=</span> <span class="n">sample_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask_key</span> <span class="o">=</span> <span class="n">mask_key</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">([])</span>
+
+<div class="viewcode-block" id="RandomCropTensorDict.forward"><a class="viewcode-back" href="../../../../reference/generated/torchrl.envs.transforms.RandomCropTensorDict.html#torchrl.envs.transforms.RandomCropTensorDict.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_dim</span>
+        <span class="c1"># shape must have at least one dimension</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;Cannot sub-sample from a tensordict with an empty shape.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">shape</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_seq_len</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Cannot sample trajectories of length </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_seq_len</span><span class="si">}</span><span class="s2"> along&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; dimension </span><span class="si">{</span><span class="n">dim</span><span class="si">}</span><span class="s2"> given a tensordict of shape &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">. Consider reducing the sub_seq_len &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;parameter or increase sample length.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">max_idx_0</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_seq_len</span>
+        <span class="n">idx_shape</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">idx_shape</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">device</span>
+        <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_key</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">idx_0</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">max_idx_0</span><span class="p">,</span> <span class="n">idx_shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># get the traj length for each entry</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Expected a mask of the same shape as the tensordict. Got &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;mask.shape=</span><span class="si">{</span><span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> and tensordict.shape=&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+                <span class="p">)</span>
+            <span class="n">traj_lengths</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_dim</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_dim</span><span class="p">,</span> <span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">traj_lengths</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_seq_len</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Cannot sample trajectories of length </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_seq_len</span><span class="si">}</span><span class="s2"> when the minimum &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;trajectory length is </span><span class="si">{</span><span class="n">traj_lengths</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="p">)</span>
+            <span class="c1"># take a random number between 0 and traj_lengths - self.sub_seq_len</span>
+            <span class="n">idx_0</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">idx_shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">traj_lengths</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_seq_len</span><span class="p">)</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+        <span class="n">arange</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_seq_len</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">idx_0</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">arange_shape</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">ndimension</span><span class="p">())]</span>
+        <span class="n">arange_shape</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arange</span><span class="p">)</span>
+        <span class="n">arange</span> <span class="o">=</span> <span class="n">arange</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">arange_shape</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">idx_0</span> <span class="o">+</span> <span class="n">arange</span>
+        <span class="k">return</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_dim</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span></div></div>
 </pre></div>
 
              </article>

@@ -1059,7 +1059,7 @@ async settings, and at the end of it in sync settings).</p></li>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/2500 [00:00&lt;?, ?it/s]
- 20%|##        | 500/2500 [00:00&lt;00:03, 543.16it/s]Creating a MemmapStorage...
+ 20%|##        | 500/2500 [00:00&lt;00:03, 535.37it/s]Creating a MemmapStorage...
 The storage is being created:
         action: /tmp/action.memmap, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
         done: /tmp/done.memmap, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
@@ -1076,15 +1076,15 @@ The storage is being created:
         (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/collector/traj_ids.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
         (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/next/observation_vector.memmap, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
 
-reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7573:  20%|##        | 500/2500 [00:03&lt;00:03, 543.16it/s]
-reward: -0.2210 (r0 = -1.3128), reward eval: reward: -0.7573:  40%|####      | 1000/2500 [00:03&lt;00:05, 254.63it/s]
-reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7573:  40%|####      | 1000/2500 [00:04&lt;00:05, 254.63it/s]
-reward: -0.1929 (r0 = -1.3128), reward eval: reward: -0.7573:  60%|######    | 1500/2500 [00:04&lt;00:03, 295.12it/s]
-reward: -1.4284 (r0 = -1.3128), reward eval: reward: -0.7573:  60%|######    | 1500/2500 [00:05&lt;00:03, 295.12it/s]
-reward: -1.4284 (r0 = -1.3128), reward eval: reward: -0.7573:  80%|########  | 2000/2500 [00:05&lt;00:01, 374.31it/s]
-reward: -1.3624 (r0 = -1.3128), reward eval: reward: -0.7573:  80%|########  | 2000/2500 [00:07&lt;00:01, 374.31it/s]
-reward: -1.3624 (r0 = -1.3128), reward eval: reward: -0.7573: 100%|##########| 2500/2500 [00:07&lt;00:00, 361.35it/s]
-reward: -2.2390 (r0 = -1.3128), reward eval: reward: -0.7573: 100%|##########| 2500/2500 [00:08&lt;00:00, 361.35it/s]
+reward: -0.1929 (r0 = -1.1459), reward eval: reward: -0.9066:  20%|##        | 500/2500 [00:03&lt;00:03, 535.37it/s]
+reward: -0.1929 (r0 = -1.1459), reward eval: reward: -0.9066:  40%|####      | 1000/2500 [00:03&lt;00:06, 249.16it/s]
+reward: -0.2210 (r0 = -1.1459), reward eval: reward: -0.9066:  40%|####      | 1000/2500 [00:04&lt;00:06, 249.16it/s]
+reward: -0.2210 (r0 = -1.1459), reward eval: reward: -0.9066:  60%|######    | 1500/2500 [00:04&lt;00:03, 332.55it/s]
+reward: -1.4657 (r0 = -1.1459), reward eval: reward: -0.9066:  60%|######    | 1500/2500 [00:05&lt;00:03, 332.55it/s]
+reward: -1.4657 (r0 = -1.1459), reward eval: reward: -0.9066:  80%|########  | 2000/2500 [00:05&lt;00:01, 403.59it/s]
+reward: -1.4628 (r0 = -1.1459), reward eval: reward: -0.9066:  80%|########  | 2000/2500 [00:06&lt;00:01, 403.59it/s]
+reward: -1.4628 (r0 = -1.1459), reward eval: reward: -0.9066: 100%|##########| 2500/2500 [00:06&lt;00:00, 431.59it/s]
+reward: -1.9660 (r0 = -1.1459), reward eval: reward: -0.9066: 100%|##########| 2500/2500 [00:07&lt;00:00, 431.59it/s]
 </pre></div>
 </div>
 </section>
@@ -1208,7 +1208,7 @@ loc = tensor([-3.9152e-01,  2.3728e+00,  1.6790e-02, -5.8100e-03,  2.0432e-02,
 scale: tensor([0.2335, 1.3836, 0.3375, 0.3587, 0.3461, 0.4445, 0.3917, 0.3489, 0.5510,
         0.5761, 1.1731, 4.4106, 3.3918, 2.0521, 5.4038, 4.4419, 4.9479])
 
-reward: -2.2390 (r0 = -1.3128), reward eval: reward: -0.7573: 100%|##########| 2500/2500 [00:17&lt;00:00, 361.35it/s]
+reward: -1.9660 (r0 = -1.1459), reward eval: reward: -0.9066: 100%|##########| 2500/2500 [00:16&lt;00:00, 431.59it/s]
 </pre></div>
 </div>
 <p>The training loop needs to be modified. First, whereas before extending the
@@ -1382,7 +1382,7 @@ use a greater value for <code class="docutils literal notranslate"><span class="
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;TD-labmda DDPG results&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  32.681 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  31.677 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-ddpg-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0dfdb6ef4cc9782fdb39c4a9d0900d37/coding_ddpg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_ddpg.py</span></code></a></p>

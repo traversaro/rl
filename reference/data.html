@@ -445,6 +445,22 @@ The following mean sampling latency improvements over using ListStorage were fou
 </tr>
 </tbody>
 </table>
+<section id="sotring-trajectories">
+<h3>Sotring trajectories<a class="headerlink" href="#sotring-trajectories" title="Permalink to this heading">¶</a></h3>
+<p>It is not too difficult to store trajecotries in the replay buffer.
+One element to pay attention to is that the size of the replay buffer is always
+the size of the leading dimension of the storage: in other words, creating a
+replay buffer with a storage of size 1M when storing multidimensional data
+does not mean storing 1M frames but 1M trajectories.</p>
+<p>When sampling trajectories, it may be desirable to sample sub-trajectories
+to diversify learning or make the sampling more efficient.
+To do this, we provide a custom <code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.envs.Transform</span></code> class named
+<code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.envs.RandomCropTensorDict</span></code>. Here is an example of how this class
+can be used:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+</section>
 </section>
 <section id="tensorspec">
 <h2>TensorSpec<a class="headerlink" href="#tensorspec" title="Permalink to this heading">¶</a></h2>
@@ -545,7 +561,10 @@ Check the <a class="reference internal" href="generated/torchrl.envs.utils.check
               <ul>
 <li><a class="reference internal" href="#">torchrl.data package</a><ul>
 <li><a class="reference internal" href="#replay-buffers">Replay Buffers</a></li>
-<li><a class="reference internal" href="#composable-replay-buffers">Composable Replay Buffers</a></li>
+<li><a class="reference internal" href="#composable-replay-buffers">Composable Replay Buffers</a><ul>
+<li><a class="reference internal" href="#sotring-trajectories">Sotring trajectories</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#tensorspec">TensorSpec</a></li>
 <li><a class="reference internal" href="#utils">Utils</a></li>
 </ul>
