@@ -258,10 +258,15 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/pretrained_models.html">Using pretrained models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_tutorial.html">TensorDict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_module.html">TensorDictModule</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/torch_envs.html">TorchRL envs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pretrained_models.html">Using pretrained models</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/multi_task.html">Task-specific policy in multi-task environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
@@ -386,6 +391,8 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
 </section>
 <section id="tutorials">
 <h1>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this heading">¶</a></h1>
+<section id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a><ul>
@@ -399,7 +406,19 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
 <li class="toctree-l2"><a class="reference internal" href="tutorials/torchrl_demo.html#installing-the-library">Installing the Library</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/pretrained_models.html">Using pretrained models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#define-hyperparameters">Define Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#define-an-environment">Define an environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#policy">Policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#value-network">Value network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#data-collector">Data collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#replay-buffer">Replay buffer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#loss-function">Loss function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#training-loop">Training loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#results">Results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#conclusion-and-next-steps">Conclusion and next steps</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_tutorial.html">TensorDict</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/tensordict_tutorial.html#improving-the-modularity-of-codes">Improving the modularity of codes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/tensordict_tutorial.html#tensordict-structure">TensorDict structure</a></li>
@@ -413,6 +432,13 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
 <li class="toctree-l2"><a class="reference internal" href="tutorials/tensordict_module.html#showcase-implementing-a-transformer-using-tensordictmodule">Showcase: Implementing a transformer using TensorDictModule</a></li>
 </ul>
 </li>
+</ul>
+</div>
+</section>
+<section id="intermediate">
+<h2>Intermediate<a class="headerlink" href="#intermediate" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/torch_envs.html">TorchRL envs</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/torch_envs.html#gym-environments">Gym environments</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/torch_envs.html#deepmind-control-environments">DeepMind Control environments</a></li>
@@ -423,6 +449,14 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
 <li class="toctree-l2"><a class="reference internal" href="tutorials/torch_envs.html#vecnorm">VecNorm</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pretrained_models.html">Using pretrained models</a></li>
+</ul>
+</div>
+</section>
+<section id="advanced">
+<h2>Advanced<a class="headerlink" href="#advanced" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/multi_task.html">Task-specific policy in multi-task environments</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/multi_task.html#policy">Policy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/multi_task.html#executing-diverse-tasks-in-parallel">Executing diverse tasks in parallel</a></li>
@@ -454,6 +488,7 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
 </li>
 </ul>
 </div>
+</section>
 </section>
 <section id="references">
 <h1>References<a class="headerlink" href="#references" title="Permalink to this heading">¶</a></h1>
@@ -622,7 +657,12 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
 <li><a class="reference internal" href="#">Welcome to the TorchRL Documentation!</a></li>
-<li><a class="reference internal" href="#tutorials">Tutorials</a></li>
+<li><a class="reference internal" href="#tutorials">Tutorials</a><ul>
+<li><a class="reference internal" href="#basics">Basics</a></li>
+<li><a class="reference internal" href="#intermediate">Intermediate</a></li>
+<li><a class="reference internal" href="#advanced">Advanced</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#references">References</a></li>
 <li><a class="reference internal" href="#knowledge-base">Knowledge Base</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>

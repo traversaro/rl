@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="TensorDict" href="tensordict_tutorial.html" />
-    <link rel="prev" title="Introduction to TorchRL" href="torchrl_demo.html" />
+    <link rel="next" title="Task-specific policy in multi-task environments" href="multi_task.html" />
+    <link rel="prev" title="TorchRL envs" href="torch_envs.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -257,12 +257,17 @@
               
             
             
-              <ul class="current">
+              <ul>
 <li class="toctree-l1"><a class="reference internal" href="torchrl_demo.html">Introduction to TorchRL</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Using pretrained models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tensordict_tutorial.html">TensorDict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tensordict_module.html">TensorDictModule</a></li>
+</ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="torch_envs.html">TorchRL envs</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using pretrained models</a></li>
+</ul>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="multi_task.html">Task-specific policy in multi-task environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="coding_ddpg.html">Coding DDPG using TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
@@ -412,39 +417,43 @@ the corresponding action.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading: &quot;https://pytorch.s3.amazonaws.com/models/rl/r3m/r3m_50.pt&quot; to /github/home/.cache/torch/hub/checkpoints/r3m_50.pt
 
   0%|          | 0.00/374M [00:00&lt;?, ?B/s]
-  4%|4         | 16.4M/374M [00:00&lt;00:03, 103MB/s]
-  8%|8         | 31.2M/374M [00:00&lt;00:02, 124MB/s]
- 12%|#1        | 43.5M/374M [00:00&lt;00:03, 113MB/s]
- 15%|#4        | 54.5M/374M [00:00&lt;00:04, 83.2MB/s]
- 17%|#7        | 64.0M/374M [00:00&lt;00:05, 63.1MB/s]
- 19%|#8        | 70.9M/374M [00:00&lt;00:04, 63.8MB/s]
- 21%|##1       | 80.3M/374M [00:01&lt;00:04, 65.0MB/s]
- 23%|##3       | 87.0M/374M [00:01&lt;00:05, 56.8MB/s]
- 26%|##6       | 98.3M/374M [00:01&lt;00:05, 57.0MB/s]
- 31%|###       | 115M/374M [00:01&lt;00:03, 70.1MB/s]
- 35%|###4      | 130M/374M [00:01&lt;00:03, 84.9MB/s]
- 37%|###7      | 139M/374M [00:01&lt;00:03, 74.2MB/s]
- 39%|###9      | 147M/374M [00:02&lt;00:03, 70.8MB/s]
- 44%|####3     | 164M/374M [00:02&lt;00:02, 76.5MB/s]
- 48%|####7     | 179M/374M [00:02&lt;00:02, 92.3MB/s]
- 50%|#####     | 188M/374M [00:02&lt;00:02, 87.2MB/s]
- 53%|#####2    | 197M/374M [00:02&lt;00:03, 57.5MB/s]
- 57%|#####6    | 212M/374M [00:02&lt;00:02, 75.3MB/s]
- 59%|#####9    | 222M/374M [00:03&lt;00:02, 75.6MB/s]
- 62%|######1   | 231M/374M [00:03&lt;00:02, 70.9MB/s]
- 66%|######5   | 246M/374M [00:03&lt;00:01, 79.6MB/s]
- 68%|######8   | 256M/374M [00:03&lt;00:01, 84.5MB/s]
- 71%|#######   | 265M/374M [00:03&lt;00:02, 55.2MB/s]
- 74%|#######4  | 279M/374M [00:04&lt;00:01, 64.7MB/s]
- 79%|#######8  | 295M/374M [00:04&lt;00:01, 70.5MB/s]
- 83%|########2 | 310M/374M [00:04&lt;00:00, 81.2MB/s]
- 85%|########5 | 318M/374M [00:04&lt;00:00, 78.7MB/s]
- 87%|########7 | 327M/374M [00:04&lt;00:00, 63.2MB/s]
- 89%|########9 | 333M/374M [00:04&lt;00:00, 58.0MB/s]
- 92%|#########1| 342M/374M [00:05&lt;00:00, 49.7MB/s]
- 93%|#########2| 348M/374M [00:05&lt;00:00, 49.2MB/s]
- 96%|#########6| 360M/374M [00:05&lt;00:00, 59.7MB/s]
-100%|##########| 374M/374M [00:05&lt;00:00, 71.4MB/s]
+  4%|3         | 14.8M/374M [00:00&lt;00:03, 116MB/s]
+  7%|6         | 25.8M/374M [00:00&lt;00:06, 55.1MB/s]
+  9%|8         | 32.8M/374M [00:00&lt;00:06, 54.0MB/s]
+ 13%|#3        | 49.1M/374M [00:00&lt;00:04, 72.4MB/s]
+ 17%|#7        | 64.0M/374M [00:00&lt;00:03, 82.8MB/s]
+ 19%|#9        | 72.4M/374M [00:01&lt;00:04, 71.0MB/s]
+ 22%|##1       | 81.9M/374M [00:01&lt;00:05, 57.0MB/s]
+ 26%|##6       | 98.3M/374M [00:01&lt;00:04, 65.2MB/s]
+ 31%|###       | 115M/374M [00:01&lt;00:03, 75.9MB/s]
+ 35%|###4      | 130M/374M [00:01&lt;00:02, 89.9MB/s]
+ 37%|###7      | 140M/374M [00:02&lt;00:03, 76.0MB/s]
+ 40%|###9      | 148M/374M [00:02&lt;00:03, 74.9MB/s]
+ 44%|####3     | 164M/374M [00:02&lt;00:02, 78.1MB/s]
+ 48%|####7     | 179M/374M [00:02&lt;00:02, 77.2MB/s]
+ 50%|####9     | 186M/374M [00:02&lt;00:02, 70.4MB/s]
+ 52%|#####2    | 195M/374M [00:02&lt;00:02, 73.2MB/s]
+ 54%|#####4    | 202M/374M [00:03&lt;00:03, 59.8MB/s]
+ 57%|#####6    | 212M/374M [00:03&lt;00:02, 61.9MB/s]
+ 58%|#####8    | 218M/374M [00:03&lt;00:03, 51.8MB/s]
+ 61%|######1   | 229M/374M [00:03&lt;00:02, 56.2MB/s]
+ 65%|######5   | 244M/374M [00:03&lt;00:01, 75.6MB/s]
+ 67%|######7   | 253M/374M [00:03&lt;00:01, 73.6MB/s]
+ 70%|######9   | 261M/374M [00:03&lt;00:01, 74.5MB/s]
+ 72%|#######1  | 269M/374M [00:04&lt;00:01, 66.2MB/s]
+ 74%|#######4  | 277M/374M [00:04&lt;00:01, 64.1MB/s]
+ 76%|#######5  | 284M/374M [00:04&lt;00:01, 65.6MB/s]
+ 78%|#######8  | 293M/374M [00:04&lt;00:01, 55.4MB/s]
+ 80%|#######9  | 299M/374M [00:04&lt;00:01, 54.0MB/s]
+ 83%|########3 | 311M/374M [00:04&lt;00:01, 54.6MB/s]
+ 85%|########4 | 316M/374M [00:05&lt;00:01, 45.5MB/s]
+ 87%|########7 | 326M/374M [00:05&lt;00:01, 48.3MB/s]
+ 88%|########8 | 331M/374M [00:05&lt;00:01, 41.3MB/s]
+ 92%|#########1| 342M/374M [00:05&lt;00:00, 49.0MB/s]
+ 93%|#########2| 347M/374M [00:05&lt;00:00, 43.0MB/s]
+ 96%|#########5| 359M/374M [00:05&lt;00:00, 53.9MB/s]
+ 97%|#########7| 364M/374M [00:06&lt;00:00, 53.2MB/s]
+100%|##########| 374M/374M [00:06&lt;00:00, 64.2MB/s]
 </pre></div>
 </div>
 <p>Let’s check the number of parameters of the policy:</p>
@@ -533,11 +542,11 @@ buffer with it:</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating a MemmapStorage...
 The storage is being created:
-        action: /tmp/tmpai9oc0rz, 0.030517578125 Mb of storage (size: torch.Size([1000, 8])).
-        done: /tmp/tmplf5nars0, 0.00095367431640625 Mb of storage (size: torch.Size([1000, 1])).
-        pixels: /tmp/tmpeyzyvhz2, 659.1796875 Mb of storage (size: torch.Size([1000, 480, 480, 3])).
-        reward: /tmp/tmpjydm8np1, 0.003814697265625 Mb of storage (size: torch.Size([1000, 1])).
-        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmp_0jc3x9c, 659.1796875 Mb of storage (size: torch.Size([1000, 480, 480, 3])).
+        action: /tmp/tmpp21vy49o, 0.030517578125 Mb of storage (size: torch.Size([1000, 8])).
+        done: /tmp/tmpjdqouvok, 0.00095367431640625 Mb of storage (size: torch.Size([1000, 1])).
+        pixels: /tmp/tmp2o42eacq, 659.1796875 Mb of storage (size: torch.Size([1000, 480, 480, 3])).
+        reward: /tmp/tmposuic2e8, 0.003814697265625 Mb of storage (size: torch.Size([1000, 1])).
+        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmpfah0uvh1, 659.1796875 Mb of storage (size: torch.Size([1000, 480, 480, 3])).
 </pre></div>
 </div>
 <p>Let’s check what our replay buffer storage looks like. It should not contain the “r3m_vec” entry
@@ -585,7 +594,7 @@ In this way, we can train an algorithm offline on a dataset made of images:</p>
     is_shared=False)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  14.949 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  55.856 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-pretrained-models-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/ae7b3885bfc446e5c7ca2102306be4c2/pretrained_models.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">pretrained_models.py</span></code></a></p>
@@ -605,10 +614,10 @@ In this way, we can train an algorithm offline on a dataset made of images:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="tensordict_tutorial.html" class="btn btn-neutral float-right" title="TensorDict" accesskey="n" rel="next">Next <img src="../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="multi_task.html" class="btn btn-neutral float-right" title="Task-specific policy in multi-task environments" accesskey="n" rel="next">Next <img src="../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl_demo.html" class="btn btn-neutral" title="Introduction to TorchRL" accesskey="p" rel="prev"><img src="../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torch_envs.html" class="btn btn-neutral" title="TorchRL envs" accesskey="p" rel="prev"><img src="../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
