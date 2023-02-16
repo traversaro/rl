@@ -255,10 +255,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_tutorial.html">TensorDict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/torch_envs.html">TorchRL envs</a></li>
@@ -1715,6 +1716,20 @@
         <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.register_full_backward_hook">(torchrl.envs.SerialEnv method)</a>
 </li>
       </ul></li>
+      <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.register_full_backward_pre_hook">register_full_backward_pre_hook() (torchrl.data.MultiStep method)</a>
+
+      <ul>
+        <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.register_full_backward_pre_hook">(torchrl.envs.EnvBase method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.GymLikeEnv.html#torchrl.envs.GymLikeEnv.register_full_backward_pre_hook">(torchrl.envs.GymLikeEnv method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.MultiThreadedEnv.html#torchrl.envs.MultiThreadedEnv.register_full_backward_pre_hook">(torchrl.envs.MultiThreadedEnv method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv.register_full_backward_pre_hook">(torchrl.envs.ParallelEnv method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.register_full_backward_pre_hook">(torchrl.envs.SerialEnv method)</a>
+</li>
+      </ul></li>
       <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.register_load_state_dict_post_hook">register_load_state_dict_post_hook() (torchrl.data.MultiStep method)</a>
 
       <ul>
@@ -1757,6 +1772,20 @@
         <li><a href="reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv.register_parameter">(torchrl.envs.ParallelEnv method)</a>
 </li>
         <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.register_parameter">(torchrl.envs.SerialEnv method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.register_state_dict_pre_hook">register_state_dict_pre_hook() (torchrl.data.MultiStep method)</a>
+
+      <ul>
+        <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.register_state_dict_pre_hook">(torchrl.envs.EnvBase method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.GymLikeEnv.html#torchrl.envs.GymLikeEnv.register_state_dict_pre_hook">(torchrl.envs.GymLikeEnv method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.MultiThreadedEnv.html#torchrl.envs.MultiThreadedEnv.register_state_dict_pre_hook">(torchrl.envs.MultiThreadedEnv method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv.register_state_dict_pre_hook">(torchrl.envs.ParallelEnv method)</a>
+</li>
+        <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.register_state_dict_pre_hook">(torchrl.envs.SerialEnv method)</a>
 </li>
       </ul></li>
       <li><a href="reference/generated/torchrl.objectives.ReinforceLoss.html#torchrl.objectives.ReinforceLoss">ReinforceLoss (class in torchrl.objectives)</a>
@@ -2169,6 +2198,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/torchrl.trainers.TrainerHookBase.html#torchrl.trainers.TrainerHookBase">TrainerHookBase (class in torchrl.trainers)</a>
+</li>
       <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform">Transform (class in torchrl.envs.transforms)</a>
 </li>
       <li><a href="reference/generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose.transform_input_spec">transform_input_spec() (torchrl.envs.transforms.Compose method)</a>

@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Introduction to TorchRL" href="tutorials/torchrl_demo.html" />
+    <link rel="next" title="Reinforcement Learning (PPO) with TorchRL Tutorial" href="tutorials/coding_ppo.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -257,10 +257,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_tutorial.html">TensorDict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/torch_envs.html">TorchRL envs</a></li>
@@ -395,43 +396,11 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
 <h2>Basics<a class="headerlink" href="#basics" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torchrl_demo.html#data">Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torchrl_demo.html#envs">Envs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torchrl_demo.html#modules">Modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torchrl_demo.html#using-environments-and-modules">Using Environments and Modules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torchrl_demo.html#objectives">Objectives</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torchrl_demo.html#state-of-the-library">State of the Library</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torchrl_demo.html#contributing">Contributing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torchrl_demo.html#installing-the-library">Installing the Library</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#define-hyperparameters">Define Hyperparameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#define-an-environment">Define an environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#policy">Policy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#value-network">Value network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#data-collector">Data collector</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#replay-buffer">Replay buffer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#loss-function">Loss function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#training-loop">Training loop</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#results">Results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ppo.html#conclusion-and-next-steps">Conclusion and next steps</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_tutorial.html">TensorDict</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/tensordict_tutorial.html#improving-the-modularity-of-codes">Improving the modularity of codes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/tensordict_tutorial.html#tensordict-structure">TensorDict structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/tensordict_tutorial.html#tensordict-dictionary-features">TensorDict Dictionary Features</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/tensordict_tutorial.html#tensordict-tensor-features">TensorDict tensor features</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_module.html">TensorDictModule</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/tensordict_module.html#tensordictmodule-by-examples">TensorDictModule by examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/tensordict_module.html#do-s-and-don-t-with-tensordictmodule">Do’s and don’t with TensorDictModule</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/tensordict_module.html#showcase-implementing-a-transformer-using-tensordictmodule">Showcase: Implementing a transformer using TensorDictModule</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_tutorial.html">TensorDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 </div>
 </section>
@@ -439,16 +408,7 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
 <h2>Intermediate<a class="headerlink" href="#intermediate" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/torch_envs.html">TorchRL envs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torch_envs.html#gym-environments">Gym environments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torch_envs.html#deepmind-control-environments">DeepMind Control environments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torch_envs.html#transforming-envs">Transforming envs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torch_envs.html#environment-device">Environment device</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torch_envs.html#running-environments-in-parallel">Running environments in parallel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torch_envs.html#transforming-parallel-environments">Transforming parallel environments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/torch_envs.html#vecnorm">VecNorm</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 </div>
@@ -457,35 +417,9 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
 <h2>Advanced<a class="headerlink" href="#advanced" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/multi_task.html">Task-specific policy in multi-task environments</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/multi_task.html#policy">Policy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/multi_task.html#executing-diverse-tasks-in-parallel">Executing diverse tasks in parallel</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/multi_task.html#rollout">Rollout</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ddpg.html#environment">Environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ddpg.html#normalization-of-the-observations">Normalization of the observations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ddpg.html#building-the-model">Building the model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ddpg.html#evaluator-building-your-recorder-object">Evaluator: building your recorder object</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ddpg.html#replay-buffer">Replay buffer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ddpg.html#hyperparameters">Hyperparameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ddpg.html#initialization">Initialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ddpg.html#time-to-train-the-policy">Time to train the policy!</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ddpg.html#experiment-results">Experiment results</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_ddpg.html#sampling-trajectories-and-using-td-lambda">Sampling trajectories and using TD(lambda)</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_dqn.html#hyperparameters">Hyperparameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_dqn.html#building-the-environment">Building the environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_dqn.html#the-problem">The problem</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_dqn.html#building-the-model-deep-q-network">Building the model (Deep Q-network)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_dqn.html#regular-dqn">Regular DQN</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_dqn.html#td-lambda">TD-lambda</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/coding_dqn.html#conclusion-and-possible-improvements">Conclusion and possible improvements</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/multi_task.html">Task-specific policy in multi-task environments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
 </ul>
 </div>
 </section>
@@ -623,7 +557,7 @@ for <a class="reference internal" href="reference/objectives.html"><span class="
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="tutorials/torchrl_demo.html" class="btn btn-neutral float-right" title="Introduction to TorchRL" accesskey="n" rel="next">Next <img src="_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="tutorials/coding_ppo.html" class="btn btn-neutral float-right" title="Reinforcement Learning (PPO) with TorchRL Tutorial" accesskey="n" rel="next">Next <img src="_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
     </div>

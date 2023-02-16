@@ -258,10 +258,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torch_envs.html">TorchRL envs</a></li>
@@ -534,8 +535,8 @@ conda env config vars set LD_PRELOAD=/path/to/conda/envs/mujoco_env/x86_64-conda
 <p><em>Solution</em>: This can usually be sovled by setting EGL as your mujoco_gl backend: <code class="docutils literal notranslate"><span class="pre">MUJOCO_GL=egl</span> <span class="pre">python</span> <span class="pre">myscript.py</span></code></p>
 </li>
 </ol>
-<p><strong>Sanity check</strong>
-To check that your mujoco-py has been built against the GPU, run</p>
+<p><strong>Sanity check</strong></p>
+<p>To check that your mujoco-py has been built against the GPU, run</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">mujoco_py</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mujoco_py</span><span class="o">.</span><span class="n">cymj</span><span class="p">)</span> <span class="c1"># check it has the tag: linuxgpuextensionbuilder</span>
 </pre></div>
@@ -561,29 +562,21 @@ To check that your mujoco-py has been built against the GPU, run</p>
 <blockquote>
 <div><p>Mujoco’s EGL code indexes devices globally while CUDA_VISIBLE_DEVICES (when used with job schedulers like slurm) returns the local device ids. This can be worked around by setting the <code class="docutils literal notranslate"><span class="pre">GPUS</span></code> environment variable to the global device id. For slurm, it can be obtained using <code class="docutils literal notranslate"><span class="pre">SLURM_STEP_GPUS</span></code> enviroment variable.</p>
 </div></blockquote>
-<ol class="arabic simple" start="2">
-<li><p>Rendered images are completely black.</p></li>
-</ol>
-<blockquote>
-<div><p>Make sure to call <code class="docutils literal notranslate"><span class="pre">env.render()</span></code> before reading the pixels.</p>
-</div></blockquote>
-<ol class="arabic simple" start="3">
-<li><p><code class="docutils literal notranslate"><span class="pre">patchelf</span></code> dependency is missing.</p></li>
-</ol>
-<blockquote>
-<div><p>Install using <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">patchelf</span></code> or <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">patchelf</span></code></p>
-</div></blockquote>
-<ol class="arabic simple" start="4">
-<li><p>Errors like “Onscreen rendering needs 101 device”</p></li>
-</ol>
-<blockquote>
-<div><p>Make sure to set <code class="docutils literal notranslate"><span class="pre">DISPLAY</span></code> environment variable correctly.</p>
-</div></blockquote>
-<ol class="arabic simple" start="5">
-<li><p><code class="docutils literal notranslate"><span class="pre">ImportError:</span> <span class="pre">Cannot</span> <span class="pre">initialize</span> <span class="pre">a</span> <span class="pre">headless</span> <span class="pre">EGL</span> <span class="pre">display.</span></code>
-Make sure you have installed mujoco and all its dependencies (see instructions above).
+<ol class="arabic" start="2">
+<li><p>Rendered images are completely black.</p>
+<p><em>Solution</em>: Make sure to call <code class="docutils literal notranslate"><span class="pre">env.render()</span></code> before reading the pixels.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">patchelf</span></code> dependency is missing.</p>
+<p><em>Solution</em>: Install using <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">patchelf</span></code> or <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">patchelf</span></code></p>
+</li>
+<li><p>Errors like “Onscreen rendering needs 101 device”</p>
+<p><em>Solution</em>: Make sure to set <code class="docutils literal notranslate"><span class="pre">DISPLAY</span></code> environment variable correctly.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ImportError:</span> <span class="pre">Cannot</span> <span class="pre">initialize</span> <span class="pre">a</span> <span class="pre">headless</span> <span class="pre">EGL</span> <span class="pre">display.</span></code></p>
+<p><em>Solution</em>: Make sure you have installed mujoco and all its dependencies (see instructions above).
 Make sure you have set the <code class="docutils literal notranslate"><span class="pre">MUJOCO_GL=egl</span></code>.
-Make sure you have a GPU accessible on your machine.</p></li>
+Make sure you have a GPU accessible on your machine.</p>
+</li>
 </ol>
 </section>
 

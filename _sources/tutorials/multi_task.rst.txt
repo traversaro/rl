@@ -152,16 +152,17 @@ and another that must learn to walk.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-80
+.. GENERATED FROM PYTHON SOURCE LINES 74-81
 
 Policy
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^
+
 We will design a policy where a backbone reads the "observation" key.
 Then specific sub-components will ready the "observation_stand" and
 "observation_walk" keys of the stacked tensordicts, if they are present,
 and pass them through the dedicated sub-network.
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-83
+.. GENERATED FROM PYTHON SOURCE LINES 81-84
 
 .. code-block:: default
 
@@ -175,7 +176,7 @@ and pass them through the dedicated sub-network.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 84-102
+.. GENERATED FROM PYTHON SOURCE LINES 85-103
 
 .. code-block:: default
 
@@ -204,11 +205,11 @@ and pass them through the dedicated sub-network.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-104
+.. GENERATED FROM PYTHON SOURCE LINES 104-105
 
 Let's check that our sequence outputs actions for a single env (stand).
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-107
+.. GENERATED FROM PYTHON SOURCE LINES 105-108
 
 .. code-block:: default
 
@@ -237,11 +238,11 @@ Let's check that our sequence outputs actions for a single env (stand).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 108-109
+.. GENERATED FROM PYTHON SOURCE LINES 109-110
 
 Let's check that our sequence outputs actions for a single env (walk).
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-112
+.. GENERATED FROM PYTHON SOURCE LINES 110-113
 
 .. code-block:: default
 
@@ -270,14 +271,14 @@ Let's check that our sequence outputs actions for a single env (walk).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 113-117
+.. GENERATED FROM PYTHON SOURCE LINES 114-118
 
 This also works with the stack: now the stand and walk keys have
 disappeared, because they're not shared by all tensordicts. But the
 ``TensorDictSequential`` still performed the operations. Note that the
 backbone was executed in a vectorized way - not in a loop - which is more efficient.
 
-.. GENERATED FROM PYTHON SOURCE LINES 117-120
+.. GENERATED FROM PYTHON SOURCE LINES 118-121
 
 .. code-block:: default
 
@@ -305,10 +306,11 @@ backbone was executed in a vectorized way - not in a loop - which is more effici
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 121-131
+.. GENERATED FROM PYTHON SOURCE LINES 122-133
 
 Executing diverse tasks in parallel
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 We can parallelize the operations if the common keys-value pairs share the
 same specs (in particular their shape and dtype must match: you can't do the
 following if the observation shapes are different but are pointed to by the
@@ -318,7 +320,7 @@ If ParallelEnv receives a single env making function, it will assume that
 a single task has to be performed. If a list of functions is provided, then
 it will assume that we are in a multi-task setting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 131-169
+.. GENERATED FROM PYTHON SOURCE LINES 133-171
 
 .. code-block:: default
 
@@ -395,11 +397,11 @@ it will assume that we are in a multi-task setting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 170-171
+.. GENERATED FROM PYTHON SOURCE LINES 172-173
 
 Let's pass the output through our network.
 
-.. GENERATED FROM PYTHON SOURCE LINES 171-177
+.. GENERATED FROM PYTHON SOURCE LINES 173-185
 
 .. code-block:: default
 
@@ -408,6 +410,12 @@ Let's pass the output through our network.
     print(tdreset)
     print(tdreset[0])
     print(tdreset[1])  # should be different but all have an "action" key
+
+
+    env.step(tdreset)  # computes actions and execute steps in parallel
+    print(tdreset)
+    print(tdreset[0])
+    print(tdreset[1])  # next_observation has now been written
 
 
 
@@ -446,28 +454,6 @@ Let's pass the output through our network.
         batch_size=torch.Size([]),
         device=cpu,
         is_shared=False)
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 178-184
-
-.. code-block:: default
-
-
-    env.step(tdreset)  # computes actions and execute steps in parallel
-    print(tdreset)
-    print(tdreset[0])
-    print(tdreset[1])  # next_observation has now been written
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
     LazyStackedTensorDict(
         fields={
             action: Tensor(shape=torch.Size([2, 21]), device=cpu, dtype=torch.float32, is_shared=False),
@@ -524,12 +510,12 @@ Let's pass the output through our network.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 185-187
+.. GENERATED FROM PYTHON SOURCE LINES 186-188
 
 Rollout
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^
 
-.. GENERATED FROM PYTHON SOURCE LINES 187-190
+.. GENERATED FROM PYTHON SOURCE LINES 188-191
 
 .. code-block:: default
 
@@ -543,7 +529,7 @@ Rollout
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 191-194
+.. GENERATED FROM PYTHON SOURCE LINES 192-195
 
 .. code-block:: default
 
@@ -578,46 +564,29 @@ Rollout
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 195-197
+.. GENERATED FROM PYTHON SOURCE LINES 196-202
 
 .. code-block:: default
 
 
     td_rollout[0]  # tensordict of the first env: the stand obs is present
 
+    env.close()
+    del env
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
 
 
-    LazyStackedTensorDict(
-        fields={
-            action: Tensor(shape=torch.Size([100, 21]), device=cpu, dtype=torch.float32, is_shared=False),
-            done: Tensor(shape=torch.Size([100, 1]), device=cpu, dtype=torch.bool, is_shared=False),
-            hidden: Tensor(shape=torch.Size([100, 64]), device=cpu, dtype=torch.float32, is_shared=False),
-            next: LazyStackedTensorDict(
-                fields={
-                    observation: Tensor(shape=torch.Size([100, 67]), device=cpu, dtype=torch.float32, is_shared=False),
-                    observation_stand: Tensor(shape=torch.Size([100, 67]), device=cpu, dtype=torch.float32, is_shared=False)},
-                batch_size=torch.Size([100]),
-                device=cpu,
-                is_shared=False),
-            observation: Tensor(shape=torch.Size([100, 67]), device=cpu, dtype=torch.float32, is_shared=False),
-            observation_stand: Tensor(shape=torch.Size([100, 67]), device=cpu, dtype=torch.float32, is_shared=False),
-            reward: Tensor(shape=torch.Size([100, 1]), device=cpu, dtype=torch.float64, is_shared=False)},
-        batch_size=torch.Size([100]),
-        device=cpu,
-        is_shared=False)
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.466 seconds)
+   **Total running time of the script:** ( 1 minutes  7.023 seconds)
+
+**Estimated memory usage:**  11 MB
 
 
 .. _sphx_glr_download_tutorials_multi_task.py:

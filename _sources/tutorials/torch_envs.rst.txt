@@ -194,7 +194,7 @@ uniformly distributed) numbers in that space:
  .. code-block:: none
 
     random action: 
-     tensor([-1.7487])
+     tensor([-1.5460])
 
 
 
@@ -254,7 +254,7 @@ we can just generate a random action:
 
 
 
-    def policy(tensordict):
+    def policy(tensordict, env=env):
         tensordict.set("action", env.action_spec.rand())
         return tensordict
 
@@ -615,7 +615,7 @@ argument that allows the user to quickly ask for image-based environments:
  .. code-block:: none
 
 
-    <matplotlib.image.AxesImage object at 0x7f7ffcd40970>
+    <matplotlib.image.AxesImage object at 0x7faef02d63d0>
 
 
 
@@ -828,7 +828,7 @@ Of course we can also use pixel-based environments:
 .. GENERATED FROM PYTHON SOURCE LINES 268-289
 
 Transforming envs
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^
 It is common to pre-process the output of an environment before having it
 read by the policy or stored in a buffer.
 
@@ -1289,13 +1289,15 @@ be used, such that one can easily keep the chain going given the last seed.
 This is useful when several collectors all contain a ``ParallelEnv``
 instance and we want each of the sub-sub-environments to have a different seed.
 
-.. GENERATED FROM PYTHON SOURCE LINES 459-463
+.. GENERATED FROM PYTHON SOURCE LINES 459-465
 
 .. code-block:: default
 
 
     out_seed = parallel_env.set_seed(10)
     print(out_seed)
+
+    del parallel_env
 
 
 
@@ -1310,7 +1312,7 @@ instance and we want each of the sub-sub-environments to have a different seed.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 464-469
+.. GENERATED FROM PYTHON SOURCE LINES 466-471
 
 Accessing environment attributes
 ---------------------------------
@@ -1318,7 +1320,7 @@ It sometimes occurs that a wrapped environment has an attribute that is of
 interest. First, note that TorchRL environment wrapper constains the toolings
 to access this attribute. Here's an example:
 
-.. GENERATED FROM PYTHON SOURCE LINES 469-472
+.. GENERATED FROM PYTHON SOURCE LINES 471-474
 
 .. code-block:: default
 
@@ -1332,7 +1334,7 @@ to access this attribute. Here's an example:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 473-486
+.. GENERATED FROM PYTHON SOURCE LINES 475-488
 
 .. code-block:: default
 
@@ -1356,7 +1358,7 @@ to access this attribute. Here's an example:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 487-491
+.. GENERATED FROM PYTHON SOURCE LINES 489-493
 
 .. code-block:: default
 
@@ -1373,11 +1375,11 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    'bar_1e78c444-add2-11ed-ba5a-0242ac120002'
+    'bar_c4a6efd8-ae3d-11ed-96f4-0242ac120002'
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 492-502
+.. GENERATED FROM PYTHON SOURCE LINES 494-504
 
 .. code-block:: default
 
@@ -1404,7 +1406,7 @@ to access this attribute. Here's an example:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 503-508
+.. GENERATED FROM PYTHON SOURCE LINES 505-510
 
 .. code-block:: default
 
@@ -1422,11 +1424,11 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7f7ff4748b20>
+    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7faef03495b0>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 509-512
+.. GENERATED FROM PYTHON SOURCE LINES 511-514
 
 .. code-block:: default
 
@@ -1442,15 +1444,15 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    ['bar_21c1c2a4-add2-11ed-93c8-0242ac120002', 'bar_21da097c-add2-11ed-861f-0242ac120002', 'bar_21dce43a-add2-11ed-9552-0242ac120002']
+    ['bar_cc60c8e8-ae3d-11ed-9e29-0242ac120002', 'bar_cc620758-ae3d-11ed-996b-0242ac120002', 'bar_cc63e5dc-ae3d-11ed-ad2d-0242ac120002']
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 513-514
+.. GENERATED FROM PYTHON SOURCE LINES 515-516
 
 Similarly, methods can also be accessed:
 
-.. GENERATED FROM PYTHON SOURCE LINES 514-518
+.. GENERATED FROM PYTHON SOURCE LINES 516-520
 
 .. code-block:: default
 
@@ -1471,12 +1473,13 @@ Similarly, methods can also be accessed:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 519-522
+.. GENERATED FROM PYTHON SOURCE LINES 521-525
 
 .. code-block:: default
 
 
     parallel_env.close()
+    del parallel_env
 
 
 
@@ -1485,20 +1488,19 @@ Similarly, methods can also be accessed:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 523-527
+.. GENERATED FROM PYTHON SOURCE LINES 526-530
 
 kwargs for parallel environments
 ---------------------------------
 One may want to provide kwargs to the various environments. This can achieved
 either at construction time or afterwards:
 
-.. GENERATED FROM PYTHON SOURCE LINES 529-558
+.. GENERATED FROM PYTHON SOURCE LINES 532-561
 
 .. code-block:: default
 
 
-    from torchrl.envs import Compose, ParallelEnv, Resize, ToTensorImage, TransformedEnv
-    from torchrl.envs.libs.gym import GymEnv
+    from torchrl.envs import ParallelEnv
 
 
     def env_make(env_name):
@@ -1522,6 +1524,7 @@ either at construction time or afterwards:
     plt.subplot(122)
     plt.imshow(tensordict[1].get("pixels").permute(1, 2, 0).numpy())
     parallel_env.close()
+    del parallel_env
 
     from matplotlib import pyplot as plt
 
@@ -1537,7 +1540,7 @@ either at construction time or afterwards:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 559-566
+.. GENERATED FROM PYTHON SOURCE LINES 562-569
 
 Transforming parallel environments
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1547,7 +1550,7 @@ One can therefore think carefully about the transform design to leverage the
 device capabilities (e.g. transforms on cuda devices) and vectorizing
 operations on the main process if possible.
 
-.. GENERATED FROM PYTHON SOURCE LINES 566-602
+.. GENERATED FROM PYTHON SOURCE LINES 569-605
 
 .. code-block:: default
 
@@ -1560,7 +1563,6 @@ operations on the main process if possible.
         ToTensorImage,
         TransformedEnv,
     )
-    from torchrl.envs.libs.gym import GymEnv
 
 
     def env_make(env_name):
@@ -1586,6 +1588,7 @@ operations on the main process if possible.
     plt.subplot(122)
     plt.imshow(tensordict[1].get("pixels").permute(1, 2, 0).numpy())
     parallel_env.close()
+    del parallel_env
 
 
 
@@ -1611,7 +1614,7 @@ operations on the main process if possible.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 603-623
+.. GENERATED FROM PYTHON SOURCE LINES 606-626
 
 VecNorm
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1634,7 +1637,7 @@ it with data normalizing given a fixed version of the normalizing constants.
 
 In regular setting, using VecNorm is quite easy:
 
-.. GENERATED FROM PYTHON SOURCE LINES 623-633
+.. GENERATED FROM PYTHON SOURCE LINES 626-636
 
 .. code-block:: default
 
@@ -1656,13 +1659,13 @@ In regular setting, using VecNorm is quite easy:
 
  .. code-block:: none
 
-    mean: : tensor([0.4962, 0.2879, 0.2494])
-    std: : tensor([1.5053, 1.2934, 1.3529])
+    mean: : tensor([-0.0262, -0.0034, -0.2801])
+    std: : tensor([1.0704, 1.0708, 1.0325])
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 634-640
+.. GENERATED FROM PYTHON SOURCE LINES 637-643
 
 In **parallel envs** things are slightly more complicated, as we need to
 share the running statistics amongst the processes. We created a class
@@ -1671,7 +1674,7 @@ method, retrieving tensordicts to share amongst processes in the environment
 class, and pointing each process to the right common, shared tensordict
 once created:
 
-.. GENERATED FROM PYTHON SOURCE LINES 640-657
+.. GENERATED FROM PYTHON SOURCE LINES 643-660
 
 .. code-block:: default
 
@@ -1702,26 +1705,26 @@ once created:
 
     tensordict:  TensorDict(
         fields={
-            action: Tensor(shape=torch.Size([3, 5, 2]), device=cpu, dtype=torch.int64, is_shared=False),
-            done: Tensor(shape=torch.Size([3, 5, 1]), device=cpu, dtype=torch.bool, is_shared=False),
+            action: Tensor(shape=torch.Size([3, 4, 2]), device=cpu, dtype=torch.int64, is_shared=False),
+            done: Tensor(shape=torch.Size([3, 4, 1]), device=cpu, dtype=torch.bool, is_shared=False),
             next: TensorDict(
                 fields={
-                    observation: Tensor(shape=torch.Size([3, 5, 4]), device=cpu, dtype=torch.float32, is_shared=False)},
-                batch_size=torch.Size([3, 5]),
+                    observation: Tensor(shape=torch.Size([3, 4, 4]), device=cpu, dtype=torch.float32, is_shared=False)},
+                batch_size=torch.Size([3, 4]),
                 device=cpu,
                 is_shared=False),
-            observation: Tensor(shape=torch.Size([3, 5, 4]), device=cpu, dtype=torch.float32, is_shared=False),
-            reward: Tensor(shape=torch.Size([3, 5, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
-        batch_size=torch.Size([3, 5]),
+            observation: Tensor(shape=torch.Size([3, 4, 4]), device=cpu, dtype=torch.float32, is_shared=False),
+            reward: Tensor(shape=torch.Size([3, 4, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
+        batch_size=torch.Size([3, 4]),
         device=cpu,
         is_shared=False)
-    mean: : tensor([ 0.1578, -0.2854, -0.2863])
-    std: : tensor([1.1726, 1.1133, 1.2483])
+    mean: : tensor([-0.1512,  0.0222, -0.2197])
+    std: : tensor([1.3516, 1.2781, 1.3307])
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 658-663
+.. GENERATED FROM PYTHON SOURCE LINES 661-666
 
 The count is slightly higher than the number of steps (since we
 did not use any decay). The difference between the two is due to the fact
@@ -1729,7 +1732,7 @@ that ``ParallelEnv`` creates a dummy environment to initialize the shared
 ``TensorDict`` that is used to collect data from the dispached environments.
 This small difference will usually be absored throughout training.
 
-.. GENERATED FROM PYTHON SOURCE LINES 663-670
+.. GENERATED FROM PYTHON SOURCE LINES 666-675
 
 .. code-block:: default
 
@@ -1740,6 +1743,8 @@ This small difference will usually be absored throughout training.
     )
 
     env.close()
+    del env
+
 
 
 
@@ -1748,7 +1753,7 @@ This small difference will usually be absored throughout training.
 
  .. code-block:: none
 
-    update counts:  tensor([18.])
+    update counts:  tensor([27.])
 
 
 
@@ -1756,7 +1761,9 @@ This small difference will usually be absored throughout training.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  26.489 seconds)
+   **Total running time of the script:** ( 4 minutes  2.031 seconds)
+
+**Estimated memory usage:**  16 MB
 
 
 .. _sphx_glr_download_tutorials_torch_envs.py:

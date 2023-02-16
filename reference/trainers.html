@@ -258,10 +258,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/tensordict_tutorial.html">TensorDict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/torch_envs.html">TorchRL envs</a></li>
@@ -382,7 +383,41 @@ More particular cases, such as meta-RL algorithms may have training schemes that
 <p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">trainer.train()</span></code> method can be sketched as follows:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Trainer loops</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">collector</span><span class="p">:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>        <span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">collector</span><span class="p">:</span>
+        <span class="o">...</span>     <span class="n">batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_batch_hook</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1"># &quot;batch_process&quot;</span>
+        <span class="o">...</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_pre_steps_log_hook</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1"># &quot;pre_steps_log&quot;</span>
+        <span class="o">...</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_pre_optim_hook</span><span class="p">()</span>  <span class="c1"># &quot;pre_optim_steps&quot;</span>
+        <span class="o">...</span>     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optim_steps_per_batch</span><span class="p">):</span>
+        <span class="o">...</span>         <span class="n">sub_batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_optim_batch_hook</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1"># &quot;process_optim_batch&quot;</span>
+        <span class="o">...</span>         <span class="n">losses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_module</span><span class="p">(</span><span class="n">sub_batch</span><span class="p">)</span>
+        <span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_post_loss_hook</span><span class="p">(</span><span class="n">sub_batch</span><span class="p">)</span>  <span class="c1"># &quot;post_loss&quot;</span>
+        <span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_post_optim_hook</span><span class="p">()</span>  <span class="c1"># &quot;post_optim&quot;</span>
+        <span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_post_optim_log</span><span class="p">(</span><span class="n">sub_batch</span><span class="p">)</span>  <span class="c1"># &quot;post_optim_log&quot;</span>
+        <span class="o">...</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_post_steps_hook</span><span class="p">()</span>  <span class="c1"># &quot;post_steps&quot;</span>
+        <span class="o">...</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_post_steps_log_hook</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1">#  &quot;post_steps_log&quot;</span>
+
+<span class="n">There</span> <span class="n">are</span> <span class="mi">10</span> <span class="n">hooks</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">trainer</span> <span class="n">loop</span><span class="p">:</span>
+
+        <span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">collector</span><span class="p">:</span>
+        <span class="o">...</span>     <span class="n">batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_batch_hook</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1"># &quot;batch_process&quot;</span>
+        <span class="o">...</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_pre_steps_log_hook</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1"># &quot;pre_steps_log&quot;</span>
+        <span class="o">...</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_pre_optim_hook</span><span class="p">()</span>  <span class="c1"># &quot;pre_optim_steps&quot;</span>
+        <span class="o">...</span>     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optim_steps_per_batch</span><span class="p">):</span>
+        <span class="o">...</span>         <span class="n">sub_batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_optim_batch_hook</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1"># &quot;process_optim_batch&quot;</span>
+        <span class="o">...</span>         <span class="n">losses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_module</span><span class="p">(</span><span class="n">sub_batch</span><span class="p">)</span>
+        <span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_post_loss_hook</span><span class="p">(</span><span class="n">sub_batch</span><span class="p">)</span>  <span class="c1"># &quot;post_loss&quot;</span>
+        <span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+        <span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_post_optim_hook</span><span class="p">()</span>  <span class="c1"># &quot;post_optim&quot;</span>
+        <span class="o">...</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_post_optim_log</span><span class="p">(</span><span class="n">sub_batch</span><span class="p">)</span>  <span class="c1"># &quot;post_optim_log&quot;</span>
+        <span class="o">...</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_post_steps_hook</span><span class="p">()</span>  <span class="c1"># &quot;post_steps&quot;</span>
+        <span class="o">...</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_post_steps_log_hook</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1">#  &quot;post_steps_log&quot;</span>
+
+<span class="n">There</span> <span class="n">are</span> <span class="mi">10</span> <span class="n">hooks</span> <span class="n">that</span> <span class="n">can</span> <span class="n">be</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">trainer</span> <span class="n">loop</span><span class="p">:</span>
+
+     <span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">batch</span> <span class="ow">in</span> <span class="n">collector</span><span class="p">:</span>
      <span class="o">...</span>     <span class="n">batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_batch_hook</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1"># &quot;batch_process&quot;</span>
      <span class="o">...</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_pre_steps_log_hook</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>  <span class="c1"># &quot;pre_steps_log&quot;</span>
      <span class="o">...</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_pre_optim_hook</span><span class="p">()</span>  <span class="c1"># &quot;pre_optim_steps&quot;</span>
@@ -421,7 +456,7 @@ or update the priority of the replay buffer using <code class="xref py py-obj do
 of operation hooks. They are data-independent (they do not require a <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDict</span></code>
 input), they are just supposed to be executed once at every iteration (or every N iterations).</p></li>
 </ul>
-<p>The hooks provided by TorchRL usually inherit from a common abstract class <code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainerHookBase</span></code>,
+<p>The hooks provided by TorchRL usually inherit from a common abstract class <a class="reference internal" href="generated/torchrl.trainers.TrainerHookBase.html#torchrl.trainers.TrainerHookBase" title="torchrl.trainers.TrainerHookBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainerHookBase</span></code></a>,
 and all implement three base methods: a <code class="xref py py-obj docutils literal notranslate"><span class="pre">state_dict</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">load_state_dict</span></code> method for
 checkpointing and a <code class="xref py py-obj docutils literal notranslate"><span class="pre">register</span></code> method that registers the hook at the default value in the
 trainer. This method takes a trainer and a module name as input. For instance, the following logging
@@ -521,7 +556,10 @@ only is also a perfectly valid use.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.Trainer.html#torchrl.trainers.Trainer" title="torchrl.trainers.Trainer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Trainer</span></code></a>(*args, **kwargs)</p></td>
 <td><p>A generic Trainer class.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.UpdateWeights.html#torchrl.trainers.UpdateWeights" title="torchrl.trainers.UpdateWeights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateWeights</span></code></a>(collector, update_weights_interval)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.trainers.TrainerHookBase.html#torchrl.trainers.TrainerHookBase" title="torchrl.trainers.TrainerHookBase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TrainerHookBase</span></code></a>()</p></td>
+<td><p>An abstract hooking class for torchrl Trainer class.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.trainers.UpdateWeights.html#torchrl.trainers.UpdateWeights" title="torchrl.trainers.UpdateWeights"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UpdateWeights</span></code></a>(collector, update_weights_interval)</p></td>
 <td><p>A collector weights update hook class.</p></td>
 </tr>
 </tbody>

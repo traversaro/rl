@@ -255,10 +255,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torch_envs.html">TorchRL envs</a></li>
@@ -1058,7 +1059,8 @@
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">is_closed</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span></div>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span>
+        <span class="k">return</span></div>
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1420,7 +1422,6 @@
         <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">send</span><span class="p">((</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;close&quot;</span><span class="p">))</span>
 
-        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span><span class="p">):</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pipes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">recv</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">msg</span> <span class="o">!=</span> <span class="s2">&quot;closed&quot;</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2"> but expected &#39;close&#39;&quot;</span><span class="p">)</span>
@@ -1989,7 +1990,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;worker </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> received </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;poll failed, j=</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;poll failed, j=</span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">, worker=</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="c1"># default is &quot;continue&quot; (after first iteration)</span>
             <span class="c1"># this is expected to happen if queue_out reached the timeout, but no new msg was waiting in the pipe</span>
             <span class="c1"># in that case, the main process probably expects the worker to continue collect data</span>
@@ -2006,7 +2007,10 @@
                 <span class="c1"># this means that our process has been waiting for a command from main in vain, while main was not</span>
                 <span class="c1"># receiving data.</span>
                 <span class="c1"># This will occur if main is busy doing something else (e.g. computing loss etc).</span>
+
                 <span class="n">counter</span> <span class="o">+=</span> <span class="n">_timeout</span>
+                <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;worker </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> has counter </span><span class="si">{</span><span class="n">counter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">counter</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="n">_MAX_IDLE_COUNT</span> <span class="o">*</span> <span class="n">_TIMEOUT</span><span class="p">):</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                         <span class="sa">f</span><span class="s2">&quot;This process waited for </span><span class="si">{</span><span class="n">counter</span><span class="si">}</span><span class="s2"> seconds &quot;</span>

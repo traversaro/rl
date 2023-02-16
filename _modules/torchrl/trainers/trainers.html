@@ -255,10 +255,11 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torch_envs.html">TorchRL envs</a></li>
@@ -424,7 +425,7 @@
 <span class="n">TYPE_DESCR</span> <span class="o">=</span> <span class="p">{</span><span class="nb">float</span><span class="p">:</span> <span class="s2">&quot;4.4f&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
 
 
-<span class="k">class</span> <span class="nc">TrainerHookBase</span><span class="p">:</span>
+<div class="viewcode-block" id="TrainerHookBase"><a class="viewcode-back" href="../../../reference/generated/torchrl.trainers.TrainerHookBase.html#torchrl.trainers.TrainerHookBase">[docs]</a><span class="k">class</span> <span class="nc">TrainerHookBase</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An abstract hooking class for torchrl Trainer class.&quot;&quot;&quot;</span>
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
@@ -437,7 +438,7 @@
 
     <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
     <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trainer</span><span class="p">:</span> <span class="n">Trainer</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
 <div class="viewcode-block" id="Trainer"><a class="viewcode-back" href="../../../reference/generated/torchrl.trainers.Trainer.html#torchrl.trainers.Trainer">[docs]</a><span class="k">class</span> <span class="nc">Trainer</span><span class="p">:</span>
