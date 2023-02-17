@@ -194,7 +194,7 @@ uniformly distributed) numbers in that space:
  .. code-block:: none
 
     random action: 
-     tensor([-1.5460])
+     tensor([-1.7475])
 
 
 
@@ -615,7 +615,7 @@ argument that allows the user to quickly ask for image-based environments:
  .. code-block:: none
 
 
-    <matplotlib.image.AxesImage object at 0x7faef02d63d0>
+    <matplotlib.image.AxesImage object at 0x7fc8ac474190>
 
 
 
@@ -1375,7 +1375,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    'bar_c4a6efd8-ae3d-11ed-96f4-0242ac120002'
+    'bar_9c4e128e-aecc-11ed-9304-0242ac120002'
 
 
 
@@ -1424,7 +1424,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7faef03495b0>
+    <torchrl.envs.vec_env._dispatch_caller_parallel object at 0x7fc8ac1539d0>
 
 
 
@@ -1444,7 +1444,7 @@ to access this attribute. Here's an example:
  .. code-block:: none
 
 
-    ['bar_cc60c8e8-ae3d-11ed-9e29-0242ac120002', 'bar_cc620758-ae3d-11ed-996b-0242ac120002', 'bar_cc63e5dc-ae3d-11ed-ad2d-0242ac120002']
+    ['bar_a431a952-aecc-11ed-b5f7-0242ac120002', 'bar_a4311942-aecc-11ed-a741-0242ac120002', 'bar_a433cf3e-aecc-11ed-b3d1-0242ac120002']
 
 
 
@@ -1659,8 +1659,8 @@ In regular setting, using VecNorm is quite easy:
 
  .. code-block:: none
 
-    mean: : tensor([-0.0262, -0.0034, -0.2801])
-    std: : tensor([1.0704, 1.0708, 1.0325])
+    mean: : tensor([-0.1172,  0.0185,  0.0242])
+    std: : tensor([1.0962, 1.0964, 1.1337])
 
 
 
@@ -1705,21 +1705,21 @@ once created:
 
     tensordict:  TensorDict(
         fields={
-            action: Tensor(shape=torch.Size([3, 4, 2]), device=cpu, dtype=torch.int64, is_shared=False),
-            done: Tensor(shape=torch.Size([3, 4, 1]), device=cpu, dtype=torch.bool, is_shared=False),
+            action: Tensor(shape=torch.Size([3, 5, 2]), device=cpu, dtype=torch.int64, is_shared=False),
+            done: Tensor(shape=torch.Size([3, 5, 1]), device=cpu, dtype=torch.bool, is_shared=False),
             next: TensorDict(
                 fields={
-                    observation: Tensor(shape=torch.Size([3, 4, 4]), device=cpu, dtype=torch.float32, is_shared=False)},
-                batch_size=torch.Size([3, 4]),
+                    observation: Tensor(shape=torch.Size([3, 5, 4]), device=cpu, dtype=torch.float32, is_shared=False)},
+                batch_size=torch.Size([3, 5]),
                 device=cpu,
                 is_shared=False),
-            observation: Tensor(shape=torch.Size([3, 4, 4]), device=cpu, dtype=torch.float32, is_shared=False),
-            reward: Tensor(shape=torch.Size([3, 4, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
-        batch_size=torch.Size([3, 4]),
+            observation: Tensor(shape=torch.Size([3, 5, 4]), device=cpu, dtype=torch.float32, is_shared=False),
+            reward: Tensor(shape=torch.Size([3, 5, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
+        batch_size=torch.Size([3, 5]),
         device=cpu,
         is_shared=False)
-    mean: : tensor([-0.1512,  0.0222, -0.2197])
-    std: : tensor([1.3516, 1.2781, 1.3307])
+    mean: : tensor([-0.2545, -0.2577,  0.0227])
+    std: : tensor([1.3868, 1.5721, 1.3486])
 
 
 
@@ -1753,7 +1753,7 @@ This small difference will usually be absored throughout training.
 
  .. code-block:: none
 
-    update counts:  tensor([27.])
+    update counts:  tensor([33.])
 
 
 
@@ -1761,7 +1761,7 @@ This small difference will usually be absored throughout training.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  2.031 seconds)
+   **Total running time of the script:** ( 4 minutes  7.754 seconds)
 
 **Estimated memory usage:**  16 MB
 

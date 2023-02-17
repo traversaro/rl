@@ -259,9 +259,7 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pendulum.html">Writing your environment with TorchRL</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tensordict_tutorial.html">TensorDict</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pendulum.html">Pendulum: Writing your environment and transforms with TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
@@ -1182,7 +1180,7 @@ async settings, and at the end of it in sync settings).</p></li>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/2500 [00:00&lt;?, ?it/s]
- 20%|##        | 500/2500 [00:00&lt;00:03, 576.83it/s]Creating a MemmapStorage...
+ 20%|##        | 500/2500 [00:00&lt;00:03, 581.87it/s]Creating a MemmapStorage...
 The storage is being created:
         action: /tmp/action.memmap, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
         done: /tmp/done.memmap, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
@@ -1199,15 +1197,15 @@ The storage is being created:
         (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/collector/traj_ids.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
         (&#39;next&#39;, &#39;observation_vector&#39;): /tmp/next/observation_vector.memmap, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
 
-reward: -0.4567 (r0 = -2.7129), reward eval: reward: -1.3348:  20%|##        | 500/2500 [00:03&lt;00:03, 576.83it/s]
-reward: -0.4567 (r0 = -2.7129), reward eval: reward: -1.3348:  40%|####      | 1000/2500 [00:03&lt;00:05, 272.60it/s]
-reward: -0.4025 (r0 = -2.7129), reward eval: reward: -1.3348:  40%|####      | 1000/2500 [00:04&lt;00:05, 272.60it/s]
-reward: -0.4025 (r0 = -2.7129), reward eval: reward: -1.3348:  60%|######    | 1500/2500 [00:05&lt;00:03, 256.62it/s]
-reward: -2.8219 (r0 = -2.7129), reward eval: reward: -1.3348:  60%|######    | 1500/2500 [00:06&lt;00:03, 256.62it/s]
-reward: -2.8219 (r0 = -2.7129), reward eval: reward: -1.3348:  80%|########  | 2000/2500 [00:06&lt;00:01, 316.06it/s]
-reward: -2.9432 (r0 = -2.7129), reward eval: reward: -1.3348:  80%|########  | 2000/2500 [00:07&lt;00:01, 316.06it/s]
-reward: -2.9432 (r0 = -2.7129), reward eval: reward: -1.3348: 100%|##########| 2500/2500 [00:08&lt;00:00, 317.05it/s]
-reward: -3.1043 (r0 = -2.7129), reward eval: reward: -1.3348: 100%|##########| 2500/2500 [00:09&lt;00:00, 317.05it/s]
+reward: -0.4567 (r0 = -2.7129), reward eval: reward: -1.3351:  20%|##        | 500/2500 [00:03&lt;00:03, 581.87it/s]
+reward: -0.4567 (r0 = -2.7129), reward eval: reward: -1.3351:  40%|####      | 1000/2500 [00:03&lt;00:05, 261.13it/s]
+reward: -0.4025 (r0 = -2.7129), reward eval: reward: -1.3351:  40%|####      | 1000/2500 [00:05&lt;00:05, 261.13it/s]
+reward: -0.4025 (r0 = -2.7129), reward eval: reward: -1.3351:  60%|######    | 1500/2500 [00:06&lt;00:04, 206.94it/s]
+reward: -2.8492 (r0 = -2.7129), reward eval: reward: -1.3351:  60%|######    | 1500/2500 [00:07&lt;00:04, 206.94it/s]
+reward: -2.8492 (r0 = -2.7129), reward eval: reward: -1.3351:  80%|########  | 2000/2500 [00:07&lt;00:01, 259.19it/s]
+reward: -3.0198 (r0 = -2.7129), reward eval: reward: -1.3351:  80%|########  | 2000/2500 [00:08&lt;00:01, 259.19it/s]
+reward: -3.0198 (r0 = -2.7129), reward eval: reward: -1.3351: 100%|##########| 2500/2500 [00:09&lt;00:00, 256.64it/s]
+reward: -3.0767 (r0 = -2.7129), reward eval: reward: -1.3351: 100%|##########| 2500/2500 [00:10&lt;00:00, 256.64it/s]
 </pre></div>
 </div>
 </section>
@@ -1325,7 +1323,7 @@ the new batch size for trajectories is 4
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>reward: -3.1043 (r0 = -2.7129), reward eval: reward: -1.3348: 100%|##########| 2500/2500 [00:20&lt;00:00, 317.05it/s]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>reward: -3.0767 (r0 = -2.7129), reward eval: reward: -1.3351: 100%|##########| 2500/2500 [00:26&lt;00:00, 256.64it/s]
 </pre></div>
 </div>
 <p>The training loop needs to be slightly adapted.
@@ -1494,8 +1492,8 @@ use a greater value for <code class="docutils literal notranslate"><span class="
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;TD-labmda DDPG results&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_coding_ddpg_002.png" srcset="../_images/sphx_glr_coding_ddpg_002.png" alt="TD-labmda DDPG results" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  19.345 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  23 MB</p>
+<img src="../_images/sphx_glr_coding_ddpg_002.png" srcset="../_images/sphx_glr_coding_ddpg_002.png" alt="TD-labmda DDPG results" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  29.979 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  24 MB</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-ddpg-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/0dfdb6ef4cc9782fdb39c4a9d0900d37/coding_ddpg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_ddpg.py</span></code></a></p>

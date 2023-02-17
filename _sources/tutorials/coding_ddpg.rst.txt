@@ -1205,7 +1205,7 @@ Some notes about the following training loop:
 
  .. code-block:: none
 
-      0%|          | 0/2500 [00:00<?, ?it/s]     20%|##        | 500/2500 [00:00<00:03, 576.83it/s]Creating a MemmapStorage...
+      0%|          | 0/2500 [00:00<?, ?it/s]     20%|##        | 500/2500 [00:00<00:03, 581.87it/s]Creating a MemmapStorage...
     The storage is being created: 
             action: /tmp/action.memmap, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
             done: /tmp/done.memmap, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
@@ -1221,7 +1221,7 @@ Some notes about the following training loop:
             ('collector', 'step_count'): /tmp/collector/step_count.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
             ('collector', 'traj_ids'): /tmp/collector/traj_ids.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
             ('next', 'observation_vector'): /tmp/next/observation_vector.memmap, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
-    reward: -0.4567 (r0 = -2.7129), reward eval: reward: -1.3348:  20%|##        | 500/2500 [00:03<00:03, 576.83it/s]    reward: -0.4567 (r0 = -2.7129), reward eval: reward: -1.3348:  40%|####      | 1000/2500 [00:03<00:05, 272.60it/s]    reward: -0.4025 (r0 = -2.7129), reward eval: reward: -1.3348:  40%|####      | 1000/2500 [00:04<00:05, 272.60it/s]    reward: -0.4025 (r0 = -2.7129), reward eval: reward: -1.3348:  60%|######    | 1500/2500 [00:05<00:03, 256.62it/s]    reward: -2.8219 (r0 = -2.7129), reward eval: reward: -1.3348:  60%|######    | 1500/2500 [00:06<00:03, 256.62it/s]    reward: -2.8219 (r0 = -2.7129), reward eval: reward: -1.3348:  80%|########  | 2000/2500 [00:06<00:01, 316.06it/s]    reward: -2.9432 (r0 = -2.7129), reward eval: reward: -1.3348:  80%|########  | 2000/2500 [00:07<00:01, 316.06it/s]    reward: -2.9432 (r0 = -2.7129), reward eval: reward: -1.3348: 100%|##########| 2500/2500 [00:08<00:00, 317.05it/s]    reward: -3.1043 (r0 = -2.7129), reward eval: reward: -1.3348: 100%|##########| 2500/2500 [00:09<00:00, 317.05it/s]
+    reward: -0.4567 (r0 = -2.7129), reward eval: reward: -1.3351:  20%|##        | 500/2500 [00:03<00:03, 581.87it/s]    reward: -0.4567 (r0 = -2.7129), reward eval: reward: -1.3351:  40%|####      | 1000/2500 [00:03<00:05, 261.13it/s]    reward: -0.4025 (r0 = -2.7129), reward eval: reward: -1.3351:  40%|####      | 1000/2500 [00:05<00:05, 261.13it/s]    reward: -0.4025 (r0 = -2.7129), reward eval: reward: -1.3351:  60%|######    | 1500/2500 [00:06<00:04, 206.94it/s]    reward: -2.8492 (r0 = -2.7129), reward eval: reward: -1.3351:  60%|######    | 1500/2500 [00:07<00:04, 206.94it/s]    reward: -2.8492 (r0 = -2.7129), reward eval: reward: -1.3351:  80%|########  | 2000/2500 [00:07<00:01, 259.19it/s]    reward: -3.0198 (r0 = -2.7129), reward eval: reward: -1.3351:  80%|########  | 2000/2500 [00:08<00:01, 259.19it/s]    reward: -3.0198 (r0 = -2.7129), reward eval: reward: -1.3351: 100%|##########| 2500/2500 [00:09<00:00, 256.64it/s]    reward: -3.0767 (r0 = -2.7129), reward eval: reward: -1.3351: 100%|##########| 2500/2500 [00:10<00:00, 256.64it/s]
 
 
 
@@ -1395,7 +1395,7 @@ The following code is identical to the initialization we made earlier:
 
  .. code-block:: none
 
-    reward: -3.1043 (r0 = -2.7129), reward eval: reward: -1.3348: 100%|##########| 2500/2500 [00:20<00:00, 317.05it/s]
+    reward: -3.0767 (r0 = -2.7129), reward eval: reward: -1.3351: 100%|##########| 2500/2500 [00:26<00:00, 256.64it/s]
 
 
 
@@ -1639,9 +1639,9 @@ use a greater value for ``total_frames`` e.g. 1000000.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  19.345 seconds)
+   **Total running time of the script:** ( 2 minutes  29.979 seconds)
 
-**Estimated memory usage:**  23 MB
+**Estimated memory usage:**  24 MB
 
 
 .. _sphx_glr_download_tutorials_coding_ddpg.py:
