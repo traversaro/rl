@@ -19,51 +19,30 @@
 
 
 Coding a pixel-based DQN using TorchRL
-======================================
-**Author**: `Vincent Moens <https://github.com/vmoens>`_
+=======================================
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-67
+.. GENERATED FROM PYTHON SOURCE LINES 8-44
 
 This tutorial will guide you through the steps to code DQN to solve the
 CartPole task from scratch. DQN
 (`Deep Q-Learning <https://www.cs.toronto.edu/~vmnih/docs/dqn.pdf>`_) was
-the founding work in deep reinforcement learning.
-On a high level, the algorithm is quite simple: Q-learning consists in learning a table of
-state-action values in such a way that, when encountering any particular state,
+the founding work in deep reinforcement learning. On a high level, the
+algorithm is quite simple: Q-learning consists in learning a table of
+state-action values in such a way that, when facing any particular state,
 we know which action to pick just by searching for the action with the
 highest value. This simple setting requires the actions and states to be
-discrete, otherwise a lookup table cannot be built.
-
-DQN uses a neural network that encodes a map from the state-action space to
-a value (scalar) space, which amortizes the cost of storing and exploring all
-the possible state-action combinations: if a state has not been seen in the
-past, we can still pass it in conjunction with the various actions available
-through our neural network and get an interpolated value for each of the
+discretizable. DQN uses a neural network that maps state-actions pairs to
+a certain value, which amortizes the cost of storing and exploring all the
+possible states: if a state has not been seen in the past, we can still pass
+it through our neural network and get an interpolated value for each of the
 actions available.
-
-We will solve the classic control problem of the cart pole. From the
-Gymnasium doc from where this environment is retrieved:
-
-| A pole is attached by an un-actuated joint to a cart, which moves along a
-| frictionless track. The pendulum is placed upright on the cart and the goal
-| is to balance the pole by applying forces in the left and right direction
-| on the cart.
-
-.. figure:: /_static/img/cartpole_demo.gif
-   :alt: Cart Pole
-
-**Prerequisites**: We encourage you to get familiar with torchrl through the
-`PPO tutorial <https://pytorch.org/rl/tutorials/coding_ppo.html>`_ first.
-This tutorial is more complex and full-fleshed, but it may be .
 
 In this tutorial, you will learn:
 
 - how to build an environment in TorchRL, including transforms (e.g. data
   normalization, frame concatenation, resizing and turning to grayscale)
-  and parallel execution. Unlike what we did in the
-  `DDPG tutorial <https://pytorch.org/rl/tutorials/coding_ddpg.html>`_, we
-  will normalize the pixels and not the state vector.
-- how to design a QValue actor, i.e. an actor that estimates the action
+  and parallel execution;
+- how to design a QValue actor, i.e. an actor that esitmates the action
   values and picks up the action with the highest estimated return;
 - how to collect data from your environment efficiently and store them
   in a replay buffer;
@@ -73,8 +52,7 @@ In this tutorial, you will learn:
 - and finally how to evaluate your model.
 
 This tutorial assumes the reader is familiar with some of TorchRL
-primitives, such as :class:`tensordict.TensorDict` and
-:class:`tensordict.TensorDictModules`, although it
+primitives, such as ``TensorDict`` and ``TensorDictModules``, although it
 should be sufficiently transparent to be understood without a deep
 understanding of these classes.
 
@@ -82,7 +60,7 @@ We do not aim at giving a SOTA implementation of the algorithm, but rather
 to provide a high-level illustration of TorchRL features in the context
 of this algorithm.
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-107
+.. GENERATED FROM PYTHON SOURCE LINES 44-85
 
 .. code-block:: default
 
@@ -91,13 +69,14 @@ of this algorithm.
     import torch
     import tqdm
     from functorch import vmap
+    from IPython import display
     from matplotlib import pyplot as plt
     from tensordict import TensorDict
     from tensordict.nn import get_functional
     from torch import nn
     from torchrl.collectors import MultiaSyncDataCollector
     from torchrl.data import LazyMemmapStorage, TensorDictReplayBuffer
-    from torchrl.envs import EnvCreator, ParallelEnv, RewardScaling
+    from torchrl.envs import EnvCreator, ParallelEnv
     from torchrl.envs.libs.gym import GymEnv
     from torchrl.envs.transforms import (
         CatFrames,
@@ -133,242 +112,58 @@ of this algorithm.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-120
+.. GENERATED FROM PYTHON SOURCE LINES 91-96
 
 Hyperparameters
----------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Let's start with our hyperparameters. This is a totally arbitrary list of
+hyperparams that we found to work well in practice. Hopefully the performance
+of the algorithm should not be too sentitive to slight variations of these.
 
-Let's start with our hyperparameters. The following setting should work well
-in practice, and the performance of the algorithm should hopefully not be
-too sensitive to slight variations of these.
-
-.. GENERATED FROM PYTHON SOURCE LINES 120-123
-
-.. code-block:: default
-
-
-    device = "cuda:0" if torch.cuda.device_count() > 0 else "cpu"
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 124-126
-
-Optimizer
-^^^^^^^^^
-
-.. GENERATED FROM PYTHON SOURCE LINES 126-134
+.. GENERATED FROM PYTHON SOURCE LINES 96-137
 
 .. code-block:: default
 
+
+    # hyperparams
 
     # the learning rate of the optimizer
     lr = 2e-3
     # the beta parameters of Adam
     betas = (0.9, 0.999)
-    # Optimization steps per batch collected (aka UPD or updates per data)
-    n_optim = 8
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 135-137
-
-DQN parameters
-^^^^^^^^^^^^^^
-
-.. GENERATED FROM PYTHON SOURCE LINES 139-140
-
-gamma decay factor
-
-.. GENERATED FROM PYTHON SOURCE LINES 140-142
-
-.. code-block:: default
-
+    # gamma decay factor
     gamma = 0.99
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 143-144
-
-lambda decay factor (see second the part with TD(:math:`\lambda`)
-
-.. GENERATED FROM PYTHON SOURCE LINES 144-146
-
-.. code-block:: default
-
+    # lambda decay factor (see second the part with TD(lambda)
     lmbda = 0.95
+    # total frames collected in the environment. In other implementations, the user defines a maximum number of episodes.
+    # This is harder to do with our data collectors since they return batches of N collected frames, where N is a constant.
+    # However, one can easily get the same restriction on number of episodes by breaking the training loop when a certain number
+    # episodes has been collected.
+    total_frames = 500
+    # Random frames used to initialize the replay buffer.
+    init_random_frames = 100
+    # Frames in each batch collected.
+    frames_per_batch = 32
+    # Optimization steps per batch collected
+    n_optim = 4
+    # Frames sampled from the replay buffer at each optimization step
+    batch_size = 32
+    # Size of the replay buffer in terms of frames
+    buffer_size = min(total_frames, 100000)
+    # Number of environments run in parallel in each data collector
+    n_workers = 1
 
+    device = "cuda:0" if torch.cuda.device_count() > 0 else "cpu"
 
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 147-150
-
-Smooth target network update decay parameter.
-This loosely corresponds to a 1/(1-tau) interval with hard target network
-update
-
-.. GENERATED FROM PYTHON SOURCE LINES 150-152
-
-.. code-block:: default
-
+    # Smooth target network update decay parameter. This loosely corresponds to a 1/(1-tau) interval with hard target network update
     tau = 0.005
 
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 153-164
-
-Data collection and replay buffer
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Values to be used for proper training have been commented.
-
-Total frames collected in the environment. In other implementations, the
-user defines a maximum number of episodes.
-This is harder to do with our data collectors since they return batches
-of N collected frames, where N is a constant.
-However, one can easily get the same restriction on number of episodes by
-breaking the training loop when a certain number
-episodes has been collected.
-
-.. GENERATED FROM PYTHON SOURCE LINES 164-166
-
-.. code-block:: default
-
-    total_frames = 5000  # 500000
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 167-168
-
-Random frames used to initialize the replay buffer.
-
-.. GENERATED FROM PYTHON SOURCE LINES 168-170
-
-.. code-block:: default
-
-    init_random_frames = 100  # 1000
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 171-172
-
-Frames in each batch collected.
-
-.. GENERATED FROM PYTHON SOURCE LINES 172-174
-
-.. code-block:: default
-
-    frames_per_batch = 32  # 128
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 175-176
-
-Frames sampled from the replay buffer at each optimization step
-
-.. GENERATED FROM PYTHON SOURCE LINES 176-178
-
-.. code-block:: default
-
-    batch_size = 32  # 256
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 179-180
-
-Size of the replay buffer in terms of frames
-
-.. GENERATED FROM PYTHON SOURCE LINES 180-182
-
-.. code-block:: default
-
-    buffer_size = min(total_frames, 100000)
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 183-184
-
-Number of environments run in parallel in each data collector
-
-.. GENERATED FROM PYTHON SOURCE LINES 184-188
-
-.. code-block:: default
-
-    num_workers = 2  # 8
-    num_collectors = 2  # 4
-
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 189-196
-
-Environment and exploration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-We set the initial and final value of the epsilon factor in Epsilon-greedy
-exploration.
-Since our policy is deterministic, exploration is crucial: without it, the
-only source of randomness would be the environment reset.
-
-.. GENERATED FROM PYTHON SOURCE LINES 196-200
-
-.. code-block:: default
-
-
+    # Initial and final value of the epsilon factor in Epsilon-greedy exploration (notice that since our policy is deterministic exploration is crucial)
     eps_greedy_val = 0.1
-    eps_greedy_val_env = 0.005
+    eps_greedy_val_env = 0.05
+
+    # To speed up learning, we set the bias of the last layer of our value network to a predefined value
+    init_bias = 20.0
 
 
 
@@ -377,74 +172,35 @@ only source of randomness would be the environment reset.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 201-203
-
-To speed up learning, we set the bias of the last layer of our value network
-to a predefined value (this is not mandatory)
-
-.. GENERATED FROM PYTHON SOURCE LINES 203-205
-
-.. code-block:: default
-
-    init_bias = 2.0
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 206-241
+.. GENERATED FROM PYTHON SOURCE LINES 138-153
 
 **Note**: for fast rendering of the tutorial ``total_frames`` hyperparameter
 was set to a very low number. To get a reasonable performance, use a greater
 value e.g. 500000
 
 Building the environment
-------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Our environment builder has three arguments:
 
-Our environment builder has two arguments:
-
-- ``parallel``: determines whether multiple environments have to be run in
-  parallel. We stack the transforms after the
-  :class:`torchrl.envs.ParallelEnv` to take advantage
+- parallel: determines whether multiple environments have to be run in
+  parallel. We stack the transforms after the ParallelEnv to take advantage
   of vectorization of the operations on device, although this would
-  technically work with every single environment attached to its own set of
+  techinally work with every single environment attached to its own set of
   transforms.
-- ``observation_norm_state_dict`` will contain the normalizing constants for
-  the :class:`torchrl.envs.ObservationNorm` tranform.
+- mean and standard deviation: we normalize the observations (images)
+  with two parameters computed from a random rollout in the environment.
 
-We will be using five transforms:
-
-- :class:`torchrl.envs.ToTensorImage` will convert a ``[W, H, C]`` uint8
-  tensor in a floating point tensor in the ``[0, 1]`` space with shape
-  ``[C, W, H]``;
-- :class:`torchrl.envs.RewardScaling` to reduce the scale of the return;
-- :class:`torchrl.envs.GrayScale` will turn our image into grayscale;
-- :class:`torchrl.envs.Resize` will resize the image in a 64x64 format;
-- :class:`torchrl.envs.CatFrames` will concatenate an arbitrary number of
-  successive frames (``N=4``) in a single tensor along the channel dimension.
-  This is useful as a single image does not carry information about the
-  motion of the cartpole. Some memory about past observations and actions
-  is needed, either via a recurrent neural network or using a stack of
-  frames.
-- :class:`torchrl.envs.ObservationNorm` which will normalize our observations
-  given some custom summary statistics.
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 241-274
+.. GENERATED FROM PYTHON SOURCE LINES 153-184
 
 .. code-block:: default
 
 
 
-    def make_env(parallel=False, observation_norm_state_dict=None):
-        if observation_norm_state_dict is None:
-            observation_norm_state_dict = {"standard_normal": True}
+    def make_env(parallel=False, m=0, s=1):
+
         if parallel:
             base_env = ParallelEnv(
-                num_workers,
+                n_workers,
                 EnvCreator(
                     lambda: GymEnv(
                         "CartPole-v1", from_pixels=True, pixels_only=True, device=device
@@ -460,11 +216,10 @@ We will be using five transforms:
             base_env,
             Compose(
                 ToTensorImage(),
-                RewardScaling(loc=0.0, scale=0.1),
                 GrayScale(),
                 Resize(64, 64),
+                ObservationNorm(in_keys=["pixels"], loc=m, scale=s, standard_normal=True),
                 CatFrames(4, in_keys=["pixels"], dim=-3),
-                ObservationNorm(in_keys=["pixels"], **observation_norm_state_dict),
             ),
         )
         return env
@@ -477,46 +232,19 @@ We will be using five transforms:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 275-284
+.. GENERATED FROM PYTHON SOURCE LINES 185-186
 
-Compute normalizing constants
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Compute normalizing constants:
 
-To normalize images, we don't want to normalize each pixel independently
-with a full ``[C, W, H]`` normalizing mask, but with simpler ``[C, 1, 1]``
-shaped loc and scale parameters. We will be using the ``reduce_dim`` argument
-of :func:`torchrl.envs.ObservationNorm.init_stats` to instruct which
-dimensions must be reduced, and the ``keep_dims`` parameter to ensure that
-not all dimensions disappear in the process:
-
-.. GENERATED FROM PYTHON SOURCE LINES 284-291
+.. GENERATED FROM PYTHON SOURCE LINES 186-192
 
 .. code-block:: default
 
 
-    test_env = make_env()
-    test_env.transform[-1].init_stats(
-        num_iter=1000, cat_dim=0, reduce_dim=[-1, -2, -4], keep_dims=(-1, -2)
-    )
-    observation_norm_state_dict = test_env.transform[-1].state_dict()
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 292-294
-
-let's check that normalizing constants have a size of ``[C, 1, 1]`` where
-``C=4`` (because of :class:`torchrl.envs.CatFrames`).
-
-.. GENERATED FROM PYTHON SOURCE LINES 294-296
-
-.. code-block:: default
-
-    print(observation_norm_state_dict)
+    dummy_env = make_env()
+    v = dummy_env.transform[3].parent.reset()["pixels"]
+    m, s = v.mean().item(), v.std().item()
+    m, s
 
 
 
@@ -526,68 +254,63 @@ let's check that normalizing constants have a size of ``[C, 1, 1]`` where
 
  .. code-block:: none
 
-    OrderedDict([('standard_normal', tensor(True)), ('loc', tensor([[[0.9920]],
 
-            [[0.9920]],
-
-            [[0.9920]],
-
-            [[0.9920]]])), ('scale', tensor([[[0.0789]],
-
-            [[0.0789]],
-
-            [[0.0789]],
-
-            [[0.0789]]]))])
+    (0.9927785992622375, 0.0761081725358963)
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 193-202
 
-.. GENERATED FROM PYTHON SOURCE LINES 297-338
+The problem
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+We can have a look at the problem by generating a video with a random
+policy. From gym:
+
+*A pole is attached by an un-actuated joint to a cart, which moves along a*
+*frictionless track. The pendulum is placed upright on the cart and the*
+*goal is to balance the pole by applying forces in the left and right*
+*direction on the cart.*
+
+.. GENERATED FROM PYTHON SOURCE LINES 202-211
+
+.. code-block:: default
+
+
+    # we add a CatTensors transform to copy the "pixels" before it's being replaced by its grayscale, resized version
+    dummy_env.transform.insert(0, CatTensors(["pixels"], "pixels_save", del_keys=False))
+    # we omit the policy from the rollout call: this will generate random actions from the env.action_spec attribute
+    eval_rollout = dummy_env.rollout(max_steps=10000).cpu()
+
+    # imageio.mimwrite('cartpole_random.mp4', eval_rollout["pixels_save"].numpy(), fps=30)
+    # Video('cartpole_random.mp4', width=480, height=360)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 212-228
 
 Building the model (Deep Q-network)
------------------------------------
-
-The following function builds a :class:`torchrl.modules.DuelingCnnDQNet`
-object which is a simple CNN followed by a two-layer MLP. The only trick used
-here is that the action values (i.e. left and right action value) are
-computed using
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The following function builds a ``DuelingCnnDQNet`` object which is a
+simple CNN followed by a two-layer MLP. The only trick used here is that
+the action values (i.e. left and right action value) are computed using
 
 .. math::
 
-   val = b(obs) + v(obs) - \mathbb{E}[v(obs)]
+   values = baseline(observation) + values(observation) - values(observation).mean()
 
-where :math:`b` is a :math:`\# obs \rightarrow 1` function and :math:`v` is a
-:math:`\# obs \rightarrow num_actions` function.
+where ``baseline`` is a ``num_obs -> 1`` function and ``values`` is a
+``num_obs -> num_actions`` function.
 
-Our network is wrapped in a :class:`torchrl.modules.QValueActor`, which will read the state-action
+Our network is wrapped in a ``QValueActor``, which will read the state-action
 values, pick up the one with the maximum value and write all those results
-in the input :class:`tensordict.TensorDict`.
+in the input ``TensorDict``.
 
-Target parameters
-^^^^^^^^^^^^^^^^^
-
-Many off-policy RL algorithms use the concept of "target parameters" when it
-comes to estimate the value of the ``t+1`` state or state-action pair.
-The target parameters are lagged copies of the model parameters. Because
-their predictions mismatch those of the current model configuration, they
-help learning by putting a pessimistic bound on the value being estimated.
-This is a powerful trick (known as "Double Q-Learning") that is ubiquitous
-in similar algorithms.
-
-Functionalizing modules
-^^^^^^^^^^^^^^^^^^^^^^^
-
-One of the features of torchrl is its usage of functional modules: as the
-same architecture is often used with multiple sets of parameters (e.g.
-trainable and target parameters), we functionalize the modules and isolate
-the various sets of parameters in separate tensordicts.
-
-To this aim, we use :func:`tensordict.nn.get_functional`, which augments
-our modules with some extra feature that make them compatible with parameters
-passed in the ``TensorDict`` format.
-
-.. GENERATED FROM PYTHON SOURCE LINES 338-402
+.. GENERATED FROM PYTHON SOURCE LINES 228-283
 
 .. code-block:: default
 
@@ -599,10 +322,9 @@ passed in the ``TensorDict`` format.
             "kernel_sizes": [6, 4, 3],
             "strides": [2, 2, 1],
             "activation_class": nn.ELU,
-            # This can be used to reduce the size of the last layer of the CNN
-            # "squeeze_output": True,
-            # "aggregator_class": nn.AdaptiveAvgPool2d,
-            # "aggregator_kwargs": {"output_size": (1, 1)},
+            "squeeze_output": True,
+            "aggregator_class": nn.AdaptiveAvgPool2d,
+            "aggregator_kwargs": {"output_size": (1, 1)},
         }
         mlp_kwargs = {
             "depth": 2,
@@ -618,23 +340,23 @@ passed in the ``TensorDict`` format.
         net.value[-1].bias.data.fill_(init_bias)
 
         actor = QValueActor(net, in_keys=["pixels"], spec=dummy_env.action_spec).to(device)
-        # init actor: because the model is composed of lazy conv/linear layers,
-        # we must pass a fake batch of data through it to instantiate them.
-        tensordict = dummy_env.fake_tensordict()
+        # init actor
+        tensordict = dummy_env.reset()
+        print("reset results:", tensordict)
         actor(tensordict)
+        print("Q-value network results:", tensordict)
 
-        # Make functional:
+        # make functional
         # here's an explicit way of creating the parameters and buffer tensordict.
         # Alternatively, we could have used `params = make_functional(actor)` from
         # tensordict.nn
         params = TensorDict({k: v for k, v in actor.named_parameters()}, [])
         buffers = TensorDict({k: v for k, v in actor.named_buffers()}, [])
-        params = params.update(buffers)
-        params = params.unflatten_keys(".")  # creates a nested TensorDict
+        params = params.update(buffers).unflatten_keys(".")  # creates a nested TensorDict
         factor = get_functional(actor)
 
         # creating the target parameters is fairly easy with tensordict:
-        params_target = params.clone().detach()
+        (params_target,) = (params.to_tensordict().detach(),)
 
         # we wrap our actor in an EGreedyWrapper for data collection
         actor_explore = EGreedyWrapper(
@@ -647,72 +369,143 @@ passed in the ``TensorDict`` format.
         return factor, actor, actor_explore, params, params_target
 
 
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 284-288
+
+When creating the model, we initialize the network with an environment reset.
+We print the resulting tensordict instance to get an idea of what
+``QValueActor`` (pay attention to the keys ``action``, ``action_value`` and
+``chosen_action_value`` after calling the policy).
+
+.. GENERATED FROM PYTHON SOURCE LINES 288-299
+
+.. code-block:: default
+
+
     (
         factor,
         actor,
         actor_explore,
         params,
         params_target,
-    ) = make_model(test_env)
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 403-405
-
-We represent the parameters and targets as flat structures, but unflattening
-them is quite easy:
-
-.. GENERATED FROM PYTHON SOURCE LINES 405-408
-
-.. code-block:: default
-
-
+    ) = make_model(dummy_env)
     params_flat = params.flatten_keys(".")
+    params_target_flat = params_target.flatten_keys(".")
 
 
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    reset results: TensorDict(
+        fields={
+            done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+            pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False),
+            pixels_save: Tensor(shape=torch.Size([400, 600, 3]), device=cpu, dtype=torch.uint8, is_shared=False)},
+        batch_size=torch.Size([]),
+        device=cpu,
+        is_shared=False)
+    Q-value network results: TensorDict(
+        fields={
+            action: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.int64, is_shared=False),
+            action_value: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
+            chosen_action_value: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
+            done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+            pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False),
+            pixels_save: Tensor(shape=torch.Size([400, 600, 3]), device=cpu, dtype=torch.uint8, is_shared=False)},
+        batch_size=torch.Size([]),
+        device=cpu,
+        is_shared=False)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 409-410
 
-We will be using the adam optimizer:
+.. GENERATED FROM PYTHON SOURCE LINES 300-312
 
-.. GENERATED FROM PYTHON SOURCE LINES 410-413
+Regular DQN
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+We'll start with a simple implementation of DQN where the returns are
+computed without bootstrapping, i.e.
+
+  return = reward + gamma * value_next_step * not_terminated
+
+We start with the *replay buffer*. We'll use a regular replay buffer,
+although a prioritized RB could improve the performance significantly.
+We place the storage on disk using ``LazyMemmapStorage``. The only requirement
+of this storage is that the data given to it must always have the same
+shape. This storage will be instantiated later.
+
+.. GENERATED FROM PYTHON SOURCE LINES 312-318
 
 .. code-block:: default
 
 
-    optim = torch.optim.Adam(list(params_flat.values()), lr, betas=betas)
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 414-415
-
-We create a test environment for evaluation of the policy:
-
-.. GENERATED FROM PYTHON SOURCE LINES 415-422
-
-.. code-block:: default
-
-
-    test_env = make_env(
-        parallel=False, observation_norm_state_dict=observation_norm_state_dict
+    replay_buffer = TensorDictReplayBuffer(
+        storage=LazyMemmapStorage(buffer_size),
+        prefetch=n_optim,
     )
-    # sanity check:
-    print(actor_explore(test_env.reset()))
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 319-323
+
+Our *data collector* will run two parallel environments in parallel, and
+deliver the collected tensordicts once at a time to the main process. We'll
+use the ``MultiaSyncDataCollector`` collector, which will collect data while
+the optimization is taking place.
+
+.. GENERATED FROM PYTHON SOURCE LINES 323-338
+
+.. code-block:: default
+
+
+
+    data_collector = MultiaSyncDataCollector(
+        [
+            make_env(True, m=m, s=s),
+            make_env(True, m=m, s=s),
+        ],  # 2 collectors, each with an set of `num_workers` environments being run in parallel
+        policy=actor_explore,
+        frames_per_batch=frames_per_batch,
+        total_frames=total_frames,
+        exploration_mode="random",  # this is the default behaviour: the collector runs in `"random"` (or explorative) mode
+        devices=[device, device],  # each collector can sit on a different device
+        storing_devices=[device, device],
+    )
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 339-340
+
+Our *optimizer* and the env used for evaluation
+
+.. GENERATED FROM PYTHON SOURCE LINES 340-345
+
+.. code-block:: default
+
+
+    optim = torch.optim.Adam(list(params_flat.values()), lr)
+    dummy_env = make_env(parallel=False, m=m, s=s)
+    print(actor_explore(dummy_env.reset()))
 
 
 
@@ -736,37 +529,25 @@ We create a test environment for evaluation of the policy:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 423-442
+.. GENERATED FROM PYTHON SOURCE LINES 346-347
 
-Collecting and storing data
----------------------------
+Various lists that will contain the values recorded for evaluation:
 
-Replay buffers
-^^^^^^^^^^^^^^
-
-Replay buffers play a central role in off-policy RL algorithms such as DQN.
-They constitute the dataset we will be sampling from during training.
-
-Here, we will use a regular sampling strategy, although a prioritized RB
-could improve the performance significantly.
-
-We place the storage on disk using
-:class:`torchrl.data.replay_buffers.storages.LazyMemmapStorage` class. This
-storage is created in a lazy manner: it will only be instantiated once the
-first batch of data is passed to it.
-
-The only requirement of this storage is that the data passed to it at write
-time must always have the same shape.
-
-.. GENERATED FROM PYTHON SOURCE LINES 442-448
+.. GENERATED FROM PYTHON SOURCE LINES 347-359
 
 .. code-block:: default
 
 
-    replay_buffer = TensorDictReplayBuffer(
-        storage=LazyMemmapStorage(buffer_size),
-        prefetch=n_optim,
-    )
+    evals = []
+    traj_lengths_eval = []
+    losses = []
+    frames = []
+    values = []
+    grad_vals = []
+    traj_lengths = []
+    mavgs = []
+    traj_count = []
+    prev_traj_count = 0
 
 
 
@@ -775,122 +556,38 @@ time must always have the same shape.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 449-477
+.. GENERATED FROM PYTHON SOURCE LINES 360-362
 
-Data collector
-^^^^^^^^^^^^^^
-
-As in `PPO <https://pytorch.org/rl/tutorials/coding_ppo.html>` and
-`DDPG <https://pytorch.org/rl/tutorials/coding_ddpg.html>`, we will be using
-a data collector as a dataloader in the outer loop.
-
-We choose the following configuration: we will be running a series of
-parallel environments synchronously in parallel in different collectors,
-themselves running in parallel but asynchronously.
-The advantage of this configuration is that we can balance the amount of
-compute that is executed in batch with what we want to be executed
-asynchronously. We encourage the reader to experiment how the collection
-speed is impacted by modifying the number of collectors (ie the number of
-environment constructors passed to the collector) and the number of
-environment executed in parallel in each collector (controlled by the
-``num_workers`` hyperparameter).
-
-When building the collector, we can choose on which device we want the
-environment and policy to execute the operations through the ``device``
-keyword argument. The ``storing_devices`` argument will modify the
-location of the data being collected: if the batches that we are gathering
-have a considerable size, we may want to store them on a different location
-than the device where the computation is happening. For asynchronous data
-collectors such as ours, different storing devices mean that the data that
-we collect won't sit on the same device each time, which is something that
-out training loop must account for. For simplicity, we set the devices to
-the same value for all sub-collectors.
-
-.. GENERATED FROM PYTHON SOURCE LINES 477-500
-
-.. code-block:: default
-
-
-    data_collector = MultiaSyncDataCollector(
-        # ``num_collectors`` collectors, each with an set of `num_workers` environments being run in parallel
-        [
-            make_env(
-                parallel=True, observation_norm_state_dict=observation_norm_state_dict
-            ),
-        ]
-        * num_collectors,
-        policy=actor_explore,
-        frames_per_batch=frames_per_batch,
-        total_frames=total_frames,
-        # this is the default behaviour: the collector runs in ``"random"`` (or explorative) mode
-        exploration_mode="random",
-        # We set the all the devices to be identical. Below is an example of
-        # heterogeneous devices
-        devices=[device] * num_collectors,
-        storing_devices=[device] * num_collectors,
-        # devices=[f"cuda:{i}" for i in range(1, 1 + num_collectors)],
-        # storing_devices=[f"cuda:{i}" for i in range(1, 1 + num_collectors)],
-        split_trajs=False,
-    )
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 501-516
-
-Training loop of a regular DQN
+Training loop
 ------------------------------
 
-We'll start with a simple implementation of DQN where the returns are
-computed without bootstrapping, i.e.
-
-.. math::
-
-      Q_{t}(s, a) = R(s, a) + \gamma * V_{t+1}(s)
-
-where :math:`Q(s, a)` is the Q-value of the current state-action pair,
-:math:`R(s, a)` is the result of the reward function, and :math:`V(s)` is a
-value function that returns 0 for terminating states.
-
-We store the logs in a defaultdict:
-
-.. GENERATED FROM PYTHON SOURCE LINES 516-618
+.. GENERATED FROM PYTHON SOURCE LINES 362-494
 
 .. code-block:: default
 
-
-    logs_exp1 = defaultdict(list)
-    prev_traj_count = 0
 
     pbar = tqdm.tqdm(total=total_frames)
     for j, data in enumerate(data_collector):
-        current_frames = data.numel()
+        # trajectories are padded to be stored in the same tensordict: since we do not care about consecutive step, we'll just mask the tensordict and get the flattened representation instead.
+        mask = data["collector", "mask"]
+        current_frames = mask.sum().cpu().item()
         pbar.update(current_frames)
-        data = data.view(-1)
 
-        # We store the values on the replay buffer, after placing them on CPU.
-        # When called for the first time, this will instantiate our storage
-        # object which will print its content.
-        replay_buffer.extend(data.cpu())
+        # We store the values on the replay buffer, after placing them on CPU. When called for the first time, this will instantiate our storage object which will print its content.
+        replay_buffer.extend(data[mask].cpu())
 
         # some logging
-        if len(logs_exp1["frames"]):
-            logs_exp1["frames"].append(current_frames + logs_exp1["frames"][-1])
+        if len(frames):
+            frames.append(current_frames + frames[-1])
         else:
-            logs_exp1["frames"].append(current_frames)
+            frames.append(current_frames)
 
         if data["done"].any():
             done = data["done"].squeeze(-1)
-            logs_exp1["traj_lengths"].append(
-                data["collector", "step_count"][done].float().mean().item()
-            )
+            traj_lengths.append(data["collector", "step_count"][done].float().mean().item())
 
         # check that we have enough data to start training
-        if sum(logs_exp1["frames"]) > init_random_frames:
+        if sum(frames) > init_random_frames:
             for _ in range(n_optim):
                 # sample from the RB and send to device
                 sampled_data = replay_buffer.sample(batch_size)
@@ -902,7 +599,6 @@ We store the logs in a defaultdict:
                 action = sampled_data["action"].clone()
 
                 # Compute action value (of the action actually taken) at time t
-                # By default, TorchRL uses one-hot encodings for discrete actions
                 sampled_data_out = sampled_data.select(*actor.in_keys)
                 sampled_data_out = factor(sampled_data_out, params=params)
                 action_value = sampled_data_out["action_value"]
@@ -920,168 +616,185 @@ We store the logs in a defaultdict:
                 error = nn.functional.mse_loss(exp_value, action_value).mean()
                 error.backward()
 
-                gv = nn.utils.clip_grad_norm_(list(params_flat.values()), 1)
+                gv = sum([p.grad.pow(2).sum() for p in params_flat.values()]).sqrt()
+                nn.utils.clip_grad_value_(list(params_flat.values()), 1)
 
                 optim.step()
                 optim.zero_grad()
 
                 # update of the target parameters
-                params_target.apply(
-                    lambda p_target, p_orig: p_orig * tau + p_target * (1 - tau),
-                    params.detach(),
-                    inplace=True,
-                )
+                for (key, p1) in params_flat.items():
+                    p2 = params_target_flat[key]
+                    params_target_flat.set_(key, tau * p1.data + (1 - tau) * p2.data)
 
+            pbar.set_description(
+                f"error: {error: 4.4f}, value: {action_value.mean(): 4.4f}"
+            )
             actor_explore.step(current_frames)
 
-            # Logging
-            logs_exp1["grad_vals"].append(float(gv))
-            logs_exp1["losses"].append(error.item())
-            logs_exp1["values"].append(action_value.mean().item())
-            logs_exp1["traj_count"].append(prev_traj_count + data["done"].sum().item())
-            prev_traj_count = logs_exp1["traj_count"][-1]
-
+            # logs
+            with set_exploration_mode("mode"), torch.no_grad():
+                # execute a rollout. The `set_exploration_mode("mode")` has no effect here since the policy is deterministic, but we add it for completeness
+                eval_rollout = dummy_env.rollout(max_steps=10000, policy=actor).cpu()
+            grad_vals.append(float(gv))
+            traj_lengths_eval.append(eval_rollout.shape[-1])
+            evals.append(eval_rollout["reward"].squeeze(-1).sum(-1).item())
+            if len(mavgs):
+                mavgs.append(evals[-1] * 0.05 + mavgs[-1] * 0.95)
+            else:
+                mavgs.append(evals[-1])
+            losses.append(error.item())
+            values.append(action_value.mean().item())
+            traj_count.append(prev_traj_count + data["done"].sum().item())
+            prev_traj_count = traj_count[-1]
+            # plots
             if j % 10 == 0:
-                with set_exploration_mode("mode"), torch.no_grad():
-                    # execute a rollout. The `set_exploration_mode("mode")` has no effect here since the policy is deterministic, but we add it for completeness
-                    eval_rollout = test_env.rollout(
-                        max_steps=10000,
-                        policy=actor,
-                    ).cpu()
-                logs_exp1["traj_lengths_eval"].append(eval_rollout.shape[-1])
-                logs_exp1["evals"].append(eval_rollout["reward"].sum().item())
-                if len(logs_exp1["mavgs"]):
-                    logs_exp1["mavgs"].append(
-                        logs_exp1["evals"][-1] * 0.05 + logs_exp1["mavgs"][-1] * 0.95
-                    )
+                if is_notebook():
+                    display.clear_output(wait=True)
+                    display.display(plt.gcf())
                 else:
-                    logs_exp1["mavgs"].append(logs_exp1["evals"][-1])
-                logs_exp1["traj_count_eval"].append(logs_exp1["traj_count"][-1])
-                pbar.set_description(
-                    f"error: {error: 4.4f}, value: {action_value.mean(): 4.4f}, test return: {logs_exp1['evals'][-1]: 4.4f}"
-                )
+                    plt.clf()
+                plt.figure(figsize=(15, 15))
+                plt.subplot(3, 2, 1)
+                plt.plot(frames[-len(evals) :], evals, label="return")
+                plt.plot(frames[-len(mavgs) :], mavgs, label="mavg")
+                plt.xlabel("frames collected")
+                plt.ylabel("trajectory length (= return)")
+                plt.subplot(3, 2, 2)
+                plt.plot(traj_count[-len(evals) :], evals, label="return")
+                plt.plot(traj_count[-len(mavgs) :], mavgs, label="mavg")
+                plt.xlabel("trajectories collected")
+                plt.legend()
+                plt.subplot(3, 2, 3)
+                plt.plot(frames[-len(losses) :], losses)
+                plt.xlabel("frames collected")
+                plt.title("loss")
+                plt.subplot(3, 2, 4)
+                plt.plot(frames[-len(values) :], values)
+                plt.xlabel("frames collected")
+                plt.title("value")
+                plt.subplot(3, 2, 5)
+                plt.plot(frames[-len(grad_vals) :], grad_vals)
+                plt.xlabel("frames collected")
+                plt.title("grad norm")
+                if len(traj_lengths):
+                    plt.subplot(3, 2, 6)
+                    plt.plot(traj_lengths)
+                    plt.xlabel("batches")
+                    plt.title("traj length (training)")
+            plt.savefig("dqn_td0.png")
+            if is_notebook():
+                plt.show()
 
         # update policy weights
         data_collector.update_policy_weights_()
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-      0%|          | 0/5000 [00:00<?, ?it/s]      1%|          | 32/5000 [00:00<02:21, 34.99it/s]Creating a MemmapStorage...
-    The storage is being created: 
-            action: /tmp/tmppcbgpiav, 0.0762939453125 Mb of storage (size: torch.Size([5000, 2])).
-            action_value: /tmp/tmp_izwwgqp, 0.03814697265625 Mb of storage (size: torch.Size([5000, 2])).
-            chosen_action_value: /tmp/tmpa8_klquj, 0.019073486328125 Mb of storage (size: torch.Size([5000, 1])).
-            done: /tmp/tmp_rs77gf4, 0.00476837158203125 Mb of storage (size: torch.Size([5000, 1])).
-            index: /tmp/tmph1s80xl3, 0.019073486328125 Mb of storage (size: torch.Size([5000])).
-            pixels: /tmp/tmpgx3om6tr, 312.5 Mb of storage (size: torch.Size([5000, 4, 64, 64])).
-            reward: /tmp/tmp7royc_6b, 0.019073486328125 Mb of storage (size: torch.Size([5000, 1])).
-            ('collector', 'step_count'): /tmp/tmppgjtbcou, 0.03814697265625 Mb of storage (size: torch.Size([5000])).
-            ('collector', 'traj_ids'): /tmp/tmpq25ltp1w, 0.03814697265625 Mb of storage (size: torch.Size([5000])).
-            ('next', 'pixels'): /tmp/tmpztnzx1zm, 312.5 Mb of storage (size: torch.Size([5000, 4, 64, 64])).
-      1%|1         | 64/5000 [00:01<02:12, 37.38it/s]      2%|1         | 96/5000 [00:02<01:41, 48.48it/s]      3%|2         | 128/5000 [00:03<02:08, 37.95it/s]      3%|3         | 160/5000 [00:03<01:59, 40.56it/s]      4%|3         | 192/5000 [00:04<01:52, 42.76it/s]      4%|4         | 224/5000 [00:05<01:46, 44.84it/s]      5%|5         | 256/5000 [00:05<01:41, 46.79it/s]      6%|5         | 288/5000 [00:06<01:37, 48.18it/s]      6%|6         | 320/5000 [00:07<01:36, 48.65it/s]      7%|7         | 352/5000 [00:07<01:35, 48.43it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:   7%|7         | 352/5000 [00:08<01:35, 48.43it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:   8%|7         | 384/5000 [00:08<01:44, 44.20it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:   8%|8         | 416/5000 [00:09<01:39, 46.02it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:   9%|8         | 448/5000 [00:09<01:37, 46.64it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:  10%|9         | 480/5000 [00:10<01:37, 46.15it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:  10%|#         | 512/5000 [00:11<01:39, 45.17it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:  11%|#         | 544/5000 [00:12<01:40, 44.54it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:  12%|#1        | 576/5000 [00:12<01:36, 46.01it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:  12%|#2        | 608/5000 [00:13<01:32, 47.24it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:  13%|#2        | 640/5000 [00:14<01:31, 47.52it/s]    error:  0.0231, value:  2.3334, test return:  2.3000:  13%|#3        | 672/5000 [00:14<01:29, 48.23it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  13%|#3        | 672/5000 [00:15<01:29, 48.23it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  14%|#4        | 704/5000 [00:15<01:31, 46.83it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  15%|#4        | 736/5000 [00:16<01:29, 47.46it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  15%|#5        | 768/5000 [00:16<01:26, 48.71it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  16%|#6        | 800/5000 [00:17<01:24, 49.60it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  17%|#6        | 832/5000 [00:18<01:24, 49.52it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  17%|#7        | 864/5000 [00:18<01:21, 50.49it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  18%|#7        | 896/5000 [00:19<01:22, 49.52it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  19%|#8        | 928/5000 [00:20<01:24, 48.41it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  19%|#9        | 960/5000 [00:20<01:25, 47.06it/s]    error:  0.2145, value:  2.0393, test return:  1.1000:  20%|#9        | 992/5000 [00:21<01:24, 47.52it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  20%|#9        | 992/5000 [00:22<01:24, 47.52it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  20%|##        | 1024/5000 [00:22<01:28, 45.04it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  21%|##1       | 1056/5000 [00:22<01:25, 46.34it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  22%|##1       | 1088/5000 [00:23<01:22, 47.50it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  22%|##2       | 1120/5000 [00:24<01:21, 47.86it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  23%|##3       | 1152/5000 [00:24<01:19, 48.69it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  24%|##3       | 1184/5000 [00:25<01:18, 48.69it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  24%|##4       | 1216/5000 [00:26<01:16, 49.19it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  25%|##4       | 1248/5000 [00:26<01:14, 50.18it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  26%|##5       | 1280/5000 [00:27<01:14, 50.12it/s]    error:  0.0470, value:  2.1083, test return:  1.0000:  26%|##6       | 1312/5000 [00:27<01:14, 49.61it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  26%|##6       | 1312/5000 [00:28<01:14, 49.61it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  27%|##6       | 1344/5000 [00:28<01:16, 48.07it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  28%|##7       | 1376/5000 [00:29<01:15, 47.88it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  28%|##8       | 1408/5000 [00:30<01:16, 46.75it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  29%|##8       | 1440/5000 [00:30<01:16, 46.66it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  29%|##9       | 1472/5000 [00:31<01:17, 45.62it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  30%|###       | 1504/5000 [00:32<01:17, 45.39it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  31%|###       | 1536/5000 [00:32<01:15, 45.88it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  31%|###1      | 1568/5000 [00:33<01:14, 46.11it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  32%|###2      | 1600/5000 [00:34<01:12, 46.72it/s]    error:  0.0369, value:  2.1208, test return:  0.9000:  33%|###2      | 1632/5000 [00:34<01:11, 47.41it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  33%|###2      | 1632/5000 [00:35<01:11, 47.41it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  33%|###3      | 1664/5000 [00:35<01:11, 46.77it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  34%|###3      | 1696/5000 [00:36<01:08, 48.16it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  35%|###4      | 1728/5000 [00:36<01:08, 48.01it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  35%|###5      | 1760/5000 [00:37<01:05, 49.27it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  36%|###5      | 1792/5000 [00:38<01:04, 49.60it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  36%|###6      | 1824/5000 [00:38<01:03, 50.09it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  37%|###7      | 1856/5000 [00:39<01:03, 49.81it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  38%|###7      | 1888/5000 [00:40<01:05, 47.75it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  38%|###8      | 1920/5000 [00:40<01:08, 44.80it/s]    error:  0.0702, value:  1.9491, test return:  1.0000:  39%|###9      | 1952/5000 [00:41<01:09, 44.12it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  39%|###9      | 1952/5000 [00:42<01:09, 44.12it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  40%|###9      | 1984/5000 [00:42<01:16, 39.61it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  40%|####      | 2016/5000 [00:43<01:10, 42.31it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  41%|####      | 2048/5000 [00:43<01:06, 44.39it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  42%|####1     | 2080/5000 [00:44<01:03, 46.25it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  42%|####2     | 2112/5000 [00:45<01:02, 46.53it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  43%|####2     | 2144/5000 [00:45<01:00, 47.36it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  44%|####3     | 2176/5000 [00:46<00:58, 48.42it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  44%|####4     | 2208/5000 [00:47<00:57, 48.73it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  45%|####4     | 2240/5000 [00:47<00:56, 48.75it/s]    error:  0.0480, value:  2.2043, test return:  3.2000:  45%|####5     | 2272/5000 [00:48<00:55, 49.28it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  45%|####5     | 2272/5000 [00:49<00:55, 49.28it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  46%|####6     | 2304/5000 [00:49<00:56, 47.33it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  47%|####6     | 2336/5000 [00:49<00:56, 46.82it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  47%|####7     | 2368/5000 [00:50<00:58, 45.26it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  48%|####8     | 2400/5000 [00:51<00:58, 44.51it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  49%|####8     | 2432/5000 [00:52<00:56, 45.31it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  49%|####9     | 2464/5000 [00:52<00:54, 46.55it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  50%|####9     | 2496/5000 [00:53<00:52, 47.56it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  51%|#####     | 2528/5000 [00:54<00:51, 47.76it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  51%|#####1    | 2560/5000 [00:54<00:50, 48.27it/s]    error:  0.0994, value:  2.1073, test return:  1.1000:  52%|#####1    | 2592/5000 [00:55<00:49, 48.77it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  52%|#####1    | 2592/5000 [00:56<00:49, 48.77it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  52%|#####2    | 2624/5000 [00:56<00:50, 47.14it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  53%|#####3    | 2656/5000 [00:56<00:48, 47.92it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  54%|#####3    | 2688/5000 [00:57<00:47, 48.86it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  54%|#####4    | 2720/5000 [00:57<00:46, 49.34it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  55%|#####5    | 2752/5000 [00:58<00:45, 48.92it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  56%|#####5    | 2784/5000 [00:59<00:45, 49.04it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  56%|#####6    | 2816/5000 [01:00<00:45, 47.96it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  57%|#####6    | 2848/5000 [01:00<00:45, 47.43it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  58%|#####7    | 2880/5000 [01:01<00:44, 47.23it/s]    error:  0.0436, value:  1.9782, test return:  1.0000:  58%|#####8    | 2912/5000 [01:02<00:43, 47.55it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  58%|#####8    | 2912/5000 [01:02<00:43, 47.55it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  59%|#####8    | 2944/5000 [01:02<00:47, 43.11it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  60%|#####9    | 2976/5000 [01:03<00:44, 45.33it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  60%|######    | 3008/5000 [01:04<00:42, 47.06it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  61%|######    | 3040/5000 [01:04<00:41, 47.30it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  61%|######1   | 3072/5000 [01:05<00:40, 47.55it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  62%|######2   | 3104/5000 [01:06<00:39, 48.60it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  63%|######2   | 3136/5000 [01:06<00:38, 48.76it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  63%|######3   | 3168/5000 [01:07<00:37, 49.38it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  64%|######4   | 3200/5000 [01:08<00:36, 49.32it/s]    error:  0.1339, value:  1.9176, test return:  3.0000:  65%|######4   | 3232/5000 [01:08<00:35, 50.24it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  65%|######4   | 3232/5000 [01:09<00:35, 50.24it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  65%|######5   | 3264/5000 [01:09<00:35, 48.48it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  66%|######5   | 3296/5000 [01:10<00:35, 47.84it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  67%|######6   | 3328/5000 [01:10<00:36, 46.21it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  67%|######7   | 3360/5000 [01:11<00:37, 43.87it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  68%|######7   | 3392/5000 [01:12<00:36, 44.15it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  68%|######8   | 3424/5000 [01:12<00:34, 46.34it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  69%|######9   | 3456/5000 [01:13<00:32, 47.35it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  70%|######9   | 3488/5000 [01:14<00:31, 48.26it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  70%|#######   | 3520/5000 [01:14<00:30, 48.74it/s]    error:  0.0659, value:  1.7419, test return:  1.3000:  71%|#######1  | 3552/5000 [01:15<00:29, 49.03it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  71%|#######1  | 3552/5000 [01:16<00:29, 49.03it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  72%|#######1  | 3584/5000 [01:16<00:29, 47.55it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  72%|#######2  | 3616/5000 [01:16<00:28, 47.91it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  73%|#######2  | 3648/5000 [01:17<00:27, 48.74it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  74%|#######3  | 3680/5000 [01:18<00:26, 49.10it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  74%|#######4  | 3712/5000 [01:18<00:26, 49.41it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  75%|#######4  | 3744/5000 [01:19<00:25, 49.59it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  76%|#######5  | 3776/5000 [01:20<00:25, 48.82it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  76%|#######6  | 3808/5000 [01:20<00:24, 47.88it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  77%|#######6  | 3840/5000 [01:21<00:24, 46.76it/s]    error:  0.0984, value:  1.7182, test return:  1.1000:  77%|#######7  | 3872/5000 [01:22<00:24, 46.99it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  77%|#######7  | 3872/5000 [01:22<00:24, 46.99it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  78%|#######8  | 3904/5000 [01:22<00:23, 45.74it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  79%|#######8  | 3936/5000 [01:23<00:22, 46.76it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  79%|#######9  | 3968/5000 [01:24<00:21, 48.63it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  80%|########  | 4000/5000 [01:24<00:20, 49.31it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  81%|########  | 4032/5000 [01:25<00:19, 49.26it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  81%|########1 | 4064/5000 [01:26<00:18, 50.19it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  82%|########1 | 4096/5000 [01:26<00:18, 49.69it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  83%|########2 | 4128/5000 [01:27<00:17, 50.11it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  83%|########3 | 4160/5000 [01:28<00:16, 50.49it/s]    error:  0.1949, value:  1.8478, test return:  1.2000:  84%|########3 | 4192/5000 [01:28<00:16, 50.37it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  84%|########3 | 4192/5000 [01:29<00:16, 50.37it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  84%|########4 | 4224/5000 [01:29<00:16, 48.18it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  85%|########5 | 4256/5000 [01:30<00:15, 48.27it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  86%|########5 | 4288/5000 [01:30<00:14, 48.56it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  86%|########6 | 4320/5000 [01:31<00:14, 45.89it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  87%|########7 | 4352/5000 [01:32<00:14, 44.13it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  88%|########7 | 4384/5000 [01:32<00:13, 45.74it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  88%|########8 | 4416/5000 [01:33<00:12, 47.22it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  89%|########8 | 4448/5000 [01:34<00:11, 48.17it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  90%|########9 | 4480/5000 [01:34<00:10, 49.28it/s]    error:  0.1272, value:  1.7379, test return:  0.9000:  90%|######### | 4512/5000 [01:35<00:09, 49.08it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  90%|######### | 4512/5000 [01:36<00:09, 49.08it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  91%|######### | 4544/5000 [01:36<00:09, 45.91it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  92%|#########1| 4576/5000 [01:36<00:09, 46.47it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  92%|#########2| 4608/5000 [01:37<00:08, 47.58it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  93%|#########2| 4640/5000 [01:38<00:07, 49.06it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  93%|#########3| 4672/5000 [01:38<00:06, 49.68it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  94%|#########4| 4704/5000 [01:39<00:05, 49.72it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  95%|#########4| 4736/5000 [01:40<00:05, 48.24it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  95%|#########5| 4768/5000 [01:40<00:04, 47.16it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  96%|#########6| 4800/5000 [01:41<00:04, 46.57it/s]    error:  0.0800, value:  2.0280, test return:  1.3000:  97%|#########6| 4832/5000 [01:42<00:03, 47.14it/s]    error:  0.1149, value:  1.7689, test return:  3.2000:  97%|#########6| 4832/5000 [01:43<00:03, 47.14it/s]    error:  0.1149, value:  1.7689, test return:  3.2000:  97%|#########7| 4864/5000 [01:43<00:03, 42.82it/s]    error:  0.1149, value:  1.7689, test return:  3.2000:  98%|#########7| 4896/5000 [01:43<00:02, 45.04it/s]    error:  0.1149, value:  1.7689, test return:  3.2000:  99%|#########8| 4928/5000 [01:44<00:01, 46.95it/s]    error:  0.1149, value:  1.7689, test return:  3.2000:  99%|#########9| 4960/5000 [01:45<00:00, 47.43it/s]    error:  0.1149, value:  1.7689, test return:  3.2000: 100%|#########9| 4992/5000 [01:45<00:00, 48.97it/s]    error:  0.1149, value:  1.7689, test return:  3.2000: : 5024it [01:46, 49.92it/s]                        
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 619-621
-
-We write a custom plot function to display the performance of our algorithm
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 621-676
-
-.. code-block:: default
-
-
-
-    def plot(logs, name):
-        plt.figure(figsize=(15, 10))
-        plt.subplot(2, 3, 1)
-        plt.plot(
-            logs["frames"][-len(logs["evals"]) :],
-            logs["evals"],
-            label="return (eval)",
-        )
-        plt.plot(
-            logs["frames"][-len(logs["mavgs"]) :],
-            logs["mavgs"],
-            label="mavg of returns (eval)",
-        )
-        plt.xlabel("frames collected")
-        plt.ylabel("trajectory length (= return)")
-        plt.subplot(2, 3, 2)
-        plt.plot(
-            logs["traj_count"][-len(logs["evals"]) :],
-            logs["evals"],
-            label="return",
-        )
-        plt.plot(
-            logs["traj_count"][-len(logs["mavgs"]) :],
-            logs["mavgs"],
-            label="mavg",
-        )
-        plt.xlabel("trajectories collected")
-        plt.legend()
-        plt.subplot(2, 3, 3)
-        plt.plot(logs["frames"][-len(logs["losses"]) :], logs["losses"])
-        plt.xlabel("frames collected")
-        plt.title("loss")
-        plt.subplot(2, 3, 4)
-        plt.plot(logs["frames"][-len(logs["values"]) :], logs["values"])
-        plt.xlabel("frames collected")
-        plt.title("value")
-        plt.subplot(2, 3, 5)
-        plt.plot(
-            logs["frames"][-len(logs["grad_vals"]) :],
-            logs["grad_vals"],
-        )
-        plt.xlabel("frames collected")
-        plt.title("grad norm")
-        if len(logs["traj_lengths"]):
-            plt.subplot(2, 3, 6)
-            plt.plot(logs["traj_lengths"])
-            plt.xlabel("batches")
-            plt.title("traj length (training)")
-        plt.savefig(name)
-        if is_notebook():
-            plt.show()
-
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 677-688
-
-The performance of the policy can be measured as the length of trajectories.
-As we can see on the results of the :func:`plot` function, the performance
-of the policy increases, albeit slowly.
-
-.. code-block:: python
-
-   plot(logs_exp1, "dqn_td0.png")
-
-.. figure:: /_static/img/dqn_td0.png
-   :alt: Cart Pole results with TD(0)
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 688-693
-
-.. code-block:: default
-
 
     print("shutting down")
     data_collector.shutdown()
     del data_collector
 
+    if is_notebook():
+        display.clear_output(wait=True)
+        display.display(plt.gcf())
+
+
+
+
+.. rst-class:: sphx-glr-horizontal
+
+
+    *
+
+      .. image-sg:: /tutorials/images/sphx_glr_coding_dqn_001.png
+         :alt: coding dqn
+         :srcset: /tutorials/images/sphx_glr_coding_dqn_001.png
+         :class: sphx-glr-multi-img
+
+    *
+
+      .. image-sg:: /tutorials/images/sphx_glr_coding_dqn_002.png
+         :alt: loss, value, grad norm, traj length (training)
+         :srcset: /tutorials/images/sphx_glr_coding_dqn_002.png
+         :class: sphx-glr-multi-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+      0%|          | 0/500 [00:00<?, ?it/s]      6%|6         | 32/500 [00:01<00:16, 28.83it/s]Creating a MemmapStorage...
+    The storage is being created: 
+            action: /tmp/tmpgwlnleuc, 0.00762939453125 Mb of storage (size: torch.Size([500, 2])).
+            action_value: /tmp/tmp8svu18zm, 0.003814697265625 Mb of storage (size: torch.Size([500, 2])).
+            chosen_action_value: /tmp/tmpzf0mpdl4, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+            done: /tmp/tmphujidsan, 0.000476837158203125 Mb of storage (size: torch.Size([500, 1])).
+            index: /tmp/tmp43q_m2ym, 0.0019073486328125 Mb of storage (size: torch.Size([500])).
+            pixels: /tmp/tmpndxqwkjc, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
+            reward: /tmp/tmp9w624lgu, 0.0019073486328125 Mb of storage (size: torch.Size([500, 1])).
+            ('collector', 'mask'): /tmp/tmpo12opeon, 0.000476837158203125 Mb of storage (size: torch.Size([500])).
+            ('collector', 'step_count'): /tmp/tmptzcofwj6, 0.003814697265625 Mb of storage (size: torch.Size([500])).
+            ('collector', 'traj_ids'): /tmp/tmpnzu8gkgn, 0.003814697265625 Mb of storage (size: torch.Size([500])).
+            ('next', 'pixels'): /tmp/tmp406yfmnc, 31.25 Mb of storage (size: torch.Size([500, 4, 64, 64])).
+     13%|#2        | 64/500 [00:01<00:09, 44.51it/s]     19%|#9        | 96/500 [00:02<00:09, 41.08it/s]    error:  22.8898, value:  19.5848:  19%|#9        | 96/500 [00:02<00:09, 41.08it/s]    error:  22.8898, value:  19.5848:  26%|##5       | 128/500 [00:03<00:12, 29.18it/s]    error:  32.4588, value:  18.2775:  26%|##5       | 128/500 [00:04<00:12, 29.18it/s]    error:  32.4588, value:  18.2775:  32%|###2      | 160/500 [00:04<00:10, 33.63it/s]    error:  47.0327, value:  19.5512:  32%|###2      | 160/500 [00:05<00:10, 33.63it/s]    error:  47.0327, value:  19.5512:  38%|###8      | 192/500 [00:05<00:08, 37.92it/s]    error:  21.9886, value:  20.4796:  38%|###8      | 192/500 [00:05<00:08, 37.92it/s]    error:  21.9886, value:  20.4796:  45%|####4     | 224/500 [00:05<00:06, 42.90it/s]    error:  35.5302, value:  19.0882:  45%|####4     | 224/500 [00:06<00:06, 42.90it/s]    error:  35.5302, value:  19.0882:  51%|#####1    | 256/500 [00:06<00:05, 46.48it/s]    error:  18.4533, value:  19.7470:  51%|#####1    | 256/500 [00:06<00:05, 46.48it/s]    error:  18.4533, value:  19.7470:  58%|#####7    | 288/500 [00:07<00:04, 47.82it/s]    error:  8.7196, value:  19.4393:  58%|#####7    | 288/500 [00:07<00:04, 47.82it/s]     error:  8.7196, value:  19.4393:  64%|######4   | 320/500 [00:07<00:04, 44.71it/s]    error:  16.4435, value:  19.8129:  64%|######4   | 320/500 [00:08<00:04, 44.71it/s]    error:  16.4435, value:  19.8129:  70%|#######   | 352/500 [00:08<00:03, 43.60it/s]    error:  29.3296, value:  18.1870:  70%|#######   | 352/500 [00:09<00:03, 43.60it/s]    error:  29.3296, value:  18.1870:  77%|#######6  | 384/500 [00:09<00:03, 36.19it/s]    error:  23.2948, value:  18.1061:  77%|#######6  | 384/500 [00:10<00:03, 36.19it/s]    error:  23.2948, value:  18.1061:  83%|########3 | 416/500 [00:10<00:02, 36.19it/s]    error:  33.1025, value:  19.5516:  83%|########3 | 416/500 [00:11<00:02, 36.19it/s]    error:  33.1025, value:  19.5516:  90%|########9 | 448/500 [00:11<00:01, 36.06it/s]    error:  18.1859, value:  19.9789:  90%|########9 | 448/500 [00:12<00:01, 36.06it/s]    error:  18.1859, value:  19.9789:  96%|#########6| 480/500 [00:12<00:00, 35.61it/s]    error:  27.7825, value:  19.8626:  96%|#########6| 480/500 [00:12<00:00, 35.61it/s]    error:  27.7825, value:  19.8626: : 512it [00:13, 35.96it/s]                           error:  0.7067, value:  20.2968: : 512it [00:13, 35.96it/s] shutting down
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 495-497
+
+**Note**: As already mentioned above, to get a more reasonable performance,
+use a greater value for ``total_frames`` e.g. 500000.
+
+.. GENERATED FROM PYTHON SOURCE LINES 497-504
+
+.. code-block:: default
+
+
+
+    plt.figure(figsize=(15, 15))
+    plt.imshow(plt.imread("dqn_td0.png"))
+    plt.tight_layout()
+    plt.axis("off")
+
+
+
+
+.. image-sg:: /tutorials/images/sphx_glr_coding_dqn_003.png
+   :alt: coding dqn
+   :srcset: /tutorials/images/sphx_glr_coding_dqn_003.png
+   :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    (-0.5, 1499.5, 1499.5, -0.5)
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 505-522
+
+.. code-block:: default
+
+
+    # save results
+    torch.save(
+        {
+            "frames": frames,
+            "evals": evals,
+            "mavgs": mavgs,
+            "losses": losses,
+            "values": values,
+            "grad_vals": grad_vals,
+            "traj_lengths_training": traj_lengths,
+            "traj_count": traj_count,
+            "weights": (params,),
+        },
+        "saved_results_td0.pt",
+    )
+
 
 
 
@@ -1090,38 +803,36 @@ of the policy increases, albeit slowly.
 
  .. code-block:: none
 
-    shutting down
+    error:  0.7067, value:  20.2968: : 512it [00:25, 35.96it/s]
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 523-539
 
-.. GENERATED FROM PYTHON SOURCE LINES 694-712
-
-DQN with TD(:math:`\lambda`)
-----------------------------
-
+TD-lambda
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 We can improve the above algorithm by getting a better estimate of the
 return, using not only the next state value but the whole sequence of rewards
 and values that follow a particular step.
 
 TorchRL provides a vectorized version of TD(lambda) named
-:func:`torchrl.objectives.value.functional.vec_td_lambda_advantage_estimate`.
-We'll use this to obtain a target value that the value network will be
-trained to match.
+``vec_td_lambda_advantage_estimate``. We'll use this to obtain a target
+value that the value network will be trained to match.
 
 The big difference in this implementation is that we'll store entire
 trajectories and not single steps in the replay buffer. This will be done
-automatically as long as we're not "flattening" the tensordict collected:
-by keeping a shape ``[Batch x timesteps]`` and giving this
+automatically as long as we're not "flattening" the tensordict collected
+using its mask: by keeping a shape ``[Batch x timesteps]`` and giving this
 to the RB, we'll be creating a replay buffer of size
 ``[Capacity x timesteps]``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 712-716
+.. GENERATED FROM PYTHON SOURCE LINES 539-544
 
 .. code-block:: default
 
 
 
+    from tensordict.tensordict import pad
     from torchrl.objectives.value.functional import vec_td_lambda_advantage_estimate
 
 
@@ -1131,12 +842,11 @@ to the RB, we'll be creating a replay buffer of size
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 717-719
+.. GENERATED FROM PYTHON SOURCE LINES 545-546
 
-We reset the actor parameters:
+We reset the actor, the RB and the collector
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 719-735
+.. GENERATED FROM PYTHON SOURCE LINES 546-557
 
 .. code-block:: default
 
@@ -1147,14 +857,76 @@ We reset the actor parameters:
         actor_explore,
         params,
         params_target,
-    ) = make_model(test_env)
+    ) = make_model(dummy_env)
     params_flat = params.flatten_keys(".")
+    params_target_flat = params_target.flatten_keys(".")
 
-    optim = torch.optim.Adam(list(params_flat.values()), lr, betas=betas)
-    test_env = make_env(
-        parallel=False, observation_norm_state_dict=observation_norm_state_dict
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    reset results: TensorDict(
+        fields={
+            done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+            pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False)},
+        batch_size=torch.Size([]),
+        device=cpu,
+        is_shared=False)
+    Q-value network results: TensorDict(
+        fields={
+            action: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.int64, is_shared=False),
+            action_value: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
+            chosen_action_value: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
+            done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+            pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False)},
+        batch_size=torch.Size([]),
+        device=cpu,
+        is_shared=False)
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 558-576
+
+.. code-block:: default
+
+
+    max_size = frames_per_batch // n_workers
+
+    replay_buffer = TensorDictReplayBuffer(
+        storage=LazyMemmapStorage(-(-buffer_size // max_size)),
+        prefetch=n_optim,
     )
-    print(actor_explore(test_env.reset()))
+
+    data_collector = MultiaSyncDataCollector(
+        [make_env(True, m=m, s=s), make_env(True, m=m, s=s)],
+        policy=actor_explore,
+        frames_per_batch=frames_per_batch,
+        total_frames=total_frames,
+        exploration_mode="random",
+        devices=[device, device],
+        storing_devices=[device, device],
+    )
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 577-582
+
+.. code-block:: default
+
+
+    optim = torch.optim.Adam(list(params_flat.values()), lr)
+    dummy_env = make_env(parallel=False, m=m, s=s)
+    print(actor_explore(dummy_env.reset()))
 
 
 
@@ -1178,96 +950,63 @@ We reset the actor parameters:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 736-741
-
-Data: Replay buffer and collector
----------------------------------
-
-We need to build a new replay buffer of the appropriate size:
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 741-771
+.. GENERATED FROM PYTHON SOURCE LINES 583-595
 
 .. code-block:: default
 
 
-    max_size = frames_per_batch // num_workers
-
-    replay_buffer = TensorDictReplayBuffer(
-        storage=LazyMemmapStorage(-(-buffer_size // max_size)),
-        prefetch=n_optim,
-    )
-
-    data_collector = MultiaSyncDataCollector(
-        [
-            make_env(
-                parallel=True, observation_norm_state_dict=observation_norm_state_dict
-            ),
-        ]
-        * num_collectors,
-        policy=actor_explore,
-        frames_per_batch=frames_per_batch,
-        total_frames=total_frames,
-        exploration_mode="random",
-        devices=[device] * num_collectors,
-        storing_devices=[device] * num_collectors,
-        # devices=[f"cuda:{i}" for i in range(1, 1 + num_collectors)],
-        # storing_devices=[f"cuda:{i}" for i in range(1, 1 + num_collectors)],
-        split_trajs=False,
-    )
-
-
-    logs_exp2 = defaultdict(list)
+    evals = []
+    traj_lengths_eval = []
+    losses = []
+    frames = []
+    values = []
+    grad_vals = []
+    traj_lengths = []
+    mavgs = []
+    traj_count = []
     prev_traj_count = 0
 
 
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    error:  0.1149, value:  1.7689, test return:  3.2000: : 5024it [02:00, 49.92it/s]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 772-782
+.. GENERATED FROM PYTHON SOURCE LINES 596-604
 
 Training loop
--------------
-
+------------------------------
 There are very few differences with the training loop above:
 
-- The tensordict received by the collector is used as-is, without being
-  flattened (recall the ``data.view(-1)`` above), to keep the temporal
-  relation between consecutive steps.
-- We use :func:`vec_td_lambda_advantage_estimate` to compute the target
-  value.
+- The tensordict received by the collector is not masked but padded to the
+  desired shape (such that all tensordicts have the same shape of
+  ``[Batch x max_size]``), and sent directly to the RB.
+- We use ``vec_td_lambda_advantage_estimate`` to compute the target value.
 
-.. GENERATED FROM PYTHON SOURCE LINES 782-877
+.. GENERATED FROM PYTHON SOURCE LINES 604-740
 
 .. code-block:: default
 
 
     pbar = tqdm.tqdm(total=total_frames)
     for j, data in enumerate(data_collector):
-        current_frames = data.numel()
+        mask = data["collector", "mask"]
+        data = pad(data, [0, 0, 0, max_size - data.shape[1]])
+        current_frames = mask.sum().cpu().item()
         pbar.update(current_frames)
 
         replay_buffer.extend(data.cpu())
-        if len(logs_exp2["frames"]):
-            logs_exp2["frames"].append(current_frames + logs_exp2["frames"][-1])
+        if len(frames):
+            frames.append(current_frames + frames[-1])
         else:
-            logs_exp2["frames"].append(current_frames)
+            frames.append(current_frames)
 
         if data["done"].any():
             done = data["done"].squeeze(-1)
-            logs_exp2["traj_lengths"].append(
-                data["collector", "step_count"][done].float().mean().item()
-            )
+            traj_lengths.append(data["collector", "step_count"][done].float().mean().item())
 
-        if sum(logs_exp2["frames"]) > init_random_frames:
+        if sum(frames) > init_random_frames:
             for _ in range(n_optim):
                 sampled_data = replay_buffer.sample(batch_size // max_size)
                 sampled_data = sampled_data.clone().to(device, non_blocking=True)
@@ -1294,278 +1033,226 @@ There are very few differences with the training loop above:
                     reward,
                     done,
                 ).pow(2)
-                error = error.mean()
+                # reward + gamma * next_value * (1 - done)
+                mask = sampled_data["collector", "mask"]
+                error = error[mask].mean()
+                # assert exp_value.shape == action_value.shape
+                # error = nn.functional.smooth_l1_loss(exp_value, action_value).mean()
+                # error = nn.functional.mse_loss(exp_value, action_value)[mask].mean()
                 error.backward()
 
-                gv = nn.utils.clip_grad_norm_(list(params_flat.values()), 1)
+                # gv = sum([p.grad.pow(2).sum() for p in params_flat.values()]).sqrt()
+                # nn.utils.clip_grad_value_(list(params_flat.values()), 1)
+                gv = nn.utils.clip_grad_norm_(list(params_flat.values()), 100)
 
                 optim.step()
                 optim.zero_grad()
 
-                # update of the target parameters
-                params_target.apply(
-                    lambda p_target, p_orig: p_orig * tau + p_target * (1 - tau),
-                    params.detach(),
-                    inplace=True,
-                )
+                for (key, p1) in params_flat.items():
+                    p2 = params_target_flat[key]
+                    params_target_flat.set_(key, tau * p1.data + (1 - tau) * p2.data)
 
+            pbar.set_description(
+                f"error: {error: 4.4f}, value: {action_value.mean(): 4.4f}"
+            )
             actor_explore.step(current_frames)
 
-            # Logging
-            logs_exp2["grad_vals"].append(float(gv))
-
-            logs_exp2["losses"].append(error.item())
-            logs_exp2["values"].append(action_value.mean().item())
-            logs_exp2["traj_count"].append(prev_traj_count + data["done"].sum().item())
-            prev_traj_count = logs_exp2["traj_count"][-1]
+            # logs
+            with set_exploration_mode("random"), torch.no_grad():
+                #         eval_rollout = dummy_env.rollout(max_steps=1000, policy=actor_explore, auto_reset=True).cpu()
+                eval_rollout = dummy_env.rollout(
+                    max_steps=10000, policy=actor, auto_reset=True
+                ).cpu()
+            grad_vals.append(float(gv))
+            traj_lengths_eval.append(eval_rollout.shape[-1])
+            evals.append(eval_rollout["reward"].squeeze(-1).sum(-1).item())
+            if len(mavgs):
+                mavgs.append(evals[-1] * 0.05 + mavgs[-1] * 0.95)
+            else:
+                mavgs.append(evals[-1])
+            losses.append(error.item())
+            values.append(action_value[mask].mean().item())
+            traj_count.append(prev_traj_count + data["done"].sum().item())
+            prev_traj_count = traj_count[-1]
+            # plots
             if j % 10 == 0:
-                with set_exploration_mode("mode"), torch.no_grad():
-                    # execute a rollout. The `set_exploration_mode("mode")` has
-                    # no effect here since the policy is deterministic, but we add
-                    # it for completeness
-                    eval_rollout = test_env.rollout(
-                        max_steps=10000,
-                        policy=actor,
-                    ).cpu()
-                logs_exp2["traj_lengths_eval"].append(eval_rollout.shape[-1])
-                logs_exp2["evals"].append(eval_rollout["reward"].sum().item())
-                if len(logs_exp2["mavgs"]):
-                    logs_exp2["mavgs"].append(
-                        logs_exp2["evals"][-1] * 0.05 + logs_exp2["mavgs"][-1] * 0.95
-                    )
+                if is_notebook():
+                    display.clear_output(wait=True)
+                    display.display(plt.gcf())
                 else:
-                    logs_exp2["mavgs"].append(logs_exp2["evals"][-1])
-                logs_exp2["traj_count_eval"].append(logs_exp2["traj_count"][-1])
-                pbar.set_description(
-                    f"error: {error: 4.4f}, value: {action_value.mean(): 4.4f}, test return: {logs_exp2['evals'][-1]: 4.4f}"
-                )
+                    plt.clf()
+                plt.figure(figsize=(15, 15))
+                plt.subplot(3, 2, 1)
+                plt.plot(frames[-len(evals) :], evals, label="return")
+                plt.plot(frames[-len(mavgs) :], mavgs, label="mavg")
+                plt.xlabel("frames collected")
+                plt.ylabel("trajectory length (= return)")
+                plt.subplot(3, 2, 2)
+                plt.plot(traj_count[-len(evals) :], evals, label="return")
+                plt.plot(traj_count[-len(mavgs) :], mavgs, label="mavg")
+                plt.xlabel("trajectories collected")
+                plt.legend()
+                plt.subplot(3, 2, 3)
+                plt.plot(frames[-len(losses) :], losses)
+                plt.xlabel("frames collected")
+                plt.title("loss")
+                plt.subplot(3, 2, 4)
+                plt.plot(frames[-len(values) :], values)
+                plt.xlabel("frames collected")
+                plt.title("value")
+                plt.subplot(3, 2, 5)
+                plt.plot(frames[-len(grad_vals) :], grad_vals)
+                plt.xlabel("frames collected")
+                plt.title("grad norm")
+                if len(traj_lengths):
+                    plt.subplot(3, 2, 6)
+                    plt.plot(traj_lengths)
+                    plt.xlabel("batches")
+                    plt.title("traj length (training)")
+            plt.savefig("dqn_tdlambda.png")
+            if is_notebook():
+                plt.show()
 
         # update policy weights
         data_collector.update_policy_weights_()
-
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-
-      0%|          | 0/5000 [00:00<?, ?it/s]    error:  0.1149, value:  1.7689, test return:  3.2000: : 5024it [02:08, 38.99it/s]
-
-      1%|          | 32/5000 [00:00<02:03, 40.30it/s]Creating a MemmapStorage...
-    The storage is being created: 
-            _batch_size: /tmp/tmptqxfbjhu, 0.00238800048828125 Mb of storage (size: torch.Size([313, 1])).
-            action: /tmp/tmpu34uu7j6, 0.076416015625 Mb of storage (size: torch.Size([313, 16, 2])).
-            action_value: /tmp/tmpamoeuzkf, 0.0382080078125 Mb of storage (size: torch.Size([313, 16, 2])).
-            chosen_action_value: /tmp/tmpvxjfahp8, 0.01910400390625 Mb of storage (size: torch.Size([313, 16, 1])).
-            done: /tmp/tmpbxzlbq1k, 0.0047760009765625 Mb of storage (size: torch.Size([313, 16, 1])).
-            index: /tmp/tmppk_ek50p, 0.001194000244140625 Mb of storage (size: torch.Size([313])).
-            pixels: /tmp/tmp5xw8lo6p, 313.0 Mb of storage (size: torch.Size([313, 16, 4, 64, 64])).
-            reward: /tmp/tmp4ft_amac, 0.01910400390625 Mb of storage (size: torch.Size([313, 16, 1])).
-            ('collector', 'step_count'): /tmp/tmpikow04bx, 0.0382080078125 Mb of storage (size: torch.Size([313, 16])).
-            ('collector', 'traj_ids'): /tmp/tmpo17wp6wg, 0.0382080078125 Mb of storage (size: torch.Size([313, 16])).
-            ('next', 'pixels'): /tmp/tmpgzvd2zkf, 313.0 Mb of storage (size: torch.Size([313, 16, 4, 64, 64])).
-
-      1%|1         | 64/5000 [00:01<01:21, 60.51it/s]
-      2%|1         | 96/5000 [00:02<02:03, 39.70it/s]
-      3%|2         | 128/5000 [00:03<02:23, 33.92it/s]
-      3%|3         | 160/5000 [00:04<02:15, 35.60it/s]
-      4%|3         | 192/5000 [00:04<02:03, 38.79it/s]
-      4%|4         | 224/5000 [00:05<01:56, 40.92it/s]
-      5%|5         | 256/5000 [00:06<01:50, 42.96it/s]
-      6%|5         | 288/5000 [00:06<01:45, 44.82it/s]
-      6%|6         | 320/5000 [00:07<01:40, 46.50it/s]
-      7%|7         | 352/5000 [00:08<01:38, 47.23it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:   7%|7         | 352/5000 [00:09<01:38, 47.23it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:   8%|7         | 384/5000 [00:09<01:42, 44.90it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:   8%|8         | 416/5000 [00:09<01:38, 46.33it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:   9%|8         | 448/5000 [00:10<01:36, 47.23it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:  10%|9         | 480/5000 [00:10<01:36, 46.94it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:  10%|#         | 512/5000 [00:11<01:36, 46.53it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:  11%|#         | 544/5000 [00:12<01:40, 44.16it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:  12%|#1        | 576/5000 [00:13<01:39, 44.52it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:  12%|#2        | 608/5000 [00:13<01:37, 45.21it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:  13%|#2        | 640/5000 [00:14<01:35, 45.75it/s]
-    error:  0.8651, value:  1.6569, test return:  1.1000:  13%|#3        | 672/5000 [00:15<01:33, 46.45it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  13%|#3        | 672/5000 [00:16<01:33, 46.45it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  14%|#4        | 704/5000 [00:16<01:41, 42.25it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  15%|#4        | 736/5000 [00:16<01:36, 44.07it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  15%|#5        | 768/5000 [00:17<01:32, 45.60it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  16%|#6        | 800/5000 [00:18<01:30, 46.27it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  17%|#6        | 832/5000 [00:18<01:28, 47.03it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  17%|#7        | 864/5000 [00:19<01:27, 47.51it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  18%|#7        | 896/5000 [00:20<01:26, 47.42it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  19%|#8        | 928/5000 [00:20<01:27, 46.78it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  19%|#9        | 960/5000 [00:21<01:29, 45.25it/s]
-    error:  0.2788, value:  1.5692, test return:  2.8000:  20%|#9        | 992/5000 [00:22<01:35, 41.83it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  20%|#9        | 992/5000 [00:23<01:35, 41.83it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  20%|##        | 1024/5000 [00:23<01:36, 41.01it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  21%|##1       | 1056/5000 [00:23<01:32, 42.57it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  22%|##1       | 1088/5000 [00:24<01:29, 43.70it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  22%|##2       | 1120/5000 [00:25<01:24, 45.78it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  23%|##3       | 1152/5000 [00:25<01:22, 46.64it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  24%|##3       | 1184/5000 [00:26<01:20, 47.13it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  24%|##4       | 1216/5000 [00:27<01:18, 48.02it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  25%|##4       | 1248/5000 [00:27<01:18, 47.62it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  26%|##5       | 1280/5000 [00:28<01:18, 47.50it/s]
-    error:  0.3828, value:  1.3607, test return:  0.8000:  26%|##6       | 1312/5000 [00:29<01:16, 47.98it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  26%|##6       | 1312/5000 [00:30<01:16, 47.98it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  27%|##6       | 1344/5000 [00:30<01:19, 45.93it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  28%|##7       | 1376/5000 [00:30<01:17, 46.93it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  28%|##8       | 1408/5000 [00:31<01:17, 46.40it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  29%|##8       | 1440/5000 [00:32<01:17, 45.99it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  29%|##9       | 1472/5000 [00:32<01:16, 46.31it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  30%|###       | 1504/5000 [00:33<01:15, 46.14it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  31%|###       | 1536/5000 [00:34<01:14, 46.77it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  31%|###1      | 1568/5000 [00:34<01:13, 46.80it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  32%|###2      | 1600/5000 [00:35<01:14, 45.80it/s]
-    error:  3.2302, value:  3.3421, test return:  1.1000:  33%|###2      | 1632/5000 [00:36<01:11, 46.92it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  33%|###2      | 1632/5000 [00:37<01:11, 46.92it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  33%|###3      | 1664/5000 [00:37<01:21, 40.73it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  34%|###3      | 1696/5000 [00:37<01:16, 43.25it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  35%|###4      | 1728/5000 [00:38<01:13, 44.58it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  35%|###5      | 1760/5000 [00:39<01:10, 45.82it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  36%|###5      | 1792/5000 [00:39<01:07, 47.27it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  36%|###6      | 1824/5000 [00:40<01:06, 47.68it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  37%|###7      | 1856/5000 [00:41<01:07, 46.33it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  38%|###7      | 1888/5000 [00:41<01:05, 47.36it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  38%|###8      | 1920/5000 [00:42<01:05, 46.74it/s]
-    error:  0.2757, value:  1.1869, test return:  4.5000:  39%|###9      | 1952/5000 [00:43<01:05, 46.81it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  39%|###9      | 1952/5000 [00:44<01:05, 46.81it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  40%|###9      | 1984/5000 [00:44<01:12, 41.77it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  40%|####      | 2016/5000 [00:44<01:07, 44.21it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  41%|####      | 2048/5000 [00:45<01:04, 45.72it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  42%|####1     | 2080/5000 [00:46<01:03, 46.11it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  42%|####2     | 2112/5000 [00:46<01:02, 46.54it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  43%|####2     | 2144/5000 [00:47<01:00, 46.84it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  44%|####3     | 2176/5000 [00:48<01:00, 47.02it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  44%|####4     | 2208/5000 [00:48<00:59, 46.72it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  45%|####4     | 2240/5000 [00:49<00:58, 47.32it/s]
-    error:  0.5037, value:  1.5186, test return:  3.1000:  45%|####5     | 2272/5000 [00:50<00:56, 48.46it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  45%|####5     | 2272/5000 [00:50<00:56, 48.46it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  46%|####6     | 2304/5000 [00:50<00:58, 46.07it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  47%|####6     | 2336/5000 [00:51<00:57, 46.56it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  47%|####7     | 2368/5000 [00:52<00:58, 45.02it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  48%|####8     | 2400/5000 [00:53<00:58, 44.68it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  49%|####8     | 2432/5000 [00:53<00:57, 44.93it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  49%|####9     | 2464/5000 [00:54<00:54, 46.33it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  50%|####9     | 2496/5000 [00:55<00:53, 46.59it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  51%|#####     | 2528/5000 [00:55<00:52, 47.08it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  51%|#####1    | 2560/5000 [00:56<00:52, 46.87it/s]
-    error:  0.9095, value:  2.0276, test return:  1.1000:  52%|#####1    | 2592/5000 [00:57<00:50, 47.92it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  52%|#####1    | 2592/5000 [00:57<00:50, 47.92it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  52%|#####2    | 2624/5000 [00:57<00:51, 46.02it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  53%|#####3    | 2656/5000 [00:58<00:51, 45.65it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  54%|#####3    | 2688/5000 [00:59<00:49, 46.55it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  54%|#####4    | 2720/5000 [00:59<00:48, 46.71it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  55%|#####5    | 2752/5000 [01:00<00:46, 47.84it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  56%|#####5    | 2784/5000 [01:01<00:46, 47.46it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  56%|#####6    | 2816/5000 [01:01<00:47, 45.56it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  57%|#####6    | 2848/5000 [01:02<00:48, 44.14it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  58%|#####7    | 2880/5000 [01:03<00:47, 44.20it/s]
-    error:  0.4867, value:  1.7418, test return:  1.1000:  58%|#####8    | 2912/5000 [01:04<00:46, 45.36it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  58%|#####8    | 2912/5000 [01:05<00:46, 45.36it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  59%|#####8    | 2944/5000 [01:05<00:51, 40.17it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  60%|#####9    | 2976/5000 [01:05<00:48, 42.11it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  60%|######    | 3008/5000 [01:06<00:45, 43.86it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  61%|######    | 3040/5000 [01:07<00:43, 44.65it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  61%|######1   | 3072/5000 [01:07<00:42, 45.83it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  62%|######2   | 3104/5000 [01:08<00:40, 46.28it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  63%|######2   | 3136/5000 [01:09<00:39, 47.72it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  63%|######3   | 3168/5000 [01:09<00:38, 48.19it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  64%|######4   | 3200/5000 [01:10<00:37, 48.27it/s]
-    error:  0.5294, value:  2.5023, test return:  4.3000:  65%|######4   | 3232/5000 [01:11<00:37, 47.13it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  65%|######4   | 3232/5000 [01:12<00:37, 47.13it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  65%|######5   | 3264/5000 [01:12<00:42, 40.96it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  66%|######5   | 3296/5000 [01:12<00:40, 41.72it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  67%|######6   | 3328/5000 [01:13<00:39, 42.28it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  67%|######7   | 3360/5000 [01:14<00:37, 43.83it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  68%|######7   | 3392/5000 [01:14<00:35, 45.19it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  68%|######8   | 3424/5000 [01:15<00:34, 45.96it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  69%|######9   | 3456/5000 [01:16<00:32, 46.83it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  70%|######9   | 3488/5000 [01:16<00:32, 47.09it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  70%|#######   | 3520/5000 [01:17<00:31, 47.25it/s]
-    error:  1.0503, value:  1.9933, test return:  3.9000:  71%|#######1  | 3552/5000 [01:18<00:30, 47.16it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  71%|#######1  | 3552/5000 [01:19<00:30, 47.16it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  72%|#######1  | 3584/5000 [01:19<00:33, 42.24it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  72%|#######2  | 3616/5000 [01:19<00:31, 44.09it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  73%|#######2  | 3648/5000 [01:20<00:29, 45.31it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  74%|#######3  | 3680/5000 [01:21<00:29, 44.85it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  74%|#######4  | 3712/5000 [01:21<00:28, 44.72it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  75%|#######4  | 3744/5000 [01:22<00:27, 45.11it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  76%|#######5  | 3776/5000 [01:23<00:27, 44.86it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  76%|#######6  | 3808/5000 [01:24<00:25, 45.91it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  77%|#######6  | 3840/5000 [01:24<00:24, 46.62it/s]
-    error:  0.3585, value:  1.5799, test return:  3.4000:  77%|#######7  | 3872/5000 [01:25<00:23, 47.60it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  77%|#######7  | 3872/5000 [01:26<00:23, 47.60it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  78%|#######8  | 3904/5000 [01:26<00:23, 46.00it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  79%|#######8  | 3936/5000 [01:26<00:22, 46.30it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  79%|#######9  | 3968/5000 [01:27<00:22, 46.91it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  80%|########  | 4000/5000 [01:28<00:21, 47.60it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  81%|########  | 4032/5000 [01:28<00:20, 47.49it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  81%|########1 | 4064/5000 [01:29<00:19, 47.83it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  82%|########1 | 4096/5000 [01:30<00:18, 47.72it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  83%|########2 | 4128/5000 [01:30<00:18, 46.75it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  83%|########3 | 4160/5000 [01:31<00:18, 46.24it/s]
-    error:  0.7373, value:  1.8011, test return:  0.9000:  84%|########3 | 4192/5000 [01:32<00:17, 45.19it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  84%|########3 | 4192/5000 [01:33<00:17, 45.19it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  84%|########4 | 4224/5000 [01:33<00:20, 37.89it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  85%|########5 | 4256/5000 [01:34<00:18, 40.26it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  86%|########5 | 4288/5000 [01:34<00:16, 42.85it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  86%|########6 | 4320/5000 [01:35<00:15, 44.26it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  87%|########7 | 4352/5000 [01:36<00:14, 44.96it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  88%|########7 | 4384/5000 [01:36<00:13, 45.87it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  88%|########8 | 4416/5000 [01:37<00:12, 46.13it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  89%|########8 | 4448/5000 [01:38<00:12, 45.01it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  90%|########9 | 4480/5000 [01:38<00:11, 45.64it/s]
-    error:  0.3675, value:  1.7239, test return:  5.1000:  90%|######### | 4512/5000 [01:39<00:10, 45.76it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  90%|######### | 4512/5000 [01:40<00:10, 45.76it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  91%|######### | 4544/5000 [01:40<00:11, 40.04it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  92%|#########1| 4576/5000 [01:41<00:10, 41.09it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  92%|#########2| 4608/5000 [01:42<00:09, 41.59it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  93%|#########2| 4640/5000 [01:42<00:08, 42.81it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  93%|#########3| 4672/5000 [01:43<00:07, 43.76it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  94%|#########4| 4704/5000 [01:44<00:06, 45.23it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  95%|#########4| 4736/5000 [01:44<00:05, 45.85it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  95%|#########5| 4768/5000 [01:45<00:04, 46.97it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  96%|#########6| 4800/5000 [01:46<00:04, 47.68it/s]
-    error:  0.2891, value:  1.0758, test return:  4.5000:  97%|#########6| 4832/5000 [01:46<00:03, 47.29it/s]
-    error:  0.5220, value:  1.7625, test return:  1.0000:  97%|#########6| 4832/5000 [01:47<00:03, 47.29it/s]
-    error:  0.5220, value:  1.7625, test return:  1.0000:  97%|#########7| 4864/5000 [01:47<00:02, 46.04it/s]
-    error:  0.5220, value:  1.7625, test return:  1.0000:  98%|#########7| 4896/5000 [01:48<00:02, 46.85it/s]
-    error:  0.5220, value:  1.7625, test return:  1.0000:  99%|#########8| 4928/5000 [01:48<00:01, 47.37it/s]
-    error:  0.5220, value:  1.7625, test return:  1.0000:  99%|#########9| 4960/5000 [01:49<00:00, 47.24it/s]
-    error:  0.5220, value:  1.7625, test return:  1.0000: 100%|#########9| 4992/5000 [01:50<00:00, 47.44it/s]
-    error:  0.5220, value:  1.7625, test return:  1.0000: : 5024it [01:50, 47.32it/s]                        
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 878-888
-
-TD(:math:`\lambda`) performs significantly better than TD(0) because it
-retrieves a much less biased estimate of the state-action value.
-
-.. code-block:: python
-
-   plot(logs_exp2, "dqn_tdlambda.png")
-
-.. figure:: /_static/img/dqn_tdlambda.png
-   :alt: Cart Pole results with TD(lambda)
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 888-894
-
-.. code-block:: default
-
-
 
     print("shutting down")
     data_collector.shutdown()
     del data_collector
 
+    if is_notebook():
+        display.clear_output(wait=True)
+        display.display(plt.gcf())
+
+
+
+
+.. rst-class:: sphx-glr-horizontal
+
+
+    *
+
+      .. image-sg:: /tutorials/images/sphx_glr_coding_dqn_004.png
+         :alt: coding dqn
+         :srcset: /tutorials/images/sphx_glr_coding_dqn_004.png
+         :class: sphx-glr-multi-img
+
+    *
+
+      .. image-sg:: /tutorials/images/sphx_glr_coding_dqn_005.png
+         :alt: loss, value, grad norm, traj length (training)
+         :srcset: /tutorials/images/sphx_glr_coding_dqn_005.png
+         :class: sphx-glr-multi-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+      0%|          | 0/500 [00:00<?, ?it/s]    error:  0.7067, value:  20.2968: : 512it [00:52,  9.80it/s]
+
+      6%|6         | 32/500 [00:01<00:19, 24.14it/s]Creating a MemmapStorage...
+    The storage is being created: 
+            _batch_size: /tmp/tmpruisl_rd, 0.0001220703125 Mb of storage (size: torch.Size([16, 1])).
+            action: /tmp/tmpgyp7ep8n, 0.0078125 Mb of storage (size: torch.Size([16, 32, 2])).
+            action_value: /tmp/tmp2kwjrik1, 0.00390625 Mb of storage (size: torch.Size([16, 32, 2])).
+            chosen_action_value: /tmp/tmpudby5gfj, 0.001953125 Mb of storage (size: torch.Size([16, 32, 1])).
+            done: /tmp/tmp4hq5x7bx, 0.00048828125 Mb of storage (size: torch.Size([16, 32, 1])).
+            index: /tmp/tmpcbax21vk, 6.103515625e-05 Mb of storage (size: torch.Size([16])).
+            pixels: /tmp/tmpenws6cqb, 32.0 Mb of storage (size: torch.Size([16, 32, 4, 64, 64])).
+            reward: /tmp/tmpxu0v7qbk, 0.001953125 Mb of storage (size: torch.Size([16, 32, 1])).
+            ('collector', 'mask'): /tmp/tmpiezi6wvs, 0.00048828125 Mb of storage (size: torch.Size([16, 32])).
+            ('collector', 'step_count'): /tmp/tmpdap0cpyh, 0.00390625 Mb of storage (size: torch.Size([16, 32])).
+            ('collector', 'traj_ids'): /tmp/tmpfxmzxajg, 0.00390625 Mb of storage (size: torch.Size([16, 32])).
+            ('next', 'pixels'): /tmp/tmpeo5y8rbq, 32.0 Mb of storage (size: torch.Size([16, 32, 4, 64, 64])).
+
+     13%|#2        | 64/500 [00:02<00:13, 31.32it/s]
+    error:  0.7145, value:  1.8243:  19%|#9        | 96/500 [00:02<00:12, 31.32it/s]
+    error:  0.7145, value:  1.8243:  26%|##5       | 128/500 [00:03<00:08, 42.93it/s]
+    error:  50.2551, value:  5.0196:  26%|##5       | 128/500 [00:03<00:08, 42.93it/s]
+    error:  50.2551, value:  5.0196:  32%|###2      | 160/500 [00:03<00:07, 45.60it/s]
+    error:  10.4509, value:  1.4025:  32%|###2      | 160/500 [00:04<00:07, 45.60it/s]
+    error:  10.4509, value:  1.4025:  38%|###8      | 192/500 [00:04<00:06, 49.37it/s]
+    error:  2.7928, value:  0.5524:  38%|###8      | 192/500 [00:04<00:06, 49.37it/s] 
+    error:  2.7928, value:  0.5524:  45%|####4     | 224/500 [00:04<00:05, 52.47it/s]
+    error:  104.9315, value:  4.6982:  45%|####4     | 224/500 [00:05<00:05, 52.47it/s]
+    error:  104.9315, value:  4.6982:  51%|#####1    | 256/500 [00:05<00:04, 53.21it/s]
+    error:  21.9198, value:  4.3187:  51%|#####1    | 256/500 [00:06<00:04, 53.21it/s] 
+    error:  21.9198, value:  4.3187:  58%|#####7    | 288/500 [00:06<00:04, 51.63it/s]
+    error:  46.4283, value: -0.5503:  58%|#####7    | 288/500 [00:06<00:04, 51.63it/s]
+    error:  46.4283, value: -0.5503:  64%|######4   | 320/500 [00:07<00:04, 44.92it/s]
+    error:  47.6947, value: -0.6020:  64%|######4   | 320/500 [00:07<00:04, 44.92it/s]
+    error:  47.6947, value: -0.6020:  70%|#######   | 352/500 [00:07<00:03, 45.18it/s]
+    error:  5.9698, value:  2.3169:  70%|#######   | 352/500 [00:08<00:03, 45.18it/s] 
+    error:  5.9698, value:  2.3169:  77%|#######6  | 384/500 [00:09<00:03, 37.18it/s]
+    error:  60.8769, value:  3.3127:  77%|#######6  | 384/500 [00:09<00:03, 37.18it/s]
+    error:  60.8769, value:  3.3127:  83%|########3 | 416/500 [00:09<00:02, 36.18it/s]
+    error:  20.6197, value:  3.2082:  83%|########3 | 416/500 [00:10<00:02, 36.18it/s]
+    error:  20.6197, value:  3.2082:  90%|########9 | 448/500 [00:10<00:01, 34.56it/s]
+    error:  6.6709, value:  0.8238:  90%|########9 | 448/500 [00:11<00:01, 34.56it/s] 
+    error:  6.6709, value:  0.8238:  96%|#########6| 480/500 [00:12<00:00, 33.52it/s]
+    error:  4.3114, value:  1.7190:  96%|#########6| 480/500 [00:12<00:00, 33.52it/s]
+    error:  4.3114, value:  1.7190: : 512it [00:12, 34.35it/s]                       
+    error:  8.4433, value:  0.7238: : 512it [00:13, 34.35it/s]shutting down
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 741-743
+
+**Note**: As already mentioned above, to get a more reasonable performance,
+use a greater value for ``total_frames`` e.g. 500000.
+
+.. GENERATED FROM PYTHON SOURCE LINES 743-749
+
+.. code-block:: default
+
+
+    plt.figure(figsize=(15, 15))
+    plt.imshow(plt.imread("dqn_tdlambda.png"))
+    plt.tight_layout()
+    plt.axis("off")
+
+
+
+
+.. image-sg:: /tutorials/images/sphx_glr_coding_dqn_006.png
+   :alt: coding dqn
+   :srcset: /tutorials/images/sphx_glr_coding_dqn_006.png
+   :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    (-0.5, 1499.5, 1499.5, -0.5)
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 750-767
+
+.. code-block:: default
+
+
+    # save results
+    torch.save(
+        {
+            "frames": frames,
+            "evals": evals,
+            "mavgs": mavgs,
+            "losses": losses,
+            "values": values,
+            "grad_vals": grad_vals,
+            "traj_lengths_training": traj_lengths,
+            "traj_count": traj_count,
+            "weights": (params,),
+        },
+        "saved_results_tdlambda.pt",
+    )
+
 
 
 
@@ -1574,12 +1261,12 @@ retrieves a much less biased estimate of the state-action value.
 
  .. code-block:: none
 
-    shutting down
+
+    error:  8.4433, value:  0.7238: : 512it [00:23, 34.35it/s]
 
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 895-901
+.. GENERATED FROM PYTHON SOURCE LINES 768-774
 
 Let's compare the results on a single plot. Because the TD(lambda) version
 works better, we'll have fewer episodes collected for a given number of
@@ -1588,138 +1275,169 @@ frames (as there are more frames per episode).
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 500000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 901-956
+.. GENERATED FROM PYTHON SOURCE LINES 774-854
 
 .. code-block:: default
 
 
+    load_td0 = torch.load("saved_results_td0.pt")
+    load_tdlambda = torch.load("saved_results_tdlambda.pt")
+    frames_td0 = load_td0["frames"]
+    frames_tdlambda = load_tdlambda["frames"]
+    evals_td0 = load_td0["evals"]
+    evals_tdlambda = load_tdlambda["evals"]
+    mavgs_td0 = load_td0["mavgs"]
+    mavgs_tdlambda = load_tdlambda["mavgs"]
+    losses_td0 = load_td0["losses"]
+    losses_tdlambda = load_tdlambda["losses"]
+    values_td0 = load_td0["values"]
+    values_tdlambda = load_tdlambda["values"]
+    grad_vals_td0 = load_td0["grad_vals"]
+    grad_vals_tdlambda = load_tdlambda["grad_vals"]
+    traj_lengths_td0 = load_td0["traj_lengths_training"]
+    traj_lengths_tdlambda = load_tdlambda["traj_lengths_training"]
+    traj_count_td0 = load_td0["traj_count"]
+    traj_count_tdlambda = load_tdlambda["traj_count"]
 
-    def plot_both():
-        frames_td0 = logs_exp1["frames"]
-        frames_tdlambda = logs_exp2["frames"]
-        evals_td0 = logs_exp1["evals"]
-        evals_tdlambda = logs_exp2["evals"]
-        mavgs_td0 = logs_exp1["mavgs"]
-        mavgs_tdlambda = logs_exp2["mavgs"]
-        traj_count_td0 = logs_exp1["traj_count_eval"]
-        traj_count_tdlambda = logs_exp2["traj_count_eval"]
-
-        plt.figure(figsize=(15, 10))
-        plt.subplot(1, 2, 1)
-        plt.plot(frames_td0[-len(evals_td0) :], evals_td0, label="return (td0)", alpha=0.5)
-        plt.plot(
-            frames_tdlambda[-len(evals_tdlambda) :],
-            evals_tdlambda,
-            label="return (td(lambda))",
-            alpha=0.5,
-        )
-        plt.plot(frames_td0[-len(mavgs_td0) :], mavgs_td0, label="mavg (td0)")
-        plt.plot(
-            frames_tdlambda[-len(mavgs_tdlambda) :],
-            mavgs_tdlambda,
-            label="mavg (td(lambda))",
-        )
-        plt.xlabel("frames collected")
-        plt.ylabel("trajectory length (= return)")
-
-        plt.subplot(1, 2, 2)
-        plt.plot(
-            traj_count_td0[-len(evals_td0) :],
-            evals_td0,
-            label="return (td0)",
-            alpha=0.5,
-        )
-        plt.plot(
-            traj_count_tdlambda[-len(evals_tdlambda) :],
-            evals_tdlambda,
-            label="return (td(lambda))",
-            alpha=0.5,
-        )
-        plt.plot(traj_count_td0[-len(mavgs_td0) :], mavgs_td0, label="mavg (td0)")
-        plt.plot(
-            traj_count_tdlambda[-len(mavgs_tdlambda) :],
-            mavgs_tdlambda,
-            label="mavg (td(lambda))",
-        )
-        plt.xlabel("trajectories collected")
+    plt.figure(figsize=(15, 15))
+    plt.subplot(3, 2, 1)
+    plt.plot(frames[-len(evals_td0) :], evals_td0, label="return (td0)", alpha=0.5)
+    plt.plot(
+        frames[-len(evals_tdlambda) :],
+        evals_tdlambda,
+        label="return (td(lambda))",
+        alpha=0.5,
+    )
+    plt.plot(frames[-len(mavgs_td0) :], mavgs_td0, label="mavg (td0)")
+    plt.plot(frames[-len(mavgs_tdlambda) :], mavgs_tdlambda, label="mavg (td(lambda))")
+    plt.xlabel("frames collected")
+    plt.ylabel("trajectory length (= return)")
+    plt.subplot(3, 2, 2)
+    plt.plot(traj_count_td0[-len(evals_td0) :], evals_td0, label="return (td0)", alpha=0.5)
+    plt.plot(
+        traj_count_tdlambda[-len(evals_tdlambda) :],
+        evals_tdlambda,
+        label="return (td(lambda))",
+        alpha=0.5,
+    )
+    plt.plot(traj_count_td0[-len(mavgs_td0) :], mavgs_td0, label="mavg (td0)")
+    plt.plot(
+        traj_count_tdlambda[-len(mavgs_tdlambda) :],
+        mavgs_tdlambda,
+        label="mavg (td(lambda))",
+    )
+    plt.xlabel("trajectories collected")
+    plt.legend()
+    plt.subplot(3, 2, 3)
+    plt.plot(frames[-len(losses_td0) :], losses_td0, label="loss (td0)")
+    plt.plot(frames[-len(losses_tdlambda) :], losses_tdlambda, label="loss (td(lambda))")
+    plt.xlabel("frames collected")
+    plt.title("loss")
+    plt.legend()
+    plt.subplot(3, 2, 4)
+    plt.plot(frames[-len(values_td0) :], values_td0, label="values (td0)")
+    plt.plot(frames[-len(values_tdlambda) :], values_tdlambda, label="values (td(lambda))")
+    plt.xlabel("frames collected")
+    plt.title("value")
+    plt.legend()
+    plt.subplot(3, 2, 5)
+    plt.plot(frames[-len(grad_vals_td0) :], grad_vals_td0, label="gradient norm (td0)")
+    plt.plot(
+        frames[-len(grad_vals_tdlambda) :],
+        grad_vals_tdlambda,
+        label="gradient norm (td(lambda))",
+    )
+    plt.xlabel("frames collected")
+    plt.title("grad norm")
+    plt.legend()
+    if len(traj_lengths):
+        plt.subplot(3, 2, 6)
+        plt.plot(traj_lengths_td0, label="episode length (td0)")
+        plt.plot(traj_lengths_tdlambda, label="episode length (td(lambda))")
+        plt.xlabel("batches")
         plt.legend()
-
-        plt.savefig("dqn.png")
-
+        plt.title("episode length (training)")
 
 
 
 
 
+.. image-sg:: /tutorials/images/sphx_glr_coding_dqn_007.png
+   :alt: loss, value, grad norm, episode length (training)
+   :srcset: /tutorials/images/sphx_glr_coding_dqn_007.png
+   :class: sphx-glr-single-img
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 957-974
 
-.. code-block:: python
 
-   plot_both()
-
-.. figure:: /_static/img/dqn.png
-   :alt: Cart Pole results from the TD(:math:`lambda`) trained policy.
+.. GENERATED FROM PYTHON SOURCE LINES 855-858
 
 Finally, we generate a new video to check what the algorithm has learnt.
-If all goes well, the duration should be significantly longer than with a
-random rollout.
+If all goes well, the duration should be significantly longer than with the
+initial, random rollout.
 
-To get the raw pixels of the rollout, we insert a
-:class:`torchrl.envs.CatTensors` transform that precedes all others and copies
-the ``"pixels"`` key onto a ``"pixels_save"`` key. This is necessary because
-the other transforms that modify this key will update its value in-place in
-the output tensordict.
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 974-981
+.. GENERATED FROM PYTHON SOURCE LINES 858-864
 
 .. code-block:: default
 
 
-    test_env.transform.insert(0, CatTensors(["pixels"], "pixels_save", del_keys=False))
-    eval_rollout = test_env.rollout(max_steps=10000, policy=actor, auto_reset=True).cpu()
-
-
-    del test_env
-
-
+    dummy_env.transform.insert(0, CatTensors(["pixels"], "pixels_save", del_keys=False))
+    eval_rollout = dummy_env.rollout(max_steps=10000, policy=actor, auto_reset=True).cpu()
+    print(eval_rollout)
+    del dummy_env
 
 
 
 
 
+.. rst-class:: sphx-glr-script-out
 
-.. GENERATED FROM PYTHON SOURCE LINES 987-996
+ .. code-block:: none
 
-The video of the rollout can be saved using the imageio package:
+    TensorDict(
+        fields={
+            action: Tensor(shape=torch.Size([10, 2]), device=cpu, dtype=torch.int64, is_shared=False),
+            action_value: Tensor(shape=torch.Size([10, 2]), device=cpu, dtype=torch.float32, is_shared=False),
+            chosen_action_value: Tensor(shape=torch.Size([10, 1]), device=cpu, dtype=torch.float32, is_shared=False),
+            done: Tensor(shape=torch.Size([10, 1]), device=cpu, dtype=torch.bool, is_shared=False),
+            next: TensorDict(
+                fields={
+                    pixels: Tensor(shape=torch.Size([10, 4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False)},
+                batch_size=torch.Size([10]),
+                device=cpu,
+                is_shared=False),
+            pixels: Tensor(shape=torch.Size([10, 4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False),
+            pixels_save: Tensor(shape=torch.Size([10, 400, 600, 3]), device=cpu, dtype=torch.uint8, is_shared=False),
+            reward: Tensor(shape=torch.Size([10, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
+        batch_size=torch.Size([10]),
+        device=cpu,
+        is_shared=False)
 
-.. code-block::
 
-  import imageio
-  imageio.mimwrite('cartpole.mp4', eval_rollout["pixels_save"].numpy(), fps=30);
 
-.. figure:: /_static/img/cartpole.gif
-   :alt: Cart Pole results from the TD(:math:`\lambda`) trained policy.
 
-.. GENERATED FROM PYTHON SOURCE LINES 998-1034
+.. GENERATED FROM PYTHON SOURCE LINES 865-869
+
+.. code-block:: default
+
+
+    # imageio.mimwrite('cartpole.mp4', eval_rollout["pixels_save"].numpy(), fps=30);
+    # Video('cartpole.mp4', width=480, height=360) #the width and height option as additional thing new in Ipython 7.6.1
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 870-896
 
 Conclusion and possible improvements
-------------------------------------
-
-In this tutorial we have learnt:
-
-- How to train a policy that read pixel-based states, what transforms to
-  include and how to normalize the data;
-- How to create a policy that picks up the action with the highest value
-  with :class:`torchrl.modules.QValueNetwork`;
-- How to build a multiprocessed data collector;
-- How to train a DQN with TD(:math:`\lambda`) returns.
-
-We have seen that using TD(:math:`\lambda`) greatly improved the performance
-of DQN. Other possible improvements could include:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+We have seen that using TD(lambda) greatly improved the performance of our
+algorithm. Other possible improvements could include:
 
 - Using the Multi-Step post-processing. Multi-step will project an action
   to the nth following step, and create a discounted sum of the rewards in
@@ -1746,9 +1464,9 @@ of DQN. Other possible improvements could include:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 5 minutes  39.224 seconds)
+   **Total running time of the script:** ( 2 minutes  26.288 seconds)
 
-**Estimated memory usage:**  1569 MB
+**Estimated memory usage:**  268 MB
 
 
 .. _sphx_glr_download_tutorials_coding_dqn.py:

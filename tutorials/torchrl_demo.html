@@ -39,7 +39,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="TorchRL envs" href="torch_envs.html" />
-    <link rel="prev" title="Pendulum: Writing your environment and transforms with TorchRL" href="pendulum.html" />
+    <link rel="prev" title="TensorDictModule" href="tensordict_module.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -259,7 +259,9 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pendulum.html">Pendulum: Writing your environment and transforms with TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pendulum.html">Writing your environment with TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tensordict_tutorial.html">TensorDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tensordict_module.html">TensorDictModule</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to TorchRL</a></li>
 </ul>
 <ul>
@@ -581,7 +583,7 @@ expand:  torch.Size([3, 2, 5]) torch.Size([3, 2, 5, 1])
 <a href="https://pytorch.org/rl/reference/generated/torchrl.data.TensorDictPrioritizedReplayBuffer.html#torchrl.data.TensorDictPrioritizedReplayBuffer.sample" title="torchrl.data.TensorDictPrioritizedReplayBuffer.sample" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-method"><span class="n">rb</span><span class="o">.</span><span class="n">sample</span></a><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[2, 1, 3]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[1, 3, 3]
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pytorch.org/rl/reference/generated/torchrl.data.TensorDictPrioritizedReplayBuffer.html#torchrl.data.TensorDictPrioritizedReplayBuffer" title="torchrl.data.TensorDictPrioritizedReplayBuffer" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rb</span></a> <span class="o">=</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.data.PrioritizedReplayBuffer.html#torchrl.data.PrioritizedReplayBuffer" title="torchrl.data.PrioritizedReplayBuffer" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class"><span class="n">PrioritizedReplayBuffer</span></a><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span> <span class="n">collate_fn</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
@@ -642,7 +644,7 @@ TensorDict(
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tensordict_sample</span></a><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([0, 1], dtype=torch.int32)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([1, 1], dtype=torch.int32)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tensordict_sample</span></a><span class="p">[</span><span class="s2">&quot;td_error&quot;</span><span class="p">]</span> <span class="o">=</span> <a href="https://pytorch.org/docs/stable/generated/torch.rand.html#torch.rand" title="torch.rand" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-function"><span class="n">torch</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -659,7 +661,7 @@ TensorDict(
     <span class="kn">import</span> <span class="nn">gym</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0 0.06984968483448029
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0 1.0
 1 0.28791671991348267
 2 0.0
 </pre></div>
@@ -1460,8 +1462,8 @@ Since the library is nascent, it is a great time for you to shape it the way you
 <section id="installing-the-library">
 <h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Permalink to this heading">¶</a></h2>
 <p>The library is on PyPI: <em>pip install torchrl</em></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  45.525 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  20 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  54.944 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  15 MB</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-torchrl-demo-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/566627e1cd97def8cf2a3b4720332591/torchrl_demo.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">torchrl_demo.py</span></code></a></p>
@@ -1485,7 +1487,7 @@ Since the library is nascent, it is a great time for you to shape it the way you
         <a href="torch_envs.html" class="btn btn-neutral float-right" title="TorchRL envs" accesskey="n" rel="next">Next <img src="../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="pendulum.html" class="btn btn-neutral" title="Pendulum: Writing your environment and transforms with TorchRL" accesskey="p" rel="prev"><img src="../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="tensordict_module.html" class="btn btn-neutral" title="TensorDictModule" accesskey="p" rel="prev"><img src="../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   

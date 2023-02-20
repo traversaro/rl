@@ -259,7 +259,9 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/pendulum.html">Pendulum: Writing your environment and transforms with TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_module.html">TensorDictModule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
@@ -503,8 +505,32 @@ from it if the current dimension is a singleton.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.MultiOneHotDiscreteTensorSpec.to_categorical">
+<span class="sig-name descname"><span class="pre">to_categorical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/data/tensor_specs.html#MultiOneHotDiscreteTensorSpec.to_categorical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.to_categorical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a given one-hot tensor in categorical format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><em>torch.Tensor</em></a><em>, </em><em>optional</em>) – One-hot tensor to convert in categorical format.</p></li>
+<li><p><strong>safe</strong> (<em>bool</em>) – boolean value indicating whether a check should be
+performed on the value against the domain of the spec.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The categorical tensor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.MultiOneHotDiscreteTensorSpec.to_categorical_spec">
+<span class="sig-name descname"><span class="pre">to_categorical_spec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="torchrl.data.MultiDiscreteTensorSpec.html#torchrl.data.MultiDiscreteTensorSpec" title="torchrl.data.tensor_specs.MultiDiscreteTensorSpec"><span class="pre">MultiDiscreteTensorSpec</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/data/tensor_specs.html#MultiOneHotDiscreteTensorSpec.to_categorical_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.to_categorical_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the spec to the equivalent categorical spec.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.data.MultiOneHotDiscreteTensorSpec.to_numpy">
-<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="../../_modules/torchrl/data/tensor_specs.html#MultiOneHotDiscreteTensorSpec.to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.to_numpy" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="headerlink" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.to_numpy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the np.ndarray correspondent of an input tensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -606,6 +632,8 @@ indicated key.</p></li>
 <li><a class="reference internal" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.is_in"><code class="docutils literal notranslate"><span class="pre">MultiOneHotDiscreteTensorSpec.is_in()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.project"><code class="docutils literal notranslate"><span class="pre">MultiOneHotDiscreteTensorSpec.project()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.rand"><code class="docutils literal notranslate"><span class="pre">MultiOneHotDiscreteTensorSpec.rand()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.to_categorical"><code class="docutils literal notranslate"><span class="pre">MultiOneHotDiscreteTensorSpec.to_categorical()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.to_categorical_spec"><code class="docutils literal notranslate"><span class="pre">MultiOneHotDiscreteTensorSpec.to_categorical_spec()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.to_numpy"><code class="docutils literal notranslate"><span class="pre">MultiOneHotDiscreteTensorSpec.to_numpy()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.type_check"><code class="docutils literal notranslate"><span class="pre">MultiOneHotDiscreteTensorSpec.type_check()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.MultiOneHotDiscreteTensorSpec.zero"><code class="docutils literal notranslate"><span class="pre">MultiOneHotDiscreteTensorSpec.zero()</span></code></a></li>

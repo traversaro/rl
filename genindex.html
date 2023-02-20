@@ -256,7 +256,9 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/pendulum.html">Pendulum: Writing your environment and transforms with TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_tutorial.html">TensorDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/tensordict_module.html">TensorDictModule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
@@ -1600,18 +1602,6 @@
         <li><a href="reference/generated/torchrl.data.UnboundedDiscreteTensorSpec.html#torchrl.data.UnboundedDiscreteTensorSpec.rand">(torchrl.data.UnboundedDiscreteTensorSpec method)</a>
 </li>
       </ul></li>
-      <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.rand_action">rand_action() (torchrl.envs.EnvBase method)</a>
-
-      <ul>
-        <li><a href="reference/generated/torchrl.envs.GymLikeEnv.html#torchrl.envs.GymLikeEnv.rand_action">(torchrl.envs.GymLikeEnv method)</a>
-</li>
-        <li><a href="reference/generated/torchrl.envs.MultiThreadedEnv.html#torchrl.envs.MultiThreadedEnv.rand_action">(torchrl.envs.MultiThreadedEnv method)</a>
-</li>
-        <li><a href="reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv.rand_action">(torchrl.envs.ParallelEnv method)</a>
-</li>
-        <li><a href="reference/generated/torchrl.envs.SerialEnv.html#torchrl.envs.SerialEnv.rand_action">(torchrl.envs.SerialEnv method)</a>
-</li>
-      </ul></li>
       <li><a href="reference/generated/torchrl.envs.ModelBasedEnvBase.html#torchrl.envs.rand_step">rand_step() (in module torchrl.envs)</a>
 
       <ul>
@@ -2148,6 +2138,18 @@
         <li><a href="reference/generated/torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule.to">(torchrl.modules.tensordict_module.SafeModule method)</a>
 </li>
       </ul></li>
+      <li><a href="reference/generated/torchrl.data.MultiOneHotDiscreteTensorSpec.html#torchrl.data.MultiOneHotDiscreteTensorSpec.to_categorical">to_categorical() (torchrl.data.MultiOneHotDiscreteTensorSpec method)</a>
+
+      <ul>
+        <li><a href="reference/generated/torchrl.data.OneHotDiscreteTensorSpec.html#torchrl.data.OneHotDiscreteTensorSpec.to_categorical">(torchrl.data.OneHotDiscreteTensorSpec method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/torchrl.data.MultiOneHotDiscreteTensorSpec.html#torchrl.data.MultiOneHotDiscreteTensorSpec.to_categorical_spec">to_categorical_spec() (torchrl.data.MultiOneHotDiscreteTensorSpec method)</a>
+
+      <ul>
+        <li><a href="reference/generated/torchrl.data.OneHotDiscreteTensorSpec.html#torchrl.data.OneHotDiscreteTensorSpec.to_categorical_spec">(torchrl.data.OneHotDiscreteTensorSpec method)</a>
+</li>
+      </ul></li>
       <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.to_empty">to_empty() (torchrl.data.MultiStep method)</a>
 
       <ul>
@@ -2186,6 +2188,18 @@
       </ul></li>
       <li><a href="reference/generated/torchrl.envs.transforms.VecNorm.html#torchrl.envs.transforms.VecNorm.to_observation_norm">to_observation_norm() (torchrl.envs.transforms.VecNorm method)</a>
 </li>
+      <li><a href="reference/generated/torchrl.data.DiscreteTensorSpec.html#torchrl.data.DiscreteTensorSpec.to_one_hot">to_one_hot() (torchrl.data.DiscreteTensorSpec method)</a>
+
+      <ul>
+        <li><a href="reference/generated/torchrl.data.MultiDiscreteTensorSpec.html#torchrl.data.MultiDiscreteTensorSpec.to_one_hot">(torchrl.data.MultiDiscreteTensorSpec method)</a>
+</li>
+      </ul></li>
+      <li><a href="reference/generated/torchrl.data.DiscreteTensorSpec.html#torchrl.data.DiscreteTensorSpec.to_one_hot_spec">to_one_hot_spec() (torchrl.data.DiscreteTensorSpec method)</a>
+
+      <ul>
+        <li><a href="reference/generated/torchrl.data.MultiDiscreteTensorSpec.html#torchrl.data.MultiDiscreteTensorSpec.to_one_hot_spec">(torchrl.data.MultiDiscreteTensorSpec method)</a>
+</li>
+      </ul></li>
       <li><a href="reference/generated/torchrl.envs.transforms.ToTensorImage.html#torchrl.envs.transforms.ToTensorImage">ToTensorImage (class in torchrl.envs.transforms)</a>
 </li>
       <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.train">train() (torchrl.data.MultiStep method)</a>
@@ -2204,10 +2218,10 @@
         <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.train">(torchrl.envs.transforms.TransformedEnv method)</a>
 </li>
       </ul></li>
-      <li><a href="reference/generated/torchrl.trainers.Trainer.html#torchrl.trainers.Trainer">Trainer (class in torchrl.trainers)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="reference/generated/torchrl.trainers.Trainer.html#torchrl.trainers.Trainer">Trainer (class in torchrl.trainers)</a>
+</li>
       <li><a href="reference/generated/torchrl.trainers.TrainerHookBase.html#torchrl.trainers.TrainerHookBase">TrainerHookBase (class in torchrl.trainers)</a>
 </li>
       <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform">Transform (class in torchrl.envs.transforms)</a>

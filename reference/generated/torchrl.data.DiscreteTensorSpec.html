@@ -259,7 +259,9 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/pendulum.html">Pendulum: Writing your environment and transforms with TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/tensordict_module.html">TensorDictModule</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
@@ -519,6 +521,30 @@ performed on the value against the domain of the spec.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.DiscreteTensorSpec.to_one_hot">
+<span class="sig-name descname"><span class="pre">to_one_hot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">val</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><span class="pre">Tensor</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/data/tensor_specs.html#DiscreteTensorSpec.to_one_hot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.DiscreteTensorSpec.to_one_hot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encodes a discrete tensor from the spec domain into its one-hot correspondent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><em>torch.Tensor</em></a><em>, </em><em>optional</em>) – Tensor to one-hot encode.</p></li>
+<li><p><strong>safe</strong> (<em>bool</em>) – boolean value indicating whether a check should be
+performed on the value against the domain of the spec.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The one-hot encoded tensor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.DiscreteTensorSpec.to_one_hot_spec">
+<span class="sig-name descname"><span class="pre">to_one_hot_spec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="torchrl.data.OneHotDiscreteTensorSpec.html#torchrl.data.OneHotDiscreteTensorSpec" title="torchrl.data.tensor_specs.OneHotDiscreteTensorSpec"><span class="pre">OneHotDiscreteTensorSpec</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/data/tensor_specs.html#DiscreteTensorSpec.to_one_hot_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.DiscreteTensorSpec.to_one_hot_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the spec to the equivalent one-hot spec.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.data.DiscreteTensorSpec.type_check">
 <span class="sig-name descname"><span class="pre">type_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v1.13)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#torchrl.data.DiscreteTensorSpec.type_check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks the input value dtype against the TensorSpec dtype and raises an exception if they don’t match.</p>
@@ -605,6 +631,8 @@ indicated key.</p></li>
 <li><a class="reference internal" href="#torchrl.data.DiscreteTensorSpec.project"><code class="docutils literal notranslate"><span class="pre">DiscreteTensorSpec.project()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.DiscreteTensorSpec.rand"><code class="docutils literal notranslate"><span class="pre">DiscreteTensorSpec.rand()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.DiscreteTensorSpec.to_numpy"><code class="docutils literal notranslate"><span class="pre">DiscreteTensorSpec.to_numpy()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.data.DiscreteTensorSpec.to_one_hot"><code class="docutils literal notranslate"><span class="pre">DiscreteTensorSpec.to_one_hot()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.data.DiscreteTensorSpec.to_one_hot_spec"><code class="docutils literal notranslate"><span class="pre">DiscreteTensorSpec.to_one_hot_spec()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.DiscreteTensorSpec.type_check"><code class="docutils literal notranslate"><span class="pre">DiscreteTensorSpec.type_check()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.DiscreteTensorSpec.zero"><code class="docutils literal notranslate"><span class="pre">DiscreteTensorSpec.zero()</span></code></a></li>
 </ul>
