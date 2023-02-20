@@ -267,7 +267,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/multi_task.html">Task-specific policy in multi-task environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_dqn.html#dqn-with-td-lambda">DQN with TD(<span class="math notranslate nohighlight">\(\lambda\)</span>)</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/index.html">API Reference</a></li>
@@ -952,15 +951,15 @@
                 <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-<div class="viewcode-block" id="EnvBase.rand_step"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.rand_step">[docs]</a>    <span class="k">def</span> <span class="nf">rand_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs a random step in the environment given the action_spec attribute.</span>
+<div class="viewcode-block" id="EnvBase.rand_action"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.rand_action">[docs]</a>    <span class="k">def</span> <span class="nf">rand_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs a random action given the action_spec attribute.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            tensordict (TensorDictBase, optional): tensordict where the resulting info should be written.</span>
+<span class="sd">            tensordict (TensorDictBase, optional): tensordict where the resulting action should be written.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            a tensordict object with the new observation after a random step in the environment. The action will</span>
-<span class="sd">            be stored with the &quot;action&quot; key.</span>
+<span class="sd">            a tensordict object with the &quot;action&quot; entry updated with a random</span>
+<span class="sd">            sample from the action-spec.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([])</span>
@@ -979,6 +978,20 @@
             <span class="p">)</span>
         <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spec</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
         <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tensordict</span></div>
+
+<div class="viewcode-block" id="EnvBase.rand_step"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.rand_step">[docs]</a>    <span class="k">def</span> <span class="nf">rand_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs a random step in the environment given the action_spec attribute.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tensordict (TensorDictBase, optional): tensordict where the resulting info should be written.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a tensordict object with the new observation after a random step in the environment. The action will</span>
+<span class="sd">            be stored with the &quot;action&quot; key.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rand_action</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
@@ -1048,7 +1061,7 @@
         <span class="k">if</span> <span class="n">policy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
             <span class="k">def</span> <span class="nf">policy</span><span class="p">(</span><span class="n">td</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rand_step</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rand_action</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">td</span>
 
         <span class="n">tensordicts</span> <span class="o">=</span> <span class="p">[]</span>
