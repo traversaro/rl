@@ -267,6 +267,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/multi_task.html">Task-specific policy in multi-task environments</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_ddpg.html">Coding DDPG using TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_dqn.html">Coding a pixel-based DQN using TorchRL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_dqn.html#dqn-with-td-lambda">DQN with TD(<span class="math notranslate nohighlight">\(\lambda\)</span>)</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/index.html">API Reference</a></li>
@@ -561,6 +562,7 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="c1"># gym 0.26</span>
                 <span class="n">truncation</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">info</span>
+                <span class="n">done</span> <span class="o">=</span> <span class="n">done</span> <span class="o">|</span> <span class="n">truncation</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
