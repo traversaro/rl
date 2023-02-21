@@ -1199,29 +1199,23 @@ Some notes about the following training loop:
 
 
 
-
-
 .. rst-class:: sphx-glr-script-out
 
- .. code-block:: none
+.. code-block:: pytb
 
-      0%|          | 0/2500 [00:00<?, ?it/s]     20%|##        | 500/2500 [00:01<00:05, 387.50it/s]Creating a MemmapStorage...
-    The storage is being created: 
-            action: /tmp/action.memmap, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
-            done: /tmp/done.memmap, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
-            gamma: /tmp/gamma.memmap, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-            index: /tmp/index.memmap, 0.0095367431640625 Mb of storage (size: torch.Size([2500])).
-            nonterminal: /tmp/nonterminal.memmap, 0.002384185791015625 Mb of storage (size: torch.Size([2500, 1])).
-            observation_vector: /tmp/observation_vector.memmap, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
-            original_reward: /tmp/original_reward.memmap, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-            param: /tmp/param.memmap, 0.057220458984375 Mb of storage (size: torch.Size([2500, 6])).
-            reward: /tmp/reward.memmap, 0.0095367431640625 Mb of storage (size: torch.Size([2500, 1])).
-            steps_to_next_obs: /tmp/steps_to_next_obs.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500, 1])).
-            ('collector', 'mask'): /tmp/collector/mask.memmap, 0.002384185791015625 Mb of storage (size: torch.Size([2500])).
-            ('collector', 'step_count'): /tmp/collector/step_count.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
-            ('collector', 'traj_ids'): /tmp/collector/traj_ids.memmap, 0.019073486328125 Mb of storage (size: torch.Size([2500])).
-            ('next', 'observation_vector'): /tmp/next/observation_vector.memmap, 0.1621246337890625 Mb of storage (size: torch.Size([2500, 17])).
-    reward: -0.4567 (r0 = -2.7129), reward eval: reward: -1.3336:  20%|##        | 500/2500 [00:05<00:05, 387.50it/s]    reward: -0.4567 (r0 = -2.7129), reward eval: reward: -1.3336:  40%|####      | 1000/2500 [00:05<00:08, 175.04it/s]    reward: -0.4046 (r0 = -2.7129), reward eval: reward: -1.3336:  40%|####      | 1000/2500 [00:06<00:08, 175.04it/s]    reward: -0.4046 (r0 = -2.7129), reward eval: reward: -1.3336:  60%|######    | 1500/2500 [00:07<00:05, 192.04it/s]    reward: -2.7764 (r0 = -2.7129), reward eval: reward: -1.3336:  60%|######    | 1500/2500 [00:09<00:05, 192.04it/s]    reward: -2.7764 (r0 = -2.7129), reward eval: reward: -1.3336:  80%|########  | 2000/2500 [00:09<00:02, 201.06it/s]    reward: -3.0639 (r0 = -2.7129), reward eval: reward: -1.3336:  80%|########  | 2000/2500 [00:11<00:02, 201.06it/s]    reward: -3.0639 (r0 = -2.7129), reward eval: reward: -1.3336: 100%|##########| 2500/2500 [00:11<00:00, 218.93it/s]    reward: -3.1502 (r0 = -2.7129), reward eval: reward: -1.3336: 100%|##########| 2500/2500 [00:13<00:00, 218.93it/s]
+    Traceback (most recent call last):
+      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py", line 786, in <module>
+        for i, tensordict in enumerate(collector):
+      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 1418, in iterator
+        out = self.postprocs[out.device](out)
+      File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+        return forward_call(*args, **kwargs)
+      File "/__w/rl/rl/torchrl/data/postprocs/postprocs.py", line 180, in forward
+        terminal, post_terminal = _get_terminal(done, self.n_steps_max)
+      File "/__w/rl/rl/torchrl/data/postprocs/postprocs.py", line 38, in _get_terminal
+        raise RuntimeError("Got more or less than one terminal state per episode.")
+    RuntimeError: Got more or less than one terminal state per episode.
+
 
 
 
@@ -1248,17 +1242,6 @@ use a greater value for ``total_frames`` e.g. 1M.
     plt.xlabel("iter")
     plt.ylabel("reward")
     plt.tight_layout()
-
-
-
-
-.. image-sg:: /tutorials/images/sphx_glr_coding_ddpg_001.png
-   :alt: coding ddpg
-   :srcset: /tutorials/images/sphx_glr_coding_ddpg_001.png
-   :class: sphx-glr-single-img
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 895-912
@@ -1292,19 +1275,6 @@ time). Hence, we'll divide our replay buffer size by 250:
     print("the new batch size for trajectories is", batch_size_traj)
 
     n_steps_forward = 0  # disable multi-step for simplicity
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    the new buffer size is 200
-    the new batch size for trajectories is 4
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 921-922
@@ -1388,17 +1358,6 @@ The following code is identical to the initialization we made earlier:
     )
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    reward: -3.1502 (r0 = -2.7129), reward eval: reward: -1.3336: 100%|##########| 2500/2500 [00:28<00:00, 218.93it/s]
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 995-999
 
 The training loop needs to be slightly adapted.
@@ -1414,18 +1373,6 @@ check the output shape of the data collector:
     for data in collector:
         print(data.shape)
         break
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    torch.Size([2, 250])
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 1005-1010
@@ -1444,12 +1391,6 @@ Let's import the td_lambda function:
     from torchrl.objectives.value.functional import vec_td_lambda_advantage_estimate
 
     lmbda = 0.95
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 1016-1023
@@ -1579,29 +1520,6 @@ to compute gradients. This ensures that do not have batches that are
     del collector
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    Creating a MemmapStorage...
-    The storage is being created: 
-            _batch_size: /tmp/_batch_size.memmap, 0.00152587890625 Mb of storage (size: torch.Size([200, 1])).
-            action: /tmp/action.memmap, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-            done: /tmp/done.memmap, 0.0476837158203125 Mb of storage (size: torch.Size([200, 250, 1])).
-            index: /tmp/index.memmap, 0.0095367431640625 Mb of storage (size: torch.Size([200])).
-            observation_vector: /tmp/observation_vector.memmap, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
-            param: /tmp/param.memmap, 1.1444091796875 Mb of storage (size: torch.Size([200, 250, 6])).
-            reward: /tmp/reward.memmap, 0.19073486328125 Mb of storage (size: torch.Size([200, 250, 1])).
-            ('collector', 'step_count'): /tmp/collector/step_count.memmap, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
-            ('collector', 'traj_ids'): /tmp/collector/traj_ids.memmap, 0.3814697265625 Mb of storage (size: torch.Size([200, 250])).
-            ('next', 'observation_vector'): /tmp/next/observation_vector.memmap, 3.24249267578125 Mb of storage (size: torch.Size([200, 250, 17])).
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 1136-1141
 
 We can observe that using TD(lambda) made our results considerably more
@@ -1626,22 +1544,11 @@ use a greater value for ``total_frames`` e.g. 1000000.
 
 
 
-
-.. image-sg:: /tutorials/images/sphx_glr_coding_ddpg_002.png
-   :alt: TD-labmda DDPG results
-   :srcset: /tutorials/images/sphx_glr_coding_ddpg_002.png
-   :class: sphx-glr-single-img
-
-
-
-
-
-
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  51.519 seconds)
+   **Total running time of the script:** ( 1 minutes  19.456 seconds)
 
-**Estimated memory usage:**  22 MB
+**Estimated memory usage:**  2780 MB
 
 
 .. _sphx_glr_download_tutorials_coding_ddpg.py:

@@ -256,9 +256,7 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/pendulum.html">Pendulum: Writing your environment and transforms with TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
@@ -736,10 +734,9 @@
             <span class="p">)</span>
         <span class="k">elif</span> <span class="n">is_tensorclass</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
             <span class="n">out</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">data</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-                <span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
-                <span class="o">.</span><span class="n">memmap_</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scratch_dir</span><span class="p">)</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">memmap_like</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scratch_dir</span><span class="p">)</span>
                 <span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">tensor</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>
@@ -753,10 +750,9 @@
             <span class="c1"># out = TensorDict({}, [self.max_size, *data.shape])</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The storage is being created: &quot;</span><span class="p">)</span>
             <span class="n">out</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">data</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">to_tensordict</span><span class="p">()</span>
-                <span class="o">.</span><span class="n">zero_</span><span class="p">()</span>
-                <span class="o">.</span><span class="n">memmap_</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scratch_dir</span><span class="p">)</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+                <span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_size</span><span class="p">,</span> <span class="o">*</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">memmap_like</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scratch_dir</span><span class="p">)</span>
                 <span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">tensor</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span>

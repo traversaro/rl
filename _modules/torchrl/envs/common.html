@@ -256,9 +256,7 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/coding_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pendulum.html">Writing your environment with TorchRL</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tensordict_tutorial.html">TensorDict</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/tensordict_module.html">TensorDictModule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pendulum.html">Pendulum: Writing your environment and transforms with TorchRL</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
@@ -953,6 +951,36 @@
                 <span class="sa">f</span><span class="s2">&quot;got </span><span class="si">{</span><span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
+<div class="viewcode-block" id="EnvBase.rand_action"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.rand_action">[docs]</a>    <span class="k">def</span> <span class="nf">rand_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs a random action given the action_spec attribute.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tensordict (TensorDictBase, optional): tensordict where the resulting action should be written.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            a tensordict object with the &quot;action&quot; entry updated with a random</span>
+<span class="sd">            sample from the action-spec.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="n">tensordict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tensordict</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">(</span>
+                <span class="p">{},</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">_run_checks</span><span class="o">=</span><span class="kc">False</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_locked</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_locked</span> <span class="ow">and</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s2">&quot;The input tensordict and the env have a different batch size: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;env.batch_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="si">}</span><span class="s2"> and tensordict.batch_size=</span><span class="si">{</span><span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Non batch-locked environment require the env batch-size to be either empty or to&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; match the tensordict one.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spec</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tensordict</span></div>
+
 <div class="viewcode-block" id="EnvBase.rand_step"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.rand_step">[docs]</a>    <span class="k">def</span> <span class="nf">rand_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Performs a random step in the environment given the action_spec attribute.</span>
 
@@ -964,22 +992,7 @@
 <span class="sd">            be stored with the &quot;action&quot; key.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">shape</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([])</span>
-        <span class="k">if</span> <span class="n">tensordict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">tensordict</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">(</span>
-                <span class="p">{},</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">_run_checks</span><span class="o">=</span><span class="kc">False</span>
-            <span class="p">)</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_locked</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span>
-            <span class="n">shape</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_locked</span> <span class="ow">and</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="s2">&quot;The input tensordict and the env have a different batch size: &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;env.batch_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="si">}</span><span class="s2"> and tensordict.batch_size=</span><span class="si">{</span><span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">. &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;Non batch-locked environment require the env batch-size to be either empty or to&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot; match the tensordict one.&quot;</span>
-            <span class="p">)</span>
-        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_spec</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
-        <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+        <span class="n">tensordict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rand_action</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
@@ -1049,7 +1062,7 @@
         <span class="k">if</span> <span class="n">policy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
             <span class="k">def</span> <span class="nf">policy</span><span class="p">(</span><span class="n">td</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rand_step</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rand_action</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">td</span>
 
         <span class="n">tensordicts</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1165,16 +1178,18 @@
 <div class="viewcode-block" id="EnvBase.fake_tensordict"><a class="viewcode-back" href="../../../reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.fake_tensordict">[docs]</a>    <span class="k">def</span> <span class="nf">fake_tensordict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a fake tensordict with key-value pairs that match in shape, device and dtype what can be expected during an environment rollout.&quot;&quot;&quot;</span>
         <span class="n">input_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_spec</span>
-        <span class="n">fake_input</span> <span class="o">=</span> <span class="n">input_spec</span><span class="o">.</span><span class="n">zero</span><span class="p">()</span>
         <span class="n">observation_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spec</span>
         <span class="n">fake_obs</span> <span class="o">=</span> <span class="n">observation_spec</span><span class="o">.</span><span class="n">zero</span><span class="p">()</span>
+        <span class="n">fake_input</span> <span class="o">=</span> <span class="n">input_spec</span><span class="o">.</span><span class="n">zero</span><span class="p">()</span>
+        <span class="c1"># the input and output key may match, but the output prevails</span>
+        <span class="c1"># Hence we generate the input, and override using the output</span>
+        <span class="n">fake_in_out</span> <span class="o">=</span> <span class="n">fake_input</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">fake_obs</span><span class="p">)</span>
         <span class="n">reward_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reward_spec</span>
         <span class="n">fake_reward</span> <span class="o">=</span> <span class="n">reward_spec</span><span class="o">.</span><span class="n">zero</span><span class="p">()</span>
         <span class="n">fake_td</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">(</span>
             <span class="p">{</span>
-                <span class="o">**</span><span class="n">fake_obs</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">fake_in_out</span><span class="p">,</span>
                 <span class="s2">&quot;next&quot;</span><span class="p">:</span> <span class="n">fake_obs</span><span class="o">.</span><span class="n">clone</span><span class="p">(),</span>
-                <span class="o">**</span><span class="n">fake_input</span><span class="p">,</span>
                 <span class="s2">&quot;reward&quot;</span><span class="p">:</span> <span class="n">fake_reward</span><span class="p">,</span>
                 <span class="s2">&quot;done&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
                     <span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span>
