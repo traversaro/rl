@@ -938,7 +938,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_frames</span><span class="p">:</span>
                 <span class="k">break</span></div>
 
-    <span class="k">def</span> <span class="nf">_reset_if_necessary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_step_and_maybe_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">done</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_when_done</span><span class="p">:</span>
             <span class="n">done</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>
@@ -959,6 +959,11 @@
             <span class="n">done_or_terminated</span> <span class="o">=</span> <span class="n">done_or_terminated</span> <span class="o">|</span> <span class="n">_reset</span>
 
         <span class="k">if</span> <span class="n">done_or_terminated</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">done_or_terminated</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">[</span><span class="o">~</span><span class="n">done_or_terminated</span><span class="p">]</span> <span class="o">=</span> <span class="n">step_mdp</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">[</span><span class="o">~</span><span class="n">done_or_terminated</span><span class="p">]</span>
+                <span class="p">)</span>
+
             <span class="n">traj_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;traj_ids&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
             <span class="n">steps</span> <span class="o">=</span> <span class="n">steps</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">batch_size</span><span class="p">):</span>
@@ -984,6 +989,8 @@
                 <span class="p">(</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;traj_ids&quot;</span><span class="p">),</span> <span class="n">traj_ids</span>
             <span class="p">)</span>  <span class="c1"># no ops if they already match</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">set_</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">),</span> <span class="n">steps</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">step_mdp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">),</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SyncDataCollector.rollout"><a class="viewcode-back" href="../../../reference/generated/torchrl.collectors.collectors.SyncDataCollector.html#torchrl.collectors.collectors.SyncDataCollector.rollout">[docs]</a>    <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">rollout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
@@ -1018,8 +1025,7 @@
                     <span class="k">if</span> <span class="n">is_shared</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">share_memory_</span><span class="p">()</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">_reset_if_necessary</span><span class="p">()</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">step_mdp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">),</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_step_and_maybe_reset</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span></div>
 

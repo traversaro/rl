@@ -576,7 +576,7 @@ Here are examples of using a replaybuffer with tensordicts.
  .. code-block:: none
 
 
-    tensor([1, 0], dtype=torch.int32)
+    tensor([1, 1], dtype=torch.int32)
 
 
 
@@ -606,8 +606,8 @@ Here are examples of using a replaybuffer with tensordicts.
 
  .. code-block:: none
 
-    0 0.28791671991348267
-    1 0.06984968483448029
+    0 1.0
+    1 0.28791671991348267
     2 0.0
 
 
@@ -1064,14 +1064,14 @@ Sequences of Modules
     TensorDictSequential(
         module=ModuleList(
           (0): TensorDictModule(
-              module=Linear(in_features=5, out_features=3, bias=True), 
-              device=cpu, 
-              in_keys=['observation'], 
+              module=Linear(in_features=5, out_features=3, bias=True),
+              device=cpu,
+              in_keys=['observation'],
               out_keys=['hidden'])
           (1): TensorDictModule(
-              module=Linear(in_features=3, out_features=4, bias=True), 
-              device=cpu, 
-              in_keys=['hidden'], 
+              module=Linear(in_features=3, out_features=4, bias=True),
+              device=cpu,
+              in_keys=['hidden'],
               out_keys=['action'])
           (2): TensorDictModule(
               module=MLP(
@@ -1080,13 +1080,13 @@ Sequences of Modules
                 (2): Linear(in_features=4, out_features=5, bias=True)
                 (3): Tanh()
                 (4): Linear(in_features=5, out_features=1, bias=True)
-              ), 
-              device=cpu, 
-              in_keys=['hidden', 'action'], 
+              ),
+              device=cpu,
+              in_keys=['hidden', 'action'],
               out_keys=['value'])
-        ), 
-        device=cpu, 
-        in_keys=['observation'], 
+        ),
+        device=cpu,
+        in_keys=['observation'],
         out_keys=['hidden', 'action', 'value'])
 
 
@@ -1975,7 +1975,7 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  14.535 seconds)
+   **Total running time of the script:** ( 4 minutes  44.609 seconds)
 
 **Estimated memory usage:**  15 MB
 

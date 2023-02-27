@@ -1206,7 +1206,7 @@ Some notes about the following training loop:
     Traceback (most recent call last):
       File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py", line 786, in <module>
         for i, tensordict in enumerate(collector):
-      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 1418, in iterator
+      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 1424, in iterator
         out = self.postprocs[out.device](out)
       File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1501, in _call_impl
         return forward_call(*args, **kwargs)
@@ -1546,9 +1546,9 @@ use a greater value for ``total_frames`` e.g. 1000000.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  14.936 seconds)
+   **Total running time of the script:** ( 1 minutes  25.102 seconds)
 
-**Estimated memory usage:**  2699 MB
+**Estimated memory usage:**  4975 MB
 
 
 .. _sphx_glr_download_tutorials_coding_ddpg.py:
