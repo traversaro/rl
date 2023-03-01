@@ -380,7 +380,7 @@ even if these environments are simulated using different libraries.
 TorchRL offers some out-of-the-box environment wrappers under <code class="xref py py-obj docutils literal notranslate"><span class="pre">torchrl.envs.libs</span></code>,
 which we hope can be easily imitated for other libraries.
 The parent class <a class="reference internal" href="generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.EnvBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.envs.EnvBase</span></code></a> is a <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v1.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> subclass that implements
-some typical environment methods using <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+1a5d743 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> as a data organiser. This allows this
+some typical environment methods using <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+5bd6a4f ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> as a data organiser. This allows this
 class to be generic and to handle an arbitrary number of input and outputs, as well as
 nested or batched data structures.</p>
 <p>Each env will have the following attributes:</p>
@@ -406,9 +406,9 @@ an <code class="xref py py-obj docutils literal notranslate"><span class="pre">e
 <p>With these, the following methods are implemented:</p>
 <ul class="simple">
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.reset(tensordict)</span></code>: a reset method that may (but not necessarily requires to) take
-a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+1a5d743 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> input. It return the first tensordict of a rollout, usually
+a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+5bd6a4f ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> input. It return the first tensordict of a rollout, usually
 containing a <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;done&quot;</span></code> state and a set of observations.</p></li>
-<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.step(tensordict)</span></code>: a step method that takes a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+1a5d743 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> input
+<li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.step(tensordict)</span></code>: a step method that takes a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+5bd6a4f ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> input
 containing an input action as well as other inputs (for model-based or stateless
 environments, for instance).</p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.set_seed(integer)</span></code>: a seeding method that will return the next seed
@@ -419,7 +419,7 @@ having reproducible results.</p></li>
 <li><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">env.rollout(max_steps,</span> <span class="pre">policy)</span></code>: executes a rollout in the environment for
 a maximum number of steps <code class="xref py py-obj docutils literal notranslate"><span class="pre">max_steps</span></code> and using a policy <code class="xref py py-obj docutils literal notranslate"><span class="pre">policy</span></code>.
 The policy should be coded using a <code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeModule</span></code> (or any other
-<a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+1a5d743 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a>-compatible module).</p></li>
+<a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+5bd6a4f ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a>-compatible module).</p></li>
 </ul>
 <table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
 <tbody>
@@ -748,7 +748,7 @@ to be able to create this other composition:</p>
 <td><p>Returns all the supported libraries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.utils.set_exploration_mode.html#torchrl.envs.utils.set_exploration_mode" title="torchrl.envs.utils.set_exploration_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_exploration_mode</span></code></a></p></td>
-<td><p>alias of <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.set_interaction_mode.html#tensordict.nn.set_interaction_mode" title="(in tensordict vmain (0.0.2b+1a5d743 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">set_interaction_mode</span></code></a></p></td>
+<td><p>alias of <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.set_interaction_mode.html#tensordict.nn.set_interaction_mode" title="(in tensordict vmain (0.0.2b+5bd6a4f ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">set_interaction_mode</span></code></a></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.utils.exploration_mode.html#torchrl.envs.utils.exploration_mode" title="torchrl.envs.utils.exploration_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exploration_mode</span></code></a>()</p></td>
 <td><p>Returns the current sampling mode.</p></td>
@@ -885,9 +885,6 @@ to be able to create this other composition:</p>
      
        <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
          <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-         <script src="../_static/jquery.js"></script>
-         <script src="../_static/underscore.js"></script>
-         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
          <script src="../_static/doctools.js"></script>
          <script src="../_static/sphinx_highlight.js"></script>
      
