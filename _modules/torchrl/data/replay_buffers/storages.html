@@ -379,7 +379,7 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">tensordict.memmap</span> <span class="kn">import</span> <span class="n">MemmapTensor</span>
 <span class="kn">from</span> <span class="nn">tensordict.prototype</span> <span class="kn">import</span> <span class="n">is_tensorclass</span>
-<span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span><span class="p">,</span> <span class="n">TensorDictBase</span>
+<span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">is_tensor_collection</span><span class="p">,</span> <span class="n">TensorDict</span><span class="p">,</span> <span class="n">TensorDictBase</span>
 
 <span class="kn">from</span> <span class="nn">torchrl._utils</span> <span class="kn">import</span> <span class="n">_CKPT_BACKEND</span>
 <span class="kn">from</span> <span class="nn">torchrl.data.replay_buffers.utils</span> <span class="kn">import</span> <span class="n">INT_CLASSES</span>
@@ -577,11 +577,7 @@
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_storage</span><span class="p">,</span> <span class="n">TensorDictBase</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">_storage</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">batch_size</span> <span class="o">=</span> <span class="n">_storage</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;__batch_size&quot;</span><span class="p">)</span>
-                <span class="n">device</span> <span class="o">=</span> <span class="n">_storage</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;__device&quot;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">(</span>
-                    <span class="n">_storage</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
-                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({},</span> <span class="p">[])</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">_storage</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;Cannot copy a storage of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">_storage</span><span class="p">)</span><span class="si">}</span><span class="s2"> onto another of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_storage</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -700,15 +696,11 @@
                     <span class="sa">f</span><span class="s2">&quot;Cannot copy a storage of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">_storage</span><span class="p">)</span><span class="si">}</span><span class="s2"> onto another of type </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_storage</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="p">)</span>
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_storage</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">OrderedDict</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_storage</span><span class="p">,</span> <span class="n">TensorDictBase</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">is_tensor_collection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_storage</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">_storage</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span><span class="o">.</span><span class="n">memmap_</span><span class="p">()</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">batch_size</span> <span class="o">=</span> <span class="n">_storage</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;__batch_size&quot;</span><span class="p">)</span>
-                <span class="n">device</span> <span class="o">=</span> <span class="n">_storage</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;__device&quot;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">(</span>
-                    <span class="n">_storage</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span>
-                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({},</span> <span class="p">[])</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">_storage</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_storage</span><span class="o">.</span><span class="n">memmap_</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
