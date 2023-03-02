@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>About MuJoCo &mdash; torchrl main documentation</title>
+  <title>Working with MuJoCo-based environments &mdash; torchrl main documentation</title>
   
 
   
@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="../../../_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Pro-tips and Debugging" href="PRO-TIPS.html" />
+    <link rel="next" title="Common PyTorch errors and solutions" href="PRO-TIPS.html" />
     <link rel="prev" title="Working with habitat-lab" href="HABITAT.html" />
   <!-- Google Analytics -->
   
@@ -318,7 +318,7 @@
         
           <li><a href="../../knowledge_base.html">Knowledge Base</a> &gt;</li>
         
-      <li>About MuJoCo</li>
+      <li>Working with MuJoCo-based environments</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
@@ -371,8 +371,8 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <section id="about-mujoco">
-<h1>About MuJoCo<a class="headerlink" href="#about-mujoco" title="Permalink to this heading">¶</a></h1>
+  <section id="working-with-mujoco-based-environments">
+<h1>Working with MuJoCo-based environments<a class="headerlink" href="#working-with-mujoco-based-environments" title="Permalink to this heading">¶</a></h1>
 <p>From its <a class="reference external" href="https://github.com/deepmind/mujoco/">official repository</a>,</p>
 <blockquote>
 <div><p>MuJoCo stands for Multi-Joint dynamics with Contact. It is a general purpose
@@ -387,11 +387,10 @@ Python bindings were incorporated in the library, making the reliance on mujoco-
 However, a series of libraries keep a legacy on the old mujoco bindings.</p>
 <p>In this document, we detail issues and pro-tips for the new and old bindings of
 the library.</p>
-</section>
 <section id="installing-mujoco">
-<h1>Installing MuJoCo<a class="headerlink" href="#installing-mujoco" title="Permalink to this heading">¶</a></h1>
+<h2>Installing MuJoCo<a class="headerlink" href="#installing-mujoco" title="Permalink to this heading">¶</a></h2>
 <section id="prerequisite-for-rendering-all-mujoco-versions">
-<h2>Prerequisite for rendering (all mujoco versions)<a class="headerlink" href="#prerequisite-for-rendering-all-mujoco-versions" title="Permalink to this heading">¶</a></h2>
+<h3>Prerequisite for rendering (all mujoco versions)<a class="headerlink" href="#prerequisite-for-rendering-all-mujoco-versions" title="Permalink to this heading">¶</a></h3>
 <p>MuJoCo offers some great rendering capabilities.
 To do so, MuJoCo will use one of the following backends: glfw, osmesa or egl.
 Of these, glfw will not work in headless environments. On the other hand, osmesa
@@ -418,7 +417,7 @@ $<span class="w"> </span>conda<span class="w"> </span>deactivate<span class="w">
 </div>
 </section>
 <section id="new-bindindgs-2-1-2">
-<h2>New bindindgs (≥ 2.1.2)<a class="headerlink" href="#new-bindindgs-2-1-2" title="Permalink to this heading">¶</a></h2>
+<h3>New bindindgs (≥ 2.1.2)<a class="headerlink" href="#new-bindindgs-2-1-2" title="Permalink to this heading">¶</a></h3>
 <p>You can install the pre-built binaries from the <a class="reference external" href="https://github.com/deepmind/mujoco/releases">mujoco release page</a>.
 However, in most cases, you will only need the python bindings.
 These can be installed via pip.</p>
@@ -429,7 +428,7 @@ $<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </sp
 </div>
 </section>
 <section id="old-bindings-2-1-1-mujoco-py">
-<h2>Old bindings (≤ 2.1.1): mujoco-py<a class="headerlink" href="#old-bindings-2-1-1-mujoco-py" title="Permalink to this heading">¶</a></h2>
+<h3>Old bindings (≤ 2.1.1): mujoco-py<a class="headerlink" href="#old-bindings-2-1-1-mujoco-py" title="Permalink to this heading">¶</a></h3>
 <p>In some cases, you may need to use the old mujoco bindings. For instance, this
 be the case when using some legacy code that used mujoco-py instead of the new
 bindings, because of cluster requirements etc.
@@ -457,7 +456,7 @@ $<span class="w"> </span>conda<span class="w"> </span>deactivate<span class="w">
 </pre></div>
 </div>
 <section id="option-1-installing-mujoco-py-with-pip">
-<h3>Option 1: installing mujoco-py with pip<a class="headerlink" href="#option-1-installing-mujoco-py-with-pip" title="Permalink to this heading">¶</a></h3>
+<h4>Option 1: installing mujoco-py with pip<a class="headerlink" href="#option-1-installing-mujoco-py-with-pip" title="Permalink to this heading">¶</a></h4>
 <p>We <strong>do not</strong> recommend this as it may be hard to change code later on, since
 there are known issues when trying to use GPUs for rendering with native mujoco-py
 code. Refer to Option 2 here below if that is the intended usage.</p>
@@ -467,7 +466,7 @@ $<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </sp
 </div>
 </section>
 <section id="option-2-installing-mujoco-py-from-a-cloned-repo">
-<h3>Option 2: installing mujoco-py from a cloned repo<a class="headerlink" href="#option-2-installing-mujoco-py-from-a-cloned-repo" title="Permalink to this heading">¶</a></h3>
+<h4>Option 2: installing mujoco-py from a cloned repo<a class="headerlink" href="#option-2-installing-mujoco-py-from-a-cloned-repo" title="Permalink to this heading">¶</a></h4>
 <p>We recommend installing mujoco-py via cloning the repo and installing it
 locally. In case one must force mujoco-py to install against cuda or modify the
 path to the nvidia driver (especially with older versions of mujoco-py), cloning
@@ -544,7 +543,7 @@ conda env config vars set LD_PRELOAD=/path/to/conda/envs/mujoco_env/x86_64-conda
 </section>
 </section>
 <section id="common-issues-when-rendering-mujoco-environments">
-<h1>Common Issues when rendering Mujoco Environments<a class="headerlink" href="#common-issues-when-rendering-mujoco-environments" title="Permalink to this heading">¶</a></h1>
+<h2>Common Issues when rendering Mujoco Environments<a class="headerlink" href="#common-issues-when-rendering-mujoco-environments" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><p>RuntimeError with error stack like this when running jobs using schedulers like slurm:</p></li>
 </ol>
@@ -577,6 +576,7 @@ Make sure you have a GPU accessible on your machine.</p>
 </li>
 </ol>
 </section>
+</section>
 
 
              </article>
@@ -586,7 +586,7 @@ Make sure you have a GPU accessible on your machine.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="PRO-TIPS.html" class="btn btn-neutral float-right" title="Pro-tips and Debugging" accesskey="n" rel="next">Next <img src="../../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="PRO-TIPS.html" class="btn btn-neutral float-right" title="Common PyTorch errors and solutions" accesskey="n" rel="next">Next <img src="../../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
         <a href="HABITAT.html" class="btn btn-neutral" title="Working with habitat-lab" accesskey="p" rel="prev"><img src="../../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
@@ -621,7 +621,7 @@ Make sure you have a GPU accessible on your machine.</p>
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">About MuJoCo</a></li>
+<li><a class="reference internal" href="#">Working with MuJoCo-based environments</a><ul>
 <li><a class="reference internal" href="#installing-mujoco">Installing MuJoCo</a><ul>
 <li><a class="reference internal" href="#prerequisite-for-rendering-all-mujoco-versions">Prerequisite for rendering (all mujoco versions)</a></li>
 <li><a class="reference internal" href="#new-bindindgs-2-1-2">New bindindgs (≥ 2.1.2)</a></li>
@@ -633,6 +633,8 @@ Make sure you have a GPU accessible on your machine.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#common-issues-when-rendering-mujoco-environments">Common Issues when rendering Mujoco Environments</a></li>
+</ul>
+</li>
 </ul>
 
             </div>
