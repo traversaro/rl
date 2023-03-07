@@ -401,9 +401,19 @@
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">torchvision.transforms.functional</span> <span class="kn">import</span> <span class="n">center_crop</span>
-    <span class="kn">from</span> <span class="nn">torchvision.transforms.functional_tensor</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">resize</span><span class="p">,</span>
-    <span class="p">)</span>  <span class="c1"># as of now resize is imported from torchvision</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">torchvision.transforms.functional</span> <span class="kn">import</span> <span class="n">InterpolationMode</span><span class="p">,</span> <span class="n">resize</span>
+
+        <span class="k">def</span> <span class="nf">interpolation_fn</span><span class="p">(</span><span class="n">interpolation</span><span class="p">):</span>  <span class="c1"># noqa: D103</span>
+            <span class="k">return</span> <span class="n">InterpolationMode</span><span class="p">(</span><span class="n">interpolation</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+
+        <span class="k">def</span> <span class="nf">interpolation_fn</span><span class="p">(</span><span class="n">interpolation</span><span class="p">):</span>  <span class="c1"># noqa: D103</span>
+            <span class="k">return</span> <span class="n">interpolation</span>
+
+        <span class="kn">from</span> <span class="nn">torchvision.transforms.functional_tensor</span> <span class="kn">import</span> <span class="n">resize</span>
 
     <span class="n">_has_tv</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -430,6 +440,14 @@
 
 
 <span class="k">def</span> <span class="nf">_apply_to_composite_inv</span><span class="p">(</span><span class="n">function</span><span class="p">):</span>
+    <span class="c1"># Changes the input_spec following a transform function.</span>
+    <span class="c1"># The usage is: if an env expects a certain input (e.g. a double tensor)</span>
+    <span class="c1"># but the input has to be transformed (e.g. it is float), this function will</span>
+    <span class="c1"># modify the spec to get a spec that from the outside matches what is given</span>
+    <span class="c1"># (ie a float).</span>
+    <span class="c1"># Now since EnvBase.step ignores new inputs (ie the root level of the</span>
+    <span class="c1"># tensor is not updated) an out_key that does not match the in_key has</span>
+    <span class="c1"># no effect on the spec.</span>
     <span class="k">def</span> <span class="nf">new_fun</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_spec</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
             <span class="n">d</span> <span class="o">=</span> <span class="n">input_spec</span><span class="o">.</span><span class="n">_specs</span>
@@ -1361,7 +1379,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">in_keys</span><span class="o">=</span><span class="n">in_keys</span><span class="p">,</span> <span class="n">out_keys</span><span class="o">=</span><span class="n">out_keys</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">interpolation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="n">interpolation_fn</span><span class="p">(</span><span class="n">interpolation</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_apply_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="c1"># flatten if necessary</span>
@@ -3003,18 +3021,27 @@
         <span class="n">value_sum</span> <span class="o">=</span> <span class="n">_sum_left</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">_sum</span><span class="p">)</span>
         <span class="n">_sum</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span>
         <span class="n">_sum</span> <span class="o">+=</span> <span class="n">value_sum</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="o">.</span><span class="n">set_</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_sum&quot;</span><span class="p">,</span> <span class="n">_sum</span><span class="p">,</span> <span class="n">no_check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="o">.</span><span class="n">set_</span><span class="p">(</span>
+            <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_sum&quot;</span><span class="p">,</span>
+            <span class="n">_sum</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">_ssq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_ssq&quot;</span><span class="p">)</span>
         <span class="n">value_ssq</span> <span class="o">=</span> <span class="n">_sum_left</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">_ssq</span><span class="p">)</span>
         <span class="n">_ssq</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span>
         <span class="n">_ssq</span> <span class="o">+=</span> <span class="n">value_ssq</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="o">.</span><span class="n">set_</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_ssq&quot;</span><span class="p">,</span> <span class="n">_ssq</span><span class="p">,</span> <span class="n">no_check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="o">.</span><span class="n">set_</span><span class="p">(</span>
+            <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_ssq&quot;</span><span class="p">,</span>
+            <span class="n">_ssq</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_count&quot;</span><span class="p">)</span>
         <span class="n">_count</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decay</span>
         <span class="n">_count</span> <span class="o">+=</span> <span class="n">N</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="o">.</span><span class="n">set_</span><span class="p">(</span><span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_count&quot;</span><span class="p">,</span> <span class="n">_count</span><span class="p">,</span> <span class="n">no_check</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_td</span><span class="o">.</span><span class="n">set_</span><span class="p">(</span>
+            <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;_count&quot;</span><span class="p">,</span>
+            <span class="n">_count</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="n">mean</span> <span class="o">=</span> <span class="n">_sum</span> <span class="o">/</span> <span class="n">_count</span>
         <span class="n">std</span> <span class="o">=</span> <span class="p">(</span><span class="n">_ssq</span> <span class="o">/</span> <span class="n">_count</span> <span class="o">-</span> <span class="n">mean</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">clamp_min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="p">)</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>

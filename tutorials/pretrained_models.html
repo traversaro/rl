@@ -419,6 +419,41 @@ the corresponding action.</p>
 <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictSequential.html#tensordict.nn.TensorDictSequential" title="tensordict.nn.TensorDictSequential" class="sphx-glr-backref-module-tensordict-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">policy</span></a> <span class="o">=</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.modules.tensordict_module.Actor.html#torchrl.modules.tensordict_module.Actor" title="torchrl.modules.tensordict_module.actors.Actor" class="sphx-glr-backref-module-torchrl-modules-tensordict_module-actors sphx-glr-backref-type-py-class"><span class="n">Actor</span></a><span class="p">(</span><a href="https://pytorch.org/docs/stable/generated/torch.nn.Sequential.html#torch.nn.Sequential" title="torch.nn.Sequential" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">net</span></a><span class="p">,</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;r3m_vec&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading: &quot;https://pytorch.s3.amazonaws.com/models/rl/r3m/r3m_50.pt&quot; to /github/home/.cache/torch/hub/checkpoints/r3m_50.pt
+
+  0%|          | 0.00/374M [00:00&lt;?, ?B/s]
+  4%|4         | 16.4M/374M [00:00&lt;00:02, 131MB/s]
+  9%|8         | 32.8M/374M [00:00&lt;00:03, 93.3MB/s]
+ 13%|#3        | 49.1M/374M [00:00&lt;00:03, 95.6MB/s]
+ 17%|#7        | 64.0M/374M [00:00&lt;00:03, 89.4MB/s]
+ 19%|#9        | 72.7M/374M [00:00&lt;00:03, 81.7MB/s]
+ 22%|##1       | 81.9M/374M [00:01&lt;00:04, 71.9MB/s]
+ 26%|##6       | 97.6M/374M [00:01&lt;00:04, 70.4MB/s]
+ 28%|##7       | 104M/374M [00:01&lt;00:04, 67.0MB/s]
+ 31%|###       | 115M/374M [00:01&lt;00:03, 72.1MB/s]
+ 35%|###5      | 131M/374M [00:01&lt;00:03, 78.4MB/s]
+ 39%|###9      | 147M/374M [00:01&lt;00:02, 94.5MB/s]
+ 43%|####3     | 162M/374M [00:01&lt;00:02, 104MB/s]
+ 46%|####6     | 173M/374M [00:02&lt;00:02, 94.2MB/s]
+ 49%|####8     | 182M/374M [00:02&lt;00:02, 90.3MB/s]
+ 53%|#####2    | 197M/374M [00:02&lt;00:02, 88.5MB/s]
+ 57%|#####6    | 213M/374M [00:02&lt;00:01, 93.5MB/s]
+ 61%|######1   | 229M/374M [00:02&lt;00:01, 89.0MB/s]
+ 66%|######5   | 246M/374M [00:02&lt;00:01, 97.7MB/s]
+ 70%|#######   | 262M/374M [00:03&lt;00:01, 106MB/s]
+ 74%|#######4  | 277M/374M [00:03&lt;00:00, 112MB/s]
+ 77%|#######6  | 288M/374M [00:03&lt;00:00, 101MB/s]
+ 80%|#######9  | 298M/374M [00:03&lt;00:00, 94.3MB/s]
+ 83%|########2 | 310M/374M [00:03&lt;00:00, 90.5MB/s]
+ 85%|########5 | 318M/374M [00:03&lt;00:00, 79.2MB/s]
+ 88%|########7 | 328M/374M [00:03&lt;00:00, 79.8MB/s]
+ 92%|#########1| 342M/374M [00:04&lt;00:00, 80.9MB/s]
+ 94%|#########3| 350M/374M [00:04&lt;00:00, 73.6MB/s]
+ 96%|#########6| 360M/374M [00:04&lt;00:00, 76.4MB/s]
+ 98%|#########8| 368M/374M [00:04&lt;00:00, 71.5MB/s]
+100%|##########| 374M/374M [00:04&lt;00:00, 85.3MB/s]
+</pre></div>
+</div>
 <p>Let’s check the number of parameters of the policy:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;number of params:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.parameters" title="torch.nn.Module.parameters" class="sphx-glr-backref-module-torch-nn sphx-glr-backref-type-py-method"><span class="n">policy</span><span class="o">.</span><span class="n">parameters</span></a><span class="p">())))</span>
 </pre></div>
@@ -505,11 +540,11 @@ buffer with it:</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating a MemmapStorage...
 The storage is being created:
-        action: /tmp/tmpzd_7n89w, 0.030517578125 Mb of storage (size: torch.Size([1000, 8])).
-        done: /tmp/tmplkgmf4wm, 0.00095367431640625 Mb of storage (size: torch.Size([1000, 1])).
-        pixels: /tmp/tmps2929r9k, 659.1796875 Mb of storage (size: torch.Size([1000, 480, 480, 3])).
-        reward: /tmp/tmplv75dpum, 0.003814697265625 Mb of storage (size: torch.Size([1000, 1])).
-        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmp7v9h0yoo, 659.1796875 Mb of storage (size: torch.Size([1000, 480, 480, 3])).
+        action: /tmp/tmp2oqknk78, 0.030517578125 Mb of storage (size: torch.Size([1000, 8])).
+        done: /tmp/tmpd4fedeu3, 0.00095367431640625 Mb of storage (size: torch.Size([1000, 1])).
+        pixels: /tmp/tmp2799zy9y, 659.1796875 Mb of storage (size: torch.Size([1000, 480, 480, 3])).
+        reward: /tmp/tmp739u8w76, 0.003814697265625 Mb of storage (size: torch.Size([1000, 1])).
+        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmpazch20ek, 659.1796875 Mb of storage (size: torch.Size([1000, 480, 480, 3])).
 </pre></div>
 </div>
 <p>Let’s check what our replay buffer storage looks like. It should not contain the “r3m_vec” entry
@@ -557,8 +592,8 @@ In this way, we can train an algorithm offline on a dataset made of images:</p>
     is_shared=False)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  25.079 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  4504 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  28.372 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  3432 MB</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-pretrained-models-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/ae7b3885bfc446e5c7ca2102306be4c2/pretrained_models.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">pretrained_models.py</span></code></a></p>

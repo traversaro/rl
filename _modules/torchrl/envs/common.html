@@ -746,7 +746,7 @@
         <span class="c1"># sanity check</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_assert_tensordict_shape</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
 
-        <span class="n">tensordict</span><span class="o">.</span><span class="n">lock</span><span class="p">()</span>  <span class="c1"># make sure _step does not modify the tensordict</span>
+        <span class="n">tensordict</span><span class="o">.</span><span class="n">lock_</span><span class="p">()</span>  <span class="c1"># make sure _step does not modify the tensordict</span>
         <span class="n">tensordict_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_step</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">tensordict_out</span> <span class="ow">is</span> <span class="n">tensordict</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
@@ -754,7 +754,7 @@
                 <span class="s2">&quot;tensordict. Consider emptying the TensorDict first (e.g. tensordict.empty() or &quot;</span>
                 <span class="s2">&quot;tensordict.select()) inside _step before writing new tensors onto this new instance.&quot;</span>
             <span class="p">)</span>
-        <span class="n">tensordict</span><span class="o">.</span><span class="n">unlock</span><span class="p">()</span>
+        <span class="n">tensordict</span><span class="o">.</span><span class="n">unlock_</span><span class="p">()</span>
 
         <span class="n">obs_keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="n">nested_keys</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># we deliberately do not update the input values, but we want to keep track of</span>
@@ -1197,7 +1197,6 @@
             <span class="p">},</span>
             <span class="n">batch_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
             <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-            <span class="n">_run_checks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># this method should not be run very often. This facilitates debugging</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">fake_td</span></div></div>
 

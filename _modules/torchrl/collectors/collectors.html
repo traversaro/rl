@@ -1020,7 +1020,7 @@
                     <span class="c1"># unlock the output tensordict to allow for new keys to be written</span>
                     <span class="c1"># these will be missed during the sync but at least we won&#39;t get an error during the update</span>
                     <span class="n">is_shared</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">is_shared</span><span class="p">()</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">unlock</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">unlock_</span><span class="p">()</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span>
                     <span class="k">if</span> <span class="n">is_shared</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict_out</span><span class="o">.</span><span class="n">share_memory_</span><span class="p">()</span>
