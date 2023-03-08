@@ -260,7 +260,6 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -566,8 +565,6 @@
       </ul></li>
       <li><a href="reference/generated/torchrl.envs.transforms.VecNorm.html#torchrl.envs.transforms.VecNorm.build_td_for_shared_vecnorm">build_td_for_shared_vecnorm() (torchrl.envs.transforms.VecNorm static method)</a>
 </li>
-      <li><a href="reference/generated/torchrl.envs.Specs.html#torchrl.envs.Specs.build_tensordict">build_tensordict() (torchrl.envs.Specs method)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -684,9 +681,11 @@
 </li>
       <li><a href="reference/generated/torchrl.envs.libs.dm_control.DMControlEnv.html#torchrl.envs.libs.dm_control.DMControlEnv">DMControlEnv() (in module torchrl.envs.libs.dm_control)</a>
 </li>
+      <li><a href="reference/generated/torchrl.envs.libs.dm_control.DMControlWrapper.html#torchrl.envs.libs.dm_control.DMControlWrapper">DMControlWrapper() (in module torchrl.envs.libs.dm_control)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="reference/generated/torchrl.envs.libs.dm_control.DMControlWrapper.html#torchrl.envs.libs.dm_control.DMControlWrapper">DMControlWrapper() (in module torchrl.envs.libs.dm_control)</a>
+      <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.done_spec">done_spec (torchrl.envs.transforms.TransformedEnv property)</a>
 </li>
       <li><a href="reference/generated/torchrl.data.MultiStep.html#torchrl.data.MultiStep.double">double() (torchrl.data.MultiStep method)</a>
 
@@ -1480,10 +1479,10 @@
 </li>
       <li><a href="reference/generated/torchrl.envs.transforms.ObservationNorm.html#torchrl.envs.transforms.ObservationNorm">ObservationNorm (class in torchrl.envs.transforms)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/torchrl.envs.transforms.ObservationTransform.html#torchrl.envs.transforms.ObservationTransform">ObservationTransform (class in torchrl.envs.transforms)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="reference/generated/torchrl.modules.OneHotCategorical.html#torchrl.modules.OneHotCategorical">OneHotCategorical (class in torchrl.modules)</a>
 </li>
       <li><a href="reference/generated/torchrl.data.OneHotDiscreteTensorSpec.html#torchrl.data.OneHotDiscreteTensorSpec">OneHotDiscreteTensorSpec (class in torchrl.data)</a>
@@ -1491,6 +1490,8 @@
       <li><a href="reference/generated/torchrl.trainers.OptimizerHook.html#torchrl.trainers.OptimizerHook">OptimizerHook (class in torchrl.trainers)</a>
 </li>
       <li><a href="reference/generated/torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper.html#torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper">OrnsteinUhlenbeckProcessWrapper (class in torchrl.modules.tensordict_module)</a>
+</li>
+      <li><a href="reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv.output_spec">output_spec (torchrl.envs.transforms.TransformedEnv property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -2014,8 +2015,6 @@
       </ul></li>
       <li><a href="reference/generated/torchrl.objectives.SoftUpdate.html#torchrl.objectives.SoftUpdate">SoftUpdate (class in torchrl.objectives)</a>
 </li>
-      <li><a href="reference/generated/torchrl.envs.Specs.html#torchrl.envs.Specs">Specs (class in torchrl.envs)</a>
-</li>
       <li><a href="reference/generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase.specs">specs (torchrl.envs.EnvBase property)</a>
 
       <ul>
@@ -2236,6 +2235,8 @@
 </li>
       <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform">Transform (class in torchrl.envs.transforms)</a>
 </li>
+      <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform.transform_done_spec">transform_done_spec() (torchrl.envs.transforms.Transform method)</a>
+</li>
       <li><a href="reference/generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose.transform_input_spec">transform_input_spec() (torchrl.envs.transforms.Compose method)</a>
 
       <ul>
@@ -2290,6 +2291,8 @@
         <li><a href="reference/generated/torchrl.envs.transforms.UnsqueezeTransform.html#torchrl.envs.transforms.UnsqueezeTransform.transform_observation_spec">(torchrl.envs.transforms.UnsqueezeTransform method)</a>
 </li>
       </ul></li>
+      <li><a href="reference/generated/torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform.transform_output_spec">transform_output_spec() (torchrl.envs.transforms.Transform method)</a>
+</li>
       <li><a href="reference/generated/torchrl.envs.transforms.BinarizeReward.html#torchrl.envs.transforms.BinarizeReward.transform_reward_spec">transform_reward_spec() (torchrl.envs.transforms.BinarizeReward method)</a>
 
       <ul>

@@ -260,7 +260,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -416,7 +415,7 @@
 <span class="sd">        ...     tensordict = env.reset()</span>
 <span class="sd">        ...     for _ in range(10):</span>
 <span class="sd">        ...         env.rand_step(tensordict)</span>
-<span class="sd">        ...         if tensordict.get(&quot;done&quot;):</span>
+<span class="sd">        ...         if tensordict.get((&quot;next&quot;, &quot;done&quot;)):</span>
 <span class="sd">        ...             tensordict = env.reset(tensordict)</span>
 <span class="sd">        ...     print(&quot;env 1: &quot;, env.transform._td.get((&quot;next&quot;, &quot;observation_count&quot;)))</span>
 <span class="sd">        &gt;&gt;&gt;</span>
@@ -494,7 +493,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_share_memory</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">share_memory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_transform_state_dict</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initialized</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">meta_data</span> <span class="o">=</span> <span class="n">EnvMetaData</span><span class="o">.</span><span class="n">build_metadata_from_env</span><span class="p">(</span><span class="n">shadow_env</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">meta_data</span> <span class="o">=</span> <span class="n">EnvMetaData</span><span class="o">.</span><span class="n">metadata_from_env</span><span class="p">(</span><span class="n">shadow_env</span><span class="p">)</span>
         <span class="n">shadow_env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">del</span> <span class="n">shadow_env</span>
         <span class="k">return</span> <span class="bp">self</span>
@@ -535,7 +534,7 @@
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves a EnvMetaData object from an env.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env_or_creator</span><span class="p">,</span> <span class="p">(</span><span class="n">EnvBase</span><span class="p">,)):</span>
-        <span class="k">return</span> <span class="n">EnvMetaData</span><span class="o">.</span><span class="n">build_metadata_from_env</span><span class="p">(</span><span class="n">env_or_creator</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">EnvMetaData</span><span class="o">.</span><span class="n">metadata_from_env</span><span class="p">(</span><span class="n">env_or_creator</span><span class="p">)</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env_or_creator</span><span class="p">,</span> <span class="n">EnvBase</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
         <span class="n">env_or_creator</span><span class="p">,</span> <span class="n">EnvCreator</span>
     <span class="p">):</span>
@@ -543,7 +542,7 @@
         <span class="k">if</span> <span class="n">kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">env_or_creator</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">EnvMetaData</span><span class="o">.</span><span class="n">build_metadata_from_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">EnvMetaData</span><span class="o">.</span><span class="n">metadata_from_env</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env_or_creator</span><span class="p">,</span> <span class="n">EnvCreator</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
             <span class="n">kwargs</span> <span class="o">==</span> <span class="n">env_or_creator</span><span class="o">.</span><span class="n">create_env_kwargs</span>

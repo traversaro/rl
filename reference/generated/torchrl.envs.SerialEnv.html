@@ -39,7 +39,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="ParallelEnv" href="torchrl.envs.ParallelEnv.html" />
-    <link rel="prev" title="Specs" href="torchrl.envs.Specs.html" />
+    <link rel="prev" title="EnvMetaData" href="torchrl.envs.EnvMetaData.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -263,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -396,23 +395,7 @@ If a single task is used, a callable should be used and not a list of identical 
 if a list of callable is provided, the environment will be executed as if multiple, diverse tasks were
 needed, which comes with a slight compute overhead;</p></li>
 <li><p><strong>create_env_kwargs</strong> (<em>dict</em><em> or </em><em>list</em><em> of </em><em>dicts</em><em>, </em><em>optional</em>) – kwargs to be used with the environments being created;</p></li>
-<li><p><strong>env_input_keys</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – list of keys that are to be considered policy-output. If the policy has it,
-the attribute policy.out_keys can be used.
-Providing the env_input_keys permit to select which keys to update after the policy is called, which can
-drastically decrease the IO burden when the tensordict is placed in shared memory / memory map.
-env_input_keys will typically contain “action” and if this list is not provided this object
-will look for corresponding keys. When working with stateless models, it is important to include the
-state to be read by the environment. If none is provided, _BatchedEnv will use the <code class="xref py py-obj docutils literal notranslate"><span class="pre">EnvBase.input_spec</span></code>
-keys as indicators of the keys to be sent to the env.</p></li>
 <li><p><strong>pin_memory</strong> (<em>bool</em>) – if True and device is “cpu”, calls <code class="xref py py-obj docutils literal notranslate"><span class="pre">pin_memory</span></code> on the tensordicts when created.</p></li>
-<li><p><strong>selected_keys</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – keys that have to be returned by the environment.
-When creating a batch of environment, it might be the case that only some of the keys are to be returned.
-For instance, if the environment returns ‘next_pixels’ and ‘next_vector’, the user might only
-be interested in, say, ‘vector’. By indicating which keys must be returned in the tensordict,
-one can easily control the amount of data occupied in memory (for instance to limit the memory size of a
-replay buffer) and/or limit the amount of data passed from one process to the other;</p></li>
-<li><p><strong>excluded_keys</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – list of keys to be excluded from the returned tensordicts.
-See selected_keys for more details;</p></li>
 <li><p><strong>share_individual_td</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, a different tensordict is created for every process/worker and a lazy
 stack is returned.
 default = None (False if single task);</p></li>
@@ -1515,8 +1498,8 @@ used for another environment if created concomittently to this environment.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="torchrl.envs.SerialEnv.specs">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">specs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="torchrl.envs.Specs.html#torchrl.envs.Specs" title="torchrl.envs.common.Specs"><span class="pre">Specs</span></a></em><a class="headerlink" href="#torchrl.envs.SerialEnv.specs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a Specs container where all the environment specs are contained.</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">specs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec" title="torchrl.data.tensor_specs.CompositeSpec"><span class="pre">CompositeSpec</span></a></em><a class="headerlink" href="#torchrl.envs.SerialEnv.specs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Composite container where all the environment are present.</p>
 <p>This feature allows one to create an environment, retrieve all of the specs in a single data container and then
 erase the environment from the workspace.</p>
 </dd></dl>
@@ -1819,7 +1802,7 @@ See <a class="reference external" href="https://pytorch.org/docs/stable/generate
         <a href="torchrl.envs.ParallelEnv.html" class="btn btn-neutral float-right" title="ParallelEnv" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl.envs.Specs.html" class="btn btn-neutral" title="Specs" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torchrl.envs.EnvMetaData.html" class="btn btn-neutral" title="EnvMetaData" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   

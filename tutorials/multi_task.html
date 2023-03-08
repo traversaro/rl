@@ -263,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul class="current">
@@ -436,7 +435,8 @@ and another that must learn to walk.</p>
     fields={
         done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
         observation: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
-        observation_stand: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False)},
+        observation_stand: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float64, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -479,7 +479,8 @@ and pass them through the dedicated sub-network.</p>
         done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
         hidden: Tensor(shape=torch.Size([64]), device=cpu, dtype=torch.float32, is_shared=False),
         observation: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
-        observation_stand: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False)},
+        observation_stand: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float64, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -495,7 +496,8 @@ and pass them through the dedicated sub-network.</p>
         done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
         hidden: Tensor(shape=torch.Size([64]), device=cpu, dtype=torch.float32, is_shared=False),
         observation: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
-        observation_walk: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False)},
+        observation_walk: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float64, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -513,7 +515,8 @@ backbone was executed in a vectorized way - not in a loop - which is more effici
         action: Tensor(shape=torch.Size([2, 21]), device=cpu, dtype=torch.float32, is_shared=False),
         done: Tensor(shape=torch.Size([2, 1]), device=cpu, dtype=torch.bool, is_shared=False),
         hidden: Tensor(shape=torch.Size([2, 64]), device=cpu, dtype=torch.float32, is_shared=False),
-        observation: Tensor(shape=torch.Size([2, 67]), device=cpu, dtype=torch.float32, is_shared=False)},
+        observation: Tensor(shape=torch.Size([2, 67]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([2, 1]), device=cpu, dtype=torch.float64, is_shared=False)},
     batch_size=torch.Size([2]),
     device=cpu,
     is_shared=False)
@@ -569,7 +572,8 @@ it will assume that we are in a multi-task setting.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>LazyStackedTensorDict(
     fields={
         done: Tensor(shape=torch.Size([2, 1]), device=cpu, dtype=torch.bool, is_shared=False),
-        observation: Tensor(shape=torch.Size([2, 67]), device=cpu, dtype=torch.float32, is_shared=False)},
+        observation: Tensor(shape=torch.Size([2, 67]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([2, 1]), device=cpu, dtype=torch.float64, is_shared=False)},
     batch_size=torch.Size([2]),
     device=cpu,
     is_shared=False)
@@ -577,7 +581,8 @@ TensorDict(
     fields={
         done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
         observation: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
-        observation_stand: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False)},
+        observation_stand: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float64, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -585,7 +590,8 @@ TensorDict(
     fields={
         done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
         observation: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
-        observation_walk: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False)},
+        observation_walk: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float64, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -609,7 +615,8 @@ TensorDict(
         action: Tensor(shape=torch.Size([2, 21]), device=cpu, dtype=torch.float32, is_shared=False),
         done: Tensor(shape=torch.Size([2, 1]), device=cpu, dtype=torch.bool, is_shared=False),
         hidden: Tensor(shape=torch.Size([2, 64]), device=cpu, dtype=torch.float32, is_shared=False),
-        observation: Tensor(shape=torch.Size([2, 67]), device=cpu, dtype=torch.float32, is_shared=False)},
+        observation: Tensor(shape=torch.Size([2, 67]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([2, 1]), device=cpu, dtype=torch.float64, is_shared=False)},
     batch_size=torch.Size([2]),
     device=cpu,
     is_shared=False)
@@ -619,7 +626,8 @@ TensorDict(
         done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
         hidden: Tensor(shape=torch.Size([64]), device=cpu, dtype=torch.float32, is_shared=False),
         observation: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
-        observation_stand: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False)},
+        observation_stand: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float64, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -629,7 +637,8 @@ TensorDict(
         done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
         hidden: Tensor(shape=torch.Size([64]), device=cpu, dtype=torch.float32, is_shared=False),
         observation: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
-        observation_walk: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False)},
+        observation_walk: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float64, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -640,7 +649,9 @@ LazyStackedTensorDict(
         hidden: Tensor(shape=torch.Size([2, 64]), device=cpu, dtype=torch.float32, is_shared=False),
         next: LazyStackedTensorDict(
             fields={
-                observation: Tensor(shape=torch.Size([2, 67]), device=cpu, dtype=torch.float32, is_shared=False)},
+                done: Tensor(shape=torch.Size([2, 1]), device=cpu, dtype=torch.bool, is_shared=False),
+                observation: Tensor(shape=torch.Size([2, 67]), device=cpu, dtype=torch.float32, is_shared=False),
+                reward: Tensor(shape=torch.Size([2, 1]), device=cpu, dtype=torch.float64, is_shared=False)},
             batch_size=torch.Size([2]),
             device=cpu,
             is_shared=False),
@@ -656,8 +667,10 @@ TensorDict(
         hidden: Tensor(shape=torch.Size([64]), device=cpu, dtype=torch.float32, is_shared=False),
         next: TensorDict(
             fields={
+                done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
                 observation: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
-                observation_stand: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False)},
+                observation_stand: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
+                reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float64, is_shared=False)},
             batch_size=torch.Size([]),
             device=cpu,
             is_shared=False),
@@ -674,8 +687,10 @@ TensorDict(
         hidden: Tensor(shape=torch.Size([64]), device=cpu, dtype=torch.float32, is_shared=False),
         next: TensorDict(
             fields={
+                done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
                 observation: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
-                observation_walk: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False)},
+                observation_walk: Tensor(shape=torch.Size([67]), device=cpu, dtype=torch.float32, is_shared=False),
+                reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float64, is_shared=False)},
             batch_size=torch.Size([]),
             device=cpu,
             is_shared=False),
@@ -703,7 +718,9 @@ TensorDict(
         hidden: Tensor(shape=torch.Size([2, 64]), device=cpu, dtype=torch.float32, is_shared=False),
         next: LazyStackedTensorDict(
             fields={
-                observation: Tensor(shape=torch.Size([2, 67]), device=cpu, dtype=torch.float32, is_shared=False)},
+                done: Tensor(shape=torch.Size([2, 1]), device=cpu, dtype=torch.bool, is_shared=False),
+                observation: Tensor(shape=torch.Size([2, 67]), device=cpu, dtype=torch.float32, is_shared=False),
+                reward: Tensor(shape=torch.Size([2, 1]), device=cpu, dtype=torch.float64, is_shared=False)},
             batch_size=torch.Size([2]),
             device=cpu,
             is_shared=False),
@@ -720,8 +737,8 @@ TensorDict(
 <span class="k">del</span> <span class="n">env</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  2.058 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  11 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  55.683 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  10 MB</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-multi-task-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fe94dedecc2afb14d9227db6afb81c3f/multi_task.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">multi_task.py</span></code></a></p>

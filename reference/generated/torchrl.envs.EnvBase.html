@@ -263,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -1512,8 +1511,8 @@ used for another environment if created concomittently to this environment.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="torchrl.envs.EnvBase.specs">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">specs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="torchrl.envs.Specs.html#torchrl.envs.Specs" title="torchrl.envs.common.Specs"><span class="pre">Specs</span></a></em><a class="headerlink" href="#torchrl.envs.EnvBase.specs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a Specs container where all the environment specs are contained.</p>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">specs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec" title="torchrl.data.tensor_specs.CompositeSpec"><span class="pre">CompositeSpec</span></a></em><a class="headerlink" href="#torchrl.envs.EnvBase.specs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a Composite container where all the environment are present.</p>
 <p>This feature allows one to create an environment, retrieve all of the specs in a single data container and then
 erase the environment from the workspace.</p>
 </dd></dl>

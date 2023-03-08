@@ -260,7 +260,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -637,7 +636,7 @@
             <span class="n">record_interval</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">record_interval</span><span class="p">,</span>
             <span class="n">exploration_mode</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span>
             <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;exploration&quot;</span><span class="p">,</span>
-            <span class="n">out_keys</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;reward&quot;</span><span class="p">:</span> <span class="s2">&quot;r_evaluation_exploration&quot;</span><span class="p">},</span>
+            <span class="n">out_keys</span><span class="o">=</span><span class="p">{(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">):</span> <span class="s2">&quot;r_evaluation_exploration&quot;</span><span class="p">},</span>
         <span class="p">)</span>
         <span class="n">trainer</span><span class="o">.</span><span class="n">register_op</span><span class="p">(</span>
             <span class="s2">&quot;post_steps_log&quot;</span><span class="p">,</span>

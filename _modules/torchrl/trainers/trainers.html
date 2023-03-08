@@ -260,7 +260,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -421,6 +420,7 @@
 <span class="p">}</span>
 
 <span class="n">TYPE_DESCR</span> <span class="o">=</span> <span class="p">{</span><span class="nb">float</span><span class="p">:</span> <span class="s2">&quot;4.4f&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">}</span>
+<span class="n">REWARD_KEY</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="TrainerHookBase"><a class="viewcode-back" href="../../../reference/generated/torchrl.trainers.TrainerHookBase.html#torchrl.trainers.TrainerHookBase">[docs]</a><span class="k">class</span> <span class="nc">TrainerHookBase</span><span class="p">:</span>
@@ -1025,7 +1025,6 @@
                     <span class="p">)</span>
                     <span class="n">pads</span> <span class="o">+=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">pad_value</span><span class="p">]</span>
                 <span class="n">batch</span> <span class="o">=</span> <span class="n">pad</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">pads</span><span class="p">)</span>
-        <span class="c1"># reward_training = batch.get(&quot;reward&quot;).mean().item()</span>
         <span class="n">batch</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">memmap</span><span class="p">:</span>
             <span class="c1"># We can already place the tensords on the device if they&#39;re memmap,</span>
@@ -1160,27 +1159,39 @@
 <span class="sd">        logname (str, optional): name of the rewards to be logged. Default is :obj:`&quot;r_training&quot;`.</span>
 <span class="sd">        log_pbar (bool, optional): if True, the reward value will be logged on</span>
 <span class="sd">            the progression bar. Default is :obj:`False`.</span>
+<span class="sd">        reward_key (str or tuple, optional): the key where to find the reward</span>
+<span class="sd">            in the input batch. Defaults to ``(&quot;next&quot;, &quot;reward&quot;)``</span>
 
 <span class="sd">    Examples:</span>
-<span class="sd">        &gt;&gt;&gt; log_reward = LogReward(&quot;reward&quot;)</span>
+<span class="sd">        &gt;&gt;&gt; log_reward = LogReward((&quot;next&quot;, &quot;reward&quot;))</span>
 <span class="sd">        &gt;&gt;&gt; trainer.register_op(&quot;pre_steps_log&quot;, log_reward)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logname</span><span class="o">=</span><span class="s2">&quot;r_training&quot;</span><span class="p">,</span> <span class="n">log_pbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">logname</span><span class="o">=</span><span class="s2">&quot;r_training&quot;</span><span class="p">,</span>
+        <span class="n">log_pbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">reward_key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logname</span> <span class="o">=</span> <span class="n">logname</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log_pbar</span> <span class="o">=</span> <span class="n">log_pbar</span>
+        <span class="k">if</span> <span class="n">reward_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">reward_key</span> <span class="o">=</span> <span class="n">REWARD_KEY</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reward_key</span> <span class="o">=</span> <span class="n">reward_key</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
         <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;mask&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">batch</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
             <span class="k">return</span> <span class="p">{</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">logname</span><span class="p">:</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">)[</span><span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;mask&quot;</span><span class="p">))]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logname</span><span class="p">:</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reward_key</span><span class="p">)[</span>
+                    <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;mask&quot;</span><span class="p">))</span>
+                <span class="p">]</span>
                 <span class="o">.</span><span class="n">mean</span><span class="p">()</span>
                 <span class="o">.</span><span class="n">item</span><span class="p">(),</span>
                 <span class="s2">&quot;log_pbar&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_pbar</span><span class="p">,</span>
             <span class="p">}</span>
         <span class="k">return</span> <span class="p">{</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">logname</span><span class="p">:</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logname</span><span class="p">:</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reward_key</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span>
             <span class="s2">&quot;log_pbar&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_pbar</span><span class="p">,</span>
         <span class="p">}</span>
 
@@ -1195,6 +1206,13 @@
 <span class="sd">    Args:</span>
 <span class="sd">        decay (float, optional): exponential moving average decay parameter.</span>
 <span class="sd">            Default is 0.999</span>
+<span class="sd">        scale (float, optional): the scale used to multiply the reward once</span>
+<span class="sd">            normalized. Defaults to 1.0.</span>
+<span class="sd">        eps (float, optional): the epsilon jitter used to prevent numerical</span>
+<span class="sd">            underflow. Defaults to ``torch.finfo(DEFAULT_DTYPE).eps``</span>
+<span class="sd">            where ``DEFAULT_DTYPE=torch.get_default_dtype()``.</span>
+<span class="sd">        reward_key (str or tuple, optional): the key where to find the reward</span>
+<span class="sd">            in the input batch. Defaults to ``(&quot;next&quot;, &quot;reward&quot;)``</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; reward_normalizer = RewardNormalizer()</span>
@@ -1207,19 +1225,25 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">decay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.999</span><span class="p">,</span>
         <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span>
+        <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">log_pbar</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">reward_key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_has_been_called</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_update_has_been_called</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reward_stats</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_reward_stats</span><span class="p">[</span><span class="s2">&quot;decay&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">decay</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span>
+        <span class="k">if</span> <span class="n">eps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">eps</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">get_default_dtype</span><span class="p">())</span><span class="o">.</span><span class="n">eps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eps</span> <span class="o">=</span> <span class="n">eps</span>
+        <span class="k">if</span> <span class="n">reward_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">reward_key</span> <span class="o">=</span> <span class="n">REWARD_KEY</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reward_key</span> <span class="o">=</span> <span class="n">reward_key</span>
 
     <span class="nd">@torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">()</span>
     <span class="k">def</span> <span class="nf">update_reward_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">reward</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">)</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reward_key</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;mask&quot;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">batch</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
             <span class="n">reward</span> <span class="o">=</span> <span class="n">reward</span><span class="p">[</span><span class="n">batch</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;mask&quot;</span><span class="p">))]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_has_been_called</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_has_been_called</span><span class="p">:</span>
@@ -1251,7 +1275,7 @@
 
     <span class="k">def</span> <span class="nf">normalize_reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
         <span class="n">tensordict</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">to_tensordict</span><span class="p">()</span>  <span class="c1"># make sure it is not a SubTensorDict</span>
-        <span class="n">reward</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">)</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reward_key</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">reward</span><span class="o">.</span><span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">reward</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reward_stats</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">reward</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
@@ -1260,7 +1284,7 @@
             <span class="n">reward</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reward_stats</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span>
             <span class="n">reward</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reward_stats</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">]</span>
 
-        <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">,</span> <span class="n">reward</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
+        <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reward_key</span><span class="p">,</span> <span class="n">reward</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_normalize_has_been_called</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">tensordict</span>
 
@@ -1493,10 +1517,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">record_interval</span> <span class="o">=</span> <span class="n">record_interval</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">exploration_mode</span> <span class="o">=</span> <span class="n">exploration_mode</span>
         <span class="k">if</span> <span class="n">log_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">log_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">]</span>
+            <span class="n">log_keys</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">out_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">out_keys</span> <span class="o">=</span> <span class="n">KeyDependentDefaultDict</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-            <span class="n">out_keys</span><span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;r_evaluation&quot;</span>
+            <span class="n">out_keys</span><span class="p">[(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;r_evaluation&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">log_keys</span> <span class="o">=</span> <span class="n">log_keys</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span> <span class="o">=</span> <span class="n">out_keys</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="n">suffix</span>
@@ -1525,7 +1549,7 @@
                 <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
                 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_keys</span><span class="p">:</span>
                     <span class="n">value</span> <span class="o">=</span> <span class="n">td_record</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span>
-                    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;reward&quot;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">):</span>
                         <span class="n">mean_value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_skip</span>
                         <span class="n">total_value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
                         <span class="n">out</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="n">mean_value</span>

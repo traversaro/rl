@@ -263,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -415,6 +414,12 @@ in which case this value should be set  to <cite>False</cite>. Default is
 batch_locked is an immutable property.</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.TransformedEnv.done_spec">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">done_spec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a></em><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv.done_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Done spec of the transformed environment.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.TransformedEnv.eval">
 <span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv" title="torchrl.envs.transforms.transforms.TransformedEnv"><span class="pre">TransformedEnv</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#TransformedEnv.eval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv.eval" title="Permalink to this definition">¶</a></dt>
@@ -481,6 +486,12 @@ exists in <a class="reference internal" href="#torchrl.envs.transforms.Transform
 <dl class="py property">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.TransformedEnv.observation_spec">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">observation_spec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a></em><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv.observation_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Observation spec of the transformed environment.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.TransformedEnv.output_spec">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_spec</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a></em><a class="headerlink" href="#torchrl.envs.transforms.TransformedEnv.output_spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Observation spec of the transformed environment.</p>
 </dd></dl>
 
@@ -724,10 +735,12 @@ mode (<code class="docutils literal notranslate"><span class="pre">False</span><
 <li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv"><code class="docutils literal notranslate"><span class="pre">TransformedEnv</span></code></a><ul>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.action_spec"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.action_spec</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.batch_locked"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.batch_locked</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.done_spec"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.done_spec</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.eval"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.eval()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.input_spec"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.input_spec</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.load_state_dict"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.load_state_dict()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.observation_spec"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.observation_spec</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.output_spec"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.output_spec</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.reward_spec"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.reward_spec</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.set_seed"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.set_seed()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.TransformedEnv.state_dict"><code class="docutils literal notranslate"><span class="pre">TransformedEnv.state_dict()</span></code></a></li>

@@ -424,7 +424,7 @@ Replay buffers
  .. code-block:: none
 
 
-    [1]
+    tensor([1])
 
 
 
@@ -445,7 +445,7 @@ Replay buffers
  .. code-block:: none
 
 
-    [2, 1, 3]
+    tensor([2, 1, 3])
 
 
 
@@ -659,7 +659,9 @@ Envs
             done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
             next: TensorDict(
                 fields={
-                    observation: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False)},
+                    done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
+                    observation: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),
+                    reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False)},
                 batch_size=torch.Size([]),
                 device=cpu,
                 is_shared=False),
@@ -697,7 +699,8 @@ Changing environments config
         fields={
             done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
             observation: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),
-            pixels: Tensor(shape=torch.Size([500, 500, 3]), device=cpu, dtype=torch.uint8, is_shared=False)},
+            pixels: Tensor(shape=torch.Size([500, 500, 3]), device=cpu, dtype=torch.uint8, is_shared=False),
+            reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False)},
         batch_size=torch.Size([]),
         device=cpu,
         is_shared=False)
@@ -793,7 +796,8 @@ Transforms
         fields={
             done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
             observation: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),
-            pixels: Tensor(shape=torch.Size([3, 500, 500]), device=cpu, dtype=torch.float32, is_shared=False)},
+            pixels: Tensor(shape=torch.Size([3, 500, 500]), device=cpu, dtype=torch.float32, is_shared=False),
+            reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False)},
         batch_size=torch.Size([]),
         device=cpu,
         is_shared=False)
@@ -867,6 +871,7 @@ Vectorized Environments
             done: Tensor(shape=torch.Size([4, 1]), device=cpu, dtype=torch.bool, is_shared=False),
             observation: Tensor(shape=torch.Size([4, 3]), device=cpu, dtype=torch.float32, is_shared=False),
             pixels: Tensor(shape=torch.Size([4, 3, 500, 500]), device=cpu, dtype=torch.float32, is_shared=False),
+            reward: Tensor(shape=torch.Size([4, 1]), device=cpu, dtype=torch.float32, is_shared=False),
             step_count: Tensor(shape=torch.Size([4]), device=cpu, dtype=torch.int64, is_shared=False)},
         batch_size=torch.Size([4]),
         device=cpu,
@@ -1528,7 +1533,9 @@ Using Environments and Modules
             done: Tensor(shape=torch.Size([100, 1]), device=cpu, dtype=torch.bool, is_shared=False),
             next: TensorDict(
                 fields={
-                    observation: Tensor(shape=torch.Size([100, 3]), device=cpu, dtype=torch.float32, is_shared=False)},
+                    done: Tensor(shape=torch.Size([100, 1]), device=cpu, dtype=torch.bool, is_shared=False),
+                    observation: Tensor(shape=torch.Size([100, 3]), device=cpu, dtype=torch.float32, is_shared=False),
+                    reward: Tensor(shape=torch.Size([100, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
                 batch_size=torch.Size([100]),
                 device=None,
                 is_shared=False),
@@ -1578,7 +1585,9 @@ Using Environments and Modules
             done: Tensor(shape=torch.Size([100, 1]), device=cpu, dtype=torch.bool, is_shared=False),
             next: LazyStackedTensorDict(
                 fields={
-                    observation: Tensor(shape=torch.Size([100, 3]), device=cpu, dtype=torch.float32, is_shared=False)},
+                    done: Tensor(shape=torch.Size([100, 1]), device=cpu, dtype=torch.bool, is_shared=False),
+                    observation: Tensor(shape=torch.Size([100, 3]), device=cpu, dtype=torch.float32, is_shared=False),
+                    reward: Tensor(shape=torch.Size([100, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
                 batch_size=torch.Size([100]),
                 device=cpu,
                 is_shared=False),
@@ -1732,7 +1741,6 @@ Sync data collector
             collector: TensorDict(
                 fields={
                     mask: Tensor(shape=torch.Size([6, 10]), device=cpu, dtype=torch.bool, is_shared=False),
-                    step_count: Tensor(shape=torch.Size([6, 10]), device=cpu, dtype=torch.int64, is_shared=False),
                     traj_ids: Tensor(shape=torch.Size([6, 10]), device=cpu, dtype=torch.int64, is_shared=False)},
                 batch_size=torch.Size([6, 10]),
                 device=cpu,
@@ -1740,7 +1748,9 @@ Sync data collector
             done: Tensor(shape=torch.Size([6, 10, 1]), device=cpu, dtype=torch.bool, is_shared=False),
             next: TensorDict(
                 fields={
-                    observation: Tensor(shape=torch.Size([6, 10, 3]), device=cpu, dtype=torch.float32, is_shared=False)},
+                    done: Tensor(shape=torch.Size([6, 10, 1]), device=cpu, dtype=torch.bool, is_shared=False),
+                    observation: Tensor(shape=torch.Size([6, 10, 3]), device=cpu, dtype=torch.float32, is_shared=False),
+                    reward: Tensor(shape=torch.Size([6, 10, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
                 batch_size=torch.Size([6, 10]),
                 device=cpu,
                 is_shared=False),
@@ -1794,7 +1804,6 @@ Sync data collector
             collector: TensorDict(
                 fields={
                     mask: Tensor(shape=torch.Size([3, 20]), device=cpu, dtype=torch.bool, is_shared=False),
-                    step_count: Tensor(shape=torch.Size([3, 20]), device=cpu, dtype=torch.int64, is_shared=False),
                     traj_ids: Tensor(shape=torch.Size([3, 20]), device=cpu, dtype=torch.int64, is_shared=False)},
                 batch_size=torch.Size([3, 20]),
                 device=cpu,
@@ -1802,7 +1811,9 @@ Sync data collector
             done: Tensor(shape=torch.Size([3, 20, 1]), device=cpu, dtype=torch.bool, is_shared=False),
             next: TensorDict(
                 fields={
-                    observation: Tensor(shape=torch.Size([3, 20, 3]), device=cpu, dtype=torch.float32, is_shared=False)},
+                    done: Tensor(shape=torch.Size([3, 20, 1]), device=cpu, dtype=torch.bool, is_shared=False),
+                    observation: Tensor(shape=torch.Size([3, 20, 3]), device=cpu, dtype=torch.float32, is_shared=False),
+                    reward: Tensor(shape=torch.Size([3, 20, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
                 batch_size=torch.Size([3, 20]),
                 device=cpu,
                 is_shared=False),
@@ -1873,7 +1884,28 @@ Objectives
 
 
 
+.. rst-class:: sphx-glr-script-out
 
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/__w/rl/rl/docs/source/reference/generated/tutorials/torchrl_demo.py", line 743, in <module>
+        loss_td = loss_fn(tensordict)
+      File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1533, in _call_impl
+        return forward_call(*args, **kwargs)
+      File "/__w/rl/rl/torchrl/objectives/ddpg.py", line 98, in forward
+        loss_value, td_error, pred_val, target_value = self._loss_value(
+      File "/__w/rl/rl/torchrl/objectives/ddpg.py", line 163, in _loss_value
+        target_value = next_state_value(
+      File "/usr/local/lib/python3.8/dist-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+        return func(*args, **kwargs)
+      File "/__w/rl/rl/torchrl/objectives/utils.py", line 335, in next_state_value
+        rewards = tensordict.get(("next", "reward")).squeeze(-1)
+      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 3211, in get
+        return self._default_get(key, default)
+      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 1000, in _default_get
+        raise KeyError(
+    KeyError: 'key "(\'next\', \'reward\')" not found in TensorDict with keys [\'action\', \'done\', \'next\', \'observation\', \'reward\']'
 
 
 
@@ -1886,61 +1918,12 @@ Objectives
     print(loss_td)
 
 
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    TensorDict(
-        fields={
-            loss_actor: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),
-            loss_value: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),
-            pred_value: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),
-            pred_value_max: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),
-            target_value: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),
-            target_value_max: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False)},
-        batch_size=torch.Size([]),
-        device=None,
-        is_shared=False)
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 750-753
 
 .. code-block:: default
 
 
     print(tensordict)
-
-
-
-
-
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    TensorDict(
-        fields={
-            action: Tensor(shape=torch.Size([10, 1]), device=cpu, dtype=torch.float32, is_shared=False),
-            done: Tensor(shape=torch.Size([10, 1]), device=cpu, dtype=torch.bool, is_shared=False),
-            next: TensorDict(
-                fields={
-                    observation: Tensor(shape=torch.Size([10, 3]), device=cpu, dtype=torch.float32, is_shared=False)},
-                batch_size=torch.Size([10]),
-                device=cpu,
-                is_shared=False),
-            observation: Tensor(shape=torch.Size([10, 3]), device=cpu, dtype=torch.float32, is_shared=False),
-            reward: Tensor(shape=torch.Size([10, 1]), device=cpu, dtype=torch.float32, is_shared=False),
-            td_error: Tensor(shape=torch.Size([10, 1]), device=cpu, dtype=torch.float32, is_shared=False)},
-        batch_size=torch.Size([10]),
-        device=cpu,
-        is_shared=False)
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 754-773
@@ -1975,9 +1958,9 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  25.306 seconds)
+   **Total running time of the script:** ( 4 minutes  15.877 seconds)
 
-**Estimated memory usage:**  15 MB
+**Estimated memory usage:**  5258 MB
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:

@@ -263,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -409,6 +408,20 @@ the specs of the transformed_in tensors.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.Transform.transform_done_spec">
+<span class="sig-name descname"><span class="pre">transform_done_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">done_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#Transform.transform_done_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.Transform.transform_done_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the done spec such that the resulting spec matches transform mapping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>done_spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a>) – spec before the transform</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>expected spec after the transform</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.Transform.transform_input_spec">
 <span class="sig-name descname"><span class="pre">transform_input_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#Transform.transform_input_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.Transform.transform_input_spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms the input spec such that the resulting spec matches transform mapping.</p>
@@ -432,6 +445,21 @@ the specs of the transformed_in tensors.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>expected spec after the transform</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.Transform.transform_output_spec">
+<span class="sig-name descname"><span class="pre">transform_output_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec" title="torchrl.data.tensor_specs.CompositeSpec"><span class="pre">CompositeSpec</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec" title="torchrl.data.tensor_specs.CompositeSpec"><span class="pre">CompositeSpec</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#Transform.transform_output_spec"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.Transform.transform_output_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms the output spec such that the resulting spec matches transform mapping.</p>
+<p>This method should generally be left untouched. Changes should be implemented using
+<a class="reference internal" href="#torchrl.envs.transforms.Transform.transform_observation_spec" title="torchrl.envs.transforms.Transform.transform_observation_spec"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform_observation_spec()</span></code></a>, <a class="reference internal" href="#torchrl.envs.transforms.Transform.transform_reward_spec" title="torchrl.envs.transforms.Transform.transform_reward_spec"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform_reward_spec()</span></code></a> and <a class="reference internal" href="#torchrl.envs.transforms.Transform.transform_done_spec" title="torchrl.envs.transforms.Transform.transform_done_spec"><code class="xref py py-meth docutils literal notranslate"><span class="pre">transform_done_spec()</span></code></a>.
+:param output_spec: spec before the transform
+:type output_spec: TensorSpec</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>expected spec after the transform</p>
 </dd>
 </dl>
 </dd></dl>
@@ -501,8 +529,10 @@ the specs of the transformed_in tensors.</p>
 <li><a class="reference internal" href="#torchrl.envs.transforms.Transform"><code class="docutils literal notranslate"><span class="pre">Transform</span></code></a><ul>
 <li><a class="reference internal" href="#torchrl.envs.transforms.Transform.forward"><code class="docutils literal notranslate"><span class="pre">Transform.forward()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.Transform.reset"><code class="docutils literal notranslate"><span class="pre">Transform.reset()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.Transform.transform_done_spec"><code class="docutils literal notranslate"><span class="pre">Transform.transform_done_spec()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.Transform.transform_input_spec"><code class="docutils literal notranslate"><span class="pre">Transform.transform_input_spec()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.Transform.transform_observation_spec"><code class="docutils literal notranslate"><span class="pre">Transform.transform_observation_spec()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.envs.transforms.Transform.transform_output_spec"><code class="docutils literal notranslate"><span class="pre">Transform.transform_output_spec()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.Transform.transform_reward_spec"><code class="docutils literal notranslate"><span class="pre">Transform.transform_reward_spec()</span></code></a></li>
 </ul>
 </li>

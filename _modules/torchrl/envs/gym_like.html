@@ -260,7 +260,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -603,7 +602,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">info_dict_reader</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">info_dict_reader</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">tensordict_out</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">tensordict_out</span>
+        <span class="k">return</span> <span class="n">tensordict_out</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="n">tensordict_out</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorDictBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
@@ -628,9 +627,10 @@
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_spec</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tensordict_out</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                     <span class="n">tensordict_out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">zero</span><span class="p">()</span>
+
         <span class="n">tensordict_out</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span>
             <span class="s2">&quot;done&quot;</span><span class="p">,</span>
-            <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">zero</span><span class="p">(),</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">tensordict_out</span>
 
@@ -657,7 +657,8 @@
 <span class="sd">        Returns: the same environment with the dict_reader registered.</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">            &gt;&gt;&gt; from torchrl.envs import GymWrapper, default_info_dict_reader</span>
+<span class="sd">            &gt;&gt;&gt; from torchrl.envs import default_info_dict_reader</span>
+<span class="sd">            &gt;&gt;&gt; from torchrl.envs.libs.gym import GymWrapper</span>
 <span class="sd">            &gt;&gt;&gt; reader = default_info_dict_reader([&quot;my_info_key&quot;])</span>
 <span class="sd">            &gt;&gt;&gt; # assuming &quot;some_env-v0&quot; returns a dict with a key &quot;my_info_key&quot;</span>
 <span class="sd">            &gt;&gt;&gt; env = GymWrapper(gym.make(&quot;some_env-v0&quot;)).set_info_dict_reader(info_dict_reader=reader)</span>

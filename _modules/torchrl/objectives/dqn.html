@@ -260,7 +260,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -433,8 +432,8 @@
 <span class="sd">            a priority to items in the tensordict.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            input_tensordict (TensorDictBase): a tensordict with keys [&quot;done&quot;, &quot;reward&quot;, &quot;action&quot;] and the in_keys of</span>
-<span class="sd">                the value network.</span>
+<span class="sd">            input_tensordict (TensorDictBase): a tensordict with keys [&quot;action&quot;] and the in_keys of</span>
+<span class="sd">                the value network (observations, &quot;done&quot;, &quot;reward&quot; in a &quot;next&quot; tensordict).</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            a tensor containing the DQN loss.</span>
@@ -574,8 +573,8 @@
         <span class="n">delta_z</span> <span class="o">=</span> <span class="p">(</span><span class="n">Vmax</span> <span class="o">-</span> <span class="n">Vmin</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">atoms</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="n">action</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">)</span>
-        <span class="n">reward</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">)</span>
-        <span class="n">done</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">))</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">))</span>
 
         <span class="n">steps_to_next_obs</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;steps_to_next_obs&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">discount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">**</span><span class="n">steps_to_next_obs</span>

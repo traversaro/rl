@@ -263,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -396,7 +395,11 @@ samples.</p></li>
 <li><p><strong>prefetch</strong> (<em>int</em><em>, </em><em>optional</em>) – number of next batches to be prefetched
 using multithreading.</p></li>
 <li><p><strong>transform</strong> (<a class="reference internal" href="torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform" title="torchrl.envs.transforms.Transform"><em>Transform</em></a><em>, </em><em>optional</em>) – Transform to be executed when sample() is called.
-To chain transforms use the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compose</span></code> class.</p></li>
+To chain transforms use the <code class="xref py py-obj docutils literal notranslate"><span class="pre">Compose</span></code> class.
+Transforms should be used with <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+b76565b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a>
+content. If used with other structures, the transforms should be
+encoded with a <cite>“data”</cite> leading key that will be used to
+construct a tensordict from the non-tensordict content.</p></li>
 </ul>
 </dd>
 </dl>

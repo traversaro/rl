@@ -263,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul class="current">
@@ -423,7 +422,7 @@ and how to estimate returns using TD(lambda);</p></li>
 <li><p>and finally how to evaluate your model.</p></li>
 </ul>
 <p>This tutorial assumes the reader is familiar with some of TorchRL
-primitives, such as <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+dc25db2 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> and
+primitives, such as <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+b76565b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> and
 <code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDictModules</span></code>, although it
 should be sufficiently transparent to be understood without a deep
 understanding of these classes.</p>
@@ -439,7 +438,7 @@ of this algorithm.</p>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 <span class="kn">from</span> <span class="nn">torchrl.collectors</span> <span class="kn">import</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.collectors.collectors.MultiaSyncDataCollector.html#torchrl.collectors.collectors.MultiaSyncDataCollector" title="torchrl.collectors.collectors.MultiaSyncDataCollector" class="sphx-glr-backref-module-torchrl-collectors-collectors sphx-glr-backref-type-py-class"><span class="n">MultiaSyncDataCollector</span></a>
 <span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.data.replay_buffers.storages.LazyMemmapStorage.html#torchrl.data.replay_buffers.storages.LazyMemmapStorage" title="torchrl.data.replay_buffers.storages.LazyMemmapStorage" class="sphx-glr-backref-module-torchrl-data-replay_buffers-storages sphx-glr-backref-type-py-class"><span class="n">LazyMemmapStorage</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.data.TensorDictReplayBuffer.html#torchrl.data.TensorDictReplayBuffer" title="torchrl.data.TensorDictReplayBuffer" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class"><span class="n">TensorDictReplayBuffer</span></a>
-<span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.EnvCreator.html#torchrl.envs.EnvCreator" title="torchrl.envs.EnvCreator" class="sphx-glr-backref-module-torchrl-envs sphx-glr-backref-type-py-class"><span class="n">EnvCreator</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv" title="torchrl.envs.ParallelEnv" class="sphx-glr-backref-module-torchrl-envs sphx-glr-backref-type-py-class"><span class="n">ParallelEnv</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.RewardScaling.html#torchrl.envs.transforms.RewardScaling" title="torchrl.envs.transforms.transforms.RewardScaling" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">RewardScaling</span></a>
+<span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.EnvCreator.html#torchrl.envs.EnvCreator" title="torchrl.envs.EnvCreator" class="sphx-glr-backref-module-torchrl-envs sphx-glr-backref-type-py-class"><span class="n">EnvCreator</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv" title="torchrl.envs.ParallelEnv" class="sphx-glr-backref-module-torchrl-envs sphx-glr-backref-type-py-class"><span class="n">ParallelEnv</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.RewardScaling.html#torchrl.envs.transforms.RewardScaling" title="torchrl.envs.transforms.transforms.RewardScaling" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">RewardScaling</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.StepCounter.html#torchrl.envs.transforms.StepCounter" title="torchrl.envs.transforms.transforms.StepCounter" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">StepCounter</span></a>
 <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.libs.gym.GymEnv.html#torchrl.envs.libs.gym.GymEnv" title="torchrl.envs.libs.gym.GymEnv" class="sphx-glr-backref-module-torchrl-envs-libs-gym sphx-glr-backref-type-py-function"><span class="n">GymEnv</span></a>
 <span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="p">(</span>
     <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.CatFrames.html#torchrl.envs.transforms.CatFrames" title="torchrl.envs.transforms.transforms.CatFrames" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">CatFrames</span></a><span class="p">,</span>
@@ -609,6 +608,7 @@ given some custom summary statistics.</p></li>
     <span class="n">env</span> <span class="o">=</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.TransformedEnv.html#torchrl.envs.transforms.TransformedEnv" title="torchrl.envs.transforms.transforms.TransformedEnv" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">TransformedEnv</span></a><span class="p">(</span>
         <span class="n">base_env</span><span class="p">,</span>
         <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.Compose.html#torchrl.envs.transforms.Compose" title="torchrl.envs.transforms.transforms.Compose" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">Compose</span></a><span class="p">(</span>
+            <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.StepCounter.html#torchrl.envs.transforms.StepCounter" title="torchrl.envs.transforms.transforms.StepCounter" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">StepCounter</span></a><span class="p">(),</span>  <span class="c1"># to count the steps of each trajectory</span>
             <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.ToTensorImage.html#torchrl.envs.transforms.ToTensorImage" title="torchrl.envs.transforms.transforms.ToTensorImage" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">ToTensorImage</span></a><span class="p">(),</span>
             <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.RewardScaling.html#torchrl.envs.transforms.RewardScaling" title="torchrl.envs.transforms.transforms.RewardScaling" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">RewardScaling</span></a><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">),</span>
             <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.GrayScale.html#torchrl.envs.transforms.GrayScale" title="torchrl.envs.transforms.transforms.GrayScale" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">GrayScale</span></a><span class="p">(),</span>
@@ -642,11 +642,11 @@ not all dimensions disappear in the process:</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>OrderedDict([(&#39;standard_normal&#39;, tensor(True)), (&#39;loc&#39;, tensor([[[0.9921]],
 
-        [[0.9920]],
+        [[0.9921]],
 
-        [[0.9920]],
+        [[0.9921]],
 
-        [[0.9920]]])), (&#39;scale&#39;, tensor([[[0.0787]],
+        [[0.9921]]])), (&#39;scale&#39;, tensor([[[0.0787]],
 
         [[0.0787]],
 
@@ -669,7 +669,7 @@ computed using</p>
 <span class="math notranslate nohighlight">\(\# obs \rightarrow num_actions\)</span> function.</p>
 <p>Our network is wrapped in a <code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.modules.QValueActor</span></code>, which will read the state-action
 values, pick up the one with the maximum value and write all those results
-in the input <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+dc25db2 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a>.</p>
+in the input <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+b76565b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a>.</p>
 <section id="target-parameters">
 <h3>Target parameters<a class="headerlink" href="#target-parameters" title="Permalink to this heading">¶</a></h3>
 <p>Many off-policy RL algorithms use the concept of “target parameters” when it
@@ -686,7 +686,7 @@ in similar algorithms.</p>
 same architecture is often used with multiple sets of parameters (e.g.
 trainable and target parameters), we functionalize the modules and isolate
 the various sets of parameters in separate tensordicts.</p>
-<p>To this aim, we use <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.get_functional.html#tensordict.nn.get_functional" title="(in tensordict vmain (0.0.2b+dc25db2 ))"><code class="xref py py-func docutils literal notranslate"><span class="pre">tensordict.nn.get_functional()</span></code></a>, which augments
+<p>To this aim, we use <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.get_functional.html#tensordict.nn.get_functional" title="(in tensordict vmain (0.0.2b+b76565b ))"><code class="xref py py-func docutils literal notranslate"><span class="pre">tensordict.nn.get_functional()</span></code></a>, which augments
 our modules with some extra feature that make them compatible with parameters
 passed in the <code class="docutils literal notranslate"><span class="pre">TensorDict</span></code> format.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_model</span><span class="p">(</span><span class="n">dummy_env</span><span class="p">):</span>
@@ -775,7 +775,9 @@ them is quite easy:</p>
         action_value: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
         chosen_action_value: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
         done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
-        pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False)},
+        pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
+        step_count: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.int64, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
@@ -884,10 +886,10 @@ value function that returns 0 for terminating states.</p>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;frames&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_frames</span><span class="p">)</span>
 
-    <span class="k">if</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-        <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;traj_lengths&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">][</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">][</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
         <span class="p">)</span>
 
     <span class="c1"># check that we have enough data to start training</span>
@@ -898,8 +900,8 @@ value function that returns 0 for terminating states.</p>
             <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict.to" title="tensordict.TensorDict.to" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-method"><span class="n">sampled_data</span><span class="o">.</span><span class="n">to</span></a><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">non_blocking</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="c1"># collect data from RB</span>
-            <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reward</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a><span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reward</span><span class="o">.</span><span class="n">dtype</span></a><span class="p">)</span>
+            <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reward</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reward</span><span class="o">.</span><span class="n">dtype</span></a><span class="p">)</span>
             <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">action</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 
             <span class="c1"># Compute action value (of the action actually taken) at time t</span>
@@ -939,7 +941,9 @@ value function that returns 0 for terminating states.</p>
         <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;grad_vals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gv</span></a><span class="p">))</span>
         <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;losses&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">error</span></a><span class="o">.</span><span class="n">item</span><span class="p">())</span>
         <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">action_value</span></a><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-        <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;traj_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prev_traj_count</span> <span class="o">+</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+        <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;traj_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">prev_traj_count</span> <span class="o">+</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="p">)</span>
         <span class="n">prev_traj_count</span> <span class="o">=</span> <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;traj_count&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">j</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -950,7 +954,7 @@ value function that returns 0 for terminating states.</p>
                     <span class="n">policy</span><span class="o">=</span><a href="https://pytorch.org/rl/reference/generated/torchrl.modules.tensordict_module.QValueActor.html#torchrl.modules.tensordict_module.QValueActor" title="torchrl.modules.tensordict_module.actors.QValueActor" class="sphx-glr-backref-module-torchrl-modules-tensordict_module-actors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actor</span></a><span class="p">,</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
             <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;traj_lengths_eval&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict.shape" title="tensordict.TensorDict.shape" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-property"><span class="n">eval_rollout</span><span class="o">.</span><span class="n">shape</span></a><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;evals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">eval_rollout</span></a><span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+            <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;evals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">eval_rollout</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;mavgs&quot;</span><span class="p">]):</span>
                 <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;mavgs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;evals&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.05</span> <span class="o">+</span> <span class="n">logs_exp1</span><span class="p">[</span><span class="s2">&quot;mavgs&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.95</span>
@@ -967,190 +971,193 @@ value function that returns 0 for terminating states.</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/5000 [00:00&lt;?, ?it/s]
-  1%|          | 32/5000 [00:00&lt;02:05, 39.46it/s]Creating a MemmapStorage...
+  1%|          | 32/5000 [00:00&lt;02:22, 34.85it/s]Creating a MemmapStorage...
 The storage is being created:
-        action: /tmp/tmp_pp65spo, 0.0762939453125 Mb of storage (size: torch.Size([5000, 2])).
-        action_value: /tmp/tmpt3aqlpsw, 0.03814697265625 Mb of storage (size: torch.Size([5000, 2])).
-        chosen_action_value: /tmp/tmptavtq6z5, 0.019073486328125 Mb of storage (size: torch.Size([5000, 1])).
-        done: /tmp/tmphs_qf75f, 0.00476837158203125 Mb of storage (size: torch.Size([5000, 1])).
-        index: /tmp/tmp7t3dmmi1, 0.019073486328125 Mb of storage (size: torch.Size([5000])).
-        pixels: /tmp/tmpim_473k3, 312.5 Mb of storage (size: torch.Size([5000, 4, 64, 64])).
-        reward: /tmp/tmp0zqccr6a, 0.019073486328125 Mb of storage (size: torch.Size([5000, 1])).
-        (&#39;collector&#39;, &#39;step_count&#39;): /tmp/tmp3a9s7jen, 0.03814697265625 Mb of storage (size: torch.Size([5000])).
-        (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/tmp89j80jb8, 0.03814697265625 Mb of storage (size: torch.Size([5000])).
-        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmpoaroul_z, 312.5 Mb of storage (size: torch.Size([5000, 4, 64, 64])).
+        action: /tmp/tmpjf5pre10, 0.0762939453125 Mb of storage (size: torch.Size([5000, 2])).
+        action_value: /tmp/tmpsepls_q9, 0.03814697265625 Mb of storage (size: torch.Size([5000, 2])).
+        chosen_action_value: /tmp/tmp8ihlu1w2, 0.019073486328125 Mb of storage (size: torch.Size([5000, 1])).
+        done: /tmp/tmpal_12ak6, 0.00476837158203125 Mb of storage (size: torch.Size([5000, 1])).
+        index: /tmp/tmpda20dw82, 0.019073486328125 Mb of storage (size: torch.Size([5000])).
+        pixels: /tmp/tmp_mkuykvk, 312.5 Mb of storage (size: torch.Size([5000, 4, 64, 64])).
+        reward: /tmp/tmpr_xztdbw, 0.019073486328125 Mb of storage (size: torch.Size([5000, 1])).
+        step_count: /tmp/tmpmjs4va3l, 0.03814697265625 Mb of storage (size: torch.Size([5000])).
+        (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/tmp5mgy855e, 0.03814697265625 Mb of storage (size: torch.Size([5000])).
+        (&#39;next&#39;, &#39;done&#39;): /tmp/tmp4rg4atx8, 0.00476837158203125 Mb of storage (size: torch.Size([5000, 1])).
+        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmptlueqll5, 312.5 Mb of storage (size: torch.Size([5000, 4, 64, 64])).
+        (&#39;next&#39;, &#39;reward&#39;): /tmp/tmp5uvisvb9, 0.019073486328125 Mb of storage (size: torch.Size([5000, 1])).
+        (&#39;next&#39;, &#39;step_count&#39;): /tmp/tmp0spjb1te, 0.03814697265625 Mb of storage (size: torch.Size([5000])).
 
-  1%|1         | 64/5000 [00:00&lt;01:02, 78.45it/s]
-  2%|1         | 96/5000 [00:01&lt;01:23, 58.87it/s]
-  3%|2         | 128/5000 [00:02&lt;01:45, 45.99it/s]
-  3%|3         | 160/5000 [00:03&lt;01:44, 46.43it/s]
-  4%|3         | 192/5000 [00:03&lt;01:42, 47.02it/s]
-  4%|4         | 224/5000 [00:04&lt;01:45, 45.15it/s]
-  5%|5         | 256/5000 [00:05&lt;01:44, 45.30it/s]
-  6%|5         | 288/5000 [00:06&lt;01:45, 44.71it/s]
-  6%|6         | 320/5000 [00:06&lt;01:44, 44.81it/s]
-  7%|7         | 352/5000 [00:07&lt;01:41, 45.81it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:   7%|7         | 352/5000 [00:08&lt;01:41, 45.81it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:   8%|7         | 384/5000 [00:08&lt;01:43, 44.40it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:   8%|8         | 416/5000 [00:08&lt;01:39, 46.17it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:   9%|8         | 448/5000 [00:09&lt;01:36, 47.22it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:  10%|9         | 480/5000 [00:10&lt;01:35, 47.50it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:  10%|#         | 512/5000 [00:10&lt;01:34, 47.33it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:  11%|#         | 544/5000 [00:11&lt;01:33, 47.61it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:  12%|#1        | 576/5000 [00:12&lt;01:31, 48.17it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:  12%|#2        | 608/5000 [00:12&lt;01:31, 47.85it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:  13%|#2        | 640/5000 [00:13&lt;01:30, 48.21it/s]
-error:  0.0542, value:  1.8479, test return:  1.3000:  13%|#3        | 672/5000 [00:14&lt;01:31, 47.37it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  13%|#3        | 672/5000 [00:15&lt;01:31, 47.37it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  14%|#4        | 704/5000 [00:15&lt;01:36, 44.40it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  15%|#4        | 736/5000 [00:15&lt;01:32, 46.19it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  15%|#5        | 768/5000 [00:16&lt;01:32, 45.93it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  16%|#6        | 800/5000 [00:17&lt;01:31, 45.95it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  17%|#6        | 832/5000 [00:17&lt;01:30, 46.07it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  17%|#7        | 864/5000 [00:18&lt;01:27, 47.37it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  18%|#7        | 896/5000 [00:19&lt;01:25, 47.78it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  19%|#8        | 928/5000 [00:19&lt;01:24, 47.91it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  19%|#9        | 960/5000 [00:20&lt;01:23, 48.56it/s]
-error:  0.1468, value:  1.6311, test return:  1.0000:  20%|#9        | 992/5000 [00:21&lt;01:22, 48.55it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  20%|#9        | 992/5000 [00:21&lt;01:22, 48.55it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  20%|##        | 1024/5000 [00:21&lt;01:25, 46.54it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  21%|##1       | 1056/5000 [00:22&lt;01:23, 47.20it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  22%|##1       | 1088/5000 [00:23&lt;01:22, 47.70it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  22%|##2       | 1120/5000 [00:23&lt;01:19, 48.56it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  23%|##3       | 1152/5000 [00:24&lt;01:22, 46.88it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  24%|##3       | 1184/5000 [00:25&lt;01:23, 45.97it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  24%|##4       | 1216/5000 [00:25&lt;01:22, 45.92it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  25%|##4       | 1248/5000 [00:26&lt;01:21, 46.30it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  26%|##5       | 1280/5000 [00:27&lt;01:20, 46.50it/s]
-error:  0.0335, value:  1.5401, test return:  1.0000:  26%|##6       | 1312/5000 [00:27&lt;01:17, 47.46it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  26%|##6       | 1312/5000 [00:28&lt;01:17, 47.46it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  27%|##6       | 1344/5000 [00:28&lt;01:19, 45.93it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  28%|##7       | 1376/5000 [00:29&lt;01:17, 46.90it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  28%|##8       | 1408/5000 [00:29&lt;01:15, 47.27it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  29%|##8       | 1440/5000 [00:30&lt;01:14, 47.85it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  29%|##9       | 1472/5000 [00:31&lt;01:13, 48.15it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  30%|###       | 1504/5000 [00:31&lt;01:12, 47.99it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  31%|###       | 1536/5000 [00:32&lt;01:11, 48.42it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  31%|###1      | 1568/5000 [00:33&lt;01:11, 48.14it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  32%|###2      | 1600/5000 [00:33&lt;01:09, 48.99it/s]
-error:  0.0369, value:  1.3267, test return:  1.1000:  33%|###2      | 1632/5000 [00:34&lt;01:09, 48.47it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  33%|###2      | 1632/5000 [00:35&lt;01:09, 48.47it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  33%|###3      | 1664/5000 [00:35&lt;01:15, 44.19it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  34%|###3      | 1696/5000 [00:36&lt;01:17, 42.65it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  35%|###4      | 1728/5000 [00:36&lt;01:16, 42.53it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  35%|###5      | 1760/5000 [00:37&lt;01:12, 44.70it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  36%|###5      | 1792/5000 [00:38&lt;01:09, 45.98it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  36%|###6      | 1824/5000 [00:38&lt;01:08, 46.42it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  37%|###7      | 1856/5000 [00:39&lt;01:06, 47.31it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  38%|###7      | 1888/5000 [00:40&lt;01:04, 47.96it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  38%|###8      | 1920/5000 [00:40&lt;01:03, 48.58it/s]
-error:  0.0350, value:  1.4593, test return:  1.2000:  39%|###9      | 1952/5000 [00:41&lt;01:02, 48.80it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  39%|###9      | 1952/5000 [00:42&lt;01:02, 48.80it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  40%|###9      | 1984/5000 [00:42&lt;01:10, 42.95it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  40%|####      | 2016/5000 [00:43&lt;01:07, 44.44it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  41%|####      | 2048/5000 [00:43&lt;01:04, 45.99it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  42%|####1     | 2080/5000 [00:44&lt;01:03, 45.84it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  42%|####2     | 2112/5000 [00:45&lt;01:04, 44.56it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  43%|####2     | 2144/5000 [00:46&lt;01:05, 43.57it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  44%|####3     | 2176/5000 [00:46&lt;01:03, 44.50it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  44%|####4     | 2208/5000 [00:47&lt;01:01, 45.44it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  45%|####4     | 2240/5000 [00:47&lt;00:58, 46.88it/s]
-error:  0.0158, value:  1.4947, test return:  3.8000:  45%|####5     | 2272/5000 [00:48&lt;00:56, 48.05it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  45%|####5     | 2272/5000 [00:49&lt;00:56, 48.05it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  46%|####6     | 2304/5000 [00:49&lt;00:58, 45.85it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  47%|####6     | 2336/5000 [00:50&lt;00:56, 46.93it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  47%|####7     | 2368/5000 [00:50&lt;00:54, 48.14it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  48%|####8     | 2400/5000 [00:51&lt;00:54, 47.97it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  49%|####8     | 2432/5000 [00:51&lt;00:52, 48.59it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  49%|####9     | 2464/5000 [00:52&lt;00:52, 48.62it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  50%|####9     | 2496/5000 [00:53&lt;00:51, 48.56it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  51%|#####     | 2528/5000 [00:53&lt;00:51, 48.30it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  51%|#####1    | 2560/5000 [00:54&lt;00:53, 45.97it/s]
-error:  0.0367, value:  1.4228, test return:  1.1000:  52%|#####1    | 2592/5000 [00:55&lt;00:53, 44.64it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  52%|#####1    | 2592/5000 [00:56&lt;00:53, 44.64it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  52%|#####2    | 2624/5000 [00:56&lt;00:57, 41.26it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  53%|#####3    | 2656/5000 [00:57&lt;00:54, 42.63it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  54%|#####3    | 2688/5000 [00:57&lt;00:52, 44.21it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  54%|#####4    | 2720/5000 [00:58&lt;00:49, 45.88it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  55%|#####5    | 2752/5000 [00:59&lt;00:48, 46.73it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  56%|#####5    | 2784/5000 [00:59&lt;00:46, 47.32it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  56%|#####6    | 2816/5000 [01:00&lt;00:45, 48.43it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  57%|#####6    | 2848/5000 [01:00&lt;00:43, 49.43it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  58%|#####7    | 2880/5000 [01:01&lt;00:43, 49.20it/s]
-error:  0.0552, value:  1.5190, test return:  1.7000:  58%|#####8    | 2912/5000 [01:02&lt;00:42, 49.15it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  58%|#####8    | 2912/5000 [01:03&lt;00:42, 49.15it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  59%|#####8    | 2944/5000 [01:03&lt;00:43, 47.09it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  60%|#####9    | 2976/5000 [01:03&lt;00:42, 47.13it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  60%|######    | 3008/5000 [01:04&lt;00:42, 47.19it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  61%|######    | 3040/5000 [01:05&lt;00:42, 45.72it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  61%|######1   | 3072/5000 [01:05&lt;00:43, 44.45it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  62%|######2   | 3104/5000 [01:06&lt;00:42, 44.42it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  63%|######2   | 3136/5000 [01:07&lt;00:40, 45.80it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  63%|######3   | 3168/5000 [01:07&lt;00:39, 46.14it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  64%|######4   | 3200/5000 [01:08&lt;00:39, 45.70it/s]
-error:  0.0784, value:  1.2791, test return:  1.0000:  65%|######4   | 3232/5000 [01:09&lt;00:37, 47.22it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  65%|######4   | 3232/5000 [01:10&lt;00:37, 47.22it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  65%|######5   | 3264/5000 [01:10&lt;00:37, 46.22it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  66%|######5   | 3296/5000 [01:10&lt;00:36, 47.11it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  67%|######6   | 3328/5000 [01:11&lt;00:34, 48.23it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  67%|######7   | 3360/5000 [01:11&lt;00:33, 49.08it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  68%|######7   | 3392/5000 [01:12&lt;00:33, 48.62it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  68%|######8   | 3424/5000 [01:13&lt;00:32, 48.50it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  69%|######9   | 3456/5000 [01:13&lt;00:31, 48.57it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  70%|######9   | 3488/5000 [01:14&lt;00:32, 46.79it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  70%|#######   | 3520/5000 [01:15&lt;00:31, 46.69it/s]
-error:  0.0546, value:  1.5102, test return:  1.1000:  71%|#######1  | 3552/5000 [01:16&lt;00:31, 45.27it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  71%|#######1  | 3552/5000 [01:17&lt;00:31, 45.27it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  72%|#######1  | 3584/5000 [01:17&lt;00:35, 40.46it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  72%|#######2  | 3616/5000 [01:17&lt;00:32, 42.72it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  73%|#######2  | 3648/5000 [01:18&lt;00:30, 44.44it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  74%|#######3  | 3680/5000 [01:19&lt;00:28, 46.17it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  74%|#######4  | 3712/5000 [01:19&lt;00:26, 47.74it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  75%|#######4  | 3744/5000 [01:20&lt;00:26, 47.91it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  76%|#######5  | 3776/5000 [01:20&lt;00:25, 48.61it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  76%|#######6  | 3808/5000 [01:21&lt;00:24, 48.99it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  77%|#######6  | 3840/5000 [01:22&lt;00:23, 49.04it/s]
-error:  0.1014, value:  1.2762, test return:  3.3000:  77%|#######7  | 3872/5000 [01:22&lt;00:23, 48.73it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  77%|#######7  | 3872/5000 [01:23&lt;00:23, 48.73it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  78%|#######8  | 3904/5000 [01:23&lt;00:25, 43.52it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  79%|#######8  | 3936/5000 [01:24&lt;00:24, 44.20it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  79%|#######9  | 3968/5000 [01:25&lt;00:23, 44.37it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  80%|########  | 4000/5000 [01:26&lt;00:23, 42.88it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  81%|########  | 4032/5000 [01:26&lt;00:22, 43.74it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  81%|########1 | 4064/5000 [01:27&lt;00:21, 44.28it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  82%|########1 | 4096/5000 [01:28&lt;00:19, 45.52it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  83%|########2 | 4128/5000 [01:28&lt;00:18, 46.45it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  83%|########3 | 4160/5000 [01:29&lt;00:17, 47.33it/s]
-error:  0.0780, value:  1.3015, test return:  2.7000:  84%|########3 | 4192/5000 [01:30&lt;00:16, 47.66it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  84%|########3 | 4192/5000 [01:30&lt;00:16, 47.66it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  84%|########4 | 4224/5000 [01:30&lt;00:18, 42.24it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  85%|########5 | 4256/5000 [01:31&lt;00:16, 44.22it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  86%|########5 | 4288/5000 [01:32&lt;00:15, 45.50it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  86%|########6 | 4320/5000 [01:32&lt;00:14, 46.40it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  87%|########7 | 4352/5000 [01:33&lt;00:13, 47.14it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  88%|########7 | 4384/5000 [01:34&lt;00:13, 46.87it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  88%|########8 | 4416/5000 [01:35&lt;00:13, 43.84it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  89%|########8 | 4448/5000 [01:35&lt;00:12, 44.10it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  90%|########9 | 4480/5000 [01:36&lt;00:11, 44.24it/s]
-error:  0.0301, value:  1.4354, test return:  3.2000:  90%|######### | 4512/5000 [01:37&lt;00:10, 45.26it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  90%|######### | 4512/5000 [01:38&lt;00:10, 45.26it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  91%|######### | 4544/5000 [01:38&lt;00:10, 42.39it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  92%|#########1| 4576/5000 [01:38&lt;00:09, 44.45it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  92%|#########2| 4608/5000 [01:39&lt;00:08, 45.52it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  93%|#########2| 4640/5000 [01:40&lt;00:07, 45.31it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  93%|#########3| 4672/5000 [01:40&lt;00:07, 46.32it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  94%|#########4| 4704/5000 [01:41&lt;00:06, 47.45it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  95%|#########4| 4736/5000 [01:42&lt;00:05, 48.61it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  95%|#########5| 4768/5000 [01:42&lt;00:04, 48.90it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  96%|#########6| 4800/5000 [01:43&lt;00:04, 49.25it/s]
-error:  0.0470, value:  1.5821, test return:  2.4000:  97%|#########6| 4832/5000 [01:43&lt;00:03, 49.32it/s]
-error:  0.0702, value:  1.5299, test return:  4.3000:  97%|#########6| 4832/5000 [01:45&lt;00:03, 49.32it/s]
-error:  0.0702, value:  1.5299, test return:  4.3000:  97%|#########7| 4864/5000 [01:45&lt;00:03, 41.17it/s]
-error:  0.0702, value:  1.5299, test return:  4.3000:  98%|#########7| 4896/5000 [01:45&lt;00:02, 42.38it/s]
-error:  0.0702, value:  1.5299, test return:  4.3000:  99%|#########8| 4928/5000 [01:46&lt;00:01, 42.92it/s]
-error:  0.0702, value:  1.5299, test return:  4.3000:  99%|#########9| 4960/5000 [01:47&lt;00:00, 43.65it/s]
-error:  0.0702, value:  1.5299, test return:  4.3000: 100%|#########9| 4992/5000 [01:47&lt;00:00, 45.12it/s]
-error:  0.0702, value:  1.5299, test return:  4.3000: : 5024it [01:48, 46.13it/s]
+  1%|1         | 64/5000 [00:01&lt;01:17, 64.07it/s]
+  2%|1         | 96/5000 [00:01&lt;01:39, 49.33it/s]
+  3%|2         | 128/5000 [00:02&lt;01:57, 41.39it/s]
+  3%|3         | 160/5000 [00:03&lt;01:55, 42.08it/s]
+  4%|3         | 192/5000 [00:04&lt;01:53, 42.29it/s]
+  4%|4         | 224/5000 [00:05&lt;01:50, 43.12it/s]
+  5%|5         | 256/5000 [00:05&lt;01:44, 45.19it/s]
+  6%|5         | 288/5000 [00:06&lt;01:41, 46.65it/s]
+  6%|6         | 320/5000 [00:07&lt;01:39, 46.97it/s]
+  7%|7         | 352/5000 [00:07&lt;01:36, 48.06it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:   7%|7         | 352/5000 [00:08&lt;01:36, 48.06it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:   8%|7         | 384/5000 [00:08&lt;01:38, 47.03it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:   8%|8         | 416/5000 [00:09&lt;01:35, 48.05it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:   9%|8         | 448/5000 [00:09&lt;01:32, 49.05it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:  10%|9         | 480/5000 [00:10&lt;01:31, 49.63it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:  10%|#         | 512/5000 [00:10&lt;01:30, 49.44it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:  11%|#         | 544/5000 [00:11&lt;01:29, 49.99it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:  12%|#1        | 576/5000 [00:12&lt;01:29, 49.51it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:  12%|#2        | 608/5000 [00:12&lt;01:28, 49.72it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:  13%|#2        | 640/5000 [00:13&lt;01:28, 49.37it/s]
+error:  0.0445, value:  2.5269, test return:  1.0000:  13%|#3        | 672/5000 [00:14&lt;01:26, 50.30it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  13%|#3        | 672/5000 [00:15&lt;01:26, 50.30it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  14%|#4        | 704/5000 [00:15&lt;01:36, 44.75it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  15%|#4        | 736/5000 [00:15&lt;01:31, 46.54it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  15%|#5        | 768/5000 [00:16&lt;01:29, 47.17it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  16%|#6        | 800/5000 [00:16&lt;01:27, 48.07it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  17%|#6        | 832/5000 [00:17&lt;01:25, 48.89it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  17%|#7        | 864/5000 [00:18&lt;01:24, 48.74it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  18%|#7        | 896/5000 [00:18&lt;01:23, 49.00it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  19%|#8        | 928/5000 [00:19&lt;01:21, 50.17it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  19%|#9        | 960/5000 [00:20&lt;01:21, 49.59it/s]
+error:  0.0539, value:  2.2542, test return:  3.2000:  20%|#9        | 992/5000 [00:20&lt;01:19, 50.54it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  20%|#9        | 992/5000 [00:21&lt;01:19, 50.54it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  20%|##        | 1024/5000 [00:21&lt;01:22, 48.27it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  21%|##1       | 1056/5000 [00:22&lt;01:21, 48.21it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  22%|##1       | 1088/5000 [00:22&lt;01:19, 49.49it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  22%|##2       | 1120/5000 [00:23&lt;01:17, 49.88it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  23%|##3       | 1152/5000 [00:24&lt;01:16, 50.36it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  24%|##3       | 1184/5000 [00:24&lt;01:14, 50.89it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  24%|##4       | 1216/5000 [00:25&lt;01:15, 50.10it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  25%|##4       | 1248/5000 [00:25&lt;01:14, 50.08it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  26%|##5       | 1280/5000 [00:26&lt;01:14, 49.93it/s]
+error:  0.1438, value:  2.2755, test return:  1.0000:  26%|##6       | 1312/5000 [00:27&lt;01:13, 50.37it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  26%|##6       | 1312/5000 [00:27&lt;01:13, 50.37it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  27%|##6       | 1344/5000 [00:27&lt;01:14, 48.82it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  28%|##7       | 1376/5000 [00:28&lt;01:12, 49.92it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  28%|##8       | 1408/5000 [00:29&lt;01:12, 49.75it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  29%|##8       | 1440/5000 [00:29&lt;01:11, 49.98it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  29%|##9       | 1472/5000 [00:30&lt;01:10, 50.00it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  30%|###       | 1504/5000 [00:31&lt;01:08, 51.07it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  31%|###       | 1536/5000 [00:31&lt;01:08, 50.64it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  31%|###1      | 1568/5000 [00:32&lt;01:09, 49.63it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  32%|###2      | 1600/5000 [00:32&lt;01:09, 49.15it/s]
+error:  0.0201, value:  2.3060, test return:  1.0000:  33%|###2      | 1632/5000 [00:33&lt;01:08, 49.15it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  33%|###2      | 1632/5000 [00:34&lt;01:08, 49.15it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  33%|###3      | 1664/5000 [00:34&lt;01:10, 47.11it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  34%|###3      | 1696/5000 [00:35&lt;01:08, 48.55it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  35%|###4      | 1728/5000 [00:35&lt;01:06, 49.11it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  35%|###5      | 1760/5000 [00:36&lt;01:04, 49.91it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  36%|###5      | 1792/5000 [00:36&lt;01:04, 50.04it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  36%|###6      | 1824/5000 [00:37&lt;01:02, 50.56it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  37%|###7      | 1856/5000 [00:38&lt;01:01, 50.77it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  38%|###7      | 1888/5000 [00:38&lt;01:00, 51.37it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  38%|###8      | 1920/5000 [00:39&lt;01:00, 50.66it/s]
+error:  0.1207, value:  2.3102, test return:  1.0000:  39%|###9      | 1952/5000 [00:39&lt;00:58, 51.66it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  39%|###9      | 1952/5000 [00:40&lt;00:58, 51.66it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  40%|###9      | 1984/5000 [00:40&lt;01:06, 45.18it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  40%|####      | 2016/5000 [00:41&lt;01:03, 47.19it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  41%|####      | 2048/5000 [00:42&lt;01:01, 47.89it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  42%|####1     | 2080/5000 [00:42&lt;01:00, 48.59it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  42%|####2     | 2112/5000 [00:43&lt;00:58, 48.98it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  43%|####2     | 2144/5000 [00:44&lt;00:58, 49.07it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  44%|####3     | 2176/5000 [00:44&lt;00:56, 49.60it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  44%|####4     | 2208/5000 [00:45&lt;00:56, 49.20it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  45%|####4     | 2240/5000 [00:46&lt;00:55, 49.51it/s]
+error:  0.2150, value:  2.1800, test return:  3.3000:  45%|####5     | 2272/5000 [00:46&lt;00:54, 49.71it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  45%|####5     | 2272/5000 [00:47&lt;00:54, 49.71it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  46%|####6     | 2304/5000 [00:47&lt;00:59, 45.38it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  47%|####6     | 2336/5000 [00:48&lt;00:56, 47.14it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  47%|####7     | 2368/5000 [00:48&lt;00:54, 47.91it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  48%|####8     | 2400/5000 [00:49&lt;00:53, 48.49it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  49%|####8     | 2432/5000 [00:50&lt;00:52, 49.09it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  49%|####9     | 2464/5000 [00:50&lt;00:50, 49.95it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  50%|####9     | 2496/5000 [00:51&lt;00:49, 51.03it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  51%|#####     | 2528/5000 [00:51&lt;00:48, 50.72it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  51%|#####1    | 2560/5000 [00:52&lt;00:47, 50.92it/s]
+error:  0.0438, value:  2.3669, test return:  2.8000:  52%|#####1    | 2592/5000 [00:53&lt;00:47, 50.75it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  52%|#####1    | 2592/5000 [00:53&lt;00:47, 50.75it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  52%|#####2    | 2624/5000 [00:53&lt;00:51, 45.72it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  53%|#####3    | 2656/5000 [00:54&lt;00:50, 46.62it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  54%|#####3    | 2688/5000 [00:55&lt;00:48, 47.34it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  54%|#####4    | 2720/5000 [00:55&lt;00:46, 48.53it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  55%|#####5    | 2752/5000 [00:56&lt;00:46, 48.28it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  56%|#####5    | 2784/5000 [00:57&lt;00:45, 48.32it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  56%|#####6    | 2816/5000 [00:57&lt;00:44, 49.19it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  57%|#####6    | 2848/5000 [00:58&lt;00:43, 49.93it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  58%|#####7    | 2880/5000 [00:59&lt;00:42, 49.54it/s]
+error:  0.0453, value:  2.3227, test return:  3.0000:  58%|#####8    | 2912/5000 [00:59&lt;00:41, 50.55it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  58%|#####8    | 2912/5000 [01:00&lt;00:41, 50.55it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  59%|#####8    | 2944/5000 [01:00&lt;00:47, 43.30it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  60%|#####9    | 2976/5000 [01:01&lt;00:44, 45.60it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  60%|######    | 3008/5000 [01:01&lt;00:42, 47.27it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  61%|######    | 3040/5000 [01:02&lt;00:40, 48.53it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  61%|######1   | 3072/5000 [01:03&lt;00:39, 49.13it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  62%|######2   | 3104/5000 [01:03&lt;00:37, 49.92it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  63%|######2   | 3136/5000 [01:04&lt;00:40, 46.26it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  63%|######3   | 3168/5000 [01:05&lt;00:41, 44.18it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  64%|######4   | 3200/5000 [01:06&lt;00:42, 41.99it/s]
+error:  0.1668, value:  2.2516, test return:  3.8000:  65%|######4   | 3232/5000 [01:07&lt;00:44, 39.33it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  65%|######4   | 3232/5000 [01:08&lt;00:44, 39.33it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  65%|######5   | 3264/5000 [01:08&lt;00:45, 37.83it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  66%|######5   | 3296/5000 [01:08&lt;00:41, 40.71it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  67%|######6   | 3328/5000 [01:09&lt;00:38, 43.00it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  67%|######7   | 3360/5000 [01:10&lt;00:36, 45.00it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  68%|######7   | 3392/5000 [01:10&lt;00:34, 46.55it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  68%|######8   | 3424/5000 [01:11&lt;00:33, 47.08it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  69%|######9   | 3456/5000 [01:12&lt;00:32, 48.22it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  70%|######9   | 3488/5000 [01:12&lt;00:31, 48.45it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  70%|#######   | 3520/5000 [01:13&lt;00:30, 49.01it/s]
+error:  0.2364, value:  2.1013, test return:  1.0000:  71%|#######1  | 3552/5000 [01:13&lt;00:29, 49.73it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  71%|#######1  | 3552/5000 [01:14&lt;00:29, 49.73it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  72%|#######1  | 3584/5000 [01:14&lt;00:32, 42.97it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  72%|#######2  | 3616/5000 [01:15&lt;00:30, 45.84it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  73%|#######2  | 3648/5000 [01:16&lt;00:28, 46.92it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  74%|#######3  | 3680/5000 [01:16&lt;00:27, 48.00it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  74%|#######4  | 3712/5000 [01:17&lt;00:26, 49.30it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  75%|#######4  | 3744/5000 [01:17&lt;00:24, 50.42it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  76%|#######5  | 3776/5000 [01:18&lt;00:24, 50.74it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  76%|#######6  | 3808/5000 [01:19&lt;00:24, 49.51it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  77%|#######6  | 3840/5000 [01:19&lt;00:23, 50.01it/s]
+error:  0.1787, value:  2.2358, test return:  3.8000:  77%|#######7  | 3872/5000 [01:20&lt;00:22, 49.98it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  77%|#######7  | 3872/5000 [01:21&lt;00:22, 49.98it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  78%|#######8  | 3904/5000 [01:21&lt;00:22, 47.91it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  79%|#######8  | 3936/5000 [01:21&lt;00:22, 48.07it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  79%|#######9  | 3968/5000 [01:22&lt;00:21, 48.43it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  80%|########  | 4000/5000 [01:23&lt;00:20, 48.29it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  81%|########  | 4032/5000 [01:23&lt;00:19, 48.93it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  81%|########1 | 4064/5000 [01:24&lt;00:18, 49.45it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  82%|########1 | 4096/5000 [01:25&lt;00:18, 49.32it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  83%|########2 | 4128/5000 [01:25&lt;00:17, 49.51it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  83%|########3 | 4160/5000 [01:26&lt;00:16, 49.87it/s]
+error:  0.2663, value:  2.1051, test return:  1.0000:  84%|########3 | 4192/5000 [01:27&lt;00:16, 49.71it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  84%|########3 | 4192/5000 [01:27&lt;00:16, 49.71it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  84%|########4 | 4224/5000 [01:27&lt;00:16, 46.76it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  85%|########5 | 4256/5000 [01:28&lt;00:15, 47.90it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  86%|########5 | 4288/5000 [01:29&lt;00:14, 48.61it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  86%|########6 | 4320/5000 [01:29&lt;00:13, 49.58it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  87%|########7 | 4352/5000 [01:30&lt;00:13, 49.84it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  88%|########7 | 4384/5000 [01:31&lt;00:12, 49.15it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  88%|########8 | 4416/5000 [01:31&lt;00:11, 49.34it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  89%|########8 | 4448/5000 [01:32&lt;00:11, 49.59it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  90%|########9 | 4480/5000 [01:32&lt;00:10, 49.67it/s]
+error:  0.1549, value:  2.1820, test return:  1.4000:  90%|######### | 4512/5000 [01:33&lt;00:09, 50.12it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  90%|######### | 4512/5000 [01:34&lt;00:09, 50.12it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  91%|######### | 4544/5000 [01:34&lt;00:10, 43.29it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  92%|#########1| 4576/5000 [01:35&lt;00:09, 45.48it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  92%|#########2| 4608/5000 [01:35&lt;00:08, 45.88it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  93%|#########2| 4640/5000 [01:36&lt;00:07, 45.59it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  93%|#########3| 4672/5000 [01:37&lt;00:07, 46.32it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  94%|#########4| 4704/5000 [01:37&lt;00:06, 47.60it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  95%|#########4| 4736/5000 [01:38&lt;00:05, 48.97it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  95%|#########5| 4768/5000 [01:39&lt;00:04, 49.31it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  96%|#########6| 4800/5000 [01:39&lt;00:03, 50.01it/s]
+error:  0.2045, value:  2.1481, test return:  3.8000:  97%|#########6| 4832/5000 [01:40&lt;00:03, 50.77it/s]
+error:  0.2183, value:  2.2447, test return:  11.1000:  97%|#########6| 4832/5000 [01:42&lt;00:03, 50.77it/s]
+error:  0.2183, value:  2.2447, test return:  11.1000:  97%|#########7| 4864/5000 [01:42&lt;00:04, 33.55it/s]
+error:  0.2183, value:  2.2447, test return:  11.1000:  98%|#########7| 4896/5000 [01:42&lt;00:02, 37.43it/s]
+error:  0.2183, value:  2.2447, test return:  11.1000:  99%|#########8| 4928/5000 [01:43&lt;00:01, 40.52it/s]
+error:  0.2183, value:  2.2447, test return:  11.1000:  99%|#########9| 4960/5000 [01:43&lt;00:00, 43.43it/s]
+error:  0.2183, value:  2.2447, test return:  11.1000: 100%|#########9| 4992/5000 [01:44&lt;00:00, 45.77it/s]
+error:  0.2183, value:  2.2447, test return:  11.1000: : 5024it [01:45, 47.62it/s]
 </pre></div>
 </div>
 <p>We write a custom plot function to display the performance of our algorithm</p>
@@ -1266,10 +1273,14 @@ to the RB, we’ll be creating a replay buffer of size
         action_value: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
         chosen_action_value: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
         done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
-        pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False)},
+        pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False),
+        reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
+        step_count: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.int64, is_shared=False)},
     batch_size=torch.Size([]),
     device=cpu,
     is_shared=False)
+
+error:  0.2183, value:  2.2447, test return:  11.1000: : 5024it [01:56, 47.62it/s]
 </pre></div>
 </div>
 </section>
@@ -1306,9 +1317,6 @@ to the RB, we’ll be creating a replay buffer of size
 <span class="n">prev_traj_count</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>error:  0.0702, value:  1.5299, test return:  4.3000: : 5024it [02:05, 46.13it/s]
-</pre></div>
-</div>
 </section>
 <section id="training-loop">
 <h2>Training loop<a class="headerlink" href="#training-loop" title="Permalink to this heading">¶</a></h2>
@@ -1331,10 +1339,10 @@ value.</p></li>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;frames&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_frames</span><span class="p">)</span>
 
-    <span class="k">if</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-        <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+        <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;traj_lengths&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">][</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">][</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a><span class="p">]</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;frames&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">init_random_frames</span><span class="p">:</span>
@@ -1342,8 +1350,8 @@ value.</p></li>
             <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a> <span class="o">=</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.data.TensorDictReplayBuffer.html#torchrl.data.TensorDictReplayBuffer.sample" title="torchrl.data.TensorDictReplayBuffer.sample" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-method"><span class="n">replay_buffer</span><span class="o">.</span><span class="n">sample</span></a><span class="p">(</span><span class="n">batch_size</span> <span class="o">//</span> <span class="n">max_size</span><span class="p">)</span>
             <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict.clone" title="tensordict.TensorDict.clone" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-method"><span class="n">sampled_data</span><span class="o">.</span><span class="n">clone</span></a><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">non_blocking</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reward</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a><span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">]</span>
-            <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reward</span><span class="o">.</span><span class="n">dtype</span></a><span class="p">)</span>
+            <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reward</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">]</span>
+            <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">done</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="torch.dtype" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reward</span><span class="o">.</span><span class="n">dtype</span></a><span class="p">)</span>
             <a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">action</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data</span></a><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 
             <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sampled_data_out</span></a> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict.select" title="tensordict.TensorDict.select" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-method"><span class="n">sampled_data</span><span class="o">.</span><span class="n">select</span></a><span class="p">(</span><span class="o">*</span><a href="https://pytorch.org/rl/reference/generated/torchrl.modules.tensordict_module.QValueActor.html#torchrl.modules.tensordict_module.QValueActor" title="torchrl.modules.tensordict_module.actors.QValueActor" class="sphx-glr-backref-module-torchrl-modules-tensordict_module-actors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actor</span></a><span class="o">.</span><span class="n">in_keys</span><span class="p">)</span>
@@ -1386,7 +1394,9 @@ value.</p></li>
 
         <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;losses&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">error</span></a><span class="o">.</span><span class="n">item</span><span class="p">())</span>
         <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">action_value</span></a><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
-        <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;traj_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prev_traj_count</span> <span class="o">+</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+        <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;traj_count&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">prev_traj_count</span> <span class="o">+</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="p">)</span>
         <span class="n">prev_traj_count</span> <span class="o">=</span> <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;traj_count&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">j</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">with</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.set_interaction_mode.html#tensordict.nn.set_interaction_mode" title="tensordict.nn.set_interaction_mode" class="sphx-glr-backref-module-tensordict-nn sphx-glr-backref-type-py-class"><span class="n">set_exploration_mode</span></a><span class="p">(</span><span class="s2">&quot;mode&quot;</span><span class="p">),</span> <a href="https://pytorch.org/docs/stable/generated/torch.no_grad.html#torch.no_grad" title="torch.no_grad" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class"><span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span></a><span class="p">():</span>
@@ -1398,7 +1408,7 @@ value.</p></li>
                     <span class="n">policy</span><span class="o">=</span><a href="https://pytorch.org/rl/reference/generated/torchrl.modules.tensordict_module.QValueActor.html#torchrl.modules.tensordict_module.QValueActor" title="torchrl.modules.tensordict_module.actors.QValueActor" class="sphx-glr-backref-module-torchrl-modules-tensordict_module-actors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">actor</span></a><span class="p">,</span>
                 <span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
             <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;traj_lengths_eval&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict.shape" title="tensordict.TensorDict.shape" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-property"><span class="n">eval_rollout</span><span class="o">.</span><span class="n">shape</span></a><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;evals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">eval_rollout</span></a><span class="p">[</span><span class="s2">&quot;reward&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+            <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;evals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">eval_rollout</span></a><span class="p">[</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;mavgs&quot;</span><span class="p">]):</span>
                 <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;mavgs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;evals&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.05</span> <span class="o">+</span> <span class="n">logs_exp2</span><span class="p">[</span><span class="s2">&quot;mavgs&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.95</span>
@@ -1415,365 +1425,368 @@ value.</p></li>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  0%|          | 0/5000 [00:00&lt;?, ?it/s]
-error:  0.0702, value:  1.5299, test return:  4.3000: : 5024it [02:10, 38.62it/s]
+error:  0.2183, value:  2.2447, test return:  11.1000: : 5024it [02:07, 39.39it/s]
 
 
-  1%|          | 32/5000 [00:00&lt;01:39, 50.18it/s]Creating a MemmapStorage...
+  1%|          | 32/5000 [00:00&lt;02:02, 40.48it/s]Creating a MemmapStorage...
 The storage is being created:
-        _batch_size: /tmp/tmp2wx2lwwn, 0.00238800048828125 Mb of storage (size: torch.Size([313, 1])).
-        action: /tmp/tmparygi1xl, 0.076416015625 Mb of storage (size: torch.Size([313, 16, 2])).
-        action_value: /tmp/tmp7jdjztfh, 0.0382080078125 Mb of storage (size: torch.Size([313, 16, 2])).
-        chosen_action_value: /tmp/tmp5fdh0jj1, 0.01910400390625 Mb of storage (size: torch.Size([313, 16, 1])).
-        done: /tmp/tmpppsxgohf, 0.0047760009765625 Mb of storage (size: torch.Size([313, 16, 1])).
-        index: /tmp/tmp8tse700e, 0.001194000244140625 Mb of storage (size: torch.Size([313])).
-        pixels: /tmp/tmpctgbnc34, 313.0 Mb of storage (size: torch.Size([313, 16, 4, 64, 64])).
-        reward: /tmp/tmptglg5z2s, 0.01910400390625 Mb of storage (size: torch.Size([313, 16, 1])).
-        (&#39;collector&#39;, &#39;step_count&#39;): /tmp/tmpe02llg96, 0.0382080078125 Mb of storage (size: torch.Size([313, 16])).
-        (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/tmpbrw3kacd, 0.0382080078125 Mb of storage (size: torch.Size([313, 16])).
-        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmpgy92mj4w, 313.0 Mb of storage (size: torch.Size([313, 16, 4, 64, 64])).
+        _batch_size: /tmp/tmpr07bpvnu, 0.00238800048828125 Mb of storage (size: torch.Size([313, 1])).
+        action: /tmp/tmpc4qaphdl, 0.076416015625 Mb of storage (size: torch.Size([313, 16, 2])).
+        action_value: /tmp/tmpus_rql8u, 0.0382080078125 Mb of storage (size: torch.Size([313, 16, 2])).
+        chosen_action_value: /tmp/tmpsq74c6tw, 0.01910400390625 Mb of storage (size: torch.Size([313, 16, 1])).
+        done: /tmp/tmpmp6s4l3k, 0.0047760009765625 Mb of storage (size: torch.Size([313, 16, 1])).
+        index: /tmp/tmpcu8m1ox2, 0.001194000244140625 Mb of storage (size: torch.Size([313])).
+        pixels: /tmp/tmp6aktjg1g, 313.0 Mb of storage (size: torch.Size([313, 16, 4, 64, 64])).
+        reward: /tmp/tmpj51xokb1, 0.01910400390625 Mb of storage (size: torch.Size([313, 16, 1])).
+        step_count: /tmp/tmpx_r_d7xm, 0.0382080078125 Mb of storage (size: torch.Size([313, 16])).
+        (&#39;collector&#39;, &#39;traj_ids&#39;): /tmp/tmpguvfrmof, 0.0382080078125 Mb of storage (size: torch.Size([313, 16])).
+        (&#39;next&#39;, &#39;done&#39;): /tmp/tmpwf1isttp, 0.0047760009765625 Mb of storage (size: torch.Size([313, 16, 1])).
+        (&#39;next&#39;, &#39;pixels&#39;): /tmp/tmpzsxp3ap5, 313.0 Mb of storage (size: torch.Size([313, 16, 4, 64, 64])).
+        (&#39;next&#39;, &#39;reward&#39;): /tmp/tmppplz8ixk, 0.01910400390625 Mb of storage (size: torch.Size([313, 16, 1])).
+        (&#39;next&#39;, &#39;step_count&#39;): /tmp/tmp6kiyxwke, 0.0382080078125 Mb of storage (size: torch.Size([313, 16])).
 
 
-  1%|1         | 64/5000 [00:00&lt;01:10, 69.82it/s]
+  1%|1         | 64/5000 [00:01&lt;01:10, 70.07it/s]
 
-  2%|1         | 96/5000 [00:01&lt;01:23, 58.84it/s]
+  2%|1         | 96/5000 [00:01&lt;01:25, 57.27it/s]
 
-  3%|2         | 128/5000 [00:02&lt;01:35, 51.12it/s]
+  3%|2         | 128/5000 [00:02&lt;01:41, 48.04it/s]
 
-  3%|3         | 160/5000 [00:03&lt;01:37, 49.49it/s]
+  3%|3         | 160/5000 [00:03&lt;01:40, 48.23it/s]
 
-  4%|3         | 192/5000 [00:03&lt;01:38, 48.82it/s]
+  4%|3         | 192/5000 [00:03&lt;01:40, 47.95it/s]
 
-  4%|4         | 224/5000 [00:04&lt;01:40, 47.60it/s]
+  4%|4         | 224/5000 [00:04&lt;01:39, 47.79it/s]
 
-  5%|5         | 256/5000 [00:05&lt;01:41, 46.56it/s]
+  5%|5         | 256/5000 [00:05&lt;01:38, 48.30it/s]
 
-  6%|5         | 288/5000 [00:05&lt;01:45, 44.69it/s]
+  6%|5         | 288/5000 [00:05&lt;01:38, 47.72it/s]
 
-  6%|6         | 320/5000 [00:06&lt;01:43, 45.27it/s]
+  6%|6         | 320/5000 [00:06&lt;01:38, 47.51it/s]
 
-  7%|7         | 352/5000 [00:07&lt;01:43, 44.97it/s]
+  7%|7         | 352/5000 [00:07&lt;01:37, 47.86it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:   7%|7         | 352/5000 [00:08&lt;01:43, 44.97it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:   7%|7         | 352/5000 [00:08&lt;01:37, 47.86it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:   8%|7         | 384/5000 [00:08&lt;01:46, 43.36it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:   8%|7         | 384/5000 [00:08&lt;01:49, 42.26it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:   8%|8         | 416/5000 [00:08&lt;01:42, 44.62it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:   8%|8         | 416/5000 [00:08&lt;01:42, 44.60it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:   9%|8         | 448/5000 [00:09&lt;01:39, 45.73it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:   9%|8         | 448/5000 [00:09&lt;01:39, 45.77it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:  10%|9         | 480/5000 [00:10&lt;01:36, 46.62it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:  10%|9         | 480/5000 [00:10&lt;01:38, 46.06it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:  10%|#         | 512/5000 [00:10&lt;01:35, 46.82it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:  10%|#         | 512/5000 [00:10&lt;01:35, 46.78it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:  11%|#         | 544/5000 [00:11&lt;01:35, 46.85it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:  11%|#         | 544/5000 [00:11&lt;01:34, 47.39it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:  12%|#1        | 576/5000 [00:12&lt;01:33, 47.30it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:  12%|#1        | 576/5000 [00:12&lt;01:32, 47.63it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:  12%|#2        | 608/5000 [00:12&lt;01:33, 47.02it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:  12%|#2        | 608/5000 [00:12&lt;01:31, 48.07it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:  13%|#2        | 640/5000 [00:13&lt;01:32, 46.92it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:  13%|#2        | 640/5000 [00:13&lt;01:29, 48.66it/s]
 
-error:  1.3184, value:  1.1479, test return:  1.1000:  13%|#3        | 672/5000 [00:14&lt;01:32, 46.68it/s]
+error:  0.5450, value:  1.5694, test return:  3.5000:  13%|#3        | 672/5000 [00:14&lt;01:28, 49.01it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  13%|#3        | 672/5000 [00:15&lt;01:32, 46.68it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  13%|#3        | 672/5000 [00:14&lt;01:28, 49.01it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  14%|#4        | 704/5000 [00:15&lt;01:39, 43.05it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  14%|#4        | 704/5000 [00:14&lt;01:31, 46.73it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  15%|#4        | 736/5000 [00:15&lt;01:41, 42.15it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  15%|#4        | 736/5000 [00:15&lt;01:30, 47.28it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  15%|#5        | 768/5000 [00:16&lt;01:38, 43.03it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  15%|#5        | 768/5000 [00:16&lt;01:28, 47.95it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  16%|#6        | 800/5000 [00:17&lt;01:36, 43.75it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  16%|#6        | 800/5000 [00:16&lt;01:26, 48.33it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  17%|#6        | 832/5000 [00:17&lt;01:34, 44.29it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  17%|#6        | 832/5000 [00:17&lt;01:25, 48.79it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  17%|#7        | 864/5000 [00:18&lt;01:33, 44.08it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  17%|#7        | 864/5000 [00:18&lt;01:24, 49.19it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  18%|#7        | 896/5000 [00:19&lt;01:30, 45.21it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  18%|#7        | 896/5000 [00:18&lt;01:22, 49.82it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  19%|#8        | 928/5000 [00:20&lt;01:27, 46.44it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  19%|#8        | 928/5000 [00:19&lt;01:22, 49.25it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  19%|#9        | 960/5000 [00:20&lt;01:26, 46.53it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  19%|#9        | 960/5000 [00:19&lt;01:21, 49.32it/s]
 
-error:  0.1917, value:  0.8554, test return:  1.0000:  20%|#9        | 992/5000 [00:21&lt;01:24, 47.32it/s]
+error:  0.2145, value:  0.9928, test return:  1.1000:  20%|#9        | 992/5000 [00:20&lt;01:22, 48.53it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  20%|#9        | 992/5000 [00:22&lt;01:24, 47.32it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  20%|#9        | 992/5000 [00:21&lt;01:22, 48.53it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  20%|##        | 1024/5000 [00:22&lt;01:28, 44.99it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  20%|##        | 1024/5000 [00:21&lt;01:31, 43.49it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  21%|##1       | 1056/5000 [00:22&lt;01:25, 46.08it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  21%|##1       | 1056/5000 [00:22&lt;01:27, 45.27it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  22%|##1       | 1088/5000 [00:23&lt;01:24, 46.14it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  22%|##1       | 1088/5000 [00:22&lt;01:23, 46.62it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  22%|##2       | 1120/5000 [00:24&lt;01:25, 45.15it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  22%|##2       | 1120/5000 [00:23&lt;01:22, 47.17it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  23%|##3       | 1152/5000 [00:24&lt;01:24, 45.40it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  23%|##3       | 1152/5000 [00:24&lt;01:21, 47.22it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  24%|##3       | 1184/5000 [00:25&lt;01:26, 44.00it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  24%|##3       | 1184/5000 [00:24&lt;01:20, 47.45it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  24%|##4       | 1216/5000 [00:26&lt;01:25, 44.21it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  24%|##4       | 1216/5000 [00:25&lt;01:20, 47.23it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  25%|##4       | 1248/5000 [00:27&lt;01:24, 44.57it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  25%|##4       | 1248/5000 [00:26&lt;01:18, 47.92it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  26%|##5       | 1280/5000 [00:27&lt;01:22, 44.95it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  26%|##5       | 1280/5000 [00:26&lt;01:17, 48.25it/s]
 
-error:  0.3909, value:  1.4034, test return:  1.3000:  26%|##6       | 1312/5000 [00:28&lt;01:20, 45.67it/s]
+error:  0.2400, value:  0.9141, test return:  2.8000:  26%|##6       | 1312/5000 [00:27&lt;01:15, 48.83it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  26%|##6       | 1312/5000 [00:29&lt;01:20, 45.67it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  26%|##6       | 1312/5000 [00:28&lt;01:15, 48.83it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  27%|##6       | 1344/5000 [00:29&lt;01:21, 44.60it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  27%|##6       | 1344/5000 [00:28&lt;01:18, 46.71it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  28%|##7       | 1376/5000 [00:29&lt;01:19, 45.41it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  28%|##7       | 1376/5000 [00:28&lt;01:17, 46.55it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  28%|##8       | 1408/5000 [00:30&lt;01:17, 46.12it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  28%|##8       | 1408/5000 [00:29&lt;01:16, 47.23it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  29%|##8       | 1440/5000 [00:31&lt;01:16, 46.56it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  29%|##8       | 1440/5000 [00:30&lt;01:15, 47.08it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  29%|##9       | 1472/5000 [00:32&lt;01:16, 45.84it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  29%|##9       | 1472/5000 [00:30&lt;01:15, 46.72it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  30%|###       | 1504/5000 [00:32&lt;01:17, 44.95it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  30%|###       | 1504/5000 [00:31&lt;01:16, 45.96it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  31%|###       | 1536/5000 [00:33&lt;01:15, 46.05it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  31%|###       | 1536/5000 [00:32&lt;01:13, 46.93it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  31%|###1      | 1568/5000 [00:34&lt;01:14, 46.29it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  31%|###1      | 1568/5000 [00:32&lt;01:11, 47.74it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  32%|###2      | 1600/5000 [00:34&lt;01:12, 46.60it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  32%|###2      | 1600/5000 [00:33&lt;01:11, 47.39it/s]
 
-error:  0.1210, value:  1.1870, test return:  0.9000:  33%|###2      | 1632/5000 [00:35&lt;01:14, 45.50it/s]
+error:  0.2049, value:  1.3222, test return:  1.1000:  33%|###2      | 1632/5000 [00:34&lt;01:11, 47.39it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  33%|###2      | 1632/5000 [00:36&lt;01:14, 45.50it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  33%|###2      | 1632/5000 [00:35&lt;01:11, 47.39it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  33%|###3      | 1664/5000 [00:36&lt;01:17, 43.06it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  33%|###3      | 1664/5000 [00:35&lt;01:22, 40.57it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  34%|###3      | 1696/5000 [00:37&lt;01:16, 43.23it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  34%|###3      | 1696/5000 [00:36&lt;01:17, 42.67it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  35%|###4      | 1728/5000 [00:37&lt;01:13, 44.22it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  35%|###4      | 1728/5000 [00:36&lt;01:13, 44.65it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  35%|###5      | 1760/5000 [00:38&lt;01:11, 45.47it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  35%|###5      | 1760/5000 [00:37&lt;01:10, 45.81it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  36%|###5      | 1792/5000 [00:39&lt;01:10, 45.81it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  36%|###5      | 1792/5000 [00:37&lt;01:08, 46.89it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  36%|###6      | 1824/5000 [00:39&lt;01:08, 46.47it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  36%|###6      | 1824/5000 [00:38&lt;01:06, 47.71it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  37%|###7      | 1856/5000 [00:40&lt;01:07, 46.67it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  37%|###7      | 1856/5000 [00:39&lt;01:05, 48.12it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  38%|###7      | 1888/5000 [00:41&lt;01:05, 47.21it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  38%|###7      | 1888/5000 [00:39&lt;01:04, 47.91it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  38%|###8      | 1920/5000 [00:41&lt;01:05, 46.84it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  38%|###8      | 1920/5000 [00:40&lt;01:04, 48.08it/s]
 
-error:  0.6554, value:  2.0065, test return:  0.9000:  39%|###9      | 1952/5000 [00:42&lt;01:05, 46.83it/s]
+error:  0.1613, value:  1.4952, test return:  4.5000:  39%|###9      | 1952/5000 [00:41&lt;01:02, 48.42it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  39%|###9      | 1952/5000 [00:43&lt;01:05, 46.83it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  39%|###9      | 1952/5000 [00:42&lt;01:02, 48.42it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  40%|###9      | 1984/5000 [00:43&lt;01:07, 44.79it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  40%|###9      | 1984/5000 [00:42&lt;01:05, 46.30it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  40%|####      | 2016/5000 [00:43&lt;01:05, 45.66it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  40%|####      | 2016/5000 [00:42&lt;01:03, 47.12it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  41%|####      | 2048/5000 [00:44&lt;01:04, 45.83it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  41%|####      | 2048/5000 [00:43&lt;01:01, 47.71it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  42%|####1     | 2080/5000 [00:45&lt;01:05, 44.24it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  42%|####1     | 2080/5000 [00:43&lt;00:59, 48.69it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  42%|####2     | 2112/5000 [00:46&lt;01:06, 43.30it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  42%|####2     | 2112/5000 [00:44&lt;00:58, 49.09it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  43%|####2     | 2144/5000 [00:46&lt;01:05, 43.73it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  43%|####2     | 2144/5000 [00:45&lt;00:57, 49.35it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  44%|####3     | 2176/5000 [00:47&lt;01:03, 44.50it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  44%|####3     | 2176/5000 [00:45&lt;00:56, 49.65it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  44%|####4     | 2208/5000 [00:48&lt;01:00, 46.38it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  44%|####4     | 2208/5000 [00:46&lt;00:56, 49.26it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  45%|####4     | 2240/5000 [00:48&lt;00:58, 46.88it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  45%|####4     | 2240/5000 [00:47&lt;00:56, 48.85it/s]
 
-error:  0.2065, value:  1.6009, test return:  1.2000:  45%|####5     | 2272/5000 [00:49&lt;00:57, 47.19it/s]
+error:  0.4403, value:  1.4961, test return:  1.0000:  45%|####5     | 2272/5000 [00:47&lt;00:55, 49.01it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  45%|####5     | 2272/5000 [00:50&lt;00:57, 47.19it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  45%|####5     | 2272/5000 [00:48&lt;00:55, 49.01it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  46%|####6     | 2304/5000 [00:50&lt;01:00, 44.65it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  46%|####6     | 2304/5000 [00:48&lt;01:04, 41.97it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  47%|####6     | 2336/5000 [00:51&lt;00:58, 45.53it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  47%|####6     | 2336/5000 [00:49&lt;01:00, 43.86it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  47%|####7     | 2368/5000 [00:51&lt;00:56, 46.62it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  47%|####7     | 2368/5000 [00:50&lt;00:57, 45.66it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  48%|####8     | 2400/5000 [00:52&lt;00:56, 46.33it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  48%|####8     | 2400/5000 [00:50&lt;00:55, 46.81it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  49%|####8     | 2432/5000 [00:53&lt;00:54, 47.45it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  49%|####8     | 2432/5000 [00:51&lt;00:54, 47.54it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  49%|####9     | 2464/5000 [00:53&lt;00:52, 48.06it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  49%|####9     | 2464/5000 [00:52&lt;00:53, 47.65it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  50%|####9     | 2496/5000 [00:54&lt;00:53, 47.02it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  50%|####9     | 2496/5000 [00:52&lt;00:53, 47.13it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  51%|#####     | 2528/5000 [00:55&lt;00:55, 44.66it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  51%|#####     | 2528/5000 [00:53&lt;00:51, 47.64it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  51%|#####1    | 2560/5000 [00:55&lt;00:55, 43.60it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  51%|#####1    | 2560/5000 [00:54&lt;00:51, 47.67it/s]
 
-error:  0.1012, value:  1.1663, test return:  1.2000:  52%|#####1    | 2592/5000 [00:56&lt;00:54, 44.30it/s]
+error:  0.4080, value:  0.3284, test return:  4.0000:  52%|#####1    | 2592/5000 [00:54&lt;00:50, 48.10it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  52%|#####1    | 2592/5000 [00:57&lt;00:54, 44.30it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  52%|#####1    | 2592/5000 [00:55&lt;00:50, 48.10it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  52%|#####2    | 2624/5000 [00:57&lt;00:54, 43.72it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  52%|#####2    | 2624/5000 [00:55&lt;01:00, 39.11it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  53%|#####3    | 2656/5000 [00:58&lt;00:52, 44.60it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  53%|#####3    | 2656/5000 [00:56&lt;00:55, 41.87it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  54%|#####3    | 2688/5000 [00:58&lt;00:49, 46.50it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  54%|#####3    | 2688/5000 [00:57&lt;00:52, 43.63it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  54%|#####4    | 2720/5000 [00:59&lt;00:48, 47.01it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  54%|#####4    | 2720/5000 [00:57&lt;00:50, 45.33it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  55%|#####5    | 2752/5000 [01:00&lt;00:47, 47.43it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  55%|#####5    | 2752/5000 [00:58&lt;00:49, 45.63it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  56%|#####5    | 2784/5000 [01:00&lt;00:47, 46.64it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  56%|#####5    | 2784/5000 [00:59&lt;00:47, 46.75it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  56%|#####6    | 2816/5000 [01:01&lt;00:46, 47.36it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  56%|#####6    | 2816/5000 [01:00&lt;00:54, 40.26it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  57%|#####6    | 2848/5000 [01:02&lt;00:45, 46.96it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  57%|#####6    | 2848/5000 [01:00&lt;00:50, 42.40it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  58%|#####7    | 2880/5000 [01:02&lt;00:45, 46.70it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  58%|#####7    | 2880/5000 [01:01&lt;00:48, 44.02it/s]
 
-error:  0.4702, value:  1.0805, test return:  0.9000:  58%|#####8    | 2912/5000 [01:03&lt;00:44, 47.04it/s]
+error:  0.6767, value:  2.0005, test return:  6.1000:  58%|#####8    | 2912/5000 [01:02&lt;00:45, 45.62it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  58%|#####8    | 2912/5000 [01:04&lt;00:44, 47.04it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  58%|#####8    | 2912/5000 [01:03&lt;00:45, 45.62it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  59%|#####8    | 2944/5000 [01:04&lt;00:47, 43.21it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  59%|#####8    | 2944/5000 [01:03&lt;00:50, 40.77it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  60%|#####9    | 2976/5000 [01:05&lt;00:45, 44.38it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  60%|#####9    | 2976/5000 [01:03&lt;00:47, 42.42it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  60%|######    | 3008/5000 [01:05&lt;00:45, 43.60it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  60%|######    | 3008/5000 [01:04&lt;00:45, 43.94it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  61%|######    | 3040/5000 [01:06&lt;00:45, 43.48it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  61%|######    | 3040/5000 [01:05&lt;00:43, 45.58it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  61%|######1   | 3072/5000 [01:07&lt;00:43, 44.72it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  61%|######1   | 3072/5000 [01:05&lt;00:41, 46.81it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  62%|######2   | 3104/5000 [01:07&lt;00:42, 44.94it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  62%|######2   | 3104/5000 [01:06&lt;00:40, 46.97it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  63%|######2   | 3136/5000 [01:08&lt;00:40, 45.67it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  63%|######2   | 3136/5000 [01:07&lt;00:39, 47.74it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  63%|######3   | 3168/5000 [01:09&lt;00:39, 45.89it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  63%|######3   | 3168/5000 [01:07&lt;00:37, 48.66it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  64%|######4   | 3200/5000 [01:09&lt;00:38, 46.27it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  64%|######4   | 3200/5000 [01:08&lt;00:36, 49.33it/s]
 
-error:  0.3458, value:  1.2997, test return:  1.1000:  65%|######4   | 3232/5000 [01:10&lt;00:37, 47.06it/s]
+error:  1.2614, value:  2.4939, test return:  2.8000:  65%|######4   | 3232/5000 [01:09&lt;00:36, 48.37it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  65%|######4   | 3232/5000 [01:11&lt;00:37, 47.06it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  65%|######4   | 3232/5000 [01:10&lt;00:36, 48.37it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  65%|######5   | 3264/5000 [01:11&lt;00:37, 46.08it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  65%|######5   | 3264/5000 [01:10&lt;00:40, 43.38it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  66%|######5   | 3296/5000 [01:11&lt;00:36, 47.01it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  66%|######5   | 3296/5000 [01:10&lt;00:38, 44.63it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  67%|######6   | 3328/5000 [01:12&lt;00:35, 47.13it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  67%|######6   | 3328/5000 [01:11&lt;00:36, 46.24it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  67%|######7   | 3360/5000 [01:13&lt;00:34, 46.96it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  67%|######7   | 3360/5000 [01:11&lt;00:34, 47.20it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  68%|######7   | 3392/5000 [01:14&lt;00:34, 46.39it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  68%|######7   | 3392/5000 [01:12&lt;00:33, 48.18it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  68%|######8   | 3424/5000 [01:14&lt;00:34, 45.39it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  68%|######8   | 3424/5000 [01:13&lt;00:32, 48.31it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  69%|######9   | 3456/5000 [01:15&lt;00:33, 45.64it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  69%|######9   | 3456/5000 [01:13&lt;00:31, 48.90it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  70%|######9   | 3488/5000 [01:16&lt;00:34, 43.78it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  70%|######9   | 3488/5000 [01:14&lt;00:31, 48.67it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  70%|#######   | 3520/5000 [01:16&lt;00:33, 43.96it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  70%|#######   | 3520/5000 [01:15&lt;00:30, 48.37it/s]
 
-error:  0.2025, value:  0.9550, test return:  0.9000:  71%|#######1  | 3552/5000 [01:17&lt;00:31, 45.67it/s]
+error:  0.5204, value:  1.7676, test return:  3.2000:  71%|#######1  | 3552/5000 [01:15&lt;00:30, 48.23it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  71%|#######1  | 3552/5000 [01:18&lt;00:31, 45.67it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  71%|#######1  | 3552/5000 [01:16&lt;00:30, 48.23it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  72%|#######1  | 3584/5000 [01:18&lt;00:32, 43.74it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  72%|#######1  | 3584/5000 [01:16&lt;00:34, 41.03it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  72%|#######2  | 3616/5000 [01:19&lt;00:30, 44.84it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  72%|#######2  | 3616/5000 [01:17&lt;00:32, 43.00it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  73%|#######2  | 3648/5000 [01:19&lt;00:30, 44.98it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  73%|#######2  | 3648/5000 [01:18&lt;00:30, 44.57it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  74%|#######3  | 3680/5000 [01:20&lt;00:28, 46.17it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  74%|#######3  | 3680/5000 [01:18&lt;00:28, 45.62it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  74%|#######4  | 3712/5000 [01:21&lt;00:27, 46.66it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  74%|#######4  | 3712/5000 [01:19&lt;00:27, 46.69it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  75%|#######4  | 3744/5000 [01:21&lt;00:27, 46.37it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  75%|#######4  | 3744/5000 [01:20&lt;00:26, 47.80it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  76%|#######5  | 3776/5000 [01:22&lt;00:26, 46.59it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  76%|#######5  | 3776/5000 [01:20&lt;00:25, 47.64it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  76%|#######6  | 3808/5000 [01:23&lt;00:25, 47.29it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  76%|#######6  | 3808/5000 [01:21&lt;00:24, 48.03it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  77%|#######6  | 3840/5000 [01:23&lt;00:24, 47.43it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  77%|#######6  | 3840/5000 [01:22&lt;00:24, 48.18it/s]
 
-error:  0.1353, value:  0.9740, test return:  1.3000:  77%|#######7  | 3872/5000 [01:24&lt;00:24, 45.37it/s]
+error:  0.8595, value:  3.2096, test return:  3.8000:  77%|#######7  | 3872/5000 [01:22&lt;00:23, 48.30it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  77%|#######7  | 3872/5000 [01:25&lt;00:24, 45.37it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  77%|#######7  | 3872/5000 [01:23&lt;00:23, 48.30it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  78%|#######8  | 3904/5000 [01:25&lt;00:25, 42.72it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  78%|#######8  | 3904/5000 [01:23&lt;00:23, 47.00it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  79%|#######8  | 3936/5000 [01:26&lt;00:24, 43.15it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  79%|#######8  | 3936/5000 [01:24&lt;00:22, 47.90it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  79%|#######9  | 3968/5000 [01:26&lt;00:24, 42.95it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  79%|#######9  | 3968/5000 [01:24&lt;00:21, 47.76it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  80%|########  | 4000/5000 [01:27&lt;00:22, 44.16it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  80%|########  | 4000/5000 [01:25&lt;00:20, 48.03it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  81%|########  | 4032/5000 [01:28&lt;00:21, 45.34it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  81%|########  | 4032/5000 [01:26&lt;00:20, 48.04it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  81%|########1 | 4064/5000 [01:28&lt;00:20, 45.42it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  81%|########1 | 4064/5000 [01:26&lt;00:19, 48.13it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  82%|########1 | 4096/5000 [01:29&lt;00:19, 45.55it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  82%|########1 | 4096/5000 [01:27&lt;00:18, 48.47it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  83%|########2 | 4128/5000 [01:30&lt;00:19, 45.70it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  83%|########2 | 4128/5000 [01:28&lt;00:18, 48.03it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  83%|########3 | 4160/5000 [01:31&lt;00:18, 46.64it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  83%|########3 | 4160/5000 [01:28&lt;00:17, 48.49it/s]
 
-error:  0.8615, value:  1.8584, test return:  1.0000:  84%|########3 | 4192/5000 [01:31&lt;00:16, 47.75it/s]
+error:  0.9560, value:  1.3689, test return:  0.8000:  84%|########3 | 4192/5000 [01:29&lt;00:16, 48.95it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  84%|########3 | 4192/5000 [01:32&lt;00:16, 47.75it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  84%|########3 | 4192/5000 [01:30&lt;00:16, 48.95it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  84%|########4 | 4224/5000 [01:32&lt;00:17, 43.75it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  84%|########4 | 4224/5000 [01:30&lt;00:17, 43.58it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  85%|########5 | 4256/5000 [01:33&lt;00:16, 45.24it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  85%|########5 | 4256/5000 [01:31&lt;00:16, 45.30it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  86%|########5 | 4288/5000 [01:33&lt;00:15, 46.01it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  86%|########5 | 4288/5000 [01:31&lt;00:15, 46.37it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  86%|########6 | 4320/5000 [01:34&lt;00:14, 45.55it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  86%|########6 | 4320/5000 [01:32&lt;00:14, 47.15it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  87%|########7 | 4352/5000 [01:35&lt;00:14, 44.10it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  87%|########7 | 4352/5000 [01:33&lt;00:13, 47.59it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  88%|########7 | 4384/5000 [01:36&lt;00:13, 44.91it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  88%|########7 | 4384/5000 [01:33&lt;00:12, 48.39it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  88%|########8 | 4416/5000 [01:36&lt;00:13, 43.77it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  88%|########8 | 4416/5000 [01:34&lt;00:12, 48.21it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  89%|########8 | 4448/5000 [01:37&lt;00:12, 44.55it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  89%|########8 | 4448/5000 [01:35&lt;00:11, 47.29it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  90%|########9 | 4480/5000 [01:38&lt;00:11, 45.58it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  90%|########9 | 4480/5000 [01:35&lt;00:10, 47.55it/s]
 
-error:  0.2018, value:  1.5326, test return:  2.4000:  90%|######### | 4512/5000 [01:38&lt;00:10, 45.90it/s]
+error:  1.5548, value:  2.7615, test return:  3.2000:  90%|######### | 4512/5000 [01:36&lt;00:10, 48.14it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  90%|######### | 4512/5000 [01:39&lt;00:10, 45.90it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  90%|######### | 4512/5000 [01:37&lt;00:10, 48.14it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  91%|######### | 4544/5000 [01:39&lt;00:11, 40.70it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  91%|######### | 4544/5000 [01:37&lt;00:09, 45.90it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  92%|#########1| 4576/5000 [01:40&lt;00:09, 42.89it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  92%|#########1| 4576/5000 [01:37&lt;00:09, 46.65it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  92%|#########2| 4608/5000 [01:41&lt;00:08, 43.89it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  92%|#########2| 4608/5000 [01:38&lt;00:08, 47.71it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  93%|#########2| 4640/5000 [01:41&lt;00:07, 45.41it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  93%|#########2| 4640/5000 [01:39&lt;00:07, 47.38it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  93%|#########3| 4672/5000 [01:42&lt;00:07, 45.48it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  93%|#########3| 4672/5000 [01:39&lt;00:06, 47.23it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  94%|#########4| 4704/5000 [01:43&lt;00:06, 46.20it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  94%|#########4| 4704/5000 [01:40&lt;00:06, 47.60it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  95%|#########4| 4736/5000 [01:43&lt;00:05, 47.01it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  95%|#########4| 4736/5000 [01:41&lt;00:05, 48.24it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  95%|#########5| 4768/5000 [01:44&lt;00:05, 45.44it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  95%|#########5| 4768/5000 [01:41&lt;00:04, 48.93it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  96%|#########6| 4800/5000 [01:45&lt;00:04, 45.08it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  96%|#########6| 4800/5000 [01:42&lt;00:04, 49.05it/s]
 
-error:  0.1525, value:  1.9556, test return:  3.4000:  97%|#########6| 4832/5000 [01:46&lt;00:03, 43.27it/s]
+error:  0.2973, value:  2.0660, test return:  1.4000:  97%|#########6| 4832/5000 [01:43&lt;00:03, 49.40it/s]
 
-error:  0.3681, value:  1.6969, test return:  3.8000:  97%|#########6| 4832/5000 [01:47&lt;00:03, 43.27it/s]
+error:  0.3976, value:  2.1861, test return:  4.9000:  97%|#########6| 4832/5000 [01:44&lt;00:03, 49.40it/s]
 
-error:  0.3681, value:  1.6969, test return:  3.8000:  97%|#########7| 4864/5000 [01:47&lt;00:03, 37.85it/s]
+error:  0.3976, value:  2.1861, test return:  4.9000:  97%|#########7| 4864/5000 [01:44&lt;00:03, 41.08it/s]
 
-error:  0.3681, value:  1.6969, test return:  3.8000:  98%|#########7| 4896/5000 [01:47&lt;00:02, 40.30it/s]
+error:  0.3976, value:  2.1861, test return:  4.9000:  98%|#########7| 4896/5000 [01:44&lt;00:02, 43.83it/s]
 
-error:  0.3681, value:  1.6969, test return:  3.8000:  99%|#########8| 4928/5000 [01:48&lt;00:01, 42.35it/s]
+error:  0.3976, value:  2.1861, test return:  4.9000:  99%|#########8| 4928/5000 [01:45&lt;00:01, 44.74it/s]
 
-error:  0.3681, value:  1.6969, test return:  3.8000:  99%|#########9| 4960/5000 [01:49&lt;00:00, 44.06it/s]
+error:  0.3976, value:  2.1861, test return:  4.9000:  99%|#########9| 4960/5000 [01:46&lt;00:00, 45.85it/s]
 
-error:  0.3681, value:  1.6969, test return:  3.8000: 100%|#########9| 4992/5000 [01:49&lt;00:00, 45.33it/s]
+error:  0.3976, value:  2.1861, test return:  4.9000: 100%|#########9| 4992/5000 [01:46&lt;00:00, 46.75it/s]
 
-error:  0.3681, value:  1.6969, test return:  3.8000: : 5024it [01:50, 46.04it/s]
+error:  0.3976, value:  2.1861, test return:  4.9000: : 5024it [01:47, 47.57it/s]
 </pre></div>
 </div>
 <p>TD(<span class="math notranslate nohighlight">\(\lambda\)</span>) performs significantly better than TD(0) because it
@@ -1918,8 +1931,8 @@ for more information).</p></li>
 (check <code class="docutils literal notranslate"><span class="pre">torchrl.modules.NoisyLinear</span></code>, which is fully compatible with the
 <code class="docutils literal notranslate"><span class="pre">MLP</span></code> class used in our Dueling DQN).</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  35.352 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  1548 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 5 minutes  20.129 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  1546 MB</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-dqn-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/be66e8850a06844c91f6264538ad69e8/coding_dqn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_dqn.py</span></code></a></p>

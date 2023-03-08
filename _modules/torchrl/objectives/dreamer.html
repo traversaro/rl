@@ -260,7 +260,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -432,7 +431,7 @@
 
 <div class="viewcode-block" id="DreamerModelLoss.forward"><a class="viewcode-back" href="../../../reference/generated/torchrl.objectives.DreamerModelLoss.html#torchrl.objectives.DreamerModelLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">tensordict</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">recurse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">tensordict</span><span class="o">.</span><span class="n">rename_key</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">,</span> <span class="s2">&quot;true_reward&quot;</span><span class="p">)</span>
+        <span class="n">tensordict</span><span class="o">.</span><span class="n">rename_key</span><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;true_reward&quot;</span><span class="p">))</span>
         <span class="n">tensordict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">world_model</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
         <span class="c1"># compute model loss</span>
         <span class="n">kl_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kl_loss</span><span class="p">(</span>
@@ -451,8 +450,8 @@
         <span class="n">reco_loss</span> <span class="o">=</span> <span class="n">reco_loss</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="n">reward_loss</span> <span class="o">=</span> <span class="n">distance_loss</span><span class="p">(</span>
-            <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;true_reward&quot;</span><span class="p">),</span>
-            <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">),</span>
+            <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;true_reward&quot;</span><span class="p">)),</span>
+            <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">)),</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">reward_loss</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_average</span><span class="p">:</span>
@@ -553,7 +552,7 @@
             <span class="k">with</span> <span class="n">hold_out_net</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_model</span><span class="p">):</span>
                 <span class="n">next_tensordict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_model</span><span class="p">(</span><span class="n">next_tensordict</span><span class="p">)</span>
 
-        <span class="n">reward</span> <span class="o">=</span> <span class="n">fake_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">)</span>
+        <span class="n">reward</span> <span class="o">=</span> <span class="n">fake_data</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">))</span>
         <span class="n">next_value</span> <span class="o">=</span> <span class="n">next_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;state_value&quot;</span><span class="p">)</span>
         <span class="n">lambda_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lambda_target</span><span class="p">(</span><span class="n">reward</span><span class="p">,</span> <span class="n">next_value</span><span class="p">)</span>
         <span class="n">fake_data</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;lambda_target&quot;</span><span class="p">,</span> <span class="n">lambda_target</span><span class="p">)</span>

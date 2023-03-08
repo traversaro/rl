@@ -260,7 +260,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -669,7 +668,6 @@
         <span class="s2">&quot;pin_memory&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">pin_memory</span><span class="p">,</span>
         <span class="s2">&quot;split_trajs&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="c1"># trajectories must be separated if multi-step is used</span>
-        <span class="s2">&quot;init_with_lag&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">init_with_lag</span><span class="p">,</span>
         <span class="s2">&quot;exploration_mode&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">exploration_mode</span><span class="p">,</span>
     <span class="p">}</span>
 
@@ -723,7 +721,6 @@
         <span class="s2">&quot;pin_memory&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">pin_memory</span><span class="p">,</span>
         <span class="s2">&quot;split_trajs&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
         <span class="c1"># trajectories must be separated in online settings</span>
-        <span class="s2">&quot;init_with_lag&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">init_with_lag</span><span class="p">,</span>
         <span class="s2">&quot;exploration_mode&quot;</span><span class="p">:</span> <span class="n">cfg</span><span class="o">.</span><span class="n">exploration_mode</span><span class="p">,</span>
     <span class="p">}</span>
 
@@ -742,10 +739,6 @@
     <span class="c1"># weights of the collector policy are synchronized with collector.update_policy_weights_().</span>
     <span class="n">pin_memory</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="c1"># if True, the data collector will call pin_memory before dispatching tensordicts onto the passing device</span>
-    <span class="n">init_with_lag</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="c1"># if True, the first trajectory will be truncated earlier at a random step. This is helpful</span>
-    <span class="c1"># to desynchronize the environments, such that steps do no match in all collected</span>
-    <span class="c1"># rollouts. Especially useful for online training, to prevent cyclic sample indices.</span>
     <span class="n">frames_per_batch</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span>
     <span class="c1"># number of steps executed in the environment per collection.</span>
     <span class="c1"># This value represents how many steps will the data collector execute and return in *each*</span>

@@ -260,7 +260,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -391,50 +390,111 @@
     <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">,</span>
     <span class="n">next_tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">keep_other</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">exclude_reward</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-    <span class="n">exclude_done</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">exclude_reward</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">exclude_done</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">exclude_action</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a new tensordict that reflects a step in time of the input tensordict.</span>
 
 <span class="sd">    Given a tensordict retrieved after a step, returns the :obj:`&quot;next&quot;` indexed-tensordict.</span>
+<span class="sd">    THe arguments allow for a precise control over what should be kept and what</span>
+<span class="sd">    should be copied from the ``&quot;next&quot;`` entry. The default behaviour is:</span>
+<span class="sd">    move the observation entries, reward and done states to the root, exclude</span>
+<span class="sd">    the current action and keep all extra keys (non-action, non-done, non-reward).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        tensordict (TensorDictBase): tensordict with keys to be renamed</span>
 <span class="sd">        next_tensordict (TensorDictBase, optional): destination tensordict</span>
 <span class="sd">        keep_other (bool, optional): if True, all keys that do not start with :obj:`&#39;next_&#39;` will be kept.</span>
-<span class="sd">            Default is True.</span>
+<span class="sd">            Default is ``True``.</span>
 <span class="sd">        exclude_reward (bool, optional): if True, the :obj:`&quot;reward&quot;` key will be discarded</span>
-<span class="sd">            from the resulting tensordict.</span>
-<span class="sd">            Default is True.</span>
+<span class="sd">            from the resulting tensordict. If ``False``, it will be copied (and replaced)</span>
+<span class="sd">            from the ``&quot;next&quot;`` entry (if present).</span>
+<span class="sd">            Default is ``False``.</span>
 <span class="sd">        exclude_done (bool, optional): if True, the :obj:`&quot;done&quot;` key will be discarded</span>
-<span class="sd">            from the resulting tensordict.</span>
-<span class="sd">            Default is True.</span>
-<span class="sd">        exclude_action (bool, optional): if True, the :obj:`&quot;action&quot;` key will be discarded</span>
-<span class="sd">            from the resulting tensordict.</span>
-<span class="sd">            Default is True.</span>
+<span class="sd">            from the resulting tensordict. If ``False``, it will be copied (and replaced)</span>
+<span class="sd">            from the ``&quot;next&quot;`` entry (if present).</span>
+<span class="sd">            Default is ``False``.</span>
+<span class="sd">        exclude_action (bool, optional): if True, the :obj:`&quot;action&quot;` key will</span>
+<span class="sd">            be discarded from the resulting tensordict. If ``False``, it will</span>
+<span class="sd">            be kept in the root tensordict (since it should not be present in</span>
+<span class="sd">            the ``&quot;next&quot;`` entry).</span>
+<span class="sd">            Default is ``True``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">         A new tensordict (or next_tensordict) containing the tensors of the t+1 step.</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">    This funtion allows for this kind of loop to be used:</span>
-<span class="sd">        &gt;&gt;&gt; td_out = []</span>
-<span class="sd">        &gt;&gt;&gt; env = make_env()</span>
-<span class="sd">        &gt;&gt;&gt; policy = make_policy()</span>
-<span class="sd">        &gt;&gt;&gt; td = env.reset()</span>
-<span class="sd">        &gt;&gt;&gt; for i in range(max_steps):</span>
-<span class="sd">        &gt;&gt;&gt;     td = env.step(td)</span>
-<span class="sd">        &gt;&gt;&gt;     next_td = step_mdp(td)</span>
-<span class="sd">        &gt;&gt;&gt;     assert next_td is not td # make sure that keys are not overwritten</span>
-<span class="sd">        &gt;&gt;&gt;     td_out.append(td)</span>
-<span class="sd">        &gt;&gt;&gt;     td = next_td</span>
-<span class="sd">        &gt;&gt;&gt; td_out = torch.stack(td_out, 0)</span>
-<span class="sd">        &gt;&gt;&gt; print(td_out) # should contain keys &#39;observation&#39;, &#39;next_observation&#39;, &#39;action&#39;, &#39;reward&#39;, &#39;done&#39; or similar</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
+<span class="sd">        &gt;&gt;&gt; td = TensorDict({</span>
+<span class="sd">        ...     &quot;done&quot;: torch.zeros((), dtype=torch.bool),</span>
+<span class="sd">        ...     &quot;reward&quot;: torch.zeros(()),</span>
+<span class="sd">        ...     &quot;extra&quot;: torch.zeros(()),</span>
+<span class="sd">        ...     &quot;next&quot;: TensorDict({</span>
+<span class="sd">        ...         &quot;done&quot;: torch.zeros((), dtype=torch.bool),</span>
+<span class="sd">        ...         &quot;reward&quot;: torch.zeros(()),</span>
+<span class="sd">        ...         &quot;obs&quot;: torch.zeros(()),</span>
+<span class="sd">        ...     }, []),</span>
+<span class="sd">        ...     &quot;obs&quot;: torch.zeros(()),</span>
+<span class="sd">        ...     &quot;action&quot;: torch.zeros(()),</span>
+<span class="sd">        ... }, [])</span>
+<span class="sd">        &gt;&gt;&gt; print(step_mdp(td))</span>
+<span class="sd">        TensorDict(</span>
+<span class="sd">            fields={</span>
+<span class="sd">                done: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.bool, is_shared=False),</span>
+<span class="sd">                extra: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                obs: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                reward: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
+<span class="sd">            batch_size=torch.Size([]),</span>
+<span class="sd">            device=None,</span>
+<span class="sd">            is_shared=False)</span>
+<span class="sd">        &gt;&gt;&gt; print(step_mdp(td, exclude_done=True))  # &quot;done&quot; is dropped</span>
+<span class="sd">        TensorDict(</span>
+<span class="sd">            fields={</span>
+<span class="sd">                extra: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                obs: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                reward: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
+<span class="sd">            batch_size=torch.Size([]),</span>
+<span class="sd">            device=None,</span>
+<span class="sd">            is_shared=False)</span>
+<span class="sd">        &gt;&gt;&gt; print(step_mdp(td, exclude_reward=True))  # &quot;reward&quot; is dropped</span>
+<span class="sd">        TensorDict(</span>
+<span class="sd">            fields={</span>
+<span class="sd">                done: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.bool, is_shared=False),</span>
+<span class="sd">                extra: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                obs: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
+<span class="sd">            batch_size=torch.Size([]),</span>
+<span class="sd">            device=None,</span>
+<span class="sd">            is_shared=False)</span>
+<span class="sd">        &gt;&gt;&gt; print(step_mdp(td, exclude_action=False))  # &quot;action&quot; persists at the root</span>
+<span class="sd">        TensorDict(</span>
+<span class="sd">            fields={</span>
+<span class="sd">                action: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                done: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.bool, is_shared=False),</span>
+<span class="sd">                extra: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                obs: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                reward: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
+<span class="sd">            batch_size=torch.Size([]),</span>
+<span class="sd">            device=None,</span>
+<span class="sd">            is_shared=False)</span>
+<span class="sd">        &gt;&gt;&gt; print(step_mdp(td, keep_other=False))  # &quot;extra&quot; is missing</span>
+<span class="sd">        TensorDict(</span>
+<span class="sd">            fields={</span>
+<span class="sd">                done: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.bool, is_shared=False),</span>
+<span class="sd">                obs: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                reward: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
+<span class="sd">            batch_size=torch.Size([]),</span>
+<span class="sd">            device=None,</span>
+<span class="sd">            is_shared=False)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">other_keys</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">prohibited</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">exclude_action</span><span class="p">:</span>
+        <span class="n">prohibited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">other_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">exclude_done</span><span class="p">:</span>
         <span class="n">prohibited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -443,16 +503,21 @@
         <span class="n">prohibited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">other_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">exclude_action</span><span class="p">:</span>
-        <span class="n">prohibited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">other_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">)</span>
 
     <span class="n">prohibited</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">keep_other</span><span class="p">:</span>
+        <span class="c1"># TODO: make this work with nested keys</span>
         <span class="n">other_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prohibited</span><span class="p">]</span>
-    <span class="n">select_tensordict</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">other_keys</span><span class="p">)</span>
-    <span class="n">select_tensordict</span> <span class="o">=</span> <span class="n">select_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">))</span>
+    <span class="n">select_tensordict</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">other_keys</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">excluded</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">exclude_reward</span><span class="p">:</span>
+        <span class="n">excluded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;reward&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">exclude_done</span><span class="p">:</span>
+        <span class="n">excluded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span>
+    <span class="n">next_td</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">excluded</span><span class="p">):</span>
+        <span class="n">next_td</span> <span class="o">=</span> <span class="n">next_td</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="o">*</span><span class="n">excluded</span><span class="p">)</span>
+    <span class="n">select_tensordict</span> <span class="o">=</span> <span class="n">select_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">next_td</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">next_tensordict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">next_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">select_tensordict</span><span class="p">)</span>
@@ -565,7 +630,6 @@
 
     <span class="n">keys1</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">fake_tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
     <span class="n">keys2</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">real_tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="kc">True</span><span class="p">))</span>
-
     <span class="k">if</span> <span class="n">keys1</span> <span class="o">!=</span> <span class="n">keys2</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span>
             <span class="s2">&quot;The keys of the fake tensordict and the one collected during rollout do not match:&quot;</span>

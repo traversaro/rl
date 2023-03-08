@@ -263,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -377,16 +376,19 @@
 <h1>StepCounter<a class="headerlink" href="#stepcounter" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.StepCounter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></span><span class="sig-name descname"><span class="pre">StepCounter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#StepCounter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.StepCounter" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.envs.transforms.</span></span><span class="sig-name descname"><span class="pre">StepCounter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">truncated_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'truncated'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#StepCounter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.StepCounter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Counts the steps from a reset and sets the done state to True after a certain number of steps.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>max_steps</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, optional) – a positive integer that indicates the maximum number of steps to take before</p></li>
-<li><p><strong>None</strong> (<em>setting the done state to True. If set to</em>) – </p></li>
-<li><p><strong>However</strong> (<em>the done state is manually set by the user</em><em> or </em><em>by the environment itself.</em>) – </p></li>
-<li><p><strong>be</strong> (<em>the step count will still</em>) – </p></li>
-<li><p><strong>attribute.</strong> (<em>incremented on each call to step</em><em>(</em><em>) </em><em>into the step_count</em>) – </p></li>
+<li><p><strong>max_steps</strong> (<em>int</em><em>, </em><em>optional</em>) – a positive integer that indicates the
+maximum number of steps to take before setting the <code class="docutils literal notranslate"><span class="pre">truncated_key</span></code>
+entry to <code class="docutils literal notranslate"><span class="pre">True</span></code>.
+However, the step count will still be
+incremented on each call to step() into the <cite>step_count</cite> attribute.</p></li>
+<li><p><strong>truncated_key</strong> (<em>str</em><em>, </em><em>optional</em>) – the key where the truncated key should
+be written. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;truncated&quot;</span></code>, which is recognised by
+data collectors as a reset signal.</p></li>
 </ul>
 </dd>
 </dl>

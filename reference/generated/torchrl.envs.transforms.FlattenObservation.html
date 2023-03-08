@@ -263,7 +263,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/torchrl_demo.html">Introduction to TorchRL</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/torch_envs.html">TorchRL envs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/pretrained_models.html">Using pretrained models</a></li>
 </ul>
 <ul>
@@ -400,8 +399,10 @@ Defaults to False, ie. non-negative dimensions are not permitted.</p></li>
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="headerlink" href="#torchrl.envs.transforms.FlattenObservation.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads the input tensordict, and for the selected keys, applies the transform.</p>
 <p>For any operation that relates exclusively to the parent env (e.g. FrameSkip),
-modify the _step method instead. _call should only be overwritten
+modify the _step method instead. <code class="xref py py-meth docutils literal notranslate"><span class="pre">_call()</span></code> should only be overwritten
 if a modification of the input tensordict is needed.</p>
+<p><code class="xref py py-meth docutils literal notranslate"><span class="pre">_call()</span></code> will be called by <code class="xref py py-meth docutils literal notranslate"><span class="pre">TransformedEnv.step()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">TransformedEnv.reset()</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
