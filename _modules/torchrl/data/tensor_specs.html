@@ -2229,13 +2229,12 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_specs</span><span class="p">[</span><span class="n">_key</span><span class="p">]</span><span class="o">.</span><span class="n">type_check</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="n">_key</span><span class="p">],</span> <span class="n">_key</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CompositeSpec.is_in"><a class="viewcode-back" href="../../../reference/generated/torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec.is_in">[docs]</a>    <span class="k">def</span> <span class="nf">is_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="n">TensorDictBase</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">all</span><span class="p">(</span>
-            <span class="p">[</span>
-                <span class="n">item</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
-                <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="p">]</span>
-        <span class="p">)</span></div>
+        <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="o">.</span><span class="n">is_in</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="CompositeSpec.project"><a class="viewcode-back" href="../../../reference/generated/torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec.project">[docs]</a>    <span class="k">def</span> <span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -2261,22 +2260,29 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="CompositeSpec.keys"><a class="viewcode-back" href="../../../reference/generated/torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">yield_nesting_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">nested_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">include_nested</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">leaves_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeysView</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Keys of the CompositeSpec.</span>
 
+<span class="sd">        The keys argument reflect those of :class:`tensordict.TensorDict`.</span>
+
 <span class="sd">        Args:</span>
-<span class="sd">            yield_nesting_keys (bool, optional): if :obj:`True`, the values returned</span>
-<span class="sd">                will contain every level of nesting, i.e. a :obj:`CompositeSpec(next=CompositeSpec(obs=None))`</span>
-<span class="sd">                will lead to the keys :obj:`[&quot;next&quot;, (&quot;next&quot;, &quot;obs&quot;)]`. Default is :obj:`False`, i.e.</span>
-<span class="sd">                only nested keys will be returned.</span>
-<span class="sd">            nested_keys (bool, optional): if :obj:`False`, the returned keys will not be nested. They will</span>
+<span class="sd">            include_nested (bool, optional): if ``False``, the returned keys will not be nested. They will</span>
 <span class="sd">                represent only the immediate children of the root, and not the whole nested sequence, i.e. a</span>
 <span class="sd">                :obj:`CompositeSpec(next=CompositeSpec(obs=None))` will lead to the keys</span>
-<span class="sd">                :obj:`[&quot;next&quot;]. Default is :obj:`True`, i.e. nested keys will be returned.</span>
+<span class="sd">                :obj:`[&quot;next&quot;]. Default is ``False``, i.e. nested keys will not</span>
+<span class="sd">                be returned.</span>
+<span class="sd">            leaves_only (bool, optional): if :obj:`False`, the values returned</span>
+<span class="sd">                will contain every level of nesting, i.e. a :obj:`CompositeSpec(next=CompositeSpec(obs=None))`</span>
+<span class="sd">                will lead to the keys :obj:`[&quot;next&quot;, (&quot;next&quot;, &quot;obs&quot;)]`.</span>
+<span class="sd">                Default is ``False``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">_CompositeSpecKeysView</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">_yield_nesting_keys</span><span class="o">=</span><span class="n">yield_nesting_keys</span><span class="p">,</span> <span class="n">nested_keys</span><span class="o">=</span><span class="n">nested_keys</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">include_nested</span><span class="o">=</span><span class="n">include_nested</span><span class="p">,</span>
+            <span class="n">leaves_only</span><span class="o">=</span><span class="n">leaves_only</span><span class="p">,</span>
         <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ItemsView</span><span class="p">:</span>
@@ -2381,13 +2387,14 @@
 
 
 <span class="k">def</span> <span class="nf">_keys_to_empty_composite_spec</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Given a list of keys, creates a CompositeSpec tree where each leaf is assigned a None value.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">):</span>
         <span class="k">return</span>
     <span class="n">c</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">c</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">elif</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="n">yield_nesting_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">c</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># if the value is None we just replace it</span>
                 <span class="n">c</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">_keys_to_empty_composite_spec</span><span class="p">([</span><span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">:]])</span>
@@ -2409,31 +2416,37 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">composite</span><span class="p">:</span> <span class="n">CompositeSpec</span><span class="p">,</span>
-        <span class="n">nested_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="n">_yield_nesting_keys</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">include_nested</span><span class="p">,</span>
+        <span class="n">leaves_only</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">composite</span> <span class="o">=</span> <span class="n">composite</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_yield_nesting_keys</span> <span class="o">=</span> <span class="n">_yield_nesting_keys</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nested_keys</span> <span class="o">=</span> <span class="n">nested_keys</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">leaves_only</span> <span class="o">=</span> <span class="n">leaves_only</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">include_nested</span> <span class="o">=</span> <span class="n">include_nested</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">composite</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nested_keys</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
-                <span class="k">for</span> <span class="n">subkey</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-                    <span class="k">yield</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">subkey</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subkey</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">subkey</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_yield_nesting_keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">include_nested</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">subkey</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span>
+                    <span class="n">include_nested</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">leaves_only</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">leaves_only</span>
+                <span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subkey</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                        <span class="n">subkey</span> <span class="o">=</span> <span class="p">(</span><span class="n">subkey</span><span class="p">,)</span>
+                    <span class="k">yield</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">subkey</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaves_only</span><span class="p">:</span>
                     <span class="k">yield</span> <span class="n">key</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
-                    <span class="k">yield</span> <span class="n">key</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">leaves_only</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">key</span>
 
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">i</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;_CompositeSpecKeysView(keys=</span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2">)&quot;</span>
 </pre></div>
 
              </article>
