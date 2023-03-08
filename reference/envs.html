@@ -379,7 +379,7 @@ even if these environments are simulated using different libraries.
 TorchRL offers some out-of-the-box environment wrappers under <code class="xref py py-obj docutils literal notranslate"><span class="pre">torchrl.envs.libs</span></code>,
 which we hope can be easily imitated for other libraries.
 The parent class <a class="reference internal" href="generated/torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.EnvBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.envs.EnvBase</span></code></a> is a <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v1.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> subclass that implements
-some typical environment methods using <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+b76565b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> as a data organiser. This allows this
+some typical environment methods using <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+e22db6d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> as a data organiser. This allows this
 class to be generic and to handle an arbitrary number of input and outputs, as well as
 nested or batched data structures.</p>
 <p>Each env will have the following attributes:</p>
@@ -415,9 +415,9 @@ This is helpful when preallocation tensors, checking shape consistency etc.</p>
 <p>With these, the following methods are implemented:</p>
 <ul class="simple">
 <li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">env.reset()</span></code>: a reset method that may (but not necessarily requires to) take
-a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+b76565b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> input. It return the first tensordict of a rollout, usually
+a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+e22db6d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> input. It return the first tensordict of a rollout, usually
 containing a <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;done&quot;</span></code> state and a set of observations.</p></li>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">env.step()</span></code>: a step method that takes a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+b76565b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> input
+<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">env.step()</span></code>: a step method that takes a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+e22db6d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> input
 containing an input action as well as other inputs (for model-based or stateless
 environments, for instance).</p></li>
 <li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">env.set_seed()</span></code>: a seeding method that will return the next seed
@@ -427,8 +427,8 @@ seed without risking to overlap seeds in consecutive experiments, while still
 having reproducible results.</p></li>
 <li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">env.rollout()</span></code>: executes a rollout in the environment for
 a maximum number of steps (<code class="docutils literal notranslate"><span class="pre">max_steps=N</span></code>) and using a policy (<code class="docutils literal notranslate"><span class="pre">policy=model</span></code>).
-The policy should be coded using a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.0.2b+b76565b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.nn.TensorDictModule</span></code></a>
-(or any other <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+b76565b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a>-compatible module).</p></li>
+The policy should be coded using a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.0.2b+e22db6d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.nn.TensorDictModule</span></code></a>
+(or any other <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.0.2b+e22db6d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a>-compatible module).</p></li>
 </ul>
 <p>The following figure summarizes how a rollout is executed in torchrl.</p>
 <figure class="align-default" id="id3">
@@ -533,11 +533,11 @@ Once the environment is launched, a great speedup should be observed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p><em>TorchRL requires precise specs</em>: Another thing to take in consideration is
-that <code class="xref py py-class docutils literal notranslate"><span class="pre">ParallelEnv`s</span> <span class="pre">(as</span> <span class="pre">well</span> <span class="pre">as</span> <span class="pre">data</span> <span class="pre">collectors)</span>
-<span class="pre">will</span> <span class="pre">create</span> <span class="pre">data</span> <span class="pre">buffers</span> <span class="pre">based</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">environment</span> <span class="pre">specs</span> <span class="pre">to</span> <span class="pre">pass</span> <span class="pre">data</span> <span class="pre">from</span> <span class="pre">one</span> <span class="pre">process</span>
-<span class="pre">to</span> <span class="pre">another.</span> <span class="pre">This</span> <span class="pre">means</span> <span class="pre">that</span> <span class="pre">a</span> <span class="pre">misspecified</span> <span class="pre">spec</span> <span class="pre">(input,</span> <span class="pre">observation</span> <span class="pre">or</span> <span class="pre">reward)</span> <span class="pre">will</span>
-<span class="pre">cause</span> <span class="pre">a</span> <span class="pre">breakage</span> <span class="pre">at</span> <span class="pre">runtime</span> <span class="pre">as</span> <span class="pre">the</span> <span class="pre">data</span> <span class="pre">can't</span> <span class="pre">be</span> <span class="pre">written</span> <span class="pre">on</span> <span class="pre">the</span> <span class="pre">preallocated</span> <span class="pre">buffer.</span>
-<span class="pre">In</span> <span class="pre">general,</span> <span class="pre">an</span> <span class="pre">environment</span> <span class="pre">should</span> <span class="pre">be</span> <span class="pre">tested</span> <span class="pre">using</span> <span class="pre">the</span> <span class="pre">:func:`~.utils.check_env_specs</span></code>
+that <a class="reference internal" href="generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv" title="torchrl.envs.ParallelEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParallelEnv</span></code></a> (as well as data collectors)
+will create data buffers based on the environment specs to pass data from one process
+to another. This means that a misspecified spec (input, observation or reward) will
+cause a breakage at runtime as the data can’t be written on the preallocated buffer.
+In general, an environment should be tested using the <a class="reference internal" href="generated/torchrl.envs.utils.check_env_specs.html#torchrl.envs.utils.check_env_specs" title="torchrl.envs.utils.check_env_specs"><code class="xref py py-func docutils literal notranslate"><span class="pre">check_env_specs()</span></code></a>
 test function before being used in a <a class="reference internal" href="generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv" title="torchrl.envs.ParallelEnv"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParallelEnv</span></code></a>. This function will raise
 an assertion error whenever the preallocated buffer and the collected data mismatch.</p>
 </div>
@@ -790,7 +790,7 @@ to be able to create this other composition:</p>
 <td><p>Returns all the supported libraries.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.envs.utils.set_exploration_mode.html#torchrl.envs.utils.set_exploration_mode" title="torchrl.envs.utils.set_exploration_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_exploration_mode</span></code></a></p></td>
-<td><p>alias of <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.set_interaction_mode.html#tensordict.nn.set_interaction_mode" title="(in tensordict vmain (0.0.2b+b76565b ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">set_interaction_mode</span></code></a></p></td>
+<td><p>alias of <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.set_interaction_mode.html#tensordict.nn.set_interaction_mode" title="(in tensordict vmain (0.0.2b+e22db6d ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">set_interaction_mode</span></code></a></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.envs.utils.exploration_mode.html#torchrl.envs.utils.exploration_mode" title="torchrl.envs.utils.exploration_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exploration_mode</span></code></a>()</p></td>
 <td><p>Returns the current sampling mode.</p></td>
