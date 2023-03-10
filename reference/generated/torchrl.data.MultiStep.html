@@ -376,16 +376,18 @@
 <h1>MultiStep<a class="headerlink" href="#multistep" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchrl.data.MultiStep">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.data.</span></span><span class="sig-name descname"><span class="pre">MultiStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps_max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/data/postprocs/postprocs.html#MultiStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.MultiStep" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.data.</span></span><span class="sig-name descname"><span class="pre">MultiStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/data/postprocs/postprocs.html#MultiStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.MultiStep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Multistep reward transform.</p>
 <p>Presented in ‘Sutton, R. S. 1988. Learning to
 predict by the methods of temporal differences. Machine learning 3(
 1):9–44.’</p>
+<p>This module maps the “next” observation to the t + n “next” observation.
+It is an identity transform whenever <code class="xref py py-attr docutils literal notranslate"><span class="pre">n_steps</span></code> is 0.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gamma</strong> (<em>float</em>) – Discount factor for return computation</p></li>
-<li><p><strong>n_steps_max</strong> (<em>integer</em>) – maximum look-ahead steps.</p></li>
+<li><p><strong>n_steps</strong> (<em>integer</em>) – maximum look-ahead steps.</p></li>
 </ul>
 </dd>
 </dl>
@@ -615,28 +617,33 @@ strings are acceptable.</p>
 <dd><p>Re-writes a tensordict following the multi-step transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tensordict</strong> – <p>TennsorDict instance with Batch x Time-steps x …
-dimensions.
-The TensorDict must contain a “reward” and “done” key. All
-keys that are contained within the “next” nested tensordict
-will be shifted by (at most) <code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiStep.n_steps_max</span></code> frames.
+<dd class="field-odd"><p><strong>tensordict</strong> – <p><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDictBase</span></code> instance with
+<code class="docutils literal notranslate"><span class="pre">[*Batch</span> <span class="pre">x</span> <span class="pre">Time-steps]</span> <span class="pre">shape.</span>
+<span class="pre">The</span> <span class="pre">TensorDict</span> <span class="pre">must</span> <span class="pre">contain</span> <span class="pre">a</span> <span class="pre">``(&quot;next&quot;,</span> <span class="pre">&quot;reward&quot;)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">(&quot;next&quot;,</span> <span class="pre">&quot;done&quot;)</span></code> keys.
+All keys that are contained within the “next” nested tensordict
+will be shifted by (at most) <code class="xref py py-attr docutils literal notranslate"><span class="pre">n_steps</span></code> frames.
 The TensorDict will also be updated with new key-value pairs:</p>
 <ul class="simple">
-<li><p>gamma: indicating the discount to be used for the next</p></li>
+<li><p>gamma: indicating the discount to be used for the next
+reward;</p></li>
+<li><p>nonterminal: boolean value indicating whether a step is
+non-terminal (not done or not last of trajectory);</p></li>
+<li><p>original_reward: previous reward collected in the
+environment (i.e. before multi-step);</p></li>
+<li><p>The “reward” values will be replaced by the newly computed
+rewards.</p></li>
 </ul>
-<p>reward;</p>
-<ul class="simple">
-<li><p>nonterminal: boolean value indicating whether a step is</p></li>
-</ul>
-<p>non-terminal (not done or not last of trajectory);</p>
-<ul class="simple">
-<li><p>original_reward: previous reward collected in the</p></li>
-</ul>
-<p>environment (i.e. before multi-step);</p>
-<ul class="simple">
-<li><p>The “reward” values will be replaced by the newly computed</p></li>
-</ul>
-<p>rewards.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">&quot;done&quot;</span></code> key can have either the shape of the tensordict
+OR the shape of the tensordict followed by a singleton
+dimension OR the shape of the tensordict followed by other
+dimensions. In the latter case, the tensordict <em>must</em> be
+compatible with a reshape that follows the done shape (ie. the
+leading dimensions of every tensor it contains must match the
+shape of the <code class="docutils literal notranslate"><span class="pre">&quot;done&quot;</span></code> entry).
+The <code class="docutils literal notranslate"><span class="pre">&quot;reward&quot;</span></code> tensor can have either the shape of the
+tensordict (or done state) or this shape followed by a singleton
+dimension.</p>
 </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

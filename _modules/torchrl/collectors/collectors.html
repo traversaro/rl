@@ -620,13 +620,13 @@
 <span class="sd">            collector.</span>
 <span class="sd">        create_env_kwargs (dict, optional): Dictionary of kwargs for create_env_fn.</span>
 <span class="sd">        max_frames_per_traj (int, optional): Maximum steps per trajectory. Note that a trajectory can span over multiple batches</span>
-<span class="sd">            (unless reset_at_each_iter is set to True, see below). Once a trajectory reaches n_steps_max,</span>
+<span class="sd">            (unless reset_at_each_iter is set to True, see below). Once a trajectory reaches n_steps,</span>
 <span class="sd">            the environment is reset. If the environment wraps multiple environments together, the number of steps</span>
 <span class="sd">            is tracked for each environment independently. Negative values are allowed, in which case this argument</span>
 <span class="sd">            is ignored.</span>
 <span class="sd">            default: -1 (i.e. no maximum number of steps)</span>
 <span class="sd">        frames_per_batch (int): Time-length of a batch.</span>
-<span class="sd">            reset_at_each_iter and frames_per_batch == n_steps_max are equivalent configurations.</span>
+<span class="sd">            reset_at_each_iter and frames_per_batch == n_steps are equivalent configurations.</span>
 <span class="sd">            default: 200</span>
 <span class="sd">        init_random_frames (int, optional): Number of frames for which the policy is ignored before it is called.</span>
 <span class="sd">            This feature is mainly intended to be used in offline/model-based settings, where a batch of random</span>
@@ -636,8 +636,9 @@
 <span class="sd">            default=False.</span>
 <span class="sd">        postproc (Callable, optional): A Batcher is an object that will read a batch of data and return it in a useful format for training.</span>
 <span class="sd">            default: None.</span>
-<span class="sd">        split_trajs (bool): Boolean indicating whether the resulting TensorDict should be split according to the trajectories.</span>
+<span class="sd">        split_trajs (bool, optional): Boolean indicating whether the resulting TensorDict should be split according to the trajectories.</span>
 <span class="sd">            See utils.split_trajectories for more information.</span>
+<span class="sd">            Defaults to False.</span>
 <span class="sd">        device (int, str or torch.device, optional): The device on which the policy will be placed.</span>
 <span class="sd">            If it differs from the input policy device, the update_policy_weights_() method should be queried</span>
 <span class="sd">            at appropriate times during the training loop to accommodate for the lag between parameter configuration</span>
@@ -845,10 +846,7 @@
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">split_trajs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_when_done</span><span class="p">:</span>
-                <span class="n">split_trajs</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">split_trajs</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">split_trajs</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_when_done</span> <span class="ow">and</span> <span class="n">split_trajs</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                 <span class="s2">&quot;Cannot split trajectories when reset_when_done is False.&quot;</span>
@@ -1111,13 +1109,13 @@
 <span class="sd">            workers only once the total number of frames has been collected on the server.</span>
 <span class="sd">        create_env_kwargs (dict, optional): A (list of) dictionaries with the arguments used to create an environment</span>
 <span class="sd">        max_frames_per_traj: Maximum steps per trajectory. Note that a trajectory can span over multiple batches</span>
-<span class="sd">            (unless reset_at_each_iter is set to True, see below). Once a traje tory reaches n_steps_max,</span>
+<span class="sd">            (unless reset_at_each_iter is set to True, see below). Once a traje tory reaches n_steps,</span>
 <span class="sd">            the environment is reset. If the environment wraps multiple environments together, the number of steps</span>
 <span class="sd">            is tracked for each environment independently. Negative values are allowed, in which case this argument</span>
 <span class="sd">            is ignored.</span>
 <span class="sd">            default: -1 (i.e. no maximum number of steps)</span>
 <span class="sd">        frames_per_batch (int): Time-length of a batch.</span>
-<span class="sd">            reset_at_each_iter and frames_per_batch == n_steps_max are equivalent configurations.</span>
+<span class="sd">            reset_at_each_iter and frames_per_batch == n_steps are equivalent configurations.</span>
 <span class="sd">            default: 200</span>
 <span class="sd">        init_random_frames (int): Number of frames for which the policy is ignored before it is called.</span>
 <span class="sd">            This feature is mainly intended to be used in offline/model-based settings, where a batch of random</span>
@@ -1128,8 +1126,9 @@
 <span class="sd">        postproc (callable, optional): A PostProcessor is an object that will read a batch of data and process it in a</span>
 <span class="sd">            useful format for training.</span>
 <span class="sd">            default: None.</span>
-<span class="sd">        split_trajs (bool): Boolean indicating whether the resulting TensorDict should be split according to the trajectories.</span>
+<span class="sd">        split_trajs (bool, optional): Boolean indicating whether the resulting TensorDict should be split according to the trajectories.</span>
 <span class="sd">            See utils.split_trajectories for more information.</span>
+<span class="sd">            Defaults to False.</span>
 <span class="sd">        devices (int, str, torch.device or sequence of such, optional): The devices on which the policy will be placed.</span>
 <span class="sd">            If it differs from the input policy device, the update_policy_weights_() method should be queried</span>
 <span class="sd">            at appropriate times during the training loop to accommodate for the lag between parameter configuration</span>
@@ -1277,10 +1276,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_when_done</span> <span class="o">=</span> <span class="n">reset_when_done</span>
         <span class="k">if</span> <span class="n">split_trajs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_when_done</span><span class="p">:</span>
-                <span class="n">split_trajs</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">split_trajs</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">split_trajs</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_when_done</span> <span class="ow">and</span> <span class="n">split_trajs</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
                 <span class="s2">&quot;Cannot split trajectories when reset_when_done is False.&quot;</span>
@@ -1814,13 +1810,13 @@
 <span class="sd">        max_frames_per_traj: Maximum steps per trajectory. Note that a</span>
 <span class="sd">            trajectory can span over multiple batches (unless</span>
 <span class="sd">            reset_at_each_iter is set to True, see below). Once a trajectory</span>
-<span class="sd">            reaches n_steps_max, the environment is reset. If the</span>
+<span class="sd">            reaches n_steps, the environment is reset. If the</span>
 <span class="sd">            environment wraps multiple environments together, the number of</span>
 <span class="sd">            steps is tracked for each environment independently. Negative</span>
 <span class="sd">            values are allowed, in which case this argument is ignored.</span>
 <span class="sd">            Default is -1 (i.e. no maximum number of steps)</span>
 <span class="sd">        frames_per_batch (int): Time-length of a batch.</span>
-<span class="sd">            reset_at_each_iter and frames_per_batch == n_steps_max are equivalent configurations.</span>
+<span class="sd">            reset_at_each_iter and frames_per_batch == n_steps are equivalent configurations.</span>
 <span class="sd">            default: 200</span>
 <span class="sd">        init_random_frames (int): Number of frames for which the policy is ignored before it is called.</span>
 <span class="sd">            This feature is mainly intended to be used in offline/model-based settings, where a batch of random</span>

@@ -576,7 +576,7 @@ Here are examples of using a replaybuffer with tensordicts.
  .. code-block:: none
 
 
-    tensor([0, 1], dtype=torch.int32)
+    tensor([0, 0], dtype=torch.int32)
 
 
 
@@ -606,8 +606,8 @@ Here are examples of using a replaybuffer with tensordicts.
 
  .. code-block:: none
 
-    0 0.06984968483448029
-    1 0.28791671991348267
+    0 0.28791671991348267
+    1 1.0
     2 0.0
 
 
@@ -1740,7 +1740,6 @@ Sync data collector
             action: Tensor(shape=torch.Size([6, 10, 1]), device=cpu, dtype=torch.float32, is_shared=False),
             collector: TensorDict(
                 fields={
-                    mask: Tensor(shape=torch.Size([6, 10]), device=cpu, dtype=torch.bool, is_shared=False),
                     traj_ids: Tensor(shape=torch.Size([6, 10]), device=cpu, dtype=torch.int64, is_shared=False)},
                 batch_size=torch.Size([6, 10]),
                 device=cpu,
@@ -1803,7 +1802,6 @@ Sync data collector
             action: Tensor(shape=torch.Size([3, 20, 1]), device=cpu, dtype=torch.float32, is_shared=False),
             collector: TensorDict(
                 fields={
-                    mask: Tensor(shape=torch.Size([3, 20]), device=cpu, dtype=torch.bool, is_shared=False),
                     traj_ids: Tensor(shape=torch.Size([3, 20]), device=cpu, dtype=torch.int64, is_shared=False)},
                 batch_size=torch.Size([3, 20]),
                 device=cpu,
@@ -1891,7 +1889,7 @@ Objectives
     Traceback (most recent call last):
       File "/__w/rl/rl/docs/source/reference/generated/tutorials/torchrl_demo.py", line 743, in <module>
         loss_td = loss_fn(tensordict)
-      File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1533, in _call_impl
+      File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1501, in _call_impl
         return forward_call(*args, **kwargs)
       File "/__w/rl/rl/torchrl/objectives/ddpg.py", line 98, in forward
         loss_value, td_error, pred_val, target_value = self._loss_value(
@@ -1958,9 +1956,9 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  18.435 seconds)
+   **Total running time of the script:** ( 4 minutes  4.809 seconds)
 
-**Estimated memory usage:**  4746 MB
+**Estimated memory usage:**  3615 MB
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:

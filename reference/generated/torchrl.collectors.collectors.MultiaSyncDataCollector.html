@@ -441,13 +441,13 @@ the actual number of frames may well be greater than this as the closing signals
 workers only once the total number of frames has been collected on the server.</p></li>
 <li><p><strong>create_env_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – A (list of) dictionaries with the arguments used to create an environment</p></li>
 <li><p><strong>max_frames_per_traj</strong> – Maximum steps per trajectory. Note that a trajectory can span over multiple batches
-(unless reset_at_each_iter is set to True, see below). Once a traje tory reaches n_steps_max,
+(unless reset_at_each_iter is set to True, see below). Once a traje tory reaches n_steps,
 the environment is reset. If the environment wraps multiple environments together, the number of steps
 is tracked for each environment independently. Negative values are allowed, in which case this argument
 is ignored.
 default: -1 (i.e. no maximum number of steps)</p></li>
 <li><p><strong>frames_per_batch</strong> (<em>int</em>) – Time-length of a batch.
-reset_at_each_iter and frames_per_batch == n_steps_max are equivalent configurations.
+reset_at_each_iter and frames_per_batch == n_steps are equivalent configurations.
 default: 200</p></li>
 <li><p><strong>init_random_frames</strong> (<em>int</em>) – Number of frames for which the policy is ignored before it is called.
 This feature is mainly intended to be used in offline/model-based settings, where a batch of random
@@ -458,8 +458,9 @@ default=False.</p></li>
 <li><p><strong>postproc</strong> (<em>callable</em><em>, </em><em>optional</em>) – A PostProcessor is an object that will read a batch of data and process it in a
 useful format for training.
 default: None.</p></li>
-<li><p><strong>split_trajs</strong> (<em>bool</em>) – Boolean indicating whether the resulting TensorDict should be split according to the trajectories.
-See utils.split_trajectories for more information.</p></li>
+<li><p><strong>split_trajs</strong> (<em>bool</em><em>, </em><em>optional</em>) – Boolean indicating whether the resulting TensorDict should be split according to the trajectories.
+See utils.split_trajectories for more information.
+Defaults to False.</p></li>
 <li><p><strong>devices</strong> (<em>int</em><em>, </em><em>str</em><em>, </em><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v1.13)"><em>torch.device</em></a><em> or </em><em>sequence</em><em> of </em><em>such</em><em>, </em><em>optional</em>) – The devices on which the policy will be placed.
 If it differs from the input policy device, the update_policy_weights_() method should be queried
 at appropriate times during the training loop to accommodate for the lag between parameter configuration
