@@ -386,6 +386,12 @@ reward and be present in the env reward_spec.</p>
 (e.g. reward1 and reward2) can also be specified. If ´in_keys´ are not present in the provided tensordict,
 this transform hos no effect.</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.envs.transforms.RewardSum.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#RewardSum.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.RewardSum.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the input tensordict, and for the selected keys, applies the transform.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.envs.transforms.RewardSum.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/envs/transforms/transforms.html#RewardSum.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.envs.transforms.RewardSum.reset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets episode rewards.</p>
@@ -446,6 +452,7 @@ this transform hos no effect.</p>
               <ul>
 <li><a class="reference internal" href="#">RewardSum</a><ul>
 <li><a class="reference internal" href="#torchrl.envs.transforms.RewardSum"><code class="docutils literal notranslate"><span class="pre">RewardSum</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.envs.transforms.RewardSum.forward"><code class="docutils literal notranslate"><span class="pre">RewardSum.forward()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.RewardSum.reset"><code class="docutils literal notranslate"><span class="pre">RewardSum.reset()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.envs.transforms.RewardSum.transform_observation_spec"><code class="docutils literal notranslate"><span class="pre">RewardSum.transform_observation_spec()</span></code></a></li>
 </ul>
