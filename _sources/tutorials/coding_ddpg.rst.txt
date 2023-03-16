@@ -961,14 +961,17 @@ wide range of transforms to our collector.
 
 
 
-
-
 .. rst-class:: sphx-glr-script-out
 
- .. code-block:: none
+.. code-block:: pytb
 
+    Traceback (most recent call last):
+      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py", line 677, in <module>
+        collector = MultiaSyncDataCollector(
+      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 1460, in __init__
+        super().__init__(*args, **kwargs)
+    TypeError: __init__() got an unexpected keyword argument 'pin_memory'
 
-    3018685293
 
 
 
@@ -986,12 +989,6 @@ Replay buffer
     replay_buffer = make_replay_buffer(buffer_size, prefetch=3)
 
 
-
-
-
-
-
-
 .. GENERATED FROM PYTHON SOURCE LINES 704-706
 
 Recorder
@@ -1003,12 +1000,6 @@ Recorder
 
 
     recorder = make_recorder(actor_model_explore, transform_state_dict)
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 710-715
@@ -1034,12 +1025,6 @@ with the same learning rate for both.
     scheduler2 = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer_qnet, T_max=total_collection_steps
     )
-
-
-
-
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 728-775
@@ -1202,25 +1187,6 @@ Some notes about the following training loop:
 
     collector.shutdown()
     del collector
-
-
-
-.. rst-class:: sphx-glr-script-out
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_ddpg.py", line 787, in <module>
-        for i, tensordict in enumerate(collector):
-      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 1384, in iterator
-        out = self.postprocs[out.device](out)
-      File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1501, in _call_impl
-        return forward_call(*args, **kwargs)
-      File "/__w/rl/rl/torchrl/data/postprocs/postprocs.py", line 181, in forward
-        done = done | truncated
-    RuntimeError: The size of tensor a (2) must match the size of tensor b (500) at non-singleton dimension 1
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 883-891
@@ -1550,9 +1516,9 @@ use a greater value for ``total_frames`` e.g. 1000000.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  19.338 seconds)
+   **Total running time of the script:** ( 0 minutes  57.192 seconds)
 
-**Estimated memory usage:**  3899 MB
+**Estimated memory usage:**  5395 MB
 
 
 .. _sphx_glr_download_tutorials_coding_ddpg.py:

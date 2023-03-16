@@ -1899,9 +1899,9 @@ Objectives
         return func(*args, **kwargs)
       File "/__w/rl/rl/torchrl/objectives/utils.py", line 335, in next_state_value
         rewards = tensordict.get(("next", "reward")).squeeze(-1)
-      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 3211, in get
+      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 3241, in get
         return self._default_get(key, default)
-      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 1000, in _default_get
+      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 1011, in _default_get
         raise KeyError(
     KeyError: 'key "(\'next\', \'reward\')" not found in TensorDict with keys [\'action\', \'done\', \'next\', \'observation\', \'reward\']'
 
@@ -1956,9 +1956,9 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  9.059 seconds)
+   **Total running time of the script:** ( 4 minutes  26.141 seconds)
 
-**Estimated memory usage:**  3653 MB
+**Estimated memory usage:**  5398 MB
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:
