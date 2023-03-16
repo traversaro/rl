@@ -437,7 +437,7 @@ of this algorithm.</p>
 <span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.get_functional.html#tensordict.nn.get_functional" title="tensordict.nn.get_functional" class="sphx-glr-backref-module-tensordict-nn sphx-glr-backref-type-py-function"><span class="n">get_functional</span></a>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 <span class="kn">from</span> <span class="nn">torchrl.collectors</span> <span class="kn">import</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.collectors.collectors.MultiaSyncDataCollector.html#torchrl.collectors.collectors.MultiaSyncDataCollector" title="torchrl.collectors.collectors.MultiaSyncDataCollector" class="sphx-glr-backref-module-torchrl-collectors-collectors sphx-glr-backref-type-py-class"><span class="n">MultiaSyncDataCollector</span></a>
-<span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.data.replay_buffers.storages.LazyMemmapStorage.html#torchrl.data.replay_buffers.storages.LazyMemmapStorage" title="torchrl.data.replay_buffers.storages.LazyMemmapStorage" class="sphx-glr-backref-module-torchrl-data-replay_buffers-storages sphx-glr-backref-type-py-class"><span class="n">LazyMemmapStorage</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.data.TensorDictReplayBuffer.html#torchrl.data.TensorDictReplayBuffer" title="torchrl.data.TensorDictReplayBuffer" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class"><span class="n">TensorDictReplayBuffer</span></a>
+<span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.data.LazyMemmapStorage.html#torchrl.data.LazyMemmapStorage" title="torchrl.data.LazyMemmapStorage" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class"><span class="n">LazyMemmapStorage</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.data.TensorDictReplayBuffer.html#torchrl.data.TensorDictReplayBuffer" title="torchrl.data.TensorDictReplayBuffer" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class"><span class="n">TensorDictReplayBuffer</span></a>
 <span class="kn">from</span> <span class="nn">torchrl.envs</span> <span class="kn">import</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.EnvCreator.html#torchrl.envs.EnvCreator" title="torchrl.envs.EnvCreator" class="sphx-glr-backref-module-torchrl-envs sphx-glr-backref-type-py-class"><span class="n">EnvCreator</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.ParallelEnv.html#torchrl.envs.ParallelEnv" title="torchrl.envs.ParallelEnv" class="sphx-glr-backref-module-torchrl-envs sphx-glr-backref-type-py-class"><span class="n">ParallelEnv</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.RewardScaling.html#torchrl.envs.transforms.RewardScaling" title="torchrl.envs.transforms.transforms.RewardScaling" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">RewardScaling</span></a><span class="p">,</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.transforms.StepCounter.html#torchrl.envs.transforms.StepCounter" title="torchrl.envs.transforms.transforms.StepCounter" class="sphx-glr-backref-module-torchrl-envs-transforms-transforms sphx-glr-backref-type-py-class"><span class="n">StepCounter</span></a>
 <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.envs.libs.gym.GymEnv.html#torchrl.envs.libs.gym.GymEnv" title="torchrl.envs.libs.gym.GymEnv" class="sphx-glr-backref-module-torchrl-envs-libs-gym sphx-glr-backref-type-py-function"><span class="n">GymEnv</span></a>
 <span class="kn">from</span> <span class="nn">torchrl.envs.transforms</span> <span class="kn">import</span> <span class="p">(</span>
@@ -640,19 +640,19 @@ not all dimensions disappear in the process:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">observation_norm_state_dict</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>OrderedDict([(&#39;standard_normal&#39;, tensor(True)), (&#39;loc&#39;, tensor([[[0.9921]],
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>OrderedDict([(&#39;standard_normal&#39;, tensor(True)), (&#39;loc&#39;, tensor([[[0.9922]],
 
-        [[0.9921]],
+        [[0.9922]],
 
-        [[0.9921]],
+        [[0.9922]],
 
-        [[0.9921]]])), (&#39;scale&#39;, tensor([[[0.0787]],
+        [[0.9921]]])), (&#39;scale&#39;, tensor([[[0.0783]],
 
-        [[0.0787]],
+        [[0.0784]],
 
-        [[0.0788]],
+        [[0.0785]],
 
-        [[0.0788]]]))])
+        [[0.0785]]]))])
 </pre></div>
 </div>
 </section>
@@ -800,7 +800,7 @@ first batch of data is passed to it.</p>
 <p>The only requirement of this storage is that the data passed to it at write
 time must always have the same shape.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pytorch.org/rl/reference/generated/torchrl.data.TensorDictReplayBuffer.html#torchrl.data.TensorDictReplayBuffer" title="torchrl.data.TensorDictReplayBuffer" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">replay_buffer</span></a> <span class="o">=</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.data.TensorDictReplayBuffer.html#torchrl.data.TensorDictReplayBuffer" title="torchrl.data.TensorDictReplayBuffer" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class"><span class="n">TensorDictReplayBuffer</span></a><span class="p">(</span>
-    <span class="n">storage</span><span class="o">=</span><a href="https://pytorch.org/rl/reference/generated/torchrl.data.replay_buffers.storages.LazyMemmapStorage.html#torchrl.data.replay_buffers.storages.LazyMemmapStorage" title="torchrl.data.replay_buffers.storages.LazyMemmapStorage" class="sphx-glr-backref-module-torchrl-data-replay_buffers-storages sphx-glr-backref-type-py-class"><span class="n">LazyMemmapStorage</span></a><span class="p">(</span><span class="n">buffer_size</span><span class="p">),</span>
+    <span class="n">storage</span><span class="o">=</span><a href="https://pytorch.org/rl/reference/generated/torchrl.data.LazyMemmapStorage.html#torchrl.data.LazyMemmapStorage" title="torchrl.data.LazyMemmapStorage" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class"><span class="n">LazyMemmapStorage</span></a><span class="p">(</span><span class="n">buffer_size</span><span class="p">),</span>
     <span class="n">prefetch</span><span class="o">=</span><span class="n">n_optim</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
@@ -1091,7 +1091,7 @@ to the RB, we’ll be creating a replay buffer of size
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">max_size</span> <span class="o">=</span> <span class="n">frames_per_batch</span> <span class="o">//</span> <span class="n">num_workers</span>
 
 <a href="https://pytorch.org/rl/reference/generated/torchrl.data.TensorDictReplayBuffer.html#torchrl.data.TensorDictReplayBuffer" title="torchrl.data.TensorDictReplayBuffer" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">replay_buffer</span></a> <span class="o">=</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.data.TensorDictReplayBuffer.html#torchrl.data.TensorDictReplayBuffer" title="torchrl.data.TensorDictReplayBuffer" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class"><span class="n">TensorDictReplayBuffer</span></a><span class="p">(</span>
-    <span class="n">storage</span><span class="o">=</span><a href="https://pytorch.org/rl/reference/generated/torchrl.data.replay_buffers.storages.LazyMemmapStorage.html#torchrl.data.replay_buffers.storages.LazyMemmapStorage" title="torchrl.data.replay_buffers.storages.LazyMemmapStorage" class="sphx-glr-backref-module-torchrl-data-replay_buffers-storages sphx-glr-backref-type-py-class"><span class="n">LazyMemmapStorage</span></a><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">buffer_size</span> <span class="o">//</span> <span class="n">max_size</span><span class="p">)),</span>
+    <span class="n">storage</span><span class="o">=</span><a href="https://pytorch.org/rl/reference/generated/torchrl.data.LazyMemmapStorage.html#torchrl.data.LazyMemmapStorage" title="torchrl.data.LazyMemmapStorage" class="sphx-glr-backref-module-torchrl-data sphx-glr-backref-type-py-class"><span class="n">LazyMemmapStorage</span></a><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="o">-</span><span class="n">buffer_size</span> <span class="o">//</span> <span class="n">max_size</span><span class="p">)),</span>
     <span class="n">prefetch</span><span class="o">=</span><span class="n">n_optim</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -1364,8 +1364,8 @@ for more information).</p></li>
 (check <code class="docutils literal notranslate"><span class="pre">torchrl.modules.NoisyLinear</span></code>, which is fully compatible with the
 <code class="docutils literal notranslate"><span class="pre">MLP</span></code> class used in our Dueling DQN).</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  10.705 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  3826 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  5.681 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  2516 MB</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-dqn-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/be66e8850a06844c91f6264538ad69e8/coding_dqn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_dqn.py</span></code></a></p>
