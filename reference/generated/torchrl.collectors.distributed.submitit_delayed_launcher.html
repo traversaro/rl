@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>MLFlowLogger &mdash; torchrl main documentation</title>
+  <title>submitit_delayed_launcher &mdash; torchrl main documentation</title>
   
 
   
@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="TensorboardLogger" href="torchrl.record.loggers.TensorboardLogger.html" />
-    <link rel="prev" title="CSVLogger" href="torchrl.record.loggers.CSVLogger.html" />
+    <link rel="next" title="split_trajectories" href="torchrl.collectors.utils.split_trajectories.html" />
+    <link rel="prev" title="DistributedSyncDataCollector" href="torchrl.collectors.distributed.DistributedSyncDataCollector.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -317,15 +317,15 @@
         
           <li><a href="../index.html">API Reference</a> &gt;</li>
         
-          <li><a href="../trainers.html">torchrl.trainers package</a> &gt;</li>
+          <li><a href="../collectors.html">torchrl.collectors package</a> &gt;</li>
         
-      <li>MLFlowLogger</li>
+      <li>submitit_delayed_launcher</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="../../_sources/reference/generated/torchrl.record.loggers.MLFlowLogger.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl.collectors.distributed.submitit_delayed_launcher.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -346,7 +346,7 @@
 
         
           <div class="pytorch-call-to-action-links">
-            <div id="tutorial-type">reference/generated/torchrl.record.loggers.MLFlowLogger</div>
+            <div id="tutorial-type">reference/generated/torchrl.collectors.distributed.submitit_delayed_launcher</div>
 
             <div id="google-colab-link">
               <img class="call-to-action-img" src="../../_static/images/pytorch-colab.svg"/>
@@ -372,20 +372,57 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <section id="mlflowlogger">
-<h1>MLFlowLogger<a class="headerlink" href="#mlflowlogger" title="Permalink to this heading">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="torchrl.record.loggers.MLFlowLogger">
-<span class="sig-prename descclassname"><span class="pre">torchrl.record.loggers.</span></span><span class="sig-name descname"><span class="pre">MLFlowLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exp_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracking_uri</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/torchrl/record/loggers/mlflow.html#MLFlowLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.record.loggers.MLFlowLogger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper for the mlflow logger.</p>
+  <section id="submitit-delayed-launcher">
+<h1>submitit_delayed_launcher<a class="headerlink" href="#submitit-delayed-launcher" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="torchrl.collectors.distributed.submitit_delayed_launcher">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.collectors.distributed.</span></span><span class="sig-name descname"><span class="pre">submitit_delayed_launcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_jobs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framework</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'distributed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gloo'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcpport</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'10003'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">submitit_main_conf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'slurm_cpus_per_task':</span> <span class="pre">32,</span> <span class="pre">'slurm_gpus_per_node':</span> <span class="pre">1,</span> <span class="pre">'slurm_partition':</span> <span class="pre">'train',</span> <span class="pre">'timeout_min':</span> <span class="pre">10}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">submitit_collection_conf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{'slurm_cpus_per_task':</span> <span class="pre">32,</span> <span class="pre">'slurm_gpus_per_node':</span> <span class="pre">0,</span> <span class="pre">'slurm_partition':</span> <span class="pre">'train',</span> <span class="pre">'timeout_min':</span> <span class="pre">10}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/collectors/distributed/utils.html#submitit_delayed_launcher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.collectors.distributed.submitit_delayed_launcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delayed launcher for submitit.</p>
+<p>In some cases, launched jobs cannot spawn other jobs on their own and this
+can only be done at the jump-host level.</p>
+<p>In these cases, the <a class="reference internal" href="#torchrl.collectors.distributed.submitit_delayed_launcher" title="torchrl.collectors.distributed.submitit_delayed_launcher"><code class="xref py py-func docutils literal notranslate"><span class="pre">submitit_delayed_launcher()</span></code></a> can be used to
+pre-launch collector nodes that will wait for the main worker to provide
+the launching instruction.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>exp_name</strong> (<em>str</em>) – The name of the experiment.</p></li>
-<li><p><strong>tracking_uri</strong> (<em>str</em>) – A tracking URI to a datastore that supports MLFlow or a local directory.</p></li>
+<li><p><strong>num_jobs</strong> (<em>int</em>) – the number of collection jobs to be launched.</p></li>
+<li><p><strong>framework</strong> (<em>str</em><em>, </em><em>optional</em>) – the framework to use. Can be either <code class="docutils literal notranslate"><span class="pre">&quot;distributed&quot;</span></code>
+or <code class="docutils literal notranslate"><span class="pre">&quot;rpc&quot;</span></code>. <code class="docutils literal notranslate"><span class="pre">&quot;distributed&quot;</span></code> requires a <a class="reference internal" href="torchrl.collectors.distributed.DistributedDataCollector.html#torchrl.collectors.distributed.DistributedDataCollector" title="torchrl.collectors.distributed.DistributedDataCollector"><code class="xref py py-class docutils literal notranslate"><span class="pre">DistributedDataCollector</span></code></a>
+collector whereas <code class="docutils literal notranslate"><span class="pre">&quot;rpc&quot;</span></code> requires a <a class="reference internal" href="torchrl.collectors.distributed.RPCDataCollector.html#torchrl.collectors.distributed.RPCDataCollector" title="torchrl.collectors.distributed.RPCDataCollector"><code class="xref py py-class docutils literal notranslate"><span class="pre">RPCDataCollector</span></code></a>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;distributed&quot;</span></code>.</p></li>
+<li><p><strong>backend</strong> (<em>str</em><em>, </em><em>optional</em>) – torch.distributed backend in case <code class="docutils literal notranslate"><span class="pre">framework</span></code>
+points to <code class="docutils literal notranslate"><span class="pre">&quot;distributed&quot;</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">'gloo'</span></code>.</p></li>
+<li><p><strong>tcpport</strong> (<em>int</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – the TCP port to use.
+Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">torchrl.collectors.distributed.default_configs.TCP_PORT</span></code></p></li>
+<li><p><strong>submitit_main_conf</strong> (<em>dict</em><em>, </em><em>optional</em>) – the main node configuration to be passed to submitit.
+Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">torchrl.collectors.distributed.default_configs.DEFAULT_SLURM_CONF_MAIN</span></code></p></li>
+<li><p><strong>submitit_collection_conf</strong> (<em>dict</em><em>, </em><em>optional</em>) – the configuration to be passed to submitit.
+Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">torchrl.collectors.distributed.default_configs.DEFAULT_SLURM_CONF</span></code></p></li>
 </ul>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">num_jobs</span><span class="o">=</span><span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@submitit_delayed_launcher</span><span class="p">(</span><span class="n">num_jobs</span><span class="o">=</span><span class="n">num_jobs</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymEnv</span>
+<span class="gp">... </span>    <span class="kn">from</span> <span class="nn">torchrl.collectors.collectors</span> <span class="kn">import</span> <span class="n">RandomPolicy</span>
+<span class="gp">... </span>    <span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">BoundedTensorSpec</span>
+<span class="gp">... </span>    <span class="n">collector</span> <span class="o">=</span> <span class="n">DistributedDataCollector</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="p">[</span><span class="n">EnvCreator</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">GymEnv</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">))]</span> <span class="o">*</span> <span class="n">num_jobs</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="n">policy</span><span class="o">=</span><span class="n">RandomPolicy</span><span class="p">(</span><span class="n">BoundedTensorSpec</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,))),</span>
+<span class="gp">... </span>        <span class="n">launcher</span><span class="o">=</span><span class="s2">&quot;submitit_delayed&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="p">)</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">collector</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">main</span><span class="p">()</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </section>
@@ -398,10 +435,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.record.loggers.TensorboardLogger.html" class="btn btn-neutral float-right" title="TensorboardLogger" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.collectors.utils.split_trajectories.html" class="btn btn-neutral float-right" title="split_trajectories" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl.record.loggers.CSVLogger.html" class="btn btn-neutral" title="CSVLogger" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torchrl.collectors.distributed.DistributedSyncDataCollector.html" class="btn btn-neutral" title="DistributedSyncDataCollector" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -433,8 +470,8 @@
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">MLFlowLogger</a><ul>
-<li><a class="reference internal" href="#torchrl.record.loggers.MLFlowLogger"><code class="docutils literal notranslate"><span class="pre">MLFlowLogger()</span></code></a></li>
+<li><a class="reference internal" href="#">submitit_delayed_launcher</a><ul>
+<li><a class="reference internal" href="#torchrl.collectors.distributed.submitit_delayed_launcher"><code class="docutils literal notranslate"><span class="pre">submitit_delayed_launcher</span></code></a></li>
 </ul>
 </li>
 </ul>

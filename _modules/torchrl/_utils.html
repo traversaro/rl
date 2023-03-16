@@ -368,6 +368,7 @@
 
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">distutils.util</span> <span class="kn">import</span> <span class="n">strtobool</span>
@@ -375,8 +376,10 @@
 <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">import_module</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
 
 <span class="n">VERBOSE</span> <span class="o">=</span> <span class="n">strtobool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;VERBOSE&quot;</span><span class="p">,</span> <span class="s2">&quot;0&quot;</span><span class="p">))</span>
+<span class="n">_os_is_windows</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span>
 
 
 <span class="k">class</span> <span class="nc">timeit</span><span class="p">:</span>
@@ -642,6 +645,33 @@
             <span class="k">return</span> <span class="n">unsupported</span>
 
         <span class="k">return</span> <span class="n">unsupported</span></div>
+
+
+<span class="k">def</span> <span class="nf">accept_remote_rref_invocation</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decorator that allows a method to be invoked remotely.</span>
+
+<span class="sd">    Passes the `rpc.RRef` associated with the remote object construction as first argument in place of the object reference.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">unpack_rref_and_invoke_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># windows does not know torch._C._distributed_rpc.PyRRef</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_os_is_windows</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">_C</span><span class="o">.</span><span class="n">_distributed_rpc</span><span class="o">.</span><span class="n">PyRRef</span><span class="p">):</span>
+            <span class="bp">self</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_value</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">unpack_rref_and_invoke_function</span>
+
+
+<span class="k">def</span> <span class="nf">accept_remote_rref_udf_invocation</span><span class="p">(</span><span class="n">decorated_class</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class decorator that applies `accept_remote_rref_invocation` to all public methods.&quot;&quot;&quot;</span>
+    <span class="c1"># ignores private methods</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">decorated_class</span><span class="p">):</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">decorated_class</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">method</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">decorated_class</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">accept_remote_rref_invocation</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">decorated_class</span>
 </pre></div>
 
              </article>

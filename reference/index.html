@@ -373,12 +373,19 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="collectors.html">torchrl.collectors package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="collectors.html#data-collectors">Data collectors</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="collectors.html#single-node-data-collectors">Single node data collectors</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.MultiSyncDataCollector.html">MultiSyncDataCollector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.MultiaSyncDataCollector.html">MultiaSyncDataCollector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.RandomPolicy.html">RandomPolicy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.SyncDataCollector.html">SyncDataCollector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.aSyncDataCollector.html">aSyncDataCollector</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collectors.html#distributed-data-collectors">Distributed data collectors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.distributed.DistributedDataCollector.html">DistributedDataCollector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.distributed.RPCDataCollector.html">RPCDataCollector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.distributed.DistributedSyncDataCollector.html">DistributedSyncDataCollector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.distributed.submitit_delayed_launcher.html">submitit_delayed_launcher</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="collectors.html#helper-functions">Helper functions</a><ul>
@@ -673,10 +680,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="trainers.html#loggers">Loggers</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.Logger.html">Logger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.CSVLogger.html">CSVLogger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.MLFlowLogger.html">MLFlowLogger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.TensorboardLogger.html">TensorboardLogger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.WandbLogger.html">WandbLogger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.csv.CSVLogger.html">CSVLogger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.mlflow.MLFlowLogger.html">MLFlowLogger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.tensorboard.TensorboardLogger.html">TensorboardLogger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.wandb.WandbLogger.html">WandbLogger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.get_logger.html">get_logger</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.record.loggers.generate_exp_name.html">generate_exp_name</a></li>
 </ul>

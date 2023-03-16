@@ -533,13 +533,13 @@ let's check that normalizing constants have a size of ``[C, 1, 1]`` where
 
             [[0.9921]],
 
-            [[0.9921]]])), ('scale', tensor([[[0.0784]],
+            [[0.9921]]])), ('scale', tensor([[[0.0786]],
 
-            [[0.0785]],
+            [[0.0786]],
 
-            [[0.0785]],
+            [[0.0786]],
 
-            [[0.0785]]]))])
+            [[0.0786]]]))])
 
 
 
@@ -845,9 +845,9 @@ the same value for all sub-collectors.
     Traceback (most recent call last):
       File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py", line 479, in <module>
         data_collector = MultiaSyncDataCollector(
-      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 1460, in __init__
+      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 1553, in __init__
         super().__init__(*args, **kwargs)
-      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 973, in __init__
+      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 1031, in __init__
         raise ValueError(
     ValueError: total_frames (5000) must be divisible by frames_per_batch (32).
 
@@ -1463,9 +1463,9 @@ of DQN. Other possible improvements could include:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  7.756 seconds)
+   **Total running time of the script:** ( 1 minutes  6.148 seconds)
 
-**Estimated memory usage:**  3720 MB
+**Estimated memory usage:**  2479 MB
 
 
 .. _sphx_glr_download_tutorials_coding_dqn.py:

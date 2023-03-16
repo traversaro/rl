@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>CSVLogger &mdash; torchrl main documentation</title>
+  <title>DistributedSyncDataCollector &mdash; torchrl main documentation</title>
   
 
   
@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="MLFlowLogger" href="torchrl.record.loggers.MLFlowLogger.html" />
-    <link rel="prev" title="Logger" href="torchrl.record.loggers.Logger.html" />
+    <link rel="next" title="submitit_delayed_launcher" href="torchrl.collectors.distributed.submitit_delayed_launcher.html" />
+    <link rel="prev" title="RPCDataCollector" href="torchrl.collectors.distributed.RPCDataCollector.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -317,15 +317,15 @@
         
           <li><a href="../index.html">API Reference</a> &gt;</li>
         
-          <li><a href="../trainers.html">torchrl.trainers package</a> &gt;</li>
+          <li><a href="../collectors.html">torchrl.collectors package</a> &gt;</li>
         
-      <li>CSVLogger</li>
+      <li>DistributedSyncDataCollector</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="../../_sources/reference/generated/torchrl.record.loggers.CSVLogger.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl.collectors.distributed.DistributedSyncDataCollector.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -346,7 +346,7 @@
 
         
           <div class="pytorch-call-to-action-links">
-            <div id="tutorial-type">reference/generated/torchrl.record.loggers.CSVLogger</div>
+            <div id="tutorial-type">reference/generated/torchrl.collectors.distributed.DistributedSyncDataCollector</div>
 
             <div id="google-colab-link">
               <img class="call-to-action-img" src="../../_static/images/pytorch-colab.svg"/>
@@ -372,17 +372,116 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <section id="csvlogger">
-<h1>CSVLogger<a class="headerlink" href="#csvlogger" title="Permalink to this heading">¶</a></h1>
-<dl class="py function">
-<dt class="sig sig-object py" id="torchrl.record.loggers.CSVLogger">
-<span class="sig-prename descclassname"><span class="pre">torchrl.record.loggers.</span></span><span class="sig-name descname"><span class="pre">CSVLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exp_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/torchrl/record/loggers/csv.html#CSVLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.record.loggers.CSVLogger" title="Permalink to this definition">¶</a></dt>
-<dd><p>A minimal-dependecy CSV-logger.</p>
+  <section id="distributedsyncdatacollector">
+<h1>DistributedSyncDataCollector<a class="headerlink" href="#distributedsyncdatacollector" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="torchrl.collectors.distributed.DistributedSyncDataCollector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.collectors.distributed.</span></span><span class="sig-name descname"><span class="pre">DistributedSyncDataCollector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_env_fn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frames_per_batch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_frames_per_traj=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_random_frames=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_at_each_iter=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postproc=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_trajs=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exploration_mode='random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reset_when_done=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collector_class=&lt;class</span> <span class="pre">'torchrl.collectors.collectors.SyncDataCollector'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collector_kwargs=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers_per_collector=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slurm_kwargs=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend='gloo'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storing_device='cpu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_weight_update_interval=-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_interval=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">launcher='submitit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tcp_port=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/collectors/distributed/sync.html#DistributedSyncDataCollector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.collectors.distributed.DistributedSyncDataCollector" title="Permalink to this definition">¶</a></dt>
+<dd><p>A distributed synchronous data collector with torch.distributed backend.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>exp_name</strong> (<em>str</em>) – The name of the experiment.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>create_env_fn</strong> (<em>Callable</em><em> or </em><em>List</em><em>[</em><em>Callabled</em><em>]</em>) – list of Callables, each returning an
+instance of <a class="reference internal" href="torchrl.envs.EnvBase.html#torchrl.envs.EnvBase" title="torchrl.envs.EnvBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.envs.EnvBase</span></code></a>.</p></li>
+<li><p><strong>policy</strong> (<em>Callable</em>) – Policy to be executed in the environment.
+Must accept <code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.tensordict.TensorDictBase</span></code> object as input.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code> is provided, the policy used will be a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">RandomPolicy</span></code> instance with the environment
+<code class="docutils literal notranslate"><span class="pre">action_spec</span></code>.</p></li>
+<li><p><strong>frames_per_batch</strong> (<em>int</em>) – A keyword-only argument representing the total
+number of elements in a batch.</p></li>
+<li><p><strong>total_frames</strong> (<em>int</em>) – <p>A keyword-only argument representing the total
+number of frames returned by the collector
+during its lifespan. If the <code class="docutils literal notranslate"><span class="pre">total_frames</span></code> is not divisible by
+<code class="docutils literal notranslate"><span class="pre">frames_per_batch</span></code>, an exception is raised.</p>
+<blockquote>
+<div><p>Endless collectors can be created by passing <code class="docutils literal notranslate"><span class="pre">total_frames=-1</span></code>.</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>max_frames_per_traj</strong> (<em>int</em><em>, </em><em>optional</em>) – Maximum steps per trajectory.
+Note that a trajectory can span over multiple batches (unless
+<code class="docutils literal notranslate"><span class="pre">reset_at_each_iter</span></code> is set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, see below).
+Once a trajectory reaches <code class="docutils literal notranslate"><span class="pre">n_steps</span></code>, the environment is reset.
+If the environment wraps multiple environments together, the number
+of steps is tracked for each environment independently. Negative
+values are allowed, in which case this argument is ignored.
+Defaults to <code class="docutils literal notranslate"><span class="pre">-1</span></code> (i.e. no maximum number of steps).</p></li>
+<li><p><strong>init_random_frames</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of frames for which the
+policy is ignored before it is called. This feature is mainly
+intended to be used in offline/model-based settings, where a
+batch of random trajectories can be used to initialize training.
+Defaults to <code class="docutils literal notranslate"><span class="pre">-1</span></code> (i.e. no random frames).</p></li>
+<li><p><strong>reset_at_each_iter</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether environments should be reset
+at the beginning of a batch collection.
+Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>postproc</strong> (<em>Callable</em><em>, </em><em>optional</em>) – A post-processing transform, such as
+a <code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.envs.Transform</span></code> or a <code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.data.postprocs.MultiStep</span></code>
+instance.
+Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
+<li><p><strong>split_trajs</strong> (<em>bool</em><em>, </em><em>optional</em>) – Boolean indicating whether the resulting
+TensorDict should be split according to the trajectories.
+See <a class="reference internal" href="torchrl.collectors.utils.split_trajectories.html#torchrl.collectors.utils.split_trajectories" title="torchrl.collectors.utils.split_trajectories"><code class="xref py py-func docutils literal notranslate"><span class="pre">torchrl.collectors.utils.split_trajectories()</span></code></a> for more
+information.
+Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>exploration_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – interaction mode to be used when
+collecting data. Must be one of <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mode&quot;</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&quot;mean&quot;</span></code>.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code></p></li>
+<li><p><strong>reset_when_done</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code> (default), an environment
+that return a <code class="docutils literal notranslate"><span class="pre">True</span></code> value in its <code class="docutils literal notranslate"><span class="pre">&quot;done&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;truncated&quot;</span></code>
+entry will be reset at the corresponding indices.</p></li>
+<li><p><strong>collector_class</strong> (<em>type</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – a collector class for the remote node. Can be
+<code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.collectors.SyncDataCollector</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.collectors.MultiSyncDataCollector</span></code>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.collectors.MultiaSyncDataCollector</span></code>
+or a derived class of these. The strings “single”, “sync” and
+“async” correspond to respective class.
+Defaults to <code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.collectors.SyncDataCollector</span></code>.</p></li>
+<li><p><strong>collector_kwargs</strong> (<em>dict</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – a dictionary of parameters to be passed to the
+remote data-collector. If a list is provided, each element will
+correspond to an individual set of keyword arguments for the
+dedicated collector.</p></li>
+<li><p><strong>num_workers_per_collector</strong> (<em>int</em><em>, </em><em>optional</em>) – the number of copies of the
+env constructor that is to be used on the remote nodes.
+Defaults to 1 (a single env per collector).
+On a single worker node all the sub-workers will be
+executing the same environment. If different environments need to
+be executed, they should be dispatched across worker nodes, not
+subnodes.</p></li>
+<li><p><strong>slurm_kwargs</strong> (<em>dict</em>) – a dictionary of parameters to be passed to the
+submitit executor.</p></li>
+<li><p><strong>backend</strong> (<em>str</em><em>, </em><em>optional</em>) – must a string “&lt;distributed_backed&gt;” where
+&lt;distributed_backed&gt; is one of <code class="docutils literal notranslate"><span class="pre">&quot;gloo&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mpi&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;nccl&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;ucc&quot;</span></code>. See
+the torch.distributed documentation for more information.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;gloo&quot;</span></code>.</p></li>
+<li><p><strong>storing_device</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.0)"><em>torch.device</em></a><em> or </em><em>compatible</em><em>, </em><em>optional</em>) – the device where the
+data will be delivered. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;cpu&quot;</span></code>.</p></li>
+<li><p><strong>update_interval</strong> (<em>int</em><em>, </em><em>optional</em>) – the frequency at which the policy is
+updated. Defaults to 1.</p></li>
+<li><p><strong>launcher</strong> (<em>str</em><em>, </em><em>optional</em>) – how jobs should be launched.
+Can be one of “submitit” or “mp” for multiprocessing. The former
+can launch jobs across multiple nodes, whilst the latter will only
+launch jobs on a single machine. “submitit” requires the homonymous
+library to be installed.
+To find more about submitit, visit
+<a class="reference external" href="https://github.com/facebookincubator/submitit">https://github.com/facebookincubator/submitit</a>
+Defaults to “submitit”.</p></li>
+<li><p><strong>tcp_port</strong> (<em>int</em><em>, </em><em>optional</em>) – the TCP port to be used. Defaults to 10003.</p></li>
+</ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.collectors.distributed.DistributedSyncDataCollector.update_policy_weights_">
+<span class="sig-name descname"><span class="pre">update_policy_weights_</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">worker_rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/torchrl/collectors/distributed/sync.html#DistributedSyncDataCollector.update_policy_weights_"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.collectors.distributed.DistributedSyncDataCollector.update_policy_weights_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the policy weights if the policy of the data collector and the trained policy live on different devices.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>policy_weights</strong> (<em>TensorDictBase</em><em>, </em><em>optional</em>) – if provided, a TensorDict containing
+the weights of the policy to be used for the udpdate.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -395,10 +494,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.record.loggers.MLFlowLogger.html" class="btn btn-neutral float-right" title="MLFlowLogger" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.collectors.distributed.submitit_delayed_launcher.html" class="btn btn-neutral float-right" title="submitit_delayed_launcher" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl.record.loggers.Logger.html" class="btn btn-neutral" title="Logger" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torchrl.collectors.distributed.RPCDataCollector.html" class="btn btn-neutral" title="RPCDataCollector" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -430,8 +529,11 @@
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">CSVLogger</a><ul>
-<li><a class="reference internal" href="#torchrl.record.loggers.CSVLogger"><code class="docutils literal notranslate"><span class="pre">CSVLogger()</span></code></a></li>
+<li><a class="reference internal" href="#">DistributedSyncDataCollector</a><ul>
+<li><a class="reference internal" href="#torchrl.collectors.distributed.DistributedSyncDataCollector"><code class="docutils literal notranslate"><span class="pre">DistributedSyncDataCollector</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.collectors.distributed.DistributedSyncDataCollector.update_policy_weights_"><code class="docutils literal notranslate"><span class="pre">DistributedSyncDataCollector.update_policy_weights_()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
