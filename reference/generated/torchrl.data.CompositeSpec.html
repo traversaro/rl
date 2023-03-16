@@ -516,6 +516,27 @@ from it if the current dimension is a singleton.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.CompositeSpec.items">
+<span class="sig-name descname"><span class="pre">items</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_nested</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaves_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ItemsView</span></span></span><a class="reference internal" href="../../_modules/torchrl/data/tensor_specs.html#CompositeSpec.items"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.CompositeSpec.items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Items of the CompositeSpec.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_nested</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">False</span></code>, the returned keys will not be nested. They will
+represent only the immediate children of the root, and not the whole nested sequence, i.e. a
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">CompositeSpec(next=CompositeSpec(obs=None))</span></code> will lead to the keys
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">[&quot;next&quot;].</span> <span class="pre">Default</span> <span class="pre">is</span> <span class="pre">``False`</span></code>, i.e. nested keys will not
+be returned.</p></li>
+<li><p><strong>leaves_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>, the values returned
+will contain every level of nesting, i.e. a <code class="xref py py-obj docutils literal notranslate"><span class="pre">CompositeSpec(next=CompositeSpec(obs=None))</span></code>
+will lead to the keys <code class="xref py py-obj docutils literal notranslate"><span class="pre">[&quot;next&quot;,</span> <span class="pre">(&quot;next&quot;,</span> <span class="pre">&quot;obs&quot;)]</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.data.CompositeSpec.keys">
 <span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_nested</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaves_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">KeysView</span></span></span><a class="reference internal" href="../../_modules/torchrl/data/tensor_specs.html#CompositeSpec.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.CompositeSpec.keys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Keys of the CompositeSpec.</p>
@@ -600,6 +621,27 @@ indicated key.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.CompositeSpec.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">include_nested</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leaves_only</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ValuesView</span></span></span><a class="reference internal" href="../../_modules/torchrl/data/tensor_specs.html#CompositeSpec.values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.CompositeSpec.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Values of the CompositeSpec.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>include_nested</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">False</span></code>, the returned keys will not be nested. They will
+represent only the immediate children of the root, and not the whole nested sequence, i.e. a
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">CompositeSpec(next=CompositeSpec(obs=None))</span></code> will lead to the keys
+<code class="xref py py-obj docutils literal notranslate"><span class="pre">[&quot;next&quot;].</span> <span class="pre">Default</span> <span class="pre">is</span> <span class="pre">``False`</span></code>, i.e. nested keys will not
+be returned.</p></li>
+<li><p><strong>leaves_only</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>, the values returned
+will contain every level of nesting, i.e. a <code class="xref py py-obj docutils literal notranslate"><span class="pre">CompositeSpec(next=CompositeSpec(obs=None))</span></code>
+will lead to the keys <code class="xref py py-obj docutils literal notranslate"><span class="pre">[&quot;next&quot;,</span> <span class="pre">(&quot;next&quot;,</span> <span class="pre">&quot;obs&quot;)]</span></code>.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.data.CompositeSpec.zero">
 <span class="sig-name descname"><span class="pre">zero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/data/tensor_specs.html#CompositeSpec.zero"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.CompositeSpec.zero" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a zero-filled tensor in the box.</p>
@@ -667,11 +709,13 @@ indicated key.</p></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.expand"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.expand()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.index"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.index()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.is_in"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.is_in()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.data.CompositeSpec.items"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.items()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.keys"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.keys()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.project"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.project()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.rand"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.rand()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.to_numpy"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.to_numpy()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.type_check"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.type_check()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.data.CompositeSpec.values"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.values()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.CompositeSpec.zero"><code class="docutils literal notranslate"><span class="pre">CompositeSpec.zero()</span></code></a></li>
 </ul>
 </li>

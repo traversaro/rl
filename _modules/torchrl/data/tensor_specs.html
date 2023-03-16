@@ -2300,11 +2300,61 @@
             <span class="n">leaves_only</span><span class="o">=</span><span class="n">leaves_only</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ItemsView</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+<div class="viewcode-block" id="CompositeSpec.items"><a class="viewcode-back" href="../../../reference/generated/torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec.items">[docs]</a>    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">include_nested</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">leaves_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ItemsView</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Items of the CompositeSpec.</span>
 
-    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValuesView</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+<span class="sd">        Args:</span>
+<span class="sd">            include_nested (bool, optional): if ``False``, the returned keys will not be nested. They will</span>
+<span class="sd">                represent only the immediate children of the root, and not the whole nested sequence, i.e. a</span>
+<span class="sd">                :obj:`CompositeSpec(next=CompositeSpec(obs=None))` will lead to the keys</span>
+<span class="sd">                :obj:`[&quot;next&quot;]. Default is ``False``, i.e. nested keys will not</span>
+<span class="sd">                be returned.</span>
+<span class="sd">            leaves_only (bool, optional): if :obj:`False`, the values returned</span>
+<span class="sd">                will contain every level of nesting, i.e. a :obj:`CompositeSpec(next=CompositeSpec(obs=None))`</span>
+<span class="sd">                will lead to the keys :obj:`[&quot;next&quot;, (&quot;next&quot;, &quot;obs&quot;)]`.</span>
+<span class="sd">                Default is ``False``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">include_nested</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">leaves_only</span><span class="p">:</span>
+            <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield from</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span>
+                    <span class="n">include_nested</span><span class="o">=</span><span class="n">include_nested</span><span class="p">,</span> <span class="n">leaves_only</span><span class="o">=</span><span class="n">leaves_only</span>
+                <span class="p">)</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="CompositeSpec.values"><a class="viewcode-back" href="../../../reference/generated/torchrl.data.CompositeSpec.html#torchrl.data.CompositeSpec.values">[docs]</a>    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">include_nested</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">leaves_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValuesView</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Values of the CompositeSpec.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            include_nested (bool, optional): if ``False``, the returned keys will not be nested. They will</span>
+<span class="sd">                represent only the immediate children of the root, and not the whole nested sequence, i.e. a</span>
+<span class="sd">                :obj:`CompositeSpec(next=CompositeSpec(obs=None))` will lead to the keys</span>
+<span class="sd">                :obj:`[&quot;next&quot;]. Default is ``False``, i.e. nested keys will not</span>
+<span class="sd">                be returned.</span>
+<span class="sd">            leaves_only (bool, optional): if :obj:`False`, the values returned</span>
+<span class="sd">                will contain every level of nesting, i.e. a :obj:`CompositeSpec(next=CompositeSpec(obs=None))`</span>
+<span class="sd">                will lead to the keys :obj:`[&quot;next&quot;, (&quot;next&quot;, &quot;obs&quot;)]`.</span>
+<span class="sd">                Default is ``False``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">include_nested</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">leaves_only</span><span class="p">:</span>
+            <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_specs</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">yield from</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span>
+                    <span class="n">include_nested</span><span class="o">=</span><span class="n">include_nested</span><span class="p">,</span> <span class="n">leaves_only</span><span class="o">=</span><span class="n">leaves_only</span>
+                <span class="p">)</span>
+            <span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>

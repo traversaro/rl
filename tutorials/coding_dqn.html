@@ -646,13 +646,13 @@ not all dimensions disappear in the process:</p>
 
         [[0.9921]],
 
-        [[0.9921]]])), (&#39;scale&#39;, tensor([[[0.0786]],
+        [[0.9921]]])), (&#39;scale&#39;, tensor([[[0.0787]],
 
-        [[0.0786]],
+        [[0.0787]],
 
-        [[0.0786]],
+        [[0.0788]],
 
-        [[0.0786]]]))])
+        [[0.0788]]]))])
 </pre></div>
 </div>
 </section>
@@ -794,7 +794,7 @@ They constitute the dataset we will be sampling from during training.</p>
 <p>Here, we will use a regular sampling strategy, although a prioritized RB
 could improve the performance significantly.</p>
 <p>We place the storage on disk using
-<a class="reference internal" href="../reference/generated/torchrl.data.replay_buffers.storages.LazyMemmapStorage.html#torchrl.data.replay_buffers.storages.LazyMemmapStorage" title="torchrl.data.replay_buffers.storages.LazyMemmapStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.data.replay_buffers.storages.LazyMemmapStorage</span></code></a> class. This
+<a class="reference internal" href="../reference/generated/torchrl.data.LazyMemmapStorage.html#torchrl.data.LazyMemmapStorage" title="torchrl.data.replay_buffers.storages.LazyMemmapStorage"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.data.replay_buffers.storages.LazyMemmapStorage</span></code></a> class. This
 storage is created in a lazy manner: it will only be instantiated once the
 first batch of data is passed to it.</p>
 <p>The only requirement of this storage is that the data passed to it at write
@@ -1364,8 +1364,8 @@ for more information).</p></li>
 (check <code class="docutils literal notranslate"><span class="pre">torchrl.modules.NoisyLinear</span></code>, which is fully compatible with the
 <code class="docutils literal notranslate"><span class="pre">MLP</span></code> class used in our Dueling DQN).</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  6.148 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  2479 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  10.705 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  3826 MB</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-dqn-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/be66e8850a06844c91f6264538ad69e8/coding_dqn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_dqn.py</span></code></a></p>

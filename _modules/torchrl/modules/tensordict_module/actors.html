@@ -375,7 +375,11 @@
 <span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModuleWrapper</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 
-<span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">CompositeSpec</span><span class="p">,</span> <span class="n">TensorSpec</span><span class="p">,</span> <span class="n">UnboundedContinuousTensorSpec</span>
+<span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CompositeSpec</span><span class="p">,</span>
+    <span class="n">TensorSpec</span><span class="p">,</span>
+    <span class="n">UnboundedContinuousTensorSpec</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.models.models</span> <span class="kn">import</span> <span class="n">DistributionalDQNnet</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.common</span> <span class="kn">import</span> <span class="n">SafeModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.probabilistic</span> <span class="kn">import</span> <span class="p">(</span>
