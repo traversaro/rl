@@ -427,6 +427,12 @@ from it if the current dimension is a singleton.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.UnboundedDiscreteTensorSpec.implements_for_spec">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">implements_for_spec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">torch_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="headerlink" href="#torchrl.data.UnboundedDiscreteTensorSpec.implements_for_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a torch function override for TensorSpec.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="torchrl.data.UnboundedDiscreteTensorSpec.index">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">slice</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensor_to_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></span><a class="headerlink" href="#torchrl.data.UnboundedDiscreteTensorSpec.index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Indexes the input tensor.</p>
@@ -481,6 +487,18 @@ from it if the current dimension is a singleton.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>a random tensor sampled in the TensorSpec box.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.data.UnboundedDiscreteTensorSpec.squeeze">
+<span class="sig-name descname"><span class="pre">squeeze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#torchrl.data.UnboundedDiscreteTensorSpec.squeeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new Spec with all the dimensions of size <code class="docutils literal notranslate"><span class="pre">1</span></code> removed.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">dim</span></code> is given, a squeeze operation is done only in that dimension.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dim</strong> (<em>int</em><em> or </em><em>None</em>) – the dimension to apply the squeeze operation to</p>
 </dd>
 </dl>
 </dd></dl>
@@ -585,10 +603,12 @@ indicated key.</p></li>
 <li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.assert_is_in"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.assert_is_in()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.encode"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.encode()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.expand"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.expand()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.implements_for_spec"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.implements_for_spec()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.index"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.index()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.is_in"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.is_in()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.project"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.project()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.rand"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.rand()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.squeeze"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.squeeze()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.to_numpy"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.to_numpy()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.type_check"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.type_check()</span></code></a></li>
 <li><a class="reference internal" href="#torchrl.data.UnboundedDiscreteTensorSpec.zero"><code class="docutils literal notranslate"><span class="pre">UnboundedDiscreteTensorSpec.zero()</span></code></a></li>
