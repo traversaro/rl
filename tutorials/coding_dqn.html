@@ -640,19 +640,19 @@ not all dimensions disappear in the process:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">observation_norm_state_dict</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>OrderedDict([(&#39;standard_normal&#39;, tensor(True)), (&#39;loc&#39;, tensor([[[0.9920]],
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>OrderedDict([(&#39;standard_normal&#39;, tensor(True)), (&#39;loc&#39;, tensor([[[0.9921]],
 
-        [[0.9920]],
+        [[0.9921]],
 
-        [[0.9920]],
+        [[0.9921]],
 
-        [[0.9920]]])), (&#39;scale&#39;, tensor([[[0.0790]],
+        [[0.9921]]])), (&#39;scale&#39;, tensor([[[0.0787]],
 
-        [[0.0790]],
+        [[0.0787]],
 
-        [[0.0790]],
+        [[0.0787]],
 
-        [[0.0790]]]))])
+        [[0.0787]]]))])
 </pre></div>
 </div>
 </section>
@@ -857,9 +857,9 @@ the same value for all sub-collectors.</p>
 <div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
   File <span class="nb">&quot;/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py&quot;</span>, line <span class="m">479</span>, in <span class="n">&lt;module&gt;</span>
 <span class="w">    </span><span class="n">data_collector</span> <span class="o">=</span> <a href="https://pytorch.org/rl/reference/generated/torchrl.collectors.collectors.MultiaSyncDataCollector.html#torchrl.collectors.collectors.MultiaSyncDataCollector" title="torchrl.collectors.collectors.MultiaSyncDataCollector" class="sphx-glr-backref-module-torchrl-collectors-collectors sphx-glr-backref-type-py-class"><span class="n">MultiaSyncDataCollector</span></a><span class="p">(</span>
-  File <span class="nb">&quot;/__w/rl/rl/torchrl/collectors/collectors.py&quot;</span>, line <span class="m">1553</span>, in <span class="n">__init__</span>
+  File <span class="nb">&quot;/__w/rl/rl/torchrl/collectors/collectors.py&quot;</span>, line <span class="m">1629</span>, in <span class="n">__init__</span>
 <span class="w">    </span><span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-  File <span class="nb">&quot;/__w/rl/rl/torchrl/collectors/collectors.py&quot;</span>, line <span class="m">1031</span>, in <span class="n">__init__</span>
+  File <span class="nb">&quot;/__w/rl/rl/torchrl/collectors/collectors.py&quot;</span>, line <span class="m">1084</span>, in <span class="n">__init__</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
 <span class="gr">ValueError</span>: <span class="n">total_frames (5000) must be divisible by frames_per_batch (32).</span>
 </pre></div>
@@ -1364,8 +1364,8 @@ for more information).</p></li>
 (check <code class="docutils literal notranslate"><span class="pre">torchrl.modules.NoisyLinear</span></code>, which is fully compatible with the
 <code class="docutils literal notranslate"><span class="pre">MLP</span></code> class used in our Dueling DQN).</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  12.753 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  5372 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  11.084 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  5349 MB</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-dqn-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/be66e8850a06844c91f6264538ad69e8/coding_dqn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_dqn.py</span></code></a></p>
