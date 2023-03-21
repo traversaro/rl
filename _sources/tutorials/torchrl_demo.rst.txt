@@ -576,7 +576,7 @@ Here are examples of using a replaybuffer with tensordicts.
  .. code-block:: none
 
 
-    tensor([0, 0], dtype=torch.int32)
+    tensor([1, 1], dtype=torch.int32)
 
 
 
@@ -606,8 +606,8 @@ Here are examples of using a replaybuffer with tensordicts.
 
  .. code-block:: none
 
-    0 0.28791671991348267
-    1 1.0
+    0 1.0
+    1 0.28791671991348267
     2 0.0
 
 
@@ -1899,7 +1899,7 @@ Objectives
         return func(*args, **kwargs)
       File "/__w/rl/rl/torchrl/objectives/utils.py", line 335, in next_state_value
         rewards = tensordict.get(("next", "reward")).squeeze(-1)
-      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 3315, in get
+      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 3309, in get
         return self._default_get(key, default)
       File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 1011, in _default_get
         raise KeyError(
@@ -1956,9 +1956,9 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 3 minutes  52.206 seconds)
+   **Total running time of the script:** ( 4 minutes  27.985 seconds)
 
-**Estimated memory usage:**  2393 MB
+**Estimated memory usage:**  5409 MB
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:

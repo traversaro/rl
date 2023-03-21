@@ -508,6 +508,14 @@ issues when running <code class="docutils literal notranslate"><span class="pre"
 </div>
 <p><em>Solution</em>: This should disappear once <code class="docutils literal notranslate"><span class="pre">mesalib</span></code> is installed: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-y</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">mesalib</span></code></p>
 </li>
+<li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ImportError: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29&#39; not found (required by /path/to/conda/envs/compile/bin/../lib/libOSMesa.so.8)
+</pre></div>
+</div>
+<p><em>Solution</em>: Install libgcc, e.g.: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">libgcc</span> <span class="pre">-y</span></code>. Then make sure that it is being loaded during execution:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>export LD_PRELOAD=$LD_PRELOAD:/path/to/conda/envs/compile/lib/libstdc++.so.6
+</pre></div>
+</div>
+</li>
 <li><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">FileNotFoundError</span><span class="p">:</span> <span class="p">[</span><span class="n">Errno</span> <span class="mi">2</span><span class="p">]</span> <span class="n">No</span> <span class="n">such</span> <span class="n">file</span> <span class="ow">or</span> <span class="n">directory</span><span class="p">:</span> <span class="s1">&#39;patchelf&#39;</span>
 </pre></div>
 </div>
