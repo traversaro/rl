@@ -415,7 +415,7 @@
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt;  env = VmasWrapper(</span>
 <span class="sd">        ...      vmas.make_env(</span>
-<span class="sd">        ...          scenario_name=&quot;flocking&quot;,</span>
+<span class="sd">        ...          scenario=&quot;flocking&quot;,</span>
 <span class="sd">        ...          num_envs=32,</span>
 <span class="sd">        ...          continuous_actions=True,</span>
 <span class="sd">        ...          max_steps=200,</span>
@@ -577,19 +577,17 @@
             <span class="n">envs_to_reset</span> <span class="o">=</span> <span class="n">_reset</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">env_index</span><span class="p">,</span> <span class="n">to_reset</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">envs_to_reset</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">to_reset</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_env</span><span class="o">.</span><span class="n">reset_at</span><span class="p">(</span><span class="n">env_index</span><span class="p">)</span>
-            <span class="n">done</span> <span class="o">=</span> <span class="n">_selective_unsqueeze</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_env</span><span class="o">.</span><span class="n">done</span><span class="p">(),</span> <span class="n">batch_size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_envs</span><span class="p">,))</span>
-            <span class="n">obs</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">infos</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="n">dones</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span>
-                <span class="n">obs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario</span><span class="o">.</span><span class="n">observation</span><span class="p">(</span><span class="n">agent</span><span class="p">))</span>
-                <span class="n">infos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">agent</span><span class="p">))</span>
-                <span class="n">dones</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">done</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
-
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_env</span><span class="o">.</span><span class="n">reset_at</span><span class="p">(</span><span class="n">env_index</span><span class="p">,</span> <span class="n">return_observations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">obs</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">return_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">dones</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">return_observations</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">obs</span><span class="p">,</span> <span class="n">dones</span><span class="p">,</span> <span class="n">infos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_env</span><span class="o">.</span><span class="n">get_from_scenario</span><span class="p">(</span>
+            <span class="n">get_observations</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">get_infos</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">get_rewards</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">get_dones</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">dones</span> <span class="o">=</span> <span class="n">_selective_unsqueeze</span><span class="p">(</span><span class="n">dones</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_envs</span><span class="p">,))</span>
 
         <span class="n">agent_tds</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_agents</span><span class="p">):</span>
@@ -606,8 +604,8 @@
 
             <span class="k">if</span> <span class="n">agent_info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">agent_td</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="n">agent_info</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">dones</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">agent_td</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span> <span class="n">dones</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="n">agent_td</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">,</span> <span class="n">dones</span><span class="p">)</span>
             <span class="n">agent_tds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">agent_td</span><span class="p">)</span>
 
         <span class="n">tensordict_out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">agent_tds</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -792,7 +790,7 @@
 
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_build_env</span><span class="p">(</span>
             <span class="n">env</span><span class="o">=</span><span class="n">vmas</span><span class="o">.</span><span class="n">make_env</span><span class="p">(</span>
-                <span class="n">scenario_name</span><span class="o">=</span><span class="n">scenario_name</span><span class="p">,</span>
+                <span class="n">scenario</span><span class="o">=</span><span class="n">scenario_name</span><span class="p">,</span>
                 <span class="n">num_envs</span><span class="o">=</span><span class="n">num_envs</span><span class="p">,</span>
                 <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                 <span class="n">continuous_actions</span><span class="o">=</span><span class="n">continuous_actions</span><span class="p">,</span>

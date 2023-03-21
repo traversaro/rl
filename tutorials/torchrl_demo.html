@@ -641,7 +641,7 @@ TensorDict(
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tensordict_sample</span></a><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([1, 1], dtype=torch.int32)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>tensor([0, 0], dtype=torch.int32)
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="tensordict.TensorDict" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">tensordict_sample</span></a><span class="p">[</span><span class="s2">&quot;td_error&quot;</span><span class="p">]</span> <span class="o">=</span> <a href="https://pytorch.org/docs/stable/generated/torch.rand.html#torch.rand" title="torch.rand" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-function"><span class="n">torch</span><span class="o">.</span><span class="n">rand</span></a><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -658,8 +658,8 @@ TensorDict(
     <span class="kn">import</span> <span class="nn">gym</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0 1.0
-1 0.28791671991348267
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0 0.28791671991348267
+1 1.0
 2 0.0
 </pre></div>
 </div>
@@ -1421,7 +1421,7 @@ LazyStackedTensorDict(
 <span class="w">    </span><span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
   File <span class="nb">&quot;/__w/rl/rl/torchrl/objectives/utils.py&quot;</span>, line <span class="m">335</span>, in <span class="n">next_state_value</span>
 <span class="w">    </span><span class="n">rewards</span> <span class="o">=</span> <a href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict.get" title="tensordict.TensorDict.get" class="sphx-glr-backref-module-tensordict sphx-glr-backref-type-py-method"><span class="n">tensordict</span><span class="o">.</span><span class="n">get</span></a><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-  File <span class="nb">&quot;/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">3241</span>, in <span class="n">get</span>
+  File <span class="nb">&quot;/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">3315</span>, in <span class="n">get</span>
 <span class="w">    </span><span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
   File <span class="nb">&quot;/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py&quot;</span>, line <span class="m">1011</span>, in <span class="n">_default_get</span>
 <span class="w">    </span><span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
@@ -1457,8 +1457,8 @@ Since the library is nascent, it is a great time for you to shape it the way you
 <section id="installing-the-library">
 <h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Permalink to this heading">¶</a></h2>
 <p>The library is on PyPI: <em>pip install torchrl</em></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  15.288 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  5352 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 3 minutes  52.206 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  2393 MB</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-torchrl-demo-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/566627e1cd97def8cf2a3b4720332591/torchrl_demo.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">torchrl_demo.py</span></code></a></p>
