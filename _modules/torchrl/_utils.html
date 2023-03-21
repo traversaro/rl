@@ -535,7 +535,8 @@
                 <span class="n">_has_ts</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_ts</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;torchsnapshot not found, but the backend points to this library. Consider installing torchsnapshot or choose another backend (available backends: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">backends</span><span class="si">}</span><span class="s2">)&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;torchsnapshot not found, but the backend points to this library. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Consider installing torchsnapshot or choose another backend (available backends: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">backends</span><span class="si">}</span><span class="s2">)&quot;</span>
                 <span class="p">)</span>
         <span class="k">return</span> <span class="n">backend</span>
 
