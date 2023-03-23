@@ -576,7 +576,7 @@ Here are examples of using a replaybuffer with tensordicts.
  .. code-block:: none
 
 
-    tensor([0, 0], dtype=torch.int32)
+    tensor([1, 0], dtype=torch.int32)
 
 
 
@@ -607,7 +607,7 @@ Here are examples of using a replaybuffer with tensordicts.
  .. code-block:: none
 
     0 0.28791671991348267
-    1 1.0
+    1 0.06984968483448029
     2 0.0
 
 
@@ -1899,9 +1899,9 @@ Objectives
         return func(*args, **kwargs)
       File "/__w/rl/rl/torchrl/objectives/utils.py", line 335, in next_state_value
         rewards = tensordict.get(("next", "reward")).squeeze(-1)
-      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 3308, in get
+      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 3362, in get
         return self._default_get(key, default)
-      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 1010, in _default_get
+      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 1011, in _default_get
         raise KeyError(
     KeyError: 'key "(\'next\', \'reward\')" not found in TensorDict with keys [\'action\', \'done\', \'next\', \'observation\', \'reward\']'
 
@@ -1956,9 +1956,9 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  7.086 seconds)
+   **Total running time of the script:** ( 4 minutes  19.248 seconds)
 
-**Estimated memory usage:**  4057 MB
+**Estimated memory usage:**  5351 MB
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:
