@@ -392,7 +392,7 @@
     <span class="n">_has_ts</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="Storage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.Storage.html#torchrl.data.Storage">[docs]</a><span class="k">class</span> <span class="nc">Storage</span><span class="p">:</span>
+<div class="viewcode-block" id="Storage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.Storage.html#torchrl.data.replay_buffers.Storage">[docs]</a><span class="k">class</span> <span class="nc">Storage</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A Storage is the container of a replay buffer.</span>
 
 <span class="sd">    Every storage must have a set, get and __len__ methods implemented.</span>
@@ -417,7 +417,7 @@
     <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="Storage.attach"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.Storage.html#torchrl.data.Storage.attach">[docs]</a>    <span class="k">def</span> <span class="nf">attach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Storage.attach"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.Storage.html#torchrl.data.replay_buffers.Storage.attach">[docs]</a>    <span class="k">def</span> <span class="nf">attach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;This function attaches a sampler to this storage.</span>
 
 <span class="sd">        Buffers that read from this storage must be included as an attached</span>
@@ -454,7 +454,7 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
-<div class="viewcode-block" id="ListStorage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.ListStorage.html#torchrl.data.ListStorage">[docs]</a><span class="k">class</span> <span class="nc">ListStorage</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
+<div class="viewcode-block" id="ListStorage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.ListStorage.html#torchrl.data.replay_buffers.ListStorage">[docs]</a><span class="k">class</span> <span class="nc">ListStorage</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A storage stored in a list.</span>
 
 <span class="sd">    Args:</span>
@@ -523,7 +523,7 @@
                 <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="LazyTensorStorage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.LazyTensorStorage.html#torchrl.data.LazyTensorStorage">[docs]</a><span class="k">class</span> <span class="nc">LazyTensorStorage</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
+<div class="viewcode-block" id="LazyTensorStorage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.LazyTensorStorage.html#torchrl.data.replay_buffers.LazyTensorStorage">[docs]</a><span class="k">class</span> <span class="nc">LazyTensorStorage</span><span class="p">(</span><span class="n">Storage</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A pre-allocated tensor storage for tensors and tensordicts.</span>
 
 <span class="sd">    Args:</span>
@@ -645,7 +645,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_len</span></div>
 
 
-<div class="viewcode-block" id="LazyMemmapStorage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.LazyMemmapStorage.html#torchrl.data.LazyMemmapStorage">[docs]</a><span class="k">class</span> <span class="nc">LazyMemmapStorage</span><span class="p">(</span><span class="n">LazyTensorStorage</span><span class="p">):</span>
+<div class="viewcode-block" id="LazyMemmapStorage"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.LazyMemmapStorage.html#torchrl.data.replay_buffers.LazyMemmapStorage">[docs]</a><span class="k">class</span> <span class="nc">LazyMemmapStorage</span><span class="p">(</span><span class="n">LazyTensorStorage</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A memory-mapped storage for tensors and tensordicts.</span>
 
 <span class="sd">    Args:</span>

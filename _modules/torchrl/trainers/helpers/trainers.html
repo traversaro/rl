@@ -379,7 +379,7 @@
 <span class="kn">from</span> <span class="nn">torch.optim.lr_scheduler</span> <span class="kn">import</span> <span class="n">CosineAnnealingLR</span>
 
 <span class="kn">from</span> <span class="nn">torchrl._utils</span> <span class="kn">import</span> <span class="n">VERBOSE</span>
-<span class="kn">from</span> <span class="nn">torchrl.collectors.collectors</span> <span class="kn">import</span> <span class="n">_DataCollector</span>
+<span class="kn">from</span> <span class="nn">torchrl.collectors.collectors</span> <span class="kn">import</span> <span class="n">DataCollectorBase</span>
 <span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">ReplayBuffer</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.common</span> <span class="kn">import</span> <span class="n">EnvBase</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">reset_noise</span><span class="p">,</span> <span class="n">SafeModule</span>
@@ -443,7 +443,7 @@
 
 
 <div class="viewcode-block" id="make_trainer"><a class="viewcode-back" href="../../../../reference/generated/torchrl.trainers.helpers.make_trainer.html#torchrl.trainers.helpers.make_trainer">[docs]</a><span class="k">def</span> <span class="nf">make_trainer</span><span class="p">(</span>
-    <span class="n">collector</span><span class="p">:</span> <span class="n">_DataCollector</span><span class="p">,</span>
+    <span class="n">collector</span><span class="p">:</span> <span class="n">DataCollectorBase</span><span class="p">,</span>
     <span class="n">loss_module</span><span class="p">:</span> <span class="n">LossModule</span><span class="p">,</span>
     <span class="n">recorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">EnvBase</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">target_net_updater</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TargetNetUpdater</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -455,7 +455,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a Trainer instance given its constituents.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        collector (_DataCollector): A data collector to be used to collect data.</span>
+<span class="sd">        collector (DataCollectorBase): A data collector to be used to collect data.</span>
 <span class="sd">        loss_module (LossModule): A TorchRL loss module</span>
 <span class="sd">        recorder (EnvBase, optional): a recorder environment. If None, the trainer will train the policy without</span>
 <span class="sd">            testing it.</span>

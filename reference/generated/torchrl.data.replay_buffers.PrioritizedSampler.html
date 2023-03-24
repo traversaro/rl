@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ListStorage &mdash; torchrl main documentation</title>
+  <title>PrioritizedSampler &mdash; torchrl main documentation</title>
   
 
   
@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="LazyTensorStorage" href="torchrl.data.LazyTensorStorage.html" />
-    <link rel="prev" title="Storage" href="torchrl.data.Storage.html" />
+    <link rel="next" title="RandomSampler" href="torchrl.data.replay_buffers.RandomSampler.html" />
+    <link rel="prev" title="Sampler" href="torchrl.data.replay_buffers.Sampler.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -319,13 +319,13 @@
         
           <li><a href="../data.html">torchrl.data package</a> &gt;</li>
         
-      <li>ListStorage</li>
+      <li>PrioritizedSampler</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="../../_sources/reference/generated/torchrl.data.ListStorage.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl.data.replay_buffers.PrioritizedSampler.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -346,7 +346,7 @@
 
         
           <div class="pytorch-call-to-action-links">
-            <div id="tutorial-type">reference/generated/torchrl.data.ListStorage</div>
+            <div id="tutorial-type">reference/generated/torchrl.data.replay_buffers.PrioritizedSampler</div>
 
             <div id="google-colab-link">
               <img class="call-to-action-img" src="../../_static/images/pytorch-colab.svg"/>
@@ -372,28 +372,43 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <section id="liststorage">
-<h1>ListStorage<a class="headerlink" href="#liststorage" title="Permalink to this heading">¶</a></h1>
+  <section id="prioritizedsampler">
+<h1>PrioritizedSampler<a class="headerlink" href="#prioritizedsampler" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="torchrl.data.ListStorage">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.data.</span></span><span class="sig-name descname"><span class="pre">ListStorage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/data/replay_buffers/storages.html#ListStorage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.ListStorage" title="Permalink to this definition">¶</a></dt>
-<dd><p>A storage stored in a list.</p>
+<dt class="sig sig-object py" id="torchrl.data.replay_buffers.PrioritizedSampler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.data.replay_buffers.</span></span><span class="sig-name descname"><span class="pre">PrioritizedSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.dtype" title="(in PyTorch v2.0)"><span class="pre">dtype</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">torch.float32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'max'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/data/replay_buffers/samplers.html#PrioritizedSampler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.replay_buffers.PrioritizedSampler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prioritized sampler for replay buffer.</p>
+<dl class="simple">
+<dt>Presented in “Schaul, T.; Quan, J.; Antonoglou, I.; and Silver, D. 2015.</dt><dd><p>Prioritized experience replay.”
+(<a class="reference external" href="https://arxiv.org/abs/1511.05952">https://arxiv.org/abs/1511.05952</a>)</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>max_size</strong> (<em>int</em>) – the maximum number of elements stored in the storage.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<em>float</em>) – exponent α determines how much prioritization is used,
+with α = 0 corresponding to the uniform case.</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – importance sampling negative exponent.</p></li>
+<li><p><strong>eps</strong> (<em>float</em><em>, </em><em>optional</em>) – delta added to the priorities to ensure that the buffer
+does not contain null priorities. Defaults to 1e-8.</p></li>
+<li><p><strong>reduction</strong> (<em>str</em><em>, </em><em>optional</em>) – the reduction method for multidimensional
+tensordicts (ie stored trajectories). Can be one of “max”, “min”,
+“median” or “mean”.</p></li>
+</ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="torchrl.data.ListStorage.attach">
-<span class="sig-name descname"><span class="pre">attach</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#torchrl.data.ListStorage.attach" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function attaches a sampler to this storage.</p>
-<p>Buffers that read from this storage must be included as an attached
-entity by calling this method. This guarantees that when data
-in the storage changes, components are made aware of changes even if the storage
-is shared with other buffers (eg. Priority Samplers).</p>
+<dt class="sig sig-object py" id="torchrl.data.replay_buffers.PrioritizedSampler.update_priority">
+<span class="sig-name descname"><span class="pre">update_priority</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">priority</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/torchrl/data/replay_buffers/samplers.html#PrioritizedSampler.update_priority"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.data.replay_buffers.PrioritizedSampler.update_priority" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the priority of the data pointed by the index.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>buffer</strong> – the object that reads from this storage.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> (<em>int</em><em> or </em><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><em>torch.Tensor</em></a>) – indexes of the priorities to be
+updated.</p></li>
+<li><p><strong>priority</strong> (<em>Number</em><em> or </em><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><em>torch.Tensor</em></a>) – new priorities of the
+indexed elements.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -410,10 +425,10 @@ is shared with other buffers (eg. Priority Samplers).</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.data.LazyTensorStorage.html" class="btn btn-neutral float-right" title="LazyTensorStorage" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.data.replay_buffers.RandomSampler.html" class="btn btn-neutral float-right" title="RandomSampler" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl.data.Storage.html" class="btn btn-neutral" title="Storage" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torchrl.data.replay_buffers.Sampler.html" class="btn btn-neutral" title="Sampler" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -445,9 +460,9 @@ is shared with other buffers (eg. Priority Samplers).</p>
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">ListStorage</a><ul>
-<li><a class="reference internal" href="#torchrl.data.ListStorage"><code class="docutils literal notranslate"><span class="pre">ListStorage</span></code></a><ul>
-<li><a class="reference internal" href="#torchrl.data.ListStorage.attach"><code class="docutils literal notranslate"><span class="pre">ListStorage.attach()</span></code></a></li>
+<li><a class="reference internal" href="#">PrioritizedSampler</a><ul>
+<li><a class="reference internal" href="#torchrl.data.replay_buffers.PrioritizedSampler"><code class="docutils literal notranslate"><span class="pre">PrioritizedSampler</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.data.replay_buffers.PrioritizedSampler.update_priority"><code class="docutils literal notranslate"><span class="pre">PrioritizedSampler.update_priority()</span></code></a></li>
 </ul>
 </li>
 </ul>

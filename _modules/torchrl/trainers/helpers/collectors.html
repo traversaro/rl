@@ -376,7 +376,7 @@
 <span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDictBase</span>
 
 <span class="kn">from</span> <span class="nn">torchrl.collectors.collectors</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">_DataCollector</span><span class="p">,</span>
+    <span class="n">DataCollectorBase</span><span class="p">,</span>
     <span class="n">MultiaSyncDataCollector</span><span class="p">,</span>
     <span class="n">MultiSyncDataCollector</span><span class="p">,</span>
     <span class="n">SyncDataCollector</span><span class="p">,</span>
@@ -541,7 +541,7 @@
     <span class="n">num_env_per_collector</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">num_collectors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DataCollector</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataCollectorBase</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">env_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">env_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env_fns</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -618,7 +618,7 @@
     <span class="n">actor_model_explore</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TensorDictModuleWrapper</span><span class="p">,</span> <span class="n">SafeProbabilisticSequential</span><span class="p">],</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="s2">&quot;DictConfig&quot;</span><span class="p">,</span>  <span class="c1"># noqa: F821</span>
     <span class="n">make_env_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DataCollector</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataCollectorBase</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a data collector for off-policy algorithms.</span>
 
 <span class="sd">    Args:</span>
@@ -680,7 +680,7 @@
     <span class="n">actor_model_explore</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TensorDictModuleWrapper</span><span class="p">,</span> <span class="n">SafeProbabilisticSequential</span><span class="p">],</span>
     <span class="n">cfg</span><span class="p">:</span> <span class="s2">&quot;DictConfig&quot;</span><span class="p">,</span>  <span class="c1"># noqa: F821</span>
     <span class="n">make_env_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_DataCollector</span><span class="p">:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataCollectorBase</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Makes a collector in on-policy settings.</span>
 
 <span class="sd">    Args:</span>

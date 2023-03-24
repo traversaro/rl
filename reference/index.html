@@ -374,10 +374,11 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="collectors.html">torchrl.collectors package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="collectors.html#single-node-data-collectors">Single node data collectors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.DataCollectorBase.html">DataCollectorBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.SyncDataCollector.html">SyncDataCollector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.MultiSyncDataCollector.html">MultiSyncDataCollector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.MultiaSyncDataCollector.html">MultiaSyncDataCollector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.RandomPolicy.html">RandomPolicy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.SyncDataCollector.html">SyncDataCollector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.collectors.collectors.aSyncDataCollector.html">aSyncDataCollector</a></li>
 </ul>
 </li>
@@ -403,14 +404,23 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#composable-replay-buffers">Composable Replay Buffers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.Storage.html">Storage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.ListStorage.html">ListStorage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.LazyTensorStorage.html">LazyTensorStorage</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.LazyMemmapStorage.html">LazyMemmapStorage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.replay_buffers.Sampler.html">Sampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.replay_buffers.PrioritizedSampler.html">PrioritizedSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.replay_buffers.RandomSampler.html">RandomSampler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.replay_buffers.SamplerWithoutReplacement.html">SamplerWithoutReplacement</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.replay_buffers.Storage.html">Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.replay_buffers.ListStorage.html">ListStorage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.replay_buffers.LazyTensorStorage.html">LazyTensorStorage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.replay_buffers.LazyMemmapStorage.html">LazyMemmapStorage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.replay_buffers.Writer.html">Writer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.replay_buffers.RoundRobinWriter.html">RoundRobinWriter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="data.html#storing-trajectories">Storing trajectories</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="data.html#datasets">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#datasets">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.datasets.D4RLExperienceReplay.html">D4RLExperienceReplay</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#tensorspec">TensorSpec</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.TensorSpec.html">TensorSpec</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.BinaryDiscreteTensorSpec.html">BinaryDiscreteTensorSpec</a></li>
@@ -424,10 +434,7 @@
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.UnboundedDiscreteTensorSpec.html">UnboundedDiscreteTensorSpec</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="data.html#utils">Utils</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.data.MultiStep.html">MultiStep</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#utils">Utils</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="envs.html">torchrl.envs package</a><ul>
@@ -574,6 +581,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="objectives.html#sac">SAC</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.SACLoss.html">SACLoss</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.DiscreteSACLoss.html">DiscreteSACLoss</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="objectives.html#redq">REDQ</a><ul>
@@ -582,6 +590,10 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="objectives.html#iql">IQL</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.IQLLoss.html">IQLLoss</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="objectives.html#td3">TD3</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.TD3Loss.html">TD3Loss</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="objectives.html#ppo">PPO</a><ul>
