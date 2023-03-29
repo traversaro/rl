@@ -383,6 +383,7 @@
 <span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span><span class="p">,</span> <span class="n">TensorDictBase</span>
 <span class="kn">from</span> <span class="nn">tensordict.utils</span> <span class="kn">import</span> <span class="n">expand_as_right</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span><span class="p">,</span> <span class="n">Tensor</span>
+
 <span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">BinaryDiscreteTensorSpec</span><span class="p">,</span>
     <span class="n">BoundedTensorSpec</span><span class="p">,</span>
@@ -761,7 +762,7 @@
 <span class="sd">        transform (Transform, optional): transform to apply to the tensordict resulting</span>
 <span class="sd">            from :obj:`env.step(td)`. If none is provided, an empty Compose</span>
 <span class="sd">            placeholder in an eval mode is used.</span>
-<span class="sd">        cache_specs (bool, optional): if True, the specs will be cached once</span>
+<span class="sd">        cache_specs (bool, optional): if ``True``, the specs will be cached once</span>
 <span class="sd">            and for all after the first call (i.e. the specs will be</span>
 <span class="sd">            transformed_in only once). If the transform changes during</span>
 <span class="sd">            training, the original spec transform may not be valid anymore,</span>
@@ -1245,7 +1246,7 @@
 <span class="sd">    with values between 0 and 1.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        unsqueeze (bool): if True, the observation tensor is unsqueezed</span>
+<span class="sd">        unsqueeze (bool): if ``True``, the observation tensor is unsqueezed</span>
 <span class="sd">            along the first dimension. default=False.</span>
 <span class="sd">        dtype (torch.dtype, optional): dtype to use for the resulting</span>
 <span class="sd">            observations.</span>
@@ -1519,7 +1520,7 @@
 <span class="sd">            :obj:`[&quot;pixels&quot;]` is assumed.</span>
 <span class="sd">        out_keys (sequence of str, optional): the flatten observation keys. If none is</span>
 <span class="sd">            provided, :obj:`in_keys` is assumed.</span>
-<span class="sd">        allow_positive_dim (bool, optional): if True, positive dimensions are accepted.</span>
+<span class="sd">        allow_positive_dim (bool, optional): if ``True``, positive dimensions are accepted.</span>
 <span class="sd">            :obj:`FlattenObservation` will map these to the n^th feature dimension</span>
 <span class="sd">            (ie n^th dimension after batch size of parent env) of the input tensor.</span>
 <span class="sd">            Defaults to False, ie. non-negative dimensions are not permitted.</span>
@@ -1594,7 +1595,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        unsqueeze_dim (int): dimension to unsqueeze. Must be negative (or allow_positive_dim</span>
 <span class="sd">            must be turned on).</span>
-<span class="sd">        allow_positive_dim (bool, optional): if True, positive dimensions are accepted.</span>
+<span class="sd">        allow_positive_dim (bool, optional): if ``True``, positive dimensions are accepted.</span>
 <span class="sd">            :obj:`UnsqueezeTransform` will map these to the n^th feature dimension</span>
 <span class="sd">            (ie n^th dimension after batch size of parent env) of the input tensor,</span>
 <span class="sd">            independently from the tensordict batch size (ie positive dims may be</span>
@@ -1779,7 +1780,7 @@
 <span class="sd">            only the forward transform will be called.</span>
 <span class="sd">        out_keys_inv (list of int, optional): output entries for the inverse transform.</span>
 <span class="sd">            Defaults to the value of `in_keys_inv`.</span>
-<span class="sd">        standard_normal (bool, optional): if True, the transform will be</span>
+<span class="sd">        standard_normal (bool, optional): if ``True``, the transform will be</span>
 
 <span class="sd">            .. math::</span>
 <span class="sd">                obs = (obs-loc)/scale</span>
@@ -2084,18 +2085,19 @@
 
 <div class="viewcode-block" id="CatFrames.reset"><a class="viewcode-back" href="../../../../reference/generated/torchrl.envs.transforms.CatFrames.html#torchrl.envs.transforms.CatFrames.reset">[docs]</a>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Resets _buffers.&quot;&quot;&quot;</span>
-        <span class="n">_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s2">&quot;_reset&quot;</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_reset&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">_reset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">_reset</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
-                <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">shape</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="k">else</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
                 <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span>
                 <span class="k">if</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
                 <span class="k">else</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">),</span>
             <span class="p">)</span>
+        <span class="n">_reset</span> <span class="o">=</span> <span class="n">_reset</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">batch_dims</span><span class="p">,</span> <span class="n">_reset</span><span class="o">.</span><span class="n">ndim</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span>
+        <span class="p">)</span>
+
         <span class="k">for</span> <span class="n">in_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_keys</span><span class="p">:</span>
             <span class="n">buffer_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_cat_buffers_</span><span class="si">{</span><span class="n">in_key</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">buffer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
@@ -2119,6 +2121,10 @@
     <span class="k">def</span> <span class="nf">_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the episode tensordict with max pooled keys.&quot;&quot;&quot;</span>
         <span class="n">_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_reset&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_reset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_reset</span> <span class="o">=</span> <span class="n">_reset</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                <span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">batch_dims</span><span class="p">,</span> <span class="n">_reset</span><span class="o">.</span><span class="n">ndim</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span>
+            <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">in_key</span><span class="p">,</span> <span class="n">out_key</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_keys</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">):</span>
             <span class="c1"># Lazy init of buffers</span>
@@ -2191,7 +2197,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        loc (number or torch.Tensor): location of the affine transform</span>
 <span class="sd">        scale (number or torch.Tensor): scale of the affine transform</span>
-<span class="sd">        standard_normal (bool, optional): if True, the transform will be</span>
+<span class="sd">        standard_normal (bool, optional): if ``True``, the transform will be</span>
 
 <span class="sd">            .. math::</span>
 <span class="sd">                reward = (reward-loc)/scale</span>
@@ -2353,9 +2359,9 @@
 <span class="sd">        out_key: key of the resulting tensor.</span>
 <span class="sd">        dim (int, optional): dimension along which the concatenation will occur.</span>
 <span class="sd">            Default is -1.</span>
-<span class="sd">        del_keys (bool, optional): if True, the input values will be deleted after</span>
+<span class="sd">        del_keys (bool, optional): if ``True``, the input values will be deleted after</span>
 <span class="sd">            concatenation. Default is True.</span>
-<span class="sd">        unsqueeze_if_oor (bool, optional): if True, CatTensor will check that</span>
+<span class="sd">        unsqueeze_if_oor (bool, optional): if ``True``, CatTensor will check that</span>
 <span class="sd">            the dimension indicated exist for the tensors to concatenate. If not,</span>
 <span class="sd">            the tensors will be unsqueezed along that dimension.</span>
 <span class="sd">            Default is False.</span>
@@ -2528,7 +2534,7 @@
 <span class="sd">        num_actions_effective (int): max number of action considered.</span>
 <span class="sd">        max_actions (int): maximum number of actions that this module can read.</span>
 <span class="sd">        action_key (str, optional): key name of the action. Defaults to &quot;action&quot;.</span>
-<span class="sd">        include_forward (bool, optional): if True, a call to forward will also</span>
+<span class="sd">        include_forward (bool, optional): if ``True``, a call to forward will also</span>
 <span class="sd">            map the action from one domain to the other when the module is called</span>
 <span class="sd">            by a replay buffer or an nn.Module chain. Defaults to True.</span>
 
@@ -2743,7 +2749,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        primers (dict, optional): a dictionary containing key-spec pairs which will</span>
 <span class="sd">            be used to populate the input tensordict.</span>
-<span class="sd">        random (bool, optional): if True, the values will be drawn randomly from</span>
+<span class="sd">        random (bool, optional): if ``True``, the values will be drawn randomly from</span>
 <span class="sd">            the TensorSpec domain (or a unit Gaussian if unbounded). Otherwise a fixed value will be assumed.</span>
 <span class="sd">            Defaults to `False`.</span>
 <span class="sd">        default_value (float, optional): if non-random filling is chosen, this</span>
@@ -3131,7 +3137,7 @@
 <span class="sd">                tensordict</span>
 <span class="sd">            keys (iterable of str, optional): keys that</span>
 <span class="sd">                have to be normalized. Default is `[&quot;next&quot;, &quot;reward&quot;]`</span>
-<span class="sd">            memmap (bool): if True, the resulting tensordict will be cast into</span>
+<span class="sd">            memmap (bool): if ``True``, the resulting tensordict will be cast into</span>
 <span class="sd">                memmory map (using `memmap_()`). Otherwise, the tensordict</span>
 <span class="sd">                will be placed in shared memory.</span>
 
@@ -3245,7 +3251,7 @@
         <span class="n">_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="s2">&quot;_reset&quot;</span><span class="p">,</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
-                <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">shape</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="k">else</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
                 <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
             <span class="p">),</span>
@@ -3371,25 +3377,24 @@
         <span class="n">_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="s2">&quot;_reset&quot;</span><span class="p">,</span>
             <span class="c1"># TODO: decide if using done here, or using a default `True` tensor</span>
-            <span class="n">default</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">done</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="p">)</span>
+        <span class="k">if</span> <span class="n">_reset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_reset</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>
         <span class="n">step_count</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
             <span class="s2">&quot;step_count&quot;</span><span class="p">,</span>
-            <span class="kc">None</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">step_count</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">step_count</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-                <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
-                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
-                <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="n">step_count</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">done</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
         <span class="n">step_count</span><span class="p">[</span><span class="n">_reset</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
             <span class="s2">&quot;step_count&quot;</span><span class="p">,</span>
             <span class="n">step_count</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">truncated</span> <span class="o">=</span> <span class="p">(</span><span class="n">step_count</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">truncated</span> <span class="o">=</span> <span class="n">step_count</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span>
             <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">truncated_key</span><span class="p">,</span> <span class="n">truncated</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tensordict</span></div>
 
@@ -3401,7 +3406,7 @@
         <span class="n">next_step_count</span> <span class="o">=</span> <span class="n">step_count</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;step_count&quot;</span><span class="p">),</span> <span class="n">next_step_count</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">truncated</span> <span class="o">=</span> <span class="p">(</span><span class="n">next_step_count</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">truncated</span> <span class="o">=</span> <span class="n">next_step_count</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_steps</span>
             <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">truncated_key</span><span class="p">),</span> <span class="n">truncated</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tensordict</span>
 
@@ -3413,7 +3418,9 @@
                 <span class="sa">f</span><span class="s2">&quot;observation_spec was expected to be of type CompositeSpec. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">observation_spec</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
             <span class="p">)</span>
         <span class="n">observation_spec</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">UnboundedDiscreteTensorSpec</span><span class="p">(</span>
-            <span class="n">shape</span><span class="o">=</span><span class="n">observation_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">shape</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span>
+            <span class="k">else</span> <span class="n">observation_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
             <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
             <span class="n">device</span><span class="o">=</span><span class="n">observation_spec</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
         <span class="p">)</span>
@@ -3430,7 +3437,7 @@
                 <span class="sa">f</span><span class="s2">&quot;input_spec was expected to be of type CompositeSpec. Got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">input_spec</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
             <span class="p">)</span>
         <span class="n">input_spec</span><span class="p">[</span><span class="s2">&quot;step_count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">UnboundedDiscreteTensorSpec</span><span class="p">(</span>
-            <span class="n">shape</span><span class="o">=</span><span class="n">input_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">shape</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="k">else</span> <span class="n">input_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
             <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
             <span class="n">device</span><span class="o">=</span><span class="n">input_spec</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
         <span class="p">)</span>
@@ -3595,7 +3602,9 @@
             <span class="n">_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="s2">&quot;_reset&quot;</span><span class="p">,</span>
                 <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
-                    <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">shape</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parent</span>
+                    <span class="k">else</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
                     <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span>
                     <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
                 <span class="p">),</span>
@@ -3605,6 +3614,9 @@
                 <span class="n">buffer</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer_name</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">parameter</span><span class="o">.</span><span class="n">UninitializedBuffer</span><span class="p">):</span>
                     <span class="k">continue</span>
+                <span class="n">_reset</span> <span class="o">=</span> <span class="n">_reset</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                    <span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">batch_dims</span><span class="p">,</span> <span class="n">_reset</span><span class="o">.</span><span class="n">ndim</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span>
+                <span class="p">)</span>
                 <span class="n">buffer</span><span class="p">[:,</span> <span class="n">_reset</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
 
         <span class="k">return</span> <span class="n">tensordict</span></div>
@@ -3777,7 +3789,9 @@
                 <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
             <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">),</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span>
+                <span class="p">),</span>
             <span class="p">)</span>
         <span class="k">return</span> <span class="n">tensordict</span>
 
@@ -3787,7 +3801,11 @@
             <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
         <span class="n">_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_reset&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">_reset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">_reset</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+            <span class="n">_reset</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
+                <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">_reset</span><span class="o">.</span><span class="n">clone</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">tensordict</span></div>
 
@@ -3796,7 +3814,7 @@
             <span class="mi">2</span><span class="p">,</span>
             <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span>
             <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
-            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+            <span class="n">shape</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">observation_spec</span></div>
 

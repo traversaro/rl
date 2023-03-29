@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>SafeProbabilisticSequential &mdash; torchrl main documentation</title>
+  <title>TDLambdaEstimator &mdash; torchrl main documentation</title>
   
 
   
@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="SafeSequential" href="torchrl.modules.tensordict_module.SafeSequential.html" />
-    <link rel="prev" title="SafeProbabilisticModule" href="torchrl.modules.tensordict_module.SafeProbabilisticModule.html" />
+    <link rel="next" title="GAE" href="torchrl.objectives.value.GAE.html" />
+    <link rel="prev" title="TD1Estimator" href="torchrl.objectives.value.TD1Estimator.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -317,15 +317,15 @@
         
           <li><a href="../index.html">API Reference</a> &gt;</li>
         
-          <li><a href="../modules.html">torchrl.modules package</a> &gt;</li>
+          <li><a href="../objectives.html">torchrl.objectives package</a> &gt;</li>
         
-      <li>SafeProbabilisticSequential</li>
+      <li>TDLambdaEstimator</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="../../_sources/reference/generated/torchrl.modules.tensordict_module.SafeProbabilisticSequential.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl.objectives.value.TDLambdaEstimator.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -346,7 +346,7 @@
 
         
           <div class="pytorch-call-to-action-links">
-            <div id="tutorial-type">reference/generated/torchrl.modules.tensordict_module.SafeProbabilisticSequential</div>
+            <div id="tutorial-type">reference/generated/torchrl.objectives.value.TDLambdaEstimator</div>
 
             <div id="google-colab-link">
               <img class="call-to-action-img" src="../../_static/images/pytorch-colab.svg"/>
@@ -372,31 +372,120 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <section id="safeprobabilisticsequential">
-<h1>SafeProbabilisticSequential<a class="headerlink" href="#safeprobabilisticsequential" title="Permalink to this heading">¶</a></h1>
+  <section id="tdlambdaestimator">
+<h1>TDLambdaEstimator<a class="headerlink" href="#tdlambdaestimator" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="torchrl.modules.tensordict_module.SafeProbabilisticSequential">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.modules.tensordict_module.</span></span><span class="sig-name descname"><span class="pre">SafeProbabilisticSequential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">modules</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+8ab67e4 ))"><span class="pre">TensorDictModule</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.ProbabilisticTensorDictModule.html#tensordict.nn.ProbabilisticTensorDictModule" title="(in tensordict vmain (0.1.0+8ab67e4 ))"><span class="pre">ProbabilisticTensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">partial_tolerant</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/tensordict_module/probabilistic.html#SafeProbabilisticSequential"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.tensordict_module.SafeProbabilisticSequential" title="Permalink to this definition">¶</a></dt>
-<dd><p>A :obj:<code class="docutils literal notranslate"><span class="pre">SafeProbabilisticSequential</span></code> is an :obj:<code class="docutils literal notranslate"><span class="pre">tensordict.nn.ProbabilisticTensorDictSequential</span></code> subclass that accepts a :obj:<code class="docutils literal notranslate"><span class="pre">TensorSpec</span></code> as argument to control the output domain.</p>
-<p>Similarly to <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorDictSequential</span></code>, but enforces that the final module in the
-sequence is an <code class="xref py py-obj docutils literal notranslate"><span class="pre">ProbabilisticTensorDictModule</span></code> and also exposes <code class="docutils literal notranslate"><span class="pre">get_dist</span></code>
-method to recover the distribution object from the <code class="docutils literal notranslate"><span class="pre">ProbabilisticTensorDictModule</span></code></p>
+<dt class="sig sig-object py" id="torchrl.objectives.value.TDLambdaEstimator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.value.</span></span><span class="sig-name descname"><span class="pre">TDLambdaEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmbda</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">average_rewards</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">differentiable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vectorized</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advantage_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'advantage'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_target_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'value_target'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'state_value'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/value/advantages.html#TDLambdaEstimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.value.TDLambdaEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>TD(<span class="math notranslate nohighlight">\(\lambda\)</span>) estimate of advantage function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>modules</strong> (<em>iterable</em><em> of </em><em>TensorDictModules</em>) – ordered sequence of TensorDictModule
-instances, terminating in ProbabilisticTensorDictModule, to be run
-sequentially.</p></li>
-<li><p><strong>partial_tolerant</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, the input tensordict can miss some
-of the input keys. If so, the only module that will be executed are those
-who can be executed given the keys that are present. Also, if the input
-tensordict is a lazy stack of tensordicts AND if partial_tolerant is
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code> AND if the stack does not have the required keys, then
-TensorDictSequential will scan through the sub-tensordicts looking for those
-that have the required keys, if any.</p></li>
+<li><p><strong>gamma</strong> (<em>scalar</em>) – exponential mean discount.</p></li>
+<li><p><strong>lmbda</strong> (<em>scalar</em>) – trajectory discount.</p></li>
+<li><p><strong>value_network</strong> (<em>TensorDictModule</em>) – value operator used to retrieve the value estimates.</p></li>
+<li><p><strong>average_rewards</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, rewards will be standardized
+before the TD is computed.</p></li>
+<li><p><strong>differentiable</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>if <code class="docutils literal notranslate"><span class="pre">True</span></code>, gradients are propagated through
+the computation of the value function. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+.. note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>The proper way to make the function call non-differentiable is to
+decorate it in a `torch.no_grad()` context manager/decorator or
+pass detached parameters for functional modules.
+</pre></div>
+</div>
+</p></li>
+<li><p><strong>vectorized</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to use the vectorized version of the
+lambda return. Default is <cite>True</cite>.</p></li>
+<li><p><strong>advantage_key</strong> (<em>str</em><em> or </em><em>tuple</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – the key of the advantage entry.
+Defaults to “advantage”.</p></li>
+<li><p><strong>value_target_key</strong> (<em>str</em><em> or </em><em>tuple</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – the key of the advantage entry.
+Defaults to “value_target”.</p></li>
+<li><p><strong>value_key</strong> (<em>str</em><em> or </em><em>tuple</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – the value key to read from the input tensordict.
+Defaults to “state_value”.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.objectives.value.TDLambdaEstimator.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/objectives/value/advantages.html#TDLambdaEstimator.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.value.TDLambdaEstimator.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the TD(<span class="math notranslate nohighlight">\(\lambda\)</span>) advantage given the data in tensordict.</p>
+<p>If a functional module is provided, a nested TensorDict containing the parameters
+(and if relevant the target parameters) can be passed to the module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tensordict</strong> (<em>TensorDictBase</em>) – A TensorDict containing the data
+(an observation key, “action”, (“next”, “reward”), (“next”, “done”) and “next” tensordict state
+as returned by the environment) necessary to compute the value estimates and the TDLambdaEstimate.
+The data passed to this module should be structured as <code class="xref py py-obj docutils literal notranslate"><span class="pre">[*B,</span> <span class="pre">T,</span> <span class="pre">F]</span></code> where <code class="xref py py-obj docutils literal notranslate"><span class="pre">B</span></code> are
+the batch size, <code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code> the time dimension and <code class="xref py py-obj docutils literal notranslate"><span class="pre">F</span></code> the feature dimension(s).</p></li>
+<li><p><strong>params</strong> (<em>TensorDictBase</em><em>, </em><em>optional</em>) – A nested TensorDict containing the params
+to be passed to the functional value network module.</p></li>
+<li><p><strong>target_params</strong> (<em>TensorDictBase</em><em>, </em><em>optional</em>) – A nested TensorDict containing the
+target params to be passed to the functional value network module.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An updated TensorDict with an advantage and a value_error keys as defined in the constructor.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">value_net</span> <span class="o">=</span> <span class="n">TensorDictModule</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">],</span> <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;state_value&quot;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">TDLambdaEstimator</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">gamma</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">lmbda</span><span class="o">=</span><span class="mf">0.94</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">value_network</span><span class="o">=</span><span class="n">value_net</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span><span class="p">,</span> <span class="n">next_obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reward</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">done</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tensordict</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s2">&quot;obs&quot;</span><span class="p">:</span> <span class="n">obs</span><span class="p">,</span> <span class="s2">&quot;next&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;obs&quot;</span><span class="p">:</span> <span class="n">next_obs</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">:</span> <span class="n">done</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">:</span> <span class="n">reward</span><span class="p">}},</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">module</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s2">&quot;advantage&quot;</span> <span class="ow">in</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The module supports non-tensordict (i.e. unpacked tensordict) inputs too:</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">value_net</span> <span class="o">=</span> <span class="n">TensorDictModule</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">],</span> <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;state_value&quot;</span><span class="p">]</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">TDLambdaEstimator</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">gamma</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">lmbda</span><span class="o">=</span><span class="mf">0.94</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">value_network</span><span class="o">=</span><span class="n">value_net</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">obs</span><span class="p">,</span> <span class="n">next_obs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reward</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">done</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">advantage</span><span class="p">,</span> <span class="n">value_target</span> <span class="o">=</span> <span class="n">module</span><span class="p">(</span><span class="n">obs</span><span class="o">=</span><span class="n">obs</span><span class="p">,</span> <span class="n">reward</span><span class="o">=</span><span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="o">=</span><span class="n">done</span><span class="p">,</span> <span class="n">next_obs</span><span class="o">=</span><span class="n">next_obs</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.objectives.value.TDLambdaEstimator.value_estimate">
+<span class="sig-name descname"><span class="pre">value_estimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/value/advantages.html#TDLambdaEstimator.value_estimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.value.TDLambdaEstimator.value_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a value estimate, usually used as a target value for the value network.</p>
+<p>If the state value key is present under <code class="docutils literal notranslate"><span class="pre">tensordict.get((&quot;next&quot;,</span> <span class="pre">self.value_key))</span></code>
+then this value will be used without recurring to the value network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tensordict</strong> (<em>TensorDictBase</em>) – the tensordict containing the data to
+read.</p></li>
+<li><p><strong>target_params</strong> (<em>TensorDictBase</em><em>, </em><em>optional</em>) – A nested TensorDict containing the
+target params to be passed to the functional value network module.</p></li>
+<li><p><strong>**kwargs</strong> – the keyword arguments to be passed to the value network.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns: a tensor corresponding to the state value.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -409,10 +498,10 @@ that have the required keys, if any.</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.modules.tensordict_module.SafeSequential.html" class="btn btn-neutral float-right" title="SafeSequential" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.objectives.value.GAE.html" class="btn btn-neutral float-right" title="GAE" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl.modules.tensordict_module.SafeProbabilisticModule.html" class="btn btn-neutral" title="SafeProbabilisticModule" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torchrl.objectives.value.TD1Estimator.html" class="btn btn-neutral" title="TD1Estimator" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -444,8 +533,12 @@ that have the required keys, if any.</p></li>
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">SafeProbabilisticSequential</a><ul>
-<li><a class="reference internal" href="#torchrl.modules.tensordict_module.SafeProbabilisticSequential"><code class="docutils literal notranslate"><span class="pre">SafeProbabilisticSequential</span></code></a></li>
+<li><a class="reference internal" href="#">TDLambdaEstimator</a><ul>
+<li><a class="reference internal" href="#torchrl.objectives.value.TDLambdaEstimator"><code class="docutils literal notranslate"><span class="pre">TDLambdaEstimator</span></code></a><ul>
+<li><a class="reference internal" href="#torchrl.objectives.value.TDLambdaEstimator.forward"><code class="docutils literal notranslate"><span class="pre">TDLambdaEstimator.forward()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.objectives.value.TDLambdaEstimator.value_estimate"><code class="docutils literal notranslate"><span class="pre">TDLambdaEstimator.value_estimate()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -466,6 +559,7 @@ that have the required keys, if any.</p></li>
          <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
          <script src="../../_static/doctools.js"></script>
          <script src="../../_static/sphinx_highlight.js"></script>
+         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
      
 
   

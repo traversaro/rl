@@ -412,7 +412,7 @@
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import CompositeSpec, NdUnboundedContinuousTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.envs.model_based import ModelBasedEnvBase</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import TensorDictModule, ValueOperator</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.objectives.value import TDLambdaEstimate</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.objectives.value import TDLambdaEstimator</span>
 <span class="sd">        &gt;&gt;&gt; class MyMBEnv(ModelBasedEnvBase):</span>
 <span class="sd">        ...     def __init__(self, world_model, device=&quot;cpu&quot;, dtype=None, batch_size=None):</span>
 <span class="sd">        ...         super().__init__(world_model, device=device, dtype=dtype, batch_size=batch_size)</span>
@@ -453,7 +453,7 @@
 <span class="sd">        &gt;&gt;&gt; env = MyMBEnv(world_model)</span>
 <span class="sd">        &gt;&gt;&gt; value_net = nn.Linear(4, 1)</span>
 <span class="sd">        &gt;&gt;&gt; value_net = ValueOperator(value_net, in_keys=[&quot;hidden_observation&quot;])</span>
-<span class="sd">        &gt;&gt;&gt; adv = TDLambdaEstimate(</span>
+<span class="sd">        &gt;&gt;&gt; adv = TDLambdaEstimator(</span>
 <span class="sd">        ...     0.99,</span>
 <span class="sd">        ...     0.95,</span>
 <span class="sd">        ...     value_net,</span>

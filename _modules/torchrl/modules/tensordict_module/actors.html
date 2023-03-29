@@ -372,19 +372,15 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModuleWrapper</span>
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictModuleWrapper</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 
-<span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">CompositeSpec</span><span class="p">,</span>
-    <span class="n">TensorSpec</span><span class="p">,</span>
-    <span class="n">UnboundedContinuousTensorSpec</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="n">CompositeSpec</span><span class="p">,</span> <span class="n">TensorSpec</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.models.models</span> <span class="kn">import</span> <span class="n">DistributionalDQNnet</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.common</span> <span class="kn">import</span> <span class="n">SafeModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.probabilistic</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">SafeProbabilisticModule</span><span class="p">,</span>
-    <span class="n">SafeProbabilisticSequential</span><span class="p">,</span>
+    <span class="n">SafeProbabilisticTensorDictSequential</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.sequence</span> <span class="kn">import</span> <span class="n">SafeSequential</span>
 
@@ -396,11 +392,40 @@
 <span class="sd">    and if the spec is provided but not as a CompositeSpec object, it will be</span>
 <span class="sd">    automatically translated into :obj:`spec = CompositeSpec(action=spec)`</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        module (nn.Module): a :class:`torch.nn.Module` used to map the input to</span>
+<span class="sd">            the output parameter space.</span>
+<span class="sd">            Can be a functional module, in which case the</span>
+<span class="sd">            :meth:`torch.nn.Module.forward` method will expect</span>
+<span class="sd">            the params (and possibly) buffers keyword arguments.</span>
+<span class="sd">        in_keys (iterable of str, optional): keys to be read from input</span>
+<span class="sd">            tensordict and passed to the module. If it</span>
+<span class="sd">            contains more than one element, the values will be passed in the</span>
+<span class="sd">            order given by the in_keys iterable.</span>
+<span class="sd">            Defaults to ``[&quot;observation&quot;]``.</span>
+<span class="sd">        out_keys (iterable of str): keys to be written to the input tensordict.</span>
+<span class="sd">            The length of out_keys must match the</span>
+<span class="sd">            number of tensors returned by the embedded module. Using &quot;_&quot; as a</span>
+<span class="sd">            key avoid writing tensor to output.</span>
+<span class="sd">            Defaults to ``[&quot;action&quot;]``.</span>
+<span class="sd">        spec (TensorSpec, optional): Keyword-only argument.</span>
+<span class="sd">            Specs of the output tensor. If the module</span>
+<span class="sd">            outputs multiple output tensors,</span>
+<span class="sd">            spec characterize the space of the first output tensor.</span>
+<span class="sd">        safe (bool): Keyword-only argument.</span>
+<span class="sd">            If ``True``, the value of the output is checked against the</span>
+<span class="sd">            input spec. Out-of-domain sampling can</span>
+<span class="sd">            occur because of exploration policies or numerical under/overflow</span>
+<span class="sd">            issues. If this value is out of bounds, it is projected back onto the</span>
+<span class="sd">            desired space using the :obj:`TensorSpec.project`</span>
+<span class="sd">            method. Default is ``False``.</span>
+
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import Actor</span>
+<span class="sd">        &gt;&gt;&gt; torch.manual_seed(0)</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;observation&quot;: torch.randn(3, 4)}, [3,])</span>
 <span class="sd">        &gt;&gt;&gt; action_spec = UnboundedContinuousTensorSpec(4)</span>
 <span class="sd">        &gt;&gt;&gt; module = torch.nn.Linear(4, 4)</span>
@@ -409,15 +434,26 @@
 <span class="sd">        ...    spec=action_spec,</span>
 <span class="sd">        ...    )</span>
 <span class="sd">        &gt;&gt;&gt; td_module(td)</span>
+<span class="sd">        TensorDict(</span>
+<span class="sd">            fields={</span>
+<span class="sd">                action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
+<span class="sd">            batch_size=torch.Size([3]),</span>
+<span class="sd">            device=None,</span>
+<span class="sd">            is_shared=False)</span>
 <span class="sd">        &gt;&gt;&gt; print(td.get(&quot;action&quot;))</span>
+<span class="sd">        tensor([[-1.3635, -0.0340,  0.1476, -1.3911],</span>
+<span class="sd">                [-0.1664,  0.5455,  0.2247, -0.4583],</span>
+<span class="sd">                [-0.2916,  0.2160,  0.5337, -0.5193]], grad_fn=&lt;AddmmBackward0&gt;)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">module</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
         <span class="n">in_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">out_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
         <span class="n">spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorSpec</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
@@ -433,7 +469,7 @@
             <span class="n">spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="n">spec</span><span class="p">)</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+            <span class="n">module</span><span class="p">,</span>
             <span class="n">in_keys</span><span class="o">=</span><span class="n">in_keys</span><span class="p">,</span>
             <span class="n">out_keys</span><span class="o">=</span><span class="n">out_keys</span><span class="p">,</span>
             <span class="n">spec</span><span class="o">=</span><span class="n">spec</span><span class="p">,</span>
@@ -441,28 +477,85 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ProbabilisticActor"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.ProbabilisticActor.html#torchrl.modules.tensordict_module.ProbabilisticActor">[docs]</a><span class="k">class</span> <span class="nc">ProbabilisticActor</span><span class="p">(</span><span class="n">SafeProbabilisticSequential</span><span class="p">):</span>
+<div class="viewcode-block" id="ProbabilisticActor"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.ProbabilisticActor.html#torchrl.modules.tensordict_module.ProbabilisticActor">[docs]</a><span class="k">class</span> <span class="nc">ProbabilisticActor</span><span class="p">(</span><span class="n">SafeProbabilisticTensorDictSequential</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;General class for probabilistic actors in RL.</span>
 
 <span class="sd">    The Actor class comes with default values for the out_keys ([&quot;action&quot;])</span>
 <span class="sd">    and if the spec is provided but not as a CompositeSpec object, it will be</span>
 <span class="sd">    automatically translated into :obj:`spec = CompositeSpec(action=spec)`</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        module (nn.Module): a :class:`torch.nn.Module` used to map the input to</span>
+<span class="sd">            the output parameter space.</span>
+<span class="sd">            Can be a functional module, in which case the</span>
+<span class="sd">            :meth:`torch.nn.Module.forward` method will expect</span>
+<span class="sd">            the params (and possibly) buffers keyword arguments.</span>
+<span class="sd">        in_keys (str or iterable of str or dict): key(s) that will be read from the</span>
+<span class="sd">            input TensorDict and used to build the distribution. Importantly, if it&#39;s an</span>
+<span class="sd">            iterable of string or a string, those keys must match the keywords used by</span>
+<span class="sd">            the distribution class of interest, e.g. :obj:`&quot;loc&quot;` and :obj:`&quot;scale&quot;` for</span>
+<span class="sd">            the Normal distribution and similar. If in_keys is a dictionary,, the keys</span>
+<span class="sd">            are the keys of the distribution and the values are the keys in the</span>
+<span class="sd">            tensordict that will get match to the corresponding distribution keys.</span>
+<span class="sd">        out_keys (str or iterable of str): keys where the sampled values will be</span>
+<span class="sd">            written. Importantly, if these keys are found in the input TensorDict, the</span>
+<span class="sd">            sampling step will be skipped.</span>
+<span class="sd">        spec (TensorSpec, optional): keyword-only argument containing the specs</span>
+<span class="sd">            of the output tensor. If the module outputs multiple output tensors,</span>
+<span class="sd">            spec characterize the space of the first output tensor.</span>
+<span class="sd">        safe (bool): keyword-only argument. if ``True``, the value of the output is checked against the</span>
+<span class="sd">            input spec. Out-of-domain sampling can</span>
+<span class="sd">            occur because of exploration policies or numerical under/overflow</span>
+<span class="sd">            issues. If this value is out of bounds, it is projected back onto the</span>
+<span class="sd">            desired space using the :obj:`TensorSpec.project`</span>
+<span class="sd">            method. Default is ``False``.</span>
+<span class="sd">        default_interaction_mode (str, optional): keyword-only argument.</span>
+<span class="sd">            Default method to be used to retrieve</span>
+<span class="sd">            the output value. Should be one of: &#39;mode&#39;, &#39;median&#39;, &#39;mean&#39; or &#39;random&#39;</span>
+<span class="sd">            (in which case the value is sampled randomly from the distribution). Default</span>
+<span class="sd">            is &#39;mode&#39;.</span>
+<span class="sd">            Note: When a sample is drawn, the :obj:`ProbabilisticTDModule` instance will</span>
+<span class="sd">            first look for the interaction mode dictated by the `interaction_mode()`</span>
+<span class="sd">            global function. If this returns `None` (its default value), then the</span>
+<span class="sd">            `default_interaction_mode` of the `ProbabilisticTDModule` instance will be</span>
+<span class="sd">            used. Note that DataCollector instances will use `set_interaction_mode` to</span>
+<span class="sd">            `&quot;random&quot;` by default.</span>
+<span class="sd">        distribution_class (Type, optional): keyword-only argument.</span>
+<span class="sd">            A :class:`torch.distributions.Distribution` class to</span>
+<span class="sd">            be used for sampling.</span>
+<span class="sd">            Default is :class:`tensordict.nn.distributions.Delta`.</span>
+<span class="sd">        distribution_kwargs (dict, optional): keyword-only argument.</span>
+<span class="sd">            Keyword-argument pairs to be passed to the distribution.</span>
+<span class="sd">        return_log_prob (bool, optional): keyword-only argument.</span>
+<span class="sd">            If ``True``, the log-probability of the</span>
+<span class="sd">            distribution sample will be written in the tensordict with the key</span>
+<span class="sd">            `&#39;sample_log_prob&#39;`. Default is ``False``.</span>
+<span class="sd">        cache_dist (bool, optional): keyword-only argument.</span>
+<span class="sd">            EXPERIMENTAL: if ``True``, the parameters of the</span>
+<span class="sd">            distribution (i.e. the output of the module) will be written to the</span>
+<span class="sd">            tensordict along with the sample. Those parameters can be used to re-compute</span>
+<span class="sd">            the original distribution later on (e.g. to compute the divergence between</span>
+<span class="sd">            the distribution used to sample the action and the updated distribution in</span>
+<span class="sd">            PPO). Default is ``False``.</span>
+<span class="sd">        n_empirical_estimate (int, optional): keyword-only argument.</span>
+<span class="sd">            Number of samples to compute the empirical</span>
+<span class="sd">            mean when it is not available. Defaults to 1000.</span>
+
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
-<span class="sd">        &gt;&gt;&gt; from tensordict.nn.functional_modules import make_functional</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict.nn import TensorDictModule, make_functional</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import BoundedTensorSpec</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.modules import ProbabilisticActor, NormalParamWrapper, SafeModule, TanhNormal</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.modules import ProbabilisticActor, NormalParamWrapper, TanhNormal</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;observation&quot;: torch.randn(3, 4)}, [3,])</span>
 <span class="sd">        &gt;&gt;&gt; action_spec = BoundedTensorSpec(shape=torch.Size([4]),</span>
 <span class="sd">        ...    minimum=-1, maximum=1)</span>
 <span class="sd">        &gt;&gt;&gt; module = NormalParamWrapper(torch.nn.Linear(4, 8))</span>
-<span class="sd">        &gt;&gt;&gt; tensordict_module = SafeModule(module, in_keys=[&quot;observation&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; tensordict_module = TensorDictModule(module, in_keys=[&quot;observation&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; td_module = ProbabilisticActor(</span>
 <span class="sd">        ...    module=tensordict_module,</span>
 <span class="sd">        ...    spec=action_spec,</span>
-<span class="sd">        ...    dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
+<span class="sd">        ...    in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
 <span class="sd">        ...    distribution_class=TanhNormal,</span>
 <span class="sd">        ...    )</span>
 <span class="sd">        &gt;&gt;&gt; params = make_functional(td_module)</span>
@@ -470,21 +563,22 @@
 <span class="sd">        &gt;&gt;&gt; td</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                action: Tensor(torch.Size([3, 4]), dtype=torch.float32)},</span>
+<span class="sd">                action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
-<span class="sd">            device=cpu,</span>
+<span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">module</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
+        <span class="n">module</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
         <span class="n">in_keys</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
         <span class="n">out_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
         <span class="n">spec</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TensorSpec</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
@@ -505,7 +599,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ValueOperator"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.ValueOperator.html#torchrl.modules.tensordict_module.ValueOperator">[docs]</a><span class="k">class</span> <span class="nc">ValueOperator</span><span class="p">(</span><span class="n">SafeModule</span><span class="p">):</span>
+<div class="viewcode-block" id="ValueOperator"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.ValueOperator.html#torchrl.modules.tensordict_module.ValueOperator">[docs]</a><span class="k">class</span> <span class="nc">ValueOperator</span><span class="p">(</span><span class="n">TensorDictModule</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;General class for value functions in RL.</span>
 
 <span class="sd">    The ValueOperator class comes with default values for the in_keys and</span>
@@ -513,10 +607,27 @@
 <span class="sd">    [&quot;state_action_value&quot;], respectively and depending on whether the &quot;action&quot;</span>
 <span class="sd">    key is part of the in_keys list).</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        module (nn.Module): a :class:`torch.nn.Module` used to map the input to</span>
+<span class="sd">            the output parameter space.</span>
+<span class="sd">            Can be a functional module, in which case the</span>
+<span class="sd">            :meth:`torch.nn.Module.forward` method will expect</span>
+<span class="sd">            the params (and possibly) buffers keyword arguments.</span>
+<span class="sd">        in_keys (iterable of str, optional): keys to be read from input</span>
+<span class="sd">            tensordict and passed to the module. If it</span>
+<span class="sd">            contains more than one element, the values will be passed in the</span>
+<span class="sd">            order given by the in_keys iterable.</span>
+<span class="sd">            Defaults to ``[&quot;observation&quot;]``.</span>
+<span class="sd">        out_keys (iterable of str): keys to be written to the input tensordict.</span>
+<span class="sd">            The length of out_keys must match the</span>
+<span class="sd">            number of tensors returned by the embedded module. Using &quot;_&quot; as a</span>
+<span class="sd">            key avoid writing tensor to output.</span>
+<span class="sd">            Defaults to ``[&quot;action&quot;]``.</span>
+
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
-<span class="sd">        &gt;&gt;&gt; from tensordict.nn.functional_modules import make_functional</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict.nn import make_functional</span>
 <span class="sd">        &gt;&gt;&gt; from torch import nn</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import ValueOperator</span>
@@ -532,13 +643,13 @@
 <span class="sd">        ...    in_keys=[&quot;observation&quot;, &quot;action&quot;], module=module</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; params = make_functional(td_module)</span>
-<span class="sd">        &gt;&gt;&gt; td_module(td, params=params)</span>
+<span class="sd">        &gt;&gt;&gt; td = td_module(td, params=params)</span>
 <span class="sd">        &gt;&gt;&gt; print(td)</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                action: Tensor(torch.Size([3, 2]), dtype=torch.float32),</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                state_action_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
+<span class="sd">                action: Tensor(shape=torch.Size([3, 2]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                state_action_value: Tensor(shape=torch.Size([3, 1]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -559,9 +670,7 @@
             <span class="n">out_keys</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="p">[</span><span class="s2">&quot;state_value&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;action&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">in_keys</span> <span class="k">else</span> <span class="p">[</span><span class="s2">&quot;state_action_value&quot;</span><span class="p">]</span>
             <span class="p">)</span>
-        <span class="n">value_spec</span> <span class="o">=</span> <span class="n">UnboundedContinuousTensorSpec</span><span class="p">()</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="n">spec</span><span class="o">=</span><span class="n">value_spec</span><span class="p">,</span>
             <span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
             <span class="n">in_keys</span><span class="o">=</span><span class="n">in_keys</span><span class="p">,</span>
             <span class="n">out_keys</span><span class="o">=</span><span class="n">out_keys</span><span class="p">,</span>
@@ -571,13 +680,17 @@
 <div class="viewcode-block" id="QValueHook"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.actors.QValueHook.html#torchrl.modules.tensordict_module.QValueHook">[docs]</a><span class="k">class</span> <span class="nc">QValueHook</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Q-Value hook for Q-value policies.</span>
 
-<span class="sd">    Given a the output of a regular nn.Module, representing the values of the different discrete actions available,</span>
-<span class="sd">    a QValueHook will transform these values into their argmax component (i.e. the resulting greedy action).</span>
+<span class="sd">    Given a the output of a regular nn.Module, representing the values of the</span>
+<span class="sd">    different discrete actions available,</span>
+<span class="sd">    a QValueHook will transform these values into their argmax component (i.e.</span>
+<span class="sd">    the resulting greedy action).</span>
 <span class="sd">    Currently, this is returned as a one-hot encoding.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        action_space (str): Action space. Must be one of &quot;one-hot&quot;, &quot;mult_one_hot&quot;, &quot;binary&quot; or &quot;categorical&quot;.</span>
-<span class="sd">        var_nums (int, optional): if action_space == &quot;mult_one_hot&quot;, this value represents the cardinality of each</span>
+<span class="sd">        action_space (str): Action space. Must be one of</span>
+<span class="sd">            ``&quot;one-hot&quot;``, ``&quot;mult_one_hot&quot;``, ``&quot;binary&quot;`` or ``&quot;categorical&quot;``.</span>
+<span class="sd">        var_nums (int, optional): if ``action_space = &quot;mult_one_hot&quot;``,</span>
+<span class="sd">            this value represents the cardinality of each</span>
 <span class="sd">            action component.</span>
 
 <span class="sd">    Examples:</span>
@@ -692,9 +805,11 @@
 <span class="sd">    https://arxiv.org/pdf/1707.06887.pdf</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        action_space (str): Action space. Must be one of &quot;one_hot&quot;, &quot;mult_one_hot&quot;, &quot;binary&quot; or &quot;categorical&quot;.</span>
+<span class="sd">        action_space (str): Action space. Must be one of</span>
+<span class="sd">            ``&quot;one-hot&quot;``, ``&quot;mult_one_hot&quot;``, ``&quot;binary&quot;`` or ``&quot;categorical&quot;``.</span>
 <span class="sd">        support (torch.Tensor): support of the action values.</span>
-<span class="sd">        var_nums (int, optional): if action_space == &quot;mult_one_hot&quot;, this value represents the cardinality of each</span>
+<span class="sd">        var_nums (int, optional): if ``action_space = &quot;mult_one_hot&quot;``, this</span>
+<span class="sd">            value represents the cardinality of each</span>
 <span class="sd">            action component.</span>
 
 <span class="sd">    Examples:</span>
@@ -808,7 +923,39 @@
 <div class="viewcode-block" id="QValueActor"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.QValueActor.html#torchrl.modules.tensordict_module.QValueActor">[docs]</a><span class="k">class</span> <span class="nc">QValueActor</span><span class="p">(</span><span class="n">Actor</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;DQN Actor subclass.</span>
 
-<span class="sd">    This class hooks the module such that it returns a one-hot encoding of the argmax value.</span>
+<span class="sd">    This class hooks the module such that it returns a one-hot encoding of</span>
+<span class="sd">    the argmax value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        module (nn.Module): a :class:`torch.nn.Module` used to map the input to</span>
+<span class="sd">            the output parameter space.</span>
+<span class="sd">            Can be a functional module, in which case the</span>
+<span class="sd">            :meth:`torch.nn.Module.forward` method will expect</span>
+<span class="sd">            the params (and possibly) buffers keyword arguments.</span>
+<span class="sd">        in_keys (iterable of str, optional): keys to be read from input</span>
+<span class="sd">            tensordict and passed to the module. If it</span>
+<span class="sd">            contains more than one element, the values will be passed in the</span>
+<span class="sd">            order given by the in_keys iterable.</span>
+<span class="sd">            Defaults to ``[&quot;observation&quot;]``.</span>
+<span class="sd">        out_keys (iterable of str): keys to be written to the input tensordict.</span>
+<span class="sd">            The length of out_keys must match the</span>
+<span class="sd">            number of tensors returned by the embedded module. Using &quot;_&quot; as a</span>
+<span class="sd">            key avoid writing tensor to output.</span>
+<span class="sd">            Defaults to ``[&quot;action&quot;]``.</span>
+<span class="sd">        spec (TensorSpec, optional): Keyword-only argument.</span>
+<span class="sd">            Specs of the output tensor. If the module</span>
+<span class="sd">            outputs multiple output tensors,</span>
+<span class="sd">            spec characterize the space of the first output tensor.</span>
+<span class="sd">        safe (bool): Keyword-only argument.</span>
+<span class="sd">            If ``True``, the value of the output is checked against the</span>
+<span class="sd">            input spec. Out-of-domain sampling can</span>
+<span class="sd">            occur because of exploration policies or numerical under/overflow</span>
+<span class="sd">            issues. If this value is out of bounds, it is projected back onto the</span>
+<span class="sd">            desired space using the :obj:`TensorSpec.project`</span>
+<span class="sd">            method. Default is ``False``.</span>
+<span class="sd">        action_space (str, optional): The action space to be considered.</span>
+<span class="sd">            Must be one of</span>
+<span class="sd">            ``&quot;one-hot&quot;``, ``&quot;mult_one_hot&quot;``, ``&quot;binary&quot;`` or ``&quot;categorical&quot;``.</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
@@ -836,7 +983,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">action_space</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="s2">&quot;one_hot&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">action_space</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;one_hot&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">out_keys</span> <span class="o">=</span> <span class="p">[</span>
             <span class="s2">&quot;action&quot;</span><span class="p">,</span>
             <span class="s2">&quot;action_value&quot;</span><span class="p">,</span>
@@ -852,6 +999,38 @@
 
 <span class="sd">    This class hooks the module such that it returns a one-hot encoding of the argmax value on its support.</span>
 
+<span class="sd">    Args:</span>
+<span class="sd">        module (nn.Module): a :class:`torch.nn.Module` used to map the input to</span>
+<span class="sd">            the output parameter space.</span>
+<span class="sd">            Can be a functional module, in which case the</span>
+<span class="sd">            :meth:`torch.nn.Module.forward` method will expect</span>
+<span class="sd">            the params (and possibly) buffers keyword arguments.</span>
+<span class="sd">        in_keys (iterable of str, optional): keys to be read from input</span>
+<span class="sd">            tensordict and passed to the module. If it</span>
+<span class="sd">            contains more than one element, the values will be passed in the</span>
+<span class="sd">            order given by the in_keys iterable.</span>
+<span class="sd">            Defaults to ``[&quot;observation&quot;]``.</span>
+<span class="sd">        out_keys (iterable of str): keys to be written to the input tensordict.</span>
+<span class="sd">            The length of out_keys must match the</span>
+<span class="sd">            number of tensors returned by the embedded module. Using &quot;_&quot; as a</span>
+<span class="sd">            key avoid writing tensor to output.</span>
+<span class="sd">            Defaults to ``[&quot;action&quot;]``.</span>
+<span class="sd">        spec (TensorSpec, optional): Keyword-only argument.</span>
+<span class="sd">            Specs of the output tensor. If the module</span>
+<span class="sd">            outputs multiple output tensors,</span>
+<span class="sd">            spec characterize the space of the first output tensor.</span>
+<span class="sd">        safe (bool): Keyword-only argument.</span>
+<span class="sd">            If ``True``, the value of the output is checked against the</span>
+<span class="sd">            input spec. Out-of-domain sampling can</span>
+<span class="sd">            occur because of exploration policies or numerical under/overflow</span>
+<span class="sd">            issues. If this value is out of bounds, it is projected back onto the</span>
+<span class="sd">            desired space using the :obj:`TensorSpec.project`</span>
+<span class="sd">            method. Default is ``False``.</span>
+<span class="sd">        support (torch.Tensor): support of the action values.</span>
+<span class="sd">        action_space (str, optional): The action space to be considered.</span>
+<span class="sd">            Must be one of</span>
+<span class="sd">            ``&quot;one-hot&quot;``, ``&quot;mult_one_hot&quot;``, ``&quot;binary&quot;`` or ``&quot;categorical&quot;``.</span>
+
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
@@ -863,13 +1042,13 @@
 <span class="sd">        &gt;&gt;&gt; module = MLP(out_features=(nbins, 4), depth=2)</span>
 <span class="sd">        &gt;&gt;&gt; action_spec = OneHotDiscreteTensorSpec(4)</span>
 <span class="sd">        &gt;&gt;&gt; qvalue_actor = DistributionalQValueActor(module=module, spec=action_spec, support=torch.arange(nbins))</span>
-<span class="sd">        &gt;&gt;&gt; qvalue_actor(td)</span>
+<span class="sd">        &gt;&gt;&gt; td = qvalue_actor(td)</span>
 <span class="sd">        &gt;&gt;&gt; print(td)</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                action: Tensor(torch.Size([5, 4]), dtype=torch.int64),</span>
-<span class="sd">                action_value: Tensor(torch.Size([5, 3, 4]), dtype=torch.float32),</span>
-<span class="sd">                observation: Tensor(torch.Size([5, 4]), dtype=torch.float32)},</span>
+<span class="sd">                action: Tensor(shape=torch.Size([5, 4]), device=cpu, dtype=torch.int64, is_shared=False),</span>
+<span class="sd">                action_value: Tensor(shape=torch.Size([5, 3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([5, 4]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([5]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -931,9 +1110,12 @@
 <span class="sd">    will both return a stand-alone TDModule with the dedicated functionality.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        common_operator (SafeModule): a common operator that reads observations and produces a hidden variable</span>
-<span class="sd">        policy_operator (SafeModule): a policy operator that reads the hidden variable and returns an action</span>
-<span class="sd">        value_operator (SafeModule): a value operator, that reads the hidden variable and returns a value</span>
+<span class="sd">        common_operator (TensorDictModule): a common operator that reads</span>
+<span class="sd">            observations and produces a hidden variable</span>
+<span class="sd">        policy_operator (TensorDictModule): a policy operator that reads the</span>
+<span class="sd">            hidden variable and returns an action</span>
+<span class="sd">        value_operator (TensorDictModule): a value operator, that reads the</span>
+<span class="sd">            hidden variable and returns a value</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
@@ -950,7 +1132,7 @@
 <span class="sd">        ...    out_keys=[&quot;hidden&quot;],</span>
 <span class="sd">        ...    )</span>
 <span class="sd">        &gt;&gt;&gt; spec_action = BoundedTensorSpec(-1, 1, torch.Size([8]))</span>
-<span class="sd">        &gt;&gt;&gt; module_action = SafeModule(</span>
+<span class="sd">        &gt;&gt;&gt; module_action = TensorDictModule(</span>
 <span class="sd">        ...     NormalParamWrapper(torch.nn.Linear(4, 8)),</span>
 <span class="sd">        ...     in_keys=[&quot;hidden&quot;],</span>
 <span class="sd">        ...     out_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
@@ -958,8 +1140,8 @@
 <span class="sd">        &gt;&gt;&gt; td_module_action = ProbabilisticActor(</span>
 <span class="sd">        ...    module=module_action,</span>
 <span class="sd">        ...    spec=spec_action,</span>
-<span class="sd">        ...    dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
-<span class="sd">        ...    sample_out_key=[&quot;action&quot;],</span>
+<span class="sd">        ...    in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
+<span class="sd">        ...    out_keys=[&quot;action&quot;],</span>
 <span class="sd">        ...    distribution_class=TanhNormal,</span>
 <span class="sd">        ...    return_log_prob=True,</span>
 <span class="sd">        ...    )</span>
@@ -974,13 +1156,13 @@
 <span class="sd">        &gt;&gt;&gt; print(td_clone)</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                state_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
+<span class="sd">                action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                hidden: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                sample_log_prob: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                state_value: Tensor(shape=torch.Size([3, 1]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -988,12 +1170,12 @@
 <span class="sd">        &gt;&gt;&gt; print(td_clone)  # no value</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},</span>
+<span class="sd">                action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                hidden: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                sample_log_prob: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -1001,9 +1183,9 @@
 <span class="sd">        &gt;&gt;&gt; print(td_clone)  # no action</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                state_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
+<span class="sd">                hidden: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                state_value: Tensor(shape=torch.Size([3, 1]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -1012,9 +1194,9 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">common_operator</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
-        <span class="n">policy_operator</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
-        <span class="n">value_operator</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
+        <span class="n">common_operator</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="n">policy_operator</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="n">value_operator</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">common_operator</span><span class="p">,</span>
@@ -1024,8 +1206,10 @@
 
 <div class="viewcode-block" id="ActorValueOperator.get_policy_operator"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.ActorValueOperator.html#torchrl.modules.tensordict_module.ActorValueOperator.get_policy_operator">[docs]</a>    <span class="k">def</span> <span class="nf">get_policy_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SafeSequential</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns a stand-alone policy operator that maps an observation to an action.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">SafeProbabilisticSequential</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">SafeProbabilisticSequential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">SafeProbabilisticTensorDictSequential</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">SafeProbabilisticTensorDictSequential</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">module</span>
+            <span class="p">)</span>
         <span class="k">return</span> <span class="n">SafeSequential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="ActorValueOperator.get_value_operator"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.ActorValueOperator.html#torchrl.modules.tensordict_module.ActorValueOperator.get_value_operator">[docs]</a>    <span class="k">def</span> <span class="nf">get_value_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SafeSequential</span><span class="p">:</span>
@@ -1065,14 +1249,14 @@
 <span class="sd">    parent object, as the value is computed based on the policy output.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        common_operator (SafeModule): a common operator that reads observations and produces a hidden variable</span>
-<span class="sd">        policy_operator (SafeModule): a policy operator that reads the hidden variable and returns an action</span>
-<span class="sd">        value_operator (SafeModule): a value operator, that reads the hidden variable and returns a value</span>
+<span class="sd">        common_operator (TensorDictModule): a common operator that reads observations and produces a hidden variable</span>
+<span class="sd">        policy_operator (TensorDictModule): a policy operator that reads the hidden variable and returns an action</span>
+<span class="sd">        value_operator (TensorDictModule): a value operator, that reads the hidden variable and returns a value</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.modules import ProbabilisticActor, SafeModule</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.modules import ProbabilisticActor</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec, BoundedTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import  ValueOperator, TanhNormal, ActorCriticOperator, NormalParamWrapper, MLP</span>
 <span class="sd">        &gt;&gt;&gt; spec_hidden = UnboundedContinuousTensorSpec(4)</span>
@@ -1085,12 +1269,12 @@
 <span class="sd">        ...    )</span>
 <span class="sd">        &gt;&gt;&gt; spec_action = BoundedTensorSpec(-1, 1, torch.Size([8]))</span>
 <span class="sd">        &gt;&gt;&gt; module_action = NormalParamWrapper(torch.nn.Linear(4, 8))</span>
-<span class="sd">        &gt;&gt;&gt; module_action = SafeModule(module_action, in_keys=[&quot;hidden&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; module_action = TensorDictModule(module_action, in_keys=[&quot;hidden&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; td_module_action = ProbabilisticActor(</span>
 <span class="sd">        ...    module=module_action,</span>
 <span class="sd">        ...    spec=spec_action,</span>
-<span class="sd">        ...    dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
-<span class="sd">        ...    sample_out_key=[&quot;action&quot;],</span>
+<span class="sd">        ...    in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
+<span class="sd">        ...    out_keys=[&quot;action&quot;],</span>
 <span class="sd">        ...    distribution_class=TanhNormal,</span>
 <span class="sd">        ...    return_log_prob=True,</span>
 <span class="sd">        ...    )</span>
@@ -1106,13 +1290,13 @@
 <span class="sd">        &gt;&gt;&gt; print(td_clone)</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                state_action_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
+<span class="sd">                action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                hidden: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                sample_log_prob: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                state_action_value: Tensor(shape=torch.Size([3, 1]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -1120,12 +1304,12 @@
 <span class="sd">        &gt;&gt;&gt; print(td_clone)  # no value</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},</span>
+<span class="sd">                action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                hidden: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                sample_log_prob: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -1133,13 +1317,13 @@
 <span class="sd">        &gt;&gt;&gt; print(td_clone)  # no action</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                state_action_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
+<span class="sd">                action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                hidden: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                sample_log_prob: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                state_action_value: Tensor(shape=torch.Size([3, 1]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -1196,31 +1380,31 @@
 <span class="sd">    will both return a stand-alone TDModule with the dedicated functionality.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        policy_operator (SafeModule): a policy operator that reads the hidden variable and returns an action</span>
-<span class="sd">        value_operator (SafeModule): a value operator, that reads the hidden variable and returns a value</span>
+<span class="sd">        policy_operator (TensorDictModule): a policy operator that reads the hidden variable and returns an action</span>
+<span class="sd">        value_operator (TensorDictModule): a value operator, that reads the hidden variable and returns a value</span>
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; import torch</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict.nn import TensorDictModule</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec, BoundedTensorSpec</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import (</span>
-<span class="sd">                ActorCriticWrapper,</span>
-<span class="sd">                ProbabilisticActor,</span>
-<span class="sd">                NormalParamWrapper,</span>
-<span class="sd">                SafeModule,</span>
-<span class="sd">                TanhNormal,</span>
-<span class="sd">                ValueOperator,</span>
-<span class="sd">            )</span>
+<span class="sd">        ...      ActorCriticWrapper,</span>
+<span class="sd">        ...      ProbabilisticActor,</span>
+<span class="sd">        ...      NormalParamWrapper,</span>
+<span class="sd">        ...      TanhNormal,</span>
+<span class="sd">        ...      ValueOperator,</span>
+<span class="sd">        ...  )</span>
 <span class="sd">        &gt;&gt;&gt; action_spec = BoundedTensorSpec(-1, 1, torch.Size([8]))</span>
-<span class="sd">        &gt;&gt;&gt; action_module = SafeModule(</span>
-<span class="sd">                NormalParamWrapper(torch.nn.Linear(4, 8)),</span>
-<span class="sd">                in_keys=[&quot;observation&quot;],</span>
-<span class="sd">                out_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
-<span class="sd">            )</span>
+<span class="sd">        &gt;&gt;&gt; action_module = TensorDictModule(</span>
+<span class="sd">        ...        NormalParamWrapper(torch.nn.Linear(4, 8)),</span>
+<span class="sd">        ...        in_keys=[&quot;observation&quot;],</span>
+<span class="sd">        ...        out_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
+<span class="sd">        ...    )</span>
 <span class="sd">        &gt;&gt;&gt; td_module_action = ProbabilisticActor(</span>
 <span class="sd">        ...    module=action_module,</span>
 <span class="sd">        ...    spec=action_spec,</span>
-<span class="sd">        ...    dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
+<span class="sd">        ...    in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
 <span class="sd">        ...    distribution_class=TanhNormal,</span>
 <span class="sd">        ...    return_log_prob=True,</span>
 <span class="sd">        ...    )</span>
@@ -1235,12 +1419,12 @@
 <span class="sd">        &gt;&gt;&gt; print(td_clone)</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                state_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
+<span class="sd">                action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                sample_log_prob: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                state_value: Tensor(shape=torch.Size([3, 1]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -1248,11 +1432,11 @@
 <span class="sd">        &gt;&gt;&gt; print(td_clone)  # no value</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},</span>
+<span class="sd">                action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                sample_log_prob: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -1260,8 +1444,8 @@
 <span class="sd">        &gt;&gt;&gt; print(td_clone)  # no action</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="sd">                state_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
+<span class="sd">                observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                state_value: Tensor(shape=torch.Size([3, 1]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([3]),</span>
 <span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
@@ -1270,8 +1454,8 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">policy_operator</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
-        <span class="n">value_operator</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
+        <span class="n">policy_operator</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="n">value_operator</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
             <span class="n">policy_operator</span><span class="p">,</span>

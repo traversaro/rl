@@ -489,6 +489,7 @@
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.envs.libs.habitat.HabitatEnv.html">HabitatEnv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.envs.libs.jumanji.JumanjiEnv.html">JumanjiEnv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.envs.libs.jumanji.JumanjiWrapper.html">JumanjiWrapper</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.envs.libs.openml.OpenMLEnv.html">OpenMLEnv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.envs.libs.vmas.VmasEnv.html">VmasEnv</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.envs.libs.vmas.VmasWrapper.html">VmasWrapper</a></li>
 </ul>
@@ -510,7 +511,7 @@
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.modules.tensordict_module.EGreedyWrapper.html">EGreedyWrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper.html">OrnsteinUhlenbeckProcessWrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeProbabilisticModule.html">SafeProbabilisticModule</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeProbabilisticSequential.html">SafeProbabilisticSequential</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeProbabilisticTensorDictSequential.html">SafeProbabilisticTensorDictSequential</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeSequential.html">SafeSequential</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.modules.tensordict_module.WorldModelWrapper.html">WorldModelWrapper</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.modules.tensordict_module.common.is_tensordict_compatible.html">is_tensordict_compatible</a></li>
@@ -570,6 +571,10 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="objectives.html">torchrl.objectives package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="objectives.html#training-value-functions">Training value functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.LossModule.html">LossModule</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="objectives.html#dqn">DQN</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.DQNLoss.html">DQNLoss</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.DistributionalDQNLoss.html">DistributionalDQNLoss</a></li>
@@ -617,16 +622,23 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="objectives.html#returns">Returns</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.ValueEstimatorBase.html">ValueEstimatorBase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.TD0Estimator.html">TD0Estimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.TD1Estimator.html">TD1Estimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.TDLambdaEstimator.html">TDLambdaEstimator</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.GAE.html">GAE</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.TDLambdaEstimate.html">TDLambdaEstimate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.TDEstimate.html">TDEstimate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.td0_return_estimate.html">td0_return_estimate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.td0_advantage_estimate.html">td0_advantage_estimate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.td1_return_estimate.html">td1_return_estimate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.vec_td1_return_estimate.html">vec_td1_return_estimate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.td1_advantage_estimate.html">td1_advantage_estimate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.vec_td1_advantage_estimate.html">vec_td1_advantage_estimate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.td_lambda_return_estimate.html">td_lambda_return_estimate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.vec_td_lambda_return_estimate.html">vec_td_lambda_return_estimate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.td_lambda_advantage_estimate.html">td_lambda_advantage_estimate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.vec_td_lambda_advantage_estimate.html">vec_td_lambda_advantage_estimate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.generalized_advantage_estimate.html">generalized_advantage_estimate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.vec_generalized_advantage_estimate.html">vec_generalized_advantage_estimate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.vec_td_lambda_return_estimate.html">vec_td_lambda_return_estimate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.vec_td_lambda_advantage_estimate.html">vec_td_lambda_advantage_estimate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.td_lambda_return_estimate.html">td_lambda_return_estimate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.td_lambda_advantage_estimate.html">td_lambda_advantage_estimate</a></li>
-<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.value.functional.td_advantage_estimate.html">td_advantage_estimate</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="objectives.html#utils">Utils</a><ul>
@@ -636,6 +648,7 @@
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.next_state_value.html">next_state_value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.SoftUpdate.html">SoftUpdate</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.HardUpdate.html">HardUpdate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/torchrl.objectives.default_value_kwargs.html">default_value_kwargs</a></li>
 </ul>
 </li>
 </ul>

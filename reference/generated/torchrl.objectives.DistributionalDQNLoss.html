@@ -390,14 +390,22 @@ Perspective on Reinforcement Learning”,
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value_network</strong> (<a class="reference internal" href="torchrl.modules.tensordict_module.DistributionalQValueActor.html#torchrl.modules.tensordict_module.DistributionalQValueActor" title="torchrl.modules.tensordict_module.DistributionalQValueActor"><em>DistributionalQValueActor</em></a><em> or </em><em>nn.Module</em>) – the distributional Q
 value operator.</p></li>
-<li><p><strong>gamma</strong> (<em>scalar</em>) – a discount factor for return computation.</p></li>
-<li><p><strong>delay_value</strong> (<em>bool</em>) – whether to duplicate the value network into a new target value network to create double DQN</p></li>
+<li><p><strong>gamma</strong> (<em>scalar</em>) – <p>a discount factor for return computation.
+.. note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Unlike :class:`DQNLoss`, this class does not currently support
+custom value functions. The next value estimation is always
+bootstrapped.
+</pre></div>
+</div>
+</p></li>
+<li><p><strong>delay_value</strong> (<em>bool</em>) – whether to duplicate the value network into a new
+target value network to create double DQN</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchrl.objectives.DistributionalDQNLoss.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.1.0+8ab67e4 ))"><span class="pre">TensorDict</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/objectives/dqn.html#DistributionalDQNLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DistributionalDQNLoss.forward" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDict</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/objectives/dqn.html#DistributionalDQNLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DistributionalDQNLoss.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>It is designed to read an input TensorDict and return another tensordict with loss keys named “loss*”.</p>
 <p>Splitting the loss in its component can then be used by the trainer to log the various loss values throughout
 training. Other scalars present in the output tensordict will be logged too.</p>
@@ -411,6 +419,34 @@ is essential that the losses are returned with this name as they will be read by
 backpropagation.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.objectives.DistributionalDQNLoss.make_value_estimator">
+<span class="sig-name descname"><span class="pre">make_value_estimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ValueEstimators</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">hyperparams</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/dqn.html#DistributionalDQNLoss.make_value_estimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DistributionalDQNLoss.make_value_estimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value-function constructor.</p>
+<p>If the non-default value function is wanted, it must be built using
+this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value_type</strong> (<em>ValueEstimators</em>) – A <code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.objectives.utils.ValueFunctions</span></code>
+enum type indicating the value function to use.</p></li>
+<li><p><strong>**hyperparams</strong> – hyperparameters to use for the value function.
+If not provided, the value indicated by
+<a class="reference internal" href="torchrl.objectives.default_value_kwargs.html#torchrl.objectives.default_value_kwargs" title="torchrl.objectives.utils.default_value_kwargs"><code class="xref py py-func docutils literal notranslate"><span class="pre">torchrl.objectives.utils.default_value_kwargs()</span></code></a> will be
+used.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># initialize the DQN loss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dqn_loss</span> <span class="o">=</span> <span class="n">DQNLoss</span><span class="p">(</span><span class="n">actor</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dqn_loss</span><span class="o">.</span><span class="n">make_value_estimator</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ValueEstimators</span><span class="o">.</span><span class="n">TD1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">gamma</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -463,6 +499,7 @@ backpropagation.</p>
 <li><a class="reference internal" href="#">DistributionalDQNLoss</a><ul>
 <li><a class="reference internal" href="#torchrl.objectives.DistributionalDQNLoss"><code class="docutils literal notranslate"><span class="pre">DistributionalDQNLoss</span></code></a><ul>
 <li><a class="reference internal" href="#torchrl.objectives.DistributionalDQNLoss.forward"><code class="docutils literal notranslate"><span class="pre">DistributionalDQNLoss.forward()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.objectives.DistributionalDQNLoss.make_value_estimator"><code class="docutils literal notranslate"><span class="pre">DistributionalDQNLoss.make_value_estimator()</span></code></a></li>
 </ul>
 </li>
 </ul>

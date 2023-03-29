@@ -398,7 +398,7 @@ if a list of callable is provided, the environment will be executed as if multip
 needed, which comes with a slight compute overhead;</p></li>
 <li><p><strong>create_env_kwargs</strong> (<em>dict</em><em> or </em><em>list</em><em> of </em><em>dicts</em><em>, </em><em>optional</em>) – kwargs to be used with the environments being created;</p></li>
 <li><p><strong>pin_memory</strong> (<em>bool</em>) – if True and device is “cpu”, calls <code class="xref py py-obj docutils literal notranslate"><span class="pre">pin_memory</span></code> on the tensordicts when created.</p></li>
-<li><p><strong>share_individual_td</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, a different tensordict is created for every process/worker and a lazy
+<li><p><strong>share_individual_td</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, a different tensordict is created for every process/worker and a lazy
 stack is returned.
 default = None (False if single task);</p></li>
 <li><p><strong>shared_memory</strong> (<em>bool</em>) – whether or not the returned tensordict will be placed in shared memory;</p></li>
@@ -410,9 +410,9 @@ argument should not be passed, as the device will be inferred from the environme
 It is assumed that all environments will run on the same device as a common shared
 tensordict will be used to pass data from process to process. The device can be
 changed after instantiation using <code class="xref py py-obj docutils literal notranslate"><span class="pre">env.to(device)</span></code>.</p></li>
-<li><p><strong>allow_step_when_done</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, batched environments can
+<li><p><strong>allow_step_when_done</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, batched environments can
 execute steps after a done state is encountered.
-Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1438,11 +1438,11 @@ the environment reaches a done state before max_steps have been executed.</p></l
 actions will be called using <code class="xref py py-obj docutils literal notranslate"><span class="pre">env.rand_step()</span></code>
 default = None</p></li>
 <li><p><strong>callback</strong> (<em>callable</em><em>, </em><em>optional</em>) – function to be called at each iteration with the given TensorDict.</p></li>
-<li><p><strong>auto_reset</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, resets automatically the environment
+<li><p><strong>auto_reset</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, resets automatically the environment
 if it is in a done state when the rollout is initiated.
 Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
-<li><p><strong>auto_cast_to_device</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, the device of the tensordict is automatically cast to the
-policy device before the policy is used. Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>auto_cast_to_device</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the device of the tensordict is automatically cast to the
+policy device before the policy is used. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>break_when_any_done</strong> (<em>bool</em>) – breaks if any of the done state is True. If False, a reset() is
 called on the sub-envs that are done. Default is True.</p></li>
 <li><p><strong>return_contiguous</strong> (<em>bool</em>) – if False, a LazyStackedTensorDict will be returned. Default is True.</p></li>
@@ -1478,7 +1478,7 @@ found within the <cite>state_dict</cite>. Implement this function and a correspo
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>seed</strong> (<em>int</em>) – seed to be set</p></li>
-<li><p><strong>static_seed</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, the seed is not incremented.
+<li><p><strong>static_seed</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the seed is not incremented.
 Defaults to False</p></li>
 </ul>
 </dd>

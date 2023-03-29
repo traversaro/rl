@@ -442,7 +442,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A data-consuming sampler that ensures that the same sample is not present in consecutive batches.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        drop_last (bool, optional): if True, the last incomplete sample (if any) will be dropped.</span>
+<span class="sd">        drop_last (bool, optional): if ``True``, the last incomplete sample (if any) will be dropped.</span>
 <span class="sd">            If False, this last sample will be kept and (unlike with torch dataloaders)</span>
 <span class="sd">            completed with other samples from a fresh indices permutation.</span>
 
@@ -501,7 +501,11 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">ran_out</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ran_out</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ran_out</span>
+
+    <span class="nd">@ran_out</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">ran_out</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ran_out</span> <span class="o">=</span> <span class="n">value</span></div>
 
 
 <div class="viewcode-block" id="PrioritizedSampler"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.replay_buffers.PrioritizedSampler.html#torchrl.data.replay_buffers.PrioritizedSampler">[docs]</a><span class="k">class</span> <span class="nc">PrioritizedSampler</span><span class="p">(</span><span class="n">Sampler</span><span class="p">):</span>

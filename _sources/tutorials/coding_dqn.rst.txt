@@ -527,19 +527,19 @@ let's check that normalizing constants have a size of ``[C, 1, 1]`` where
 
  .. code-block:: none
 
-    OrderedDict([('standard_normal', tensor(True)), ('loc', tensor([[[0.9920]],
+    OrderedDict([('standard_normal', tensor(True)), ('loc', tensor([[[0.9921]],
+
+            [[0.9921]],
 
             [[0.9920]],
 
-            [[0.9920]],
+            [[0.9920]]])), ('scale', tensor([[[0.0787]],
 
-            [[0.9920]]])), ('scale', tensor([[[0.0789]],
+            [[0.0787]],
 
-            [[0.0789]],
+            [[0.0787]],
 
-            [[0.0789]],
-
-            [[0.0789]]]))])
+            [[0.0787]]]))])
 
 
 
@@ -731,7 +731,7 @@ We create a test environment for evaluation of the policy:
             done: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.bool, is_shared=False),
             pixels: Tensor(shape=torch.Size([4, 64, 64]), device=cpu, dtype=torch.float32, is_shared=False),
             reward: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),
-            step_count: Tensor(shape=torch.Size([]), device=cpu, dtype=torch.int64, is_shared=False)},
+            step_count: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.int64, is_shared=False)},
         batch_size=torch.Size([]),
         device=cpu,
         is_shared=False)
@@ -773,7 +773,18 @@ time must always have the same shape.
 
 
 
+.. rst-class:: sphx-glr-script-out
 
+.. code-block:: pytb
+
+    Traceback (most recent call last):
+      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py", line 444, in <module>
+        replay_buffer = TensorDictReplayBuffer(
+      File "/__w/rl/rl/torchrl/data/replay_buffers/replay_buffers.py", line 638, in __init__
+        super().__init__(**kw)
+      File "/__w/rl/rl/torchrl/data/replay_buffers/replay_buffers.py", line 199, in __init__
+        raise ValueError(
+    ValueError: Dynamic batch-size specification is incompatible with multithreaded sampling. When using prefetch, the batch-size must be specified in advance. 
 
 
 
@@ -835,23 +846,6 @@ the same value for all sub-collectors.
         # storing_devices=[f"cuda:{i}" for i in range(1, 1 + num_collectors)],
         split_trajs=False,
     )
-
-
-
-.. rst-class:: sphx-glr-script-out
-
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/__w/rl/rl/docs/source/reference/generated/tutorials/coding_dqn.py", line 479, in <module>
-        data_collector = MultiaSyncDataCollector(
-      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 1642, in __init__
-        super().__init__(*args, **kwargs)
-      File "/__w/rl/rl/torchrl/collectors/collectors.py", line 1094, in __init__
-        raise ValueError(
-    ValueError: total_frames (5000) must be divisible by frames_per_batch (32).
-
-
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 502-517
@@ -1463,9 +1457,9 @@ of DQN. Other possible improvements could include:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  10.285 seconds)
+   **Total running time of the script:** ( 1 minutes  8.228 seconds)
 
-**Estimated memory usage:**  3711 MB
+**Estimated memory usage:**  3699 MB
 
 
 .. _sphx_glr_download_tutorials_coding_dqn.py:

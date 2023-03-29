@@ -376,38 +376,45 @@
 <h1>PPOLoss<a class="headerlink" href="#ppoloss" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchrl.objectives.PPOLoss">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.</span></span><span class="sig-name descname"><span class="pre">PPOLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.tensordict_module.SafeProbabilisticSequential.html#torchrl.modules.tensordict_module.SafeProbabilisticSequential" title="torchrl.modules.tensordict_module.probabilistic.SafeProbabilisticSequential"><span class="pre">SafeProbabilisticSequential</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">critic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.common.SafeModule"><span class="pre">SafeModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">advantage_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'advantage'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_target_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'value_target'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entropy_bonus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples_mc_entropy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entropy_coef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">critic_coef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_critic_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'smooth_l1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_advantage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/ppo.html#PPOLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.PPOLoss" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.</span></span><span class="sig-name descname"><span class="pre">PPOLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ProbabilisticTensorDictSequential</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">critic</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advantage_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'advantage'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_target_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'value_target'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entropy_bonus</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">samples_mc_entropy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entropy_coef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">critic_coef</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_critic_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'smooth_l1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_advantage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/ppo.html#PPOLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.PPOLoss" title="Permalink to this definition">¶</a></dt>
 <dd><p>A parent PPO loss class.</p>
-<p>PPO (Proximal Policy Optimisation) is a model-free, online RL algorithm that makes use of a recorded (batch of)
-trajectories to perform several optimization steps, while actively preventing the updated policy to deviate too
+<p>PPO (Proximal Policy Optimisation) is a model-free, online RL algorithm
+that makes use of a recorded (batch of)
+trajectories to perform several optimization steps, while actively
+preventing the updated policy to deviate too
 much from its original parameter configuration.</p>
-<dl class="simple">
-<dt>PPO loss can be found in different flavours, depending on the way the constrained optimisation is implemented:</dt><dd><p>ClipPPOLoss and KLPENPPOLoss.</p>
-</dd>
-</dl>
-<p>Unlike its subclasses, this class does not implement any regularisation and should therefore be used cautiously.</p>
+<p>PPO loss can be found in different flavours, depending on the way the
+constrained optimisation is implemented: ClipPPOLoss and KLPENPPOLoss.
+Unlike its subclasses, this class does not implement any regularisation
+and should therefore be used cautiously.</p>
 <p>For more details regarding PPO, refer to: “Proximal Policy Optimization Algorithms”,
 <a class="reference external" href="https://arxiv.org/abs/1707.06347">https://arxiv.org/abs/1707.06347</a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>actor</strong> (<a class="reference internal" href="torchrl.modules.tensordict_module.SafeProbabilisticSequential.html#torchrl.modules.tensordict_module.SafeProbabilisticSequential" title="torchrl.modules.tensordict_module.SafeProbabilisticSequential"><em>SafeProbabilisticSequential</em></a>) – policy operator.</p></li>
+<li><p><strong>actor</strong> (<em>ProbabilisticTensorDictSequential</em>) – policy operator.</p></li>
 <li><p><strong>critic</strong> (<a class="reference internal" href="torchrl.modules.tensordict_module.ValueOperator.html#torchrl.modules.tensordict_module.ValueOperator" title="torchrl.modules.tensordict_module.ValueOperator"><em>ValueOperator</em></a>) – value operator.</p></li>
-<li><p><strong>advantage_key</strong> (<em>str</em>) – the input tensordict key where the advantage is expected to be written.
-default: “advantage”</p></li>
-<li><p><strong>entropy_bonus</strong> (<em>bool</em>) – if True, an entropy bonus will be added to the loss to favour exploratory policies.</p></li>
-<li><p><strong>samples_mc_entropy</strong> (<em>int</em>) – if the distribution retrieved from the policy operator does not have a closed form
-formula for the entropy, a Monte-Carlo estimate will be used. samples_mc_entropy will control how many
+<li><p><strong>advantage_key</strong> (<em>str</em>) – the input tensordict key where the advantage is
+expected to be written.
+Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;advantage&quot;</span></code>.</p></li>
+<li><p><strong>value_target_key</strong> (<em>str</em>) – the input tensordict key where the target state
+value is expected to be written. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;value_target&quot;</span></code>.</p></li>
+<li><p><strong>entropy_bonus</strong> (<em>bool</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, an entropy bonus will be added to the
+loss to favour exploratory policies.</p></li>
+<li><p><strong>samples_mc_entropy</strong> (<em>int</em>) – if the distribution retrieved from the policy
+operator does not have a closed form
+formula for the entropy, a Monte-Carlo estimate will be used.
+<code class="docutils literal notranslate"><span class="pre">samples_mc_entropy</span></code> will control how many
 samples will be used to compute this estimate.
-default: 1</p></li>
+Defaults to <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
 <li><p><strong>entropy_coef</strong> (<em>scalar</em>) – entropy multiplier when computing the total loss.
-default: 0.01</p></li>
-<li><p><strong>critic_coef</strong> (<em>scalar</em>) – critic loss multiplier when computing the total loss.
-default: 1.0</p></li>
-<li><p><strong>gamma</strong> (<em>scalar</em>) – a discount factor for return computation.</p></li>
-<li><p><strong>loss_function</strong> (<em>str</em>) – loss function for the value discrepancy. Can be one of “l1”, “l2” or “smooth_l1”.</p></li>
-<li><p><strong>normalize_advantage</strong> (<em>bool</em>) – if True, the advantage will be normalized before being used.
-Defaults to False.</p></li>
+Defaults to <code class="docutils literal notranslate"><span class="pre">0.01</span></code>.</p></li>
+<li><p><strong>critic_coef</strong> (<em>scalar</em>) – critic loss multiplier when computing the total
+loss. Defaults to <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.</p></li>
+<li><p><strong>loss_critic_type</strong> (<em>str</em>) – loss function for the value discrepancy.
+Can be one of “l1”, “l2” or “smooth_l1”. Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;smooth_l1&quot;</span></code>.</p></li>
+<li><p><strong>normalize_advantage</strong> (<em>bool</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the advantage will be normalized
+before being used. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -427,6 +434,34 @@ is essential that the losses are returned with this name as they will be read by
 backpropagation.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.objectives.PPOLoss.make_value_estimator">
+<span class="sig-name descname"><span class="pre">make_value_estimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ValueEstimators</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">hyperparams</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/ppo.html#PPOLoss.make_value_estimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.PPOLoss.make_value_estimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value-function constructor.</p>
+<p>If the non-default value function is wanted, it must be built using
+this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value_type</strong> (<em>ValueEstimators</em>) – A <code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.objectives.utils.ValueFunctions</span></code>
+enum type indicating the value function to use.</p></li>
+<li><p><strong>**hyperparams</strong> – hyperparameters to use for the value function.
+If not provided, the value indicated by
+<a class="reference internal" href="torchrl.objectives.default_value_kwargs.html#torchrl.objectives.default_value_kwargs" title="torchrl.objectives.utils.default_value_kwargs"><code class="xref py py-func docutils literal notranslate"><span class="pre">torchrl.objectives.utils.default_value_kwargs()</span></code></a> will be
+used.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># initialize the DQN loss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dqn_loss</span> <span class="o">=</span> <span class="n">DQNLoss</span><span class="p">(</span><span class="n">actor</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dqn_loss</span><span class="o">.</span><span class="n">make_value_estimator</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ValueEstimators</span><span class="o">.</span><span class="n">TD1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">gamma</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -479,6 +514,7 @@ backpropagation.</p>
 <li><a class="reference internal" href="#">PPOLoss</a><ul>
 <li><a class="reference internal" href="#torchrl.objectives.PPOLoss"><code class="docutils literal notranslate"><span class="pre">PPOLoss</span></code></a><ul>
 <li><a class="reference internal" href="#torchrl.objectives.PPOLoss.forward"><code class="docutils literal notranslate"><span class="pre">PPOLoss.forward()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.objectives.PPOLoss.make_value_estimator"><code class="docutils literal notranslate"><span class="pre">PPOLoss.make_value_estimator()</span></code></a></li>
 </ul>
 </li>
 </ul>

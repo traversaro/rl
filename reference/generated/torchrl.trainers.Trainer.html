@@ -391,7 +391,7 @@ loss module and an optimizer.</p>
 data in a TensorDict form of shape [batch x time steps].</p></li>
 <li><p><strong>total_frames</strong> (<em>int</em>) – Total number of frames to be collected during
 training.</p></li>
-<li><p><strong>loss_module</strong> (<em>LossModule</em>) – A module that reads TensorDict batches
+<li><p><strong>loss_module</strong> (<a class="reference internal" href="torchrl.objectives.LossModule.html#torchrl.objectives.LossModule" title="torchrl.objectives.LossModule"><em>LossModule</em></a>) – A module that reads TensorDict batches
 (possibly sampled from a replay buffer) and return a loss
 TensorDict where every key points to a different loss component.</p></li>
 <li><p><strong>optimizer</strong> (<em>optim.Optimizer</em>) – An optimizer that trains the parameters

@@ -368,39 +368,48 @@
 <span class="c1">#</span>
 <span class="c1"># This source code is licensed under the MIT license found in the</span>
 <span class="c1"># LICENSE file in the root directory of this source tree.</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
 
 <span class="kn">from</span> <span class="nn">torchrl.envs.model_based.dreamer</span> <span class="kn">import</span> <span class="n">DreamerEnv</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.utils</span> <span class="kn">import</span> <span class="n">set_exploration_mode</span><span class="p">,</span> <span class="n">step_mdp</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">SafeModule</span>
 <span class="kn">from</span> <span class="nn">torchrl.objectives.common</span> <span class="kn">import</span> <span class="n">LossModule</span>
-<span class="kn">from</span> <span class="nn">torchrl.objectives.utils</span> <span class="kn">import</span> <span class="n">distance_loss</span><span class="p">,</span> <span class="n">hold_out_net</span>
-<span class="kn">from</span> <span class="nn">torchrl.objectives.value.functional</span> <span class="kn">import</span> <span class="n">vec_td_lambda_return_estimate</span>
+<span class="kn">from</span> <span class="nn">torchrl.objectives.utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_GAMMA_LMBDA_DEPREC_WARNING</span><span class="p">,</span>
+    <span class="n">default_value_kwargs</span><span class="p">,</span>
+    <span class="n">distance_loss</span><span class="p">,</span>
+    <span class="n">hold_out_net</span><span class="p">,</span>
+    <span class="n">ValueEstimators</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">torchrl.objectives.value</span> <span class="kn">import</span> <span class="n">TD0Estimator</span><span class="p">,</span> <span class="n">TD1Estimator</span><span class="p">,</span> <span class="n">TDLambdaEstimator</span>
 
 
 <div class="viewcode-block" id="DreamerModelLoss"><a class="viewcode-back" href="../../../reference/generated/torchrl.objectives.DreamerModelLoss.html#torchrl.objectives.DreamerModelLoss">[docs]</a><span class="k">class</span> <span class="nc">DreamerModelLoss</span><span class="p">(</span><span class="n">LossModule</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Dreamer Model Loss.</span>
 
-<span class="sd">    Computes the loss of the dreamer world model. The loss is composed of the kl divergence between the prior and posterior of the RSSM,</span>
-<span class="sd">    the reconstruction loss over the reconstructed observation and the reward loss over the predicted reward.</span>
+<span class="sd">    Computes the loss of the dreamer world model. The loss is composed of the</span>
+<span class="sd">    kl divergence between the prior and posterior of the RSSM,</span>
+<span class="sd">    the reconstruction loss over the reconstructed observation and the reward</span>
+<span class="sd">    loss over the predicted reward.</span>
 
 <span class="sd">    Reference: https://arxiv.org/abs/1912.01603.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        world_model (SafeModule): the world model.</span>
+<span class="sd">        world_model (TensorDictModule): the world model.</span>
 <span class="sd">        lambda_kl (float, optional): the weight of the kl divergence loss. Default: 1.0.</span>
 <span class="sd">        lambda_reco (float, optional): the weight of the reconstruction loss. Default: 1.0.</span>
 <span class="sd">        lambda_reward (float, optional): the weight of the reward loss. Default: 1.0.</span>
 <span class="sd">        reco_loss (str, optional): the reconstruction loss. Default: &quot;l2&quot;.</span>
 <span class="sd">        reward_loss (str, optional): the reward loss. Default: &quot;l2&quot;.</span>
 <span class="sd">        free_nats (int, optional): the free nats. Default: 3.</span>
-<span class="sd">        delayed_clamp (bool, optional): if True, the KL clamping occurs after</span>
+<span class="sd">        delayed_clamp (bool, optional): if ``True``, the KL clamping occurs after</span>
 <span class="sd">            averaging. If False (default), the kl divergence is clamped to the</span>
 <span class="sd">            free nats value first and then averaged.</span>
-<span class="sd">        global_average (bool, optional): if True, the losses will be averaged</span>
+<span class="sd">        global_average (bool, optional): if ``True``, the losses will be averaged</span>
 <span class="sd">            over all dimensions. Otherwise, a sum will be performed over all</span>
 <span class="sd">            non-batch/time dimensions and an average over batch and time.</span>
 <span class="sd">            Default: False.</span>
@@ -408,7 +417,8 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">world_model</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
+        <span class="n">world_model</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
         <span class="n">lambda_kl</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">lambda_reco</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">lambda_reward</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
@@ -495,41 +505,47 @@
 <div class="viewcode-block" id="DreamerActorLoss"><a class="viewcode-back" href="../../../reference/generated/torchrl.objectives.DreamerActorLoss.html#torchrl.objectives.DreamerActorLoss">[docs]</a><span class="k">class</span> <span class="nc">DreamerActorLoss</span><span class="p">(</span><span class="n">LossModule</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Dreamer Actor Loss.</span>
 
-<span class="sd">    Computes the loss of the dreamer actor. The actor loss is computed as the negative average lambda return.</span>
+<span class="sd">    Computes the loss of the dreamer actor. The actor loss is computed as the</span>
+<span class="sd">    negative average lambda return.</span>
 
 <span class="sd">    Reference: https://arxiv.org/abs/1912.01603.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        actor_model (SafeModule): the actor model.</span>
-<span class="sd">        value_model (SafeModule): the value model.</span>
+<span class="sd">        actor_model (TensorDictModule): the actor model.</span>
+<span class="sd">        value_model (TensorDictModule): the value model.</span>
 <span class="sd">        model_based_env (DreamerEnv): the model based environment.</span>
 <span class="sd">        imagination_horizon (int, optional): The number of steps to unroll the</span>
-<span class="sd">            model. Default: 15.</span>
-<span class="sd">        gamma (float, optional): the gamma discount factor. Default: 0.99.</span>
-<span class="sd">        lmbda (float, optional): the lambda discount factor factor. Default: 0.95.</span>
-<span class="sd">        discount_loss (bool, optional): if True, the loss is discounted with a</span>
-<span class="sd">            gamma discount factor. Default: False.</span>
+<span class="sd">            model. Defaults to ``15``.</span>
+<span class="sd">        discount_loss (bool, optional): if ``True``, the loss is discounted with a</span>
+<span class="sd">            gamma discount factor. Default to ``False``.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">default_value_estimator</span> <span class="o">=</span> <span class="n">ValueEstimators</span><span class="o">.</span><span class="n">TDLambda</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">actor_model</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
-        <span class="n">value_model</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
+        <span class="n">actor_model</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="n">value_model</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
         <span class="n">model_based_env</span><span class="p">:</span> <span class="n">DreamerEnv</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
         <span class="n">imagination_horizon</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
-        <span class="n">gamma</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.99</span><span class="p">,</span>
-        <span class="n">lmbda</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.95</span><span class="p">,</span>
         <span class="n">discount_loss</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># for consistency with paper</span>
+        <span class="n">gamma</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">lmbda</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">actor_model</span> <span class="o">=</span> <span class="n">actor_model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value_model</span> <span class="o">=</span> <span class="n">value_model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_based_env</span> <span class="o">=</span> <span class="n">model_based_env</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">imagination_horizon</span> <span class="o">=</span> <span class="n">imagination_horizon</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span> <span class="o">=</span> <span class="n">lmbda</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">discount_loss</span> <span class="o">=</span> <span class="n">discount_loss</span>
+        <span class="k">if</span> <span class="n">gamma</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">_GAMMA_LMBDA_DEPREC_WARNING</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="k">if</span> <span class="n">lmbda</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">_GAMMA_LMBDA_DEPREC_WARNING</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span> <span class="o">=</span> <span class="n">lmbda</span>
 
 <div class="viewcode-block" id="DreamerActorLoss.forward"><a class="viewcode-back" href="../../../reference/generated/torchrl.objectives.DreamerActorLoss.html#torchrl.objectives.DreamerActorLoss.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">TensorDict</span><span class="p">,</span> <span class="n">TensorDict</span><span class="p">]:</span>
         <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
@@ -558,9 +574,8 @@
         <span class="n">fake_data</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;lambda_target&quot;</span><span class="p">,</span> <span class="n">lambda_target</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">discount_loss</span><span class="p">:</span>
-            <span class="n">discount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span>
-                <span class="n">lambda_target</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span>
-            <span class="p">)</span>
+            <span class="n">gamma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_estimator</span><span class="o">.</span><span class="n">gamma</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">discount</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">lambda_target</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
             <span class="n">discount</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="n">discount</span> <span class="o">=</span> <span class="n">discount</span><span class="o">.</span><span class="n">cumprod</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">2</span><span class="p">)</span>
             <span class="n">actor_loss</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">lambda_target</span> <span class="o">*</span> <span class="n">discount</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
@@ -571,33 +586,80 @@
 
     <span class="k">def</span> <span class="nf">lambda_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reward</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">done</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">reward</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">reward</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">vec_td_lambda_return_estimate</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span>
-        <span class="p">)</span></div>
+        <span class="n">input_tensordict</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;reward&quot;</span><span class="p">):</span> <span class="n">reward</span><span class="p">,</span>
+                <span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;state_value&quot;</span><span class="p">):</span> <span class="n">value</span><span class="p">,</span>
+                <span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">):</span> <span class="n">done</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="p">[],</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_estimator</span><span class="o">.</span><span class="n">value_estimate</span><span class="p">(</span><span class="n">input_tensordict</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DreamerActorLoss.make_value_estimator"><a class="viewcode-back" href="../../../reference/generated/torchrl.objectives.DreamerActorLoss.html#torchrl.objectives.DreamerActorLoss.make_value_estimator">[docs]</a>    <span class="k">def</span> <span class="nf">make_value_estimator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_type</span><span class="p">:</span> <span class="n">ValueEstimators</span><span class="p">,</span> <span class="o">**</span><span class="n">hyperparams</span><span class="p">):</span>
+        <span class="n">value_net</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">value_key</span> <span class="o">=</span> <span class="s2">&quot;state_value&quot;</span>
+        <span class="n">hp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">default_value_kwargs</span><span class="p">(</span><span class="n">value_type</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;gamma&quot;</span><span class="p">):</span>
+            <span class="n">hp</span><span class="p">[</span><span class="s2">&quot;gamma&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>
+        <span class="n">hp</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">hyperparams</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value_type</span> <span class="ow">is</span> <span class="n">ValueEstimators</span><span class="o">.</span><span class="n">TD1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value_estimator</span> <span class="o">=</span> <span class="n">TD1Estimator</span><span class="p">(</span>
+                <span class="o">**</span><span class="n">hp</span><span class="p">,</span>
+                <span class="n">value_network</span><span class="o">=</span><span class="n">value_net</span><span class="p">,</span>
+                <span class="n">value_target_key</span><span class="o">=</span><span class="s2">&quot;value_target&quot;</span><span class="p">,</span>
+                <span class="n">value_key</span><span class="o">=</span><span class="n">value_key</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">value_type</span> <span class="ow">is</span> <span class="n">ValueEstimators</span><span class="o">.</span><span class="n">TD0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value_estimator</span> <span class="o">=</span> <span class="n">TD0Estimator</span><span class="p">(</span>
+                <span class="o">**</span><span class="n">hp</span><span class="p">,</span>
+                <span class="n">value_network</span><span class="o">=</span><span class="n">value_net</span><span class="p">,</span>
+                <span class="n">value_target_key</span><span class="o">=</span><span class="s2">&quot;value_target&quot;</span><span class="p">,</span>
+                <span class="n">value_key</span><span class="o">=</span><span class="n">value_key</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">value_type</span> <span class="ow">is</span> <span class="n">ValueEstimators</span><span class="o">.</span><span class="n">GAE</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lmbda&quot;</span><span class="p">):</span>
+                <span class="n">hp</span><span class="p">[</span><span class="s2">&quot;lmbda&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Value type </span><span class="si">{</span><span class="n">value_type</span><span class="si">}</span><span class="s2"> it not implemented for loss </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">value_type</span> <span class="ow">is</span> <span class="n">ValueEstimators</span><span class="o">.</span><span class="n">TDLambda</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;lmbda&quot;</span><span class="p">):</span>
+                <span class="n">hp</span><span class="p">[</span><span class="s2">&quot;lmbda&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmbda</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value_estimator</span> <span class="o">=</span> <span class="n">TDLambdaEstimator</span><span class="p">(</span>
+                <span class="o">**</span><span class="n">hp</span><span class="p">,</span>
+                <span class="n">value_network</span><span class="o">=</span><span class="n">value_net</span><span class="p">,</span>
+                <span class="n">value_target_key</span><span class="o">=</span><span class="s2">&quot;value_target&quot;</span><span class="p">,</span>
+                <span class="n">value_key</span><span class="o">=</span><span class="n">value_key</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown value type </span><span class="si">{</span><span class="n">value_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="DreamerValueLoss"><a class="viewcode-back" href="../../../reference/generated/torchrl.objectives.DreamerValueLoss.html#torchrl.objectives.DreamerValueLoss">[docs]</a><span class="k">class</span> <span class="nc">DreamerValueLoss</span><span class="p">(</span><span class="n">LossModule</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Dreamer Value Loss.</span>
 
-<span class="sd">    Computes the loss of the dreamer value model. The value loss is computed between the predicted value and the lambda target.</span>
+<span class="sd">    Computes the loss of the dreamer value model. The value loss is computed</span>
+<span class="sd">    between the predicted value and the lambda target.</span>
 
 <span class="sd">    Reference: https://arxiv.org/abs/1912.01603.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        value_model (SafeModule): the value model.</span>
-<span class="sd">        value_loss (str, optional): the loss to use for the value loss. Default: &quot;l2&quot;.</span>
-<span class="sd">        gamma (float, optional): the gamma discount factor. Default: 0.99.</span>
-<span class="sd">        discount_loss (bool, optional): if True, the loss is discounted with a</span>
+<span class="sd">        value_model (TensorDictModule): the value model.</span>
+<span class="sd">        value_loss (str, optional): the loss to use for the value loss.</span>
+<span class="sd">            Default: ``&quot;l2&quot;``.</span>
+<span class="sd">        discount_loss (bool, optional): if ``True``, the loss is discounted with a</span>
 <span class="sd">            gamma discount factor. Default: False.</span>
+<span class="sd">        gamma (float, optional): the gamma discount factor. Default: ``0.99``.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">value_model</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
+        <span class="n">value_model</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
         <span class="n">value_loss</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">gamma</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.99</span><span class="p">,</span>
         <span class="n">discount_loss</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># for consistency with paper</span>
+        <span class="n">gamma</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.99</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">value_model</span> <span class="o">=</span> <span class="n">value_model</span>

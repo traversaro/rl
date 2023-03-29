@@ -552,8 +552,9 @@ Here are examples of using a replaybuffer with tensordicts.
 
     TensorDict(
         fields={
+            _weight: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.float32, is_shared=False),
             a: Tensor(shape=torch.Size([2, 3]), device=cpu, dtype=torch.float32, is_shared=False),
-            index: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.int32, is_shared=False)},
+            index: Tensor(shape=torch.Size([2]), device=cpu, dtype=torch.int64, is_shared=False)},
         batch_size=torch.Size([2]),
         device=None,
         is_shared=False)
@@ -576,7 +577,7 @@ Here are examples of using a replaybuffer with tensordicts.
  .. code-block:: none
 
 
-    tensor([0, 1], dtype=torch.int32)
+    tensor([0, 0])
 
 
 
@@ -606,8 +607,8 @@ Here are examples of using a replaybuffer with tensordicts.
 
  .. code-block:: none
 
-    0 0.06984968483448029
-    1 0.28791671991348267
+    0 0.28791671991348267
+    1 1.0
     2 0.0
 
 
@@ -872,7 +873,7 @@ Vectorized Environments
             observation: Tensor(shape=torch.Size([4, 3]), device=cpu, dtype=torch.float32, is_shared=False),
             pixels: Tensor(shape=torch.Size([4, 3, 500, 500]), device=cpu, dtype=torch.float32, is_shared=False),
             reward: Tensor(shape=torch.Size([4, 1]), device=cpu, dtype=torch.float32, is_shared=False),
-            step_count: Tensor(shape=torch.Size([4]), device=cpu, dtype=torch.int64, is_shared=False)},
+            step_count: Tensor(shape=torch.Size([4, 1]), device=cpu, dtype=torch.int64, is_shared=False)},
         batch_size=torch.Size([4]),
         device=cpu,
         is_shared=False)
@@ -1891,15 +1892,13 @@ Objectives
         loss_td = loss_fn(tensordict)
       File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1501, in _call_impl
         return forward_call(*args, **kwargs)
-      File "/__w/rl/rl/torchrl/objectives/ddpg.py", line 98, in forward
+      File "/__w/rl/rl/torchrl/objectives/ddpg.py", line 108, in forward
         loss_value, td_error, pred_val, target_value = self._loss_value(
-      File "/__w/rl/rl/torchrl/objectives/ddpg.py", line 163, in _loss_value
-        target_value = next_state_value(
-      File "/usr/local/lib/python3.8/dist-packages/torch/utils/_contextlib.py", line 115, in decorate_context
-        return func(*args, **kwargs)
-      File "/__w/rl/rl/torchrl/objectives/utils.py", line 335, in next_state_value
-        rewards = tensordict.get(("next", "reward")).squeeze(-1)
-      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 3367, in get
+      File "/__w/rl/rl/torchrl/objectives/ddpg.py", line 172, in _loss_value
+        target_value = self.value_estimator.value_estimate(
+      File "/__w/rl/rl/torchrl/objectives/value/advantages.py", line 284, in value_estimate
+        reward = tensordict.get(("next", "reward"))
+      File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 3364, in get
         return self._default_get(key, default)
       File "/usr/local/lib/python3.8/dist-packages/tensordict/tensordict.py", line 1012, in _default_get
         raise KeyError(
@@ -1956,9 +1955,9 @@ The library is on PyPI: *pip install torchrl*
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 4 minutes  15.698 seconds)
+   **Total running time of the script:** ( 4 minutes  17.074 seconds)
 
-**Estimated memory usage:**  3690 MB
+**Estimated memory usage:**  3657 MB
 
 
 .. _sphx_glr_download_tutorials_torchrl_demo.py:

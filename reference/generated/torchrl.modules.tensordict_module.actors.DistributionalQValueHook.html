@@ -386,9 +386,11 @@ For more details regarding Distributional DQN, refer to “A Distributional Pers
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>action_space</strong> (<em>str</em>) – Action space. Must be one of “one_hot”, “mult_one_hot”, “binary” or “categorical”.</p></li>
+<li><p><strong>action_space</strong> (<em>str</em>) – Action space. Must be one of
+<code class="docutils literal notranslate"><span class="pre">&quot;one-hot&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mult_one_hot&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;binary&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;categorical&quot;</span></code>.</p></li>
 <li><p><strong>support</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><em>torch.Tensor</em></a>) – support of the action values.</p></li>
-<li><p><strong>var_nums</strong> (<em>int</em><em>, </em><em>optional</em>) – if action_space == “mult_one_hot”, this value represents the cardinality of each
+<li><p><strong>var_nums</strong> (<em>int</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">action_space</span> <span class="pre">=</span> <span class="pre">&quot;mult_one_hot&quot;</span></code>, this
+value represents the cardinality of each
 action component.</p></li>
 </ul>
 </dd>

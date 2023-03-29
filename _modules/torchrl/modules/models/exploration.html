@@ -398,7 +398,7 @@
 <span class="sd">    Args:</span>
 <span class="sd">        in_features (int): input features dimension</span>
 <span class="sd">        out_features (int): out features dimension</span>
-<span class="sd">        bias (bool): if True, a bias term will be added to the matrix multiplication: Ax + b.</span>
+<span class="sd">        bias (bool): if ``True``, a bias term will be added to the matrix multiplication: Ax + b.</span>
 <span class="sd">            default: True</span>
 <span class="sd">        device (DEVICE_TYPING, optional): device of the layer.</span>
 <span class="sd">            default: &quot;cpu&quot;</span>
@@ -520,7 +520,7 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        out_features (int): out features dimension</span>
-<span class="sd">        bias (bool): if True, a bias term will be added to the matrix multiplication: Ax + b.</span>
+<span class="sd">        bias (bool): if ``True``, a bias term will be added to the matrix multiplication: Ax + b.</span>
 <span class="sd">            default: True</span>
 <span class="sd">        device (DEVICE_TYPING, optional): device of the layer.</span>
 <span class="sd">        dtype (torch.dtype, optional): dtype of the parameters.</span>
@@ -630,37 +630,38 @@
 
 <span class="sd">    Examples:</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.modules import SafeModule, SafeSequential, ProbabilisticActor, TanhNormal</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.modules import ProbabilisticActor, TanhNormal</span>
+<span class="sd">        &gt;&gt;&gt; from tensordict.nn import TensorDictModule, ProbabilisticTensorDictSequential</span>
 <span class="sd">        &gt;&gt;&gt; batch, state_dim, action_dim = 3, 7, 5</span>
 <span class="sd">        &gt;&gt;&gt; model = nn.Linear(state_dim, action_dim)</span>
-<span class="sd">        &gt;&gt;&gt; deterministic_policy = SafeModule(model, in_keys=[&quot;obs&quot;], out_keys=[&quot;action&quot;])</span>
-<span class="sd">        &gt;&gt;&gt; stochatstic_part = SafeModule(</span>
+<span class="sd">        &gt;&gt;&gt; deterministic_policy = TensorDictModule(model, in_keys=[&quot;obs&quot;], out_keys=[&quot;action&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; stochastic_part = TensorDictModule(</span>
 <span class="sd">        ...     gSDEModule(action_dim, state_dim),</span>
 <span class="sd">        ...     in_keys=[&quot;action&quot;, &quot;obs&quot;, &quot;_eps_gSDE&quot;],</span>
 <span class="sd">        ...     out_keys=[&quot;loc&quot;, &quot;scale&quot;, &quot;action&quot;, &quot;_eps_gSDE&quot;])</span>
-<span class="sd">        &gt;&gt;&gt; stochatstic_part = ProbabilisticActor(stochatstic_part,</span>
-<span class="sd">        ...      dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
+<span class="sd">        &gt;&gt;&gt; stochastic_part = ProbabilisticActor(stochastic_part,</span>
+<span class="sd">        ...      in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
 <span class="sd">        ...      distribution_class=TanhNormal)</span>
-<span class="sd">        &gt;&gt;&gt; stochatstic_policy = SafeSequential(deterministic_policy, stochatstic_part)</span>
+<span class="sd">        &gt;&gt;&gt; stochastic_policy = ProbabilisticTensorDictSequential(deterministic_policy, *stochastic_part)</span>
 <span class="sd">        &gt;&gt;&gt; tensordict = TensorDict({&#39;obs&#39;: torch.randn(state_dim), &#39;_epx_gSDE&#39;: torch.zeros(1)}, [])</span>
-<span class="sd">        &gt;&gt;&gt; _ = stochatstic_policy(tensordict)</span>
+<span class="sd">        &gt;&gt;&gt; _ = stochastic_policy(tensordict)</span>
 <span class="sd">        &gt;&gt;&gt; print(tensordict)</span>
 <span class="sd">        TensorDict(</span>
 <span class="sd">            fields={</span>
-<span class="sd">                obs: Tensor(torch.Size([7]), dtype=torch.float32),</span>
-<span class="sd">                _epx_gSDE: Tensor(torch.Size([1]), dtype=torch.float32),</span>
-<span class="sd">                action: Tensor(torch.Size([5]), dtype=torch.float32),</span>
-<span class="sd">                loc: Tensor(torch.Size([5]), dtype=torch.float32),</span>
-<span class="sd">                scale: Tensor(torch.Size([5]), dtype=torch.float32),</span>
-<span class="sd">                _eps_gSDE: Tensor(torch.Size([5, 7]), dtype=torch.float32)},</span>
+<span class="sd">                _eps_gSDE: Tensor(shape=torch.Size([5, 7]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                _epx_gSDE: Tensor(shape=torch.Size([1]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                action: Tensor(shape=torch.Size([5]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                loc: Tensor(shape=torch.Size([5]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                obs: Tensor(shape=torch.Size([7]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="sd">                scale: Tensor(shape=torch.Size([5]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="sd">            batch_size=torch.Size([]),</span>
-<span class="sd">            device=cpu,</span>
+<span class="sd">            device=None,</span>
 <span class="sd">            is_shared=False)</span>
 <span class="sd">        &gt;&gt;&gt; action_first_call = tensordict.get(&quot;action&quot;).clone()</span>
-<span class="sd">        &gt;&gt;&gt; dist, *_ = stochatstic_policy.get_dist(tensordict)</span>
+<span class="sd">        &gt;&gt;&gt; dist = stochastic_policy.get_dist(tensordict)</span>
 <span class="sd">        &gt;&gt;&gt; print(dist)</span>
 <span class="sd">        TanhNormal(loc: torch.Size([5]), scale: torch.Size([5]))</span>
-<span class="sd">        &gt;&gt;&gt; _ = stochatstic_policy(tensordict)</span>
+<span class="sd">        &gt;&gt;&gt; _ = stochastic_policy(tensordict)</span>
 <span class="sd">        &gt;&gt;&gt; action_second_call = tensordict.get(&quot;action&quot;).clone()</span>
 <span class="sd">        &gt;&gt;&gt; assert (action_second_call == action_first_call).all()  # actions are the same</span>
 <span class="sd">        &gt;&gt;&gt; assert (action_first_call != dist.base_dist.base_dist.loc).all()  # actions are truly stochastic</span>

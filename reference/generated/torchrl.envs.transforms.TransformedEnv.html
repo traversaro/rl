@@ -385,7 +385,7 @@
 <li><p><strong>transform</strong> (<a class="reference internal" href="torchrl.envs.transforms.Transform.html#torchrl.envs.transforms.Transform" title="torchrl.envs.transforms.Transform"><em>Transform</em></a><em>, </em><em>optional</em>) – transform to apply to the tensordict resulting
 from <code class="xref py py-obj docutils literal notranslate"><span class="pre">env.step(td)</span></code>. If none is provided, an empty Compose
 placeholder in an eval mode is used.</p></li>
-<li><p><strong>cache_specs</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, the specs will be cached once
+<li><p><strong>cache_specs</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the specs will be cached once
 and for all after the first call (i.e. the specs will be
 transformed_in only once). If the transform changes during
 training, the original spec transform may not be valid anymore,

@@ -387,7 +387,7 @@
 <code class="xref py py-obj docutils literal notranslate"><span class="pre">[&quot;pixels&quot;]</span></code> is assumed.</p></li>
 <li><p><strong>out_keys</strong> (<em>sequence</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – the flatten observation keys. If none is
 provided, <code class="xref py py-obj docutils literal notranslate"><span class="pre">in_keys</span></code> is assumed.</p></li>
-<li><p><strong>allow_positive_dim</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, positive dimensions are accepted.
+<li><p><strong>allow_positive_dim</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, positive dimensions are accepted.
 <a class="reference internal" href="#torchrl.envs.transforms.FlattenObservation" title="torchrl.envs.transforms.FlattenObservation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FlattenObservation</span></code></a> will map these to the n^th feature dimension
 (ie n^th dimension after batch size of parent env) of the input tensor.
 Defaults to False, ie. non-negative dimensions are not permitted.</p></li>

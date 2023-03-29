@@ -384,11 +384,11 @@
 <li><p><strong>replay_buffer</strong> (<a class="reference internal" href="torchrl.data.TensorDictReplayBuffer.html#torchrl.data.TensorDictReplayBuffer" title="torchrl.data.TensorDictReplayBuffer"><em>TensorDictReplayBuffer</em></a>) – replay buffer to be used.</p></li>
 <li><p><strong>batch_size</strong> (<em>int</em>) – batch size when sampling data from the
 latest collection or from the replay buffer.</p></li>
-<li><p><strong>memmap</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, a memmap tensordict is created.
+<li><p><strong>memmap</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, a memmap tensordict is created.
 Default is False.</p></li>
 <li><p><strong>device</strong> (<em>device</em><em>, </em><em>optional</em>) – device where the samples must be placed.
 Default is cpu.</p></li>
-<li><p><strong>flatten_tensordicts</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, the tensordicts will be
+<li><p><strong>flatten_tensordicts</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the tensordicts will be
 flattened (or equivalently masked with the valid mask obtained from
 the collector) before being passed to the replay buffer. Otherwise,
 no transform will be achieved other than padding (see <code class="xref py py-obj docutils literal notranslate"><span class="pre">max_dims</span></code> arg below).

@@ -379,6 +379,42 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.modules.tensordict_module.</span></span><span class="sig-name descname"><span class="pre">DistributionalQValueActor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">support</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">action_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'one_hot'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/tensordict_module/actors.html#DistributionalQValueActor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.tensordict_module.DistributionalQValueActor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Distributional DQN Actor subclass.</p>
 <p>This class hooks the module such that it returns a one-hot encoding of the argmax value on its support.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> (<em>nn.Module</em>) – a <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> used to map the input to
+the output parameter space.
+Can be a functional module, in which case the
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.forward" title="(in PyTorch v2.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.nn.Module.forward()</span></code></a> method will expect
+the params (and possibly) buffers keyword arguments.</p></li>
+<li><p><strong>in_keys</strong> (<em>iterable</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – keys to be read from input
+tensordict and passed to the module. If it
+contains more than one element, the values will be passed in the
+order given by the in_keys iterable.
+Defaults to <code class="docutils literal notranslate"><span class="pre">[&quot;observation&quot;]</span></code>.</p></li>
+<li><p><strong>out_keys</strong> (<em>iterable</em><em> of </em><em>str</em>) – keys to be written to the input tensordict.
+The length of out_keys must match the
+number of tensors returned by the embedded module. Using “_” as a
+key avoid writing tensor to output.
+Defaults to <code class="docutils literal notranslate"><span class="pre">[&quot;action&quot;]</span></code>.</p></li>
+<li><p><strong>spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a><em>, </em><em>optional</em>) – Keyword-only argument.
+Specs of the output tensor. If the module
+outputs multiple output tensors,
+spec characterize the space of the first output tensor.</p></li>
+<li><p><strong>safe</strong> (<em>bool</em>) – Keyword-only argument.
+If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the value of the output is checked against the
+input spec. Out-of-domain sampling can
+occur because of exploration policies or numerical under/overflow
+issues. If this value is out of bounds, it is projected back onto the
+desired space using the <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorSpec.project</span></code>
+method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>support</strong> (<a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><em>torch.Tensor</em></a>) – support of the action values.</p></li>
+<li><p><strong>action_space</strong> (<em>str</em><em>, </em><em>optional</em>) – The action space to be considered.
+Must be one of
+<code class="docutils literal notranslate"><span class="pre">&quot;one-hot&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;mult_one_hot&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;binary&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;categorical&quot;</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
@@ -390,13 +426,13 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">out_features</span><span class="o">=</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">action_spec</span> <span class="o">=</span> <span class="n">OneHotDiscreteTensorSpec</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">qvalue_actor</span> <span class="o">=</span> <span class="n">DistributionalQValueActor</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">,</span> <span class="n">support</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">qvalue_actor</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">td</span> <span class="o">=</span> <span class="n">qvalue_actor</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
 <span class="go">TensorDict(</span>
 <span class="go">    fields={</span>
-<span class="go">        action: Tensor(torch.Size([5, 4]), dtype=torch.int64),</span>
-<span class="go">        action_value: Tensor(torch.Size([5, 3, 4]), dtype=torch.float32),</span>
-<span class="go">        observation: Tensor(torch.Size([5, 4]), dtype=torch.float32)},</span>
+<span class="go">        action: Tensor(shape=torch.Size([5, 4]), device=cpu, dtype=torch.int64, is_shared=False),</span>
+<span class="go">        action_value: Tensor(shape=torch.Size([5, 3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        observation: Tensor(shape=torch.Size([5, 4]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="go">    batch_size=torch.Size([5]),</span>
 <span class="go">    device=None,</span>
 <span class="go">    is_shared=False)</span>

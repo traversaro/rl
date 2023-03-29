@@ -38,7 +38,7 @@
   <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="GAE" href="torchrl.objectives.value.GAE.html" />
+    <link rel="next" title="ValueEstimatorBase" href="torchrl.objectives.value.ValueEstimatorBase.html" />
     <link rel="prev" title="DreamerModelLoss" href="torchrl.objectives.DreamerModelLoss.html" />
   <!-- Google Analytics -->
   
@@ -376,18 +376,20 @@
 <h1>DreamerValueLoss<a class="headerlink" href="#dreamervalueloss" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchrl.objectives.DreamerValueLoss">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.</span></span><span class="sig-name descname"><span class="pre">DreamerValueLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.common.SafeModule"><span class="pre">SafeModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discount_loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/dreamer.html#DreamerValueLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DreamerValueLoss" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.</span></span><span class="sig-name descname"><span class="pre">DreamerValueLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">discount_loss</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/dreamer.html#DreamerValueLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DreamerValueLoss" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dreamer Value Loss.</p>
-<p>Computes the loss of the dreamer value model. The value loss is computed between the predicted value and the lambda target.</p>
+<p>Computes the loss of the dreamer value model. The value loss is computed
+between the predicted value and the lambda target.</p>
 <p>Reference: <a class="reference external" href="https://arxiv.org/abs/1912.01603">https://arxiv.org/abs/1912.01603</a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>value_model</strong> (<a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.SafeModule"><em>SafeModule</em></a>) – the value model.</p></li>
-<li><p><strong>value_loss</strong> (<em>str</em><em>, </em><em>optional</em>) – the loss to use for the value loss. Default: “l2”.</p></li>
-<li><p><strong>gamma</strong> (<em>float</em><em>, </em><em>optional</em>) – the gamma discount factor. Default: 0.99.</p></li>
-<li><p><strong>discount_loss</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, the loss is discounted with a
+<li><p><strong>value_model</strong> (<em>TensorDictModule</em>) – the value model.</p></li>
+<li><p><strong>value_loss</strong> (<em>str</em><em>, </em><em>optional</em>) – the loss to use for the value loss.
+Default: <code class="docutils literal notranslate"><span class="pre">&quot;l2&quot;</span></code>.</p></li>
+<li><p><strong>discount_loss</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the loss is discounted with a
 gamma discount factor. Default: False.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em><em>, </em><em>optional</em>) – the gamma discount factor. Default: <code class="docutils literal notranslate"><span class="pre">0.99</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -421,7 +423,7 @@ backpropagation.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.objectives.value.GAE.html" class="btn btn-neutral float-right" title="GAE" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.objectives.value.ValueEstimatorBase.html" class="btn btn-neutral float-right" title="ValueEstimatorBase" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
         <a href="torchrl.objectives.DreamerModelLoss.html" class="btn btn-neutral" title="DreamerModelLoss" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>

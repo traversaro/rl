@@ -376,26 +376,87 @@
 <h1>ProbabilisticActor<a class="headerlink" href="#probabilisticactor" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchrl.modules.tensordict_module.ProbabilisticActor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.modules.tensordict_module.</span></span><span class="sig-name descname"><span class="pre">ProbabilisticActor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.common.SafeModule"><span class="pre">SafeModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/tensordict_module/actors.html#ProbabilisticActor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.tensordict_module.ProbabilisticActor" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.modules.tensordict_module.</span></span><span class="sig-name descname"><span class="pre">ProbabilisticActor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.tensor_specs.TensorSpec"><span class="pre">TensorSpec</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/tensordict_module/actors.html#ProbabilisticActor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.tensordict_module.ProbabilisticActor" title="Permalink to this definition">¶</a></dt>
 <dd><p>General class for probabilistic actors in RL.</p>
 <p>The Actor class comes with default values for the out_keys ([“action”])
 and if the spec is provided but not as a CompositeSpec object, it will be
 automatically translated into <code class="xref py py-obj docutils literal notranslate"><span class="pre">spec</span> <span class="pre">=</span> <span class="pre">CompositeSpec(action=spec)</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> (<em>nn.Module</em>) – a <a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module" title="(in PyTorch v2.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.Module</span></code></a> used to map the input to
+the output parameter space.
+Can be a functional module, in which case the
+<a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.Module.html#torch.nn.Module.forward" title="(in PyTorch v2.0)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">torch.nn.Module.forward()</span></code></a> method will expect
+the params (and possibly) buffers keyword arguments.</p></li>
+<li><p><strong>in_keys</strong> (<em>str</em><em> or </em><em>iterable</em><em> of </em><em>str</em><em> or </em><em>dict</em>) – key(s) that will be read from the
+input TensorDict and used to build the distribution. Importantly, if it’s an
+iterable of string or a string, those keys must match the keywords used by
+the distribution class of interest, e.g. <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;loc&quot;</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;scale&quot;</span></code> for
+the Normal distribution and similar. If in_keys is a dictionary,, the keys
+are the keys of the distribution and the values are the keys in the
+tensordict that will get match to the corresponding distribution keys.</p></li>
+<li><p><strong>out_keys</strong> (<em>str</em><em> or </em><em>iterable</em><em> of </em><em>str</em>) – keys where the sampled values will be
+written. Importantly, if these keys are found in the input TensorDict, the
+sampling step will be skipped.</p></li>
+<li><p><strong>spec</strong> (<a class="reference internal" href="torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><em>TensorSpec</em></a><em>, </em><em>optional</em>) – keyword-only argument containing the specs
+of the output tensor. If the module outputs multiple output tensors,
+spec characterize the space of the first output tensor.</p></li>
+<li><p><strong>safe</strong> (<em>bool</em>) – keyword-only argument. if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the value of the output is checked against the
+input spec. Out-of-domain sampling can
+occur because of exploration policies or numerical under/overflow
+issues. If this value is out of bounds, it is projected back onto the
+desired space using the <code class="xref py py-obj docutils literal notranslate"><span class="pre">TensorSpec.project</span></code>
+method. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>default_interaction_mode</strong> (<em>str</em><em>, </em><em>optional</em>) – keyword-only argument.
+Default method to be used to retrieve
+the output value. Should be one of: ‘mode’, ‘median’, ‘mean’ or ‘random’
+(in which case the value is sampled randomly from the distribution). Default
+is ‘mode’.
+Note: When a sample is drawn, the <code class="xref py py-obj docutils literal notranslate"><span class="pre">ProbabilisticTDModule</span></code> instance will
+first look for the interaction mode dictated by the <cite>interaction_mode()</cite>
+global function. If this returns <cite>None</cite> (its default value), then the
+<cite>default_interaction_mode</cite> of the <cite>ProbabilisticTDModule</cite> instance will be
+used. Note that DataCollector instances will use <cite>set_interaction_mode</cite> to
+<cite>“random”</cite> by default.</p></li>
+<li><p><strong>distribution_class</strong> (<em>Type</em><em>, </em><em>optional</em>) – keyword-only argument.
+A <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.distributions.Distribution</span></code> class to
+be used for sampling.
+Default is <code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.nn.distributions.Delta</span></code>.</p></li>
+<li><p><strong>distribution_kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – keyword-only argument.
+Keyword-argument pairs to be passed to the distribution.</p></li>
+<li><p><strong>return_log_prob</strong> (<em>bool</em><em>, </em><em>optional</em>) – keyword-only argument.
+If <code class="docutils literal notranslate"><span class="pre">True</span></code>, the log-probability of the
+distribution sample will be written in the tensordict with the key
+<cite>‘sample_log_prob’</cite>. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>cache_dist</strong> (<em>bool</em><em>, </em><em>optional</em>) – keyword-only argument.
+EXPERIMENTAL: if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the parameters of the
+distribution (i.e. the output of the module) will be written to the
+tensordict along with the sample. Those parameters can be used to re-compute
+the original distribution later on (e.g. to compute the divergence between
+the distribution used to sample the action and the updated distribution in
+PPO). Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>n_empirical_estimate</strong> (<em>int</em><em>, </em><em>optional</em>) – keyword-only argument.
+Number of samples to compute the empirical
+mean when it is not available. Defaults to 1000.</p></li>
+</ul>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict.nn.functional_modules</span> <span class="kn">import</span> <span class="n">make_functional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">make_functional</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">BoundedTensorSpec</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">ProbabilisticActor</span><span class="p">,</span> <span class="n">NormalParamWrapper</span><span class="p">,</span> <span class="n">SafeModule</span><span class="p">,</span> <span class="n">TanhNormal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">ProbabilisticActor</span><span class="p">,</span> <span class="n">NormalParamWrapper</span><span class="p">,</span> <span class="n">TanhNormal</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">td</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)},</span> <span class="p">[</span><span class="mi">3</span><span class="p">,])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">action_spec</span> <span class="o">=</span> <span class="n">BoundedTensorSpec</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="mi">4</span><span class="p">]),</span>
 <span class="gp">... </span>   <span class="n">minimum</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">maximum</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">NormalParamWrapper</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tensordict_module</span> <span class="o">=</span> <span class="n">SafeModule</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tensordict_module</span> <span class="o">=</span> <span class="n">TensorDictModule</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">td_module</span> <span class="o">=</span> <span class="n">ProbabilisticActor</span><span class="p">(</span>
 <span class="gp">... </span>   <span class="n">module</span><span class="o">=</span><span class="n">tensordict_module</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="n">spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">,</span>
-<span class="gp">... </span>   <span class="n">dist_in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">],</span>
 <span class="gp">... </span>   <span class="n">distribution_class</span><span class="o">=</span><span class="n">TanhNormal</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">make_functional</span><span class="p">(</span><span class="n">td_module</span><span class="p">)</span>
@@ -403,12 +464,12 @@ automatically translated into <code class="xref py py-obj docutils literal notra
 <span class="gp">&gt;&gt;&gt; </span><span class="n">td</span>
 <span class="go">TensorDict(</span>
 <span class="go">    fields={</span>
-<span class="go">        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        action: Tensor(torch.Size([3, 4]), dtype=torch.float32)},</span>
+<span class="go">        action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="go">    batch_size=torch.Size([3]),</span>
-<span class="go">    device=cpu,</span>
+<span class="go">    device=None,</span>
 <span class="go">    is_shared=False)</span>
 </pre></div>
 </div>

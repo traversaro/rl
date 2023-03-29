@@ -383,7 +383,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>unsqueeze_dim</strong> (<em>int</em>) – dimension to unsqueeze. Must be negative (or allow_positive_dim
 must be turned on).</p></li>
-<li><p><strong>allow_positive_dim</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, positive dimensions are accepted.
+<li><p><strong>allow_positive_dim</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, positive dimensions are accepted.
 <a class="reference internal" href="#torchrl.envs.transforms.UnsqueezeTransform" title="torchrl.envs.transforms.UnsqueezeTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UnsqueezeTransform</span></code></a> will map these to the n^th feature dimension
 (ie n^th dimension after batch size of parent env) of the input tensor,
 independently from the tensordict batch size (ie positive dims may be

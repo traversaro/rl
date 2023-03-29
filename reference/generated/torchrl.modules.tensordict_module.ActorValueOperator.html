@@ -376,7 +376,7 @@
 <h1>ActorValueOperator<a class="headerlink" href="#actorvalueoperator" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchrl.modules.tensordict_module.ActorValueOperator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.modules.tensordict_module.</span></span><span class="sig-name descname"><span class="pre">ActorValueOperator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">common_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.common.SafeModule"><span class="pre">SafeModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.common.SafeModule"><span class="pre">SafeModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.common.SafeModule"><span class="pre">SafeModule</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/tensordict_module/actors.html#ActorValueOperator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.tensordict_module.ActorValueOperator" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.modules.tensordict_module.</span></span><span class="sig-name descname"><span class="pre">ActorValueOperator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">common_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_operator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDictModule</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/modules/tensordict_module/actors.html#ActorValueOperator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.modules.tensordict_module.ActorValueOperator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Actor-value operator.</p>
 <p>This class wraps together an actor and a value model that share a common observation embedding network:</p>
 <a class="reference internal image-reference" href="../../_images/aafig-ff3deef7e41b32870a006c6e3bbb625746fb60fb.svg"><img alt="../../_images/aafig-ff3deef7e41b32870a006c6e3bbb625746fb60fb.svg" height="274.8" src="../../_images/aafig-ff3deef7e41b32870a006c6e3bbb625746fb60fb.svg" width="426.0" /></a>
@@ -385,9 +385,12 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>common_operator</strong> (<a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.SafeModule"><em>SafeModule</em></a>) – a common operator that reads observations and produces a hidden variable</p></li>
-<li><p><strong>policy_operator</strong> (<a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.SafeModule"><em>SafeModule</em></a>) – a policy operator that reads the hidden variable and returns an action</p></li>
-<li><p><strong>value_operator</strong> (<a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.SafeModule"><em>SafeModule</em></a>) – a value operator, that reads the hidden variable and returns a value</p></li>
+<li><p><strong>common_operator</strong> (<em>TensorDictModule</em>) – a common operator that reads
+observations and produces a hidden variable</p></li>
+<li><p><strong>policy_operator</strong> (<em>TensorDictModule</em>) – a policy operator that reads the
+hidden variable and returns an action</p></li>
+<li><p><strong>value_operator</strong> (<em>TensorDictModule</em>) – a value operator, that reads the
+hidden variable and returns a value</p></li>
 </ul>
 </dd>
 </dl>
@@ -406,7 +409,7 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 <span class="gp">... </span>   <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hidden&quot;</span><span class="p">],</span>
 <span class="gp">... </span>   <span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">spec_action</span> <span class="o">=</span> <span class="n">BoundedTensorSpec</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Size</span><span class="p">([</span><span class="mi">8</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">module_action</span> <span class="o">=</span> <span class="n">SafeModule</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module_action</span> <span class="o">=</span> <span class="n">TensorDictModule</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">NormalParamWrapper</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">)),</span>
 <span class="gp">... </span>    <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hidden&quot;</span><span class="p">],</span>
 <span class="gp">... </span>    <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">],</span>
@@ -414,8 +417,8 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">td_module_action</span> <span class="o">=</span> <span class="n">ProbabilisticActor</span><span class="p">(</span>
 <span class="gp">... </span>   <span class="n">module</span><span class="o">=</span><span class="n">module_action</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="n">spec</span><span class="o">=</span><span class="n">spec_action</span><span class="p">,</span>
-<span class="gp">... </span>   <span class="n">dist_in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">],</span>
-<span class="gp">... </span>   <span class="n">sample_out_key</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">],</span>
+<span class="gp">... </span>   <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">],</span>
 <span class="gp">... </span>   <span class="n">distribution_class</span><span class="o">=</span><span class="n">TanhNormal</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="n">return_log_prob</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="p">)</span>
@@ -430,13 +433,13 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td_clone</span><span class="p">)</span>
 <span class="go">TensorDict(</span>
 <span class="go">    fields={</span>
-<span class="go">        action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
-<span class="go">        scale: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        state_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
+<span class="go">        action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        hidden: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        sample_log_prob: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        state_value: Tensor(shape=torch.Size([3, 1]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="go">    batch_size=torch.Size([3]),</span>
 <span class="go">    device=None,</span>
 <span class="go">    is_shared=False)</span>
@@ -444,12 +447,12 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td_clone</span><span class="p">)</span>  <span class="c1"># no value</span>
 <span class="go">TensorDict(</span>
 <span class="go">    fields={</span>
-<span class="go">        action: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        loc: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        sample_log_prob: Tensor(torch.Size([3, 1]), dtype=torch.float32),</span>
-<span class="go">        scale: Tensor(torch.Size([3, 4]), dtype=torch.float32)},</span>
+<span class="go">        action: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        hidden: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        loc: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        sample_log_prob: Tensor(shape=torch.Size([3]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        scale: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="go">    batch_size=torch.Size([3]),</span>
 <span class="go">    device=None,</span>
 <span class="go">    is_shared=False)</span>
@@ -457,9 +460,9 @@ will both return a stand-alone TDModule with the dedicated functionality.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td_clone</span><span class="p">)</span>  <span class="c1"># no action</span>
 <span class="go">TensorDict(</span>
 <span class="go">    fields={</span>
-<span class="go">        hidden: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        observation: Tensor(torch.Size([3, 4]), dtype=torch.float32),</span>
-<span class="go">        state_value: Tensor(torch.Size([3, 1]), dtype=torch.float32)},</span>
+<span class="go">        hidden: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        observation: Tensor(shape=torch.Size([3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        state_value: Tensor(shape=torch.Size([3, 1]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
 <span class="go">    batch_size=torch.Size([3]),</span>
 <span class="go">    device=None,</span>
 <span class="go">    is_shared=False)</span>

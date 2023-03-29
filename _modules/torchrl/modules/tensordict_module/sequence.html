@@ -371,7 +371,7 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictSequential</span>
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">TensorDictSequential</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
 
 <span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="n">CompositeSpec</span>
@@ -379,7 +379,7 @@
 
 
 <div class="viewcode-block" id="SafeSequential"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.SafeSequential.html#torchrl.modules.tensordict_module.SafeSequential">[docs]</a><span class="k">class</span> <span class="nc">SafeSequential</span><span class="p">(</span><span class="n">TensorDictSequential</span><span class="p">,</span> <span class="n">SafeModule</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A sequence of SafeModules.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A safe sequence of TensorDictModules.</span>
 
 <span class="sd">    Similarly to :obj:`nn.Sequence` which passes a tensor through a chain of mappings that read and write a single tensor</span>
 <span class="sd">    each, this module will read and write over a tensordict by querying each of the input modules.</span>
@@ -387,8 +387,8 @@
 <span class="sd">    buffers) will be concatenated in a single list.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">         modules (iterable of SafeModules): ordered sequence of SafeModule instances to be run sequentially.</span>
-<span class="sd">         partial_tolerant (bool, optional): if True, the input tensordict can miss some of the input keys.</span>
+<span class="sd">         modules (iterable of TensorDictModules): ordered sequence of TensorDictModule instances to be run sequentially.</span>
+<span class="sd">         partial_tolerant (bool, optional): if ``True``, the input tensordict can miss some of the input keys.</span>
 <span class="sd">            If so, the only module that will be executed are those who can be executed given the keys that</span>
 <span class="sd">            are present.</span>
 <span class="sd">            Also, if the input tensordict is a lazy stack of tensordicts AND if partial_tolerant is :obj:`True` AND if the</span>
@@ -401,23 +401,23 @@
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict.nn.functional_modules import make_functional</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import CompositeSpec, UnboundedContinuousTensorSpec</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.modules import TanhNormal, SafeSequential, SafeModule, NormalParamWrapper</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.modules import TanhNormal, SafeSequential, TensorDictModule, NormalParamWrapper</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules.tensordict_module import SafeProbabilisticModule</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;input&quot;: torch.randn(3, 4)}, [3,])</span>
 <span class="sd">        &gt;&gt;&gt; spec1 = CompositeSpec(hidden=UnboundedContinuousTensorSpec(4), loc=None, scale=None)</span>
 <span class="sd">        &gt;&gt;&gt; net1 = NormalParamWrapper(torch.nn.Linear(4, 8))</span>
-<span class="sd">        &gt;&gt;&gt; module1 = SafeModule(net1, in_keys=[&quot;input&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; module1 = TensorDictModule(net1, in_keys=[&quot;input&quot;], out_keys=[&quot;loc&quot;, &quot;scale&quot;])</span>
 <span class="sd">        &gt;&gt;&gt; td_module1 = SafeProbabilisticModule(</span>
 <span class="sd">        ...     module=module1,</span>
 <span class="sd">        ...     spec=spec1,</span>
-<span class="sd">        ...     dist_in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
-<span class="sd">        ...     sample_out_key=[&quot;hidden&quot;],</span>
+<span class="sd">        ...     in_keys=[&quot;loc&quot;, &quot;scale&quot;],</span>
+<span class="sd">        ...     out_keys=[&quot;hidden&quot;],</span>
 <span class="sd">        ...     distribution_class=TanhNormal,</span>
 <span class="sd">        ...     return_log_prob=True,</span>
 <span class="sd">        ... )</span>
 <span class="sd">        &gt;&gt;&gt; spec2 = UnboundedContinuousTensorSpec(8)</span>
 <span class="sd">        &gt;&gt;&gt; module2 = torch.nn.Linear(4, 8)</span>
-<span class="sd">        &gt;&gt;&gt; td_module2 = SafeModule(</span>
+<span class="sd">        &gt;&gt;&gt; td_module2 = TensorDictModule(</span>
 <span class="sd">        ...    module=module2,</span>
 <span class="sd">        ...    spec=spec2,</span>
 <span class="sd">        ...    in_keys=[&quot;hidden&quot;],</span>
@@ -471,7 +471,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="o">*</span><span class="n">modules</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">modules</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
         <span class="n">partial_tolerant</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">partial_tolerant</span> <span class="o">=</span> <span class="n">partial_tolerant</span>
@@ -480,9 +480,9 @@
 
         <span class="n">spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">module</span> <span class="ow">in</span> <span class="n">modules</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">SafeModule</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
                 <span class="n">spec</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">spec</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
                 <span class="n">spec</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">CompositeSpec</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">module</span><span class="o">.</span><span class="n">out_keys</span><span class="p">}))</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">TensorDictSequential</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>

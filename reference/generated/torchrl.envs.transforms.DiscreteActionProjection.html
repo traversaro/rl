@@ -396,7 +396,7 @@ base_env, but the original input keys will remain unchanged.</p>
 <li><p><strong>num_actions_effective</strong> (<em>int</em>) – max number of action considered.</p></li>
 <li><p><strong>max_actions</strong> (<em>int</em>) – maximum number of actions that this module can read.</p></li>
 <li><p><strong>action_key</strong> (<em>str</em><em>, </em><em>optional</em>) – key name of the action. Defaults to “action”.</p></li>
-<li><p><strong>include_forward</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, a call to forward will also
+<li><p><strong>include_forward</strong> (<em>bool</em><em>, </em><em>optional</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, a call to forward will also
 map the action from one domain to the other when the module is called
 by a replay buffer or an nn.Module chain. Defaults to True.</p></li>
 </ul>

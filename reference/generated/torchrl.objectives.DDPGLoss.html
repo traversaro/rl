@@ -376,27 +376,24 @@
 <h1>DDPGLoss<a class="headerlink" href="#ddpgloss" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchrl.objectives.DDPGLoss">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.</span></span><span class="sig-name descname"><span class="pre">DDPGLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor_network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.common.SafeModule"><span class="pre">SafeModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.common.SafeModule"><span class="pre">SafeModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'l2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/ddpg.html#DDPGLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DDPGLoss" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.</span></span><span class="sig-name descname"><span class="pre">DDPGLoss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor_network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'l2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/ddpg.html#DDPGLoss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DDPGLoss" title="Permalink to this definition">¶</a></dt>
 <dd><p>The DDPG Loss class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>actor_network</strong> (<a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.SafeModule"><em>SafeModule</em></a>) – a policy operator.</p></li>
-<li><p><strong>value_network</strong> (<a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.SafeModule"><em>SafeModule</em></a>) – a Q value operator.</p></li>
-<li><p><strong>gamma</strong> (<em>scalar</em>) – a discount factor for return computation.</p></li>
-<li><p><strong>device</strong> (<em>str</em><em>, </em><em>int</em><em> or </em><a class="reference external" href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="(in PyTorch v2.0)"><em>torch.device</em></a><em>, </em><em>optional</em>) – a device where the losses will be computed, if it can’t be found
-via the value operator.</p></li>
+<li><p><strong>actor_network</strong> (<em>TensorDictModule</em>) – a policy operator.</p></li>
+<li><p><strong>value_network</strong> (<em>TensorDictModule</em>) – a Q value operator.</p></li>
 <li><p><strong>loss_function</strong> (<em>str</em>) – loss function for the value discrepancy. Can be one of “l1”, “l2” or “smooth_l1”.</p></li>
 <li><p><strong>delay_actor</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to separate the target actor networks from the actor networks used for
-data collection. Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+data collection. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 <li><p><strong>delay_value</strong> (<em>bool</em><em>, </em><em>optional</em>) – whether to separate the target value networks from the value networks used for
-data collection. Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+data collection. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchrl.objectives.DDPGLoss.forward">
-<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.1.0+8ab67e4 ))"><span class="pre">TensorDict</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/objectives/ddpg.html#DDPGLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DDPGLoss.forward" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDict</span></a></span></span><a class="reference internal" href="../../_modules/torchrl/objectives/ddpg.html#DDPGLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DDPGLoss.forward" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the DDPG losses given a tensordict sampled from the replay buffer.</p>
 <dl class="simple">
 <dt>This function will also write a “td_error” key that can be used by prioritized replay buffers to assign</dt><dd><p>a priority to items in the tensordict.</p>
@@ -411,6 +408,34 @@ and value networks.</p>
 <dd class="field-even"><p>a tuple of 2 tensors containing the DDPG loss.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.objectives.DDPGLoss.make_value_estimator">
+<span class="sig-name descname"><span class="pre">make_value_estimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ValueEstimators</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">hyperparams</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/ddpg.html#DDPGLoss.make_value_estimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.DDPGLoss.make_value_estimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value-function constructor.</p>
+<p>If the non-default value function is wanted, it must be built using
+this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>value_type</strong> (<em>ValueEstimators</em>) – A <code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.objectives.utils.ValueFunctions</span></code>
+enum type indicating the value function to use.</p></li>
+<li><p><strong>**hyperparams</strong> – hyperparameters to use for the value function.
+If not provided, the value indicated by
+<a class="reference internal" href="torchrl.objectives.default_value_kwargs.html#torchrl.objectives.default_value_kwargs" title="torchrl.objectives.utils.default_value_kwargs"><code class="xref py py-func docutils literal notranslate"><span class="pre">torchrl.objectives.utils.default_value_kwargs()</span></code></a> will be
+used.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># initialize the DQN loss</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dqn_loss</span> <span class="o">=</span> <span class="n">DQNLoss</span><span class="p">(</span><span class="n">actor</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dqn_loss</span><span class="o">.</span><span class="n">make_value_estimator</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ValueEstimators</span><span class="o">.</span><span class="n">TD1</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">gamma</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -463,6 +488,7 @@ and value networks.</p>
 <li><a class="reference internal" href="#">DDPGLoss</a><ul>
 <li><a class="reference internal" href="#torchrl.objectives.DDPGLoss"><code class="docutils literal notranslate"><span class="pre">DDPGLoss</span></code></a><ul>
 <li><a class="reference internal" href="#torchrl.objectives.DDPGLoss.forward"><code class="docutils literal notranslate"><span class="pre">DDPGLoss.forward()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.objectives.DDPGLoss.make_value_estimator"><code class="docutils literal notranslate"><span class="pre">DDPGLoss.make_value_estimator()</span></code></a></li>
 </ul>
 </li>
 </ul>

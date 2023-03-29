@@ -380,6 +380,7 @@
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">import</span> <span class="nn">torch.nn</span> <span class="k">as</span> <span class="nn">nn</span>
 <span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span><span class="p">,</span> <span class="n">TensorDictBase</span>
+
 <span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">CompositeSpec</span><span class="p">,</span>
     <span class="n">DiscreteTensorSpec</span><span class="p">,</span>
@@ -389,7 +390,6 @@
 
 <span class="kn">from</span> <span class="nn">.._utils</span> <span class="kn">import</span> <span class="n">prod</span><span class="p">,</span> <span class="n">seed_generator</span>
 <span class="kn">from</span> <span class="nn">..data.utils</span> <span class="kn">import</span> <span class="n">DEVICE_TYPING</span>
-
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">get_available_libraries</span><span class="p">,</span> <span class="n">step_mdp</span>
 
 <span class="n">LIBRARIES</span> <span class="o">=</span> <span class="n">get_available_libraries</span><span class="p">()</span>
@@ -493,7 +493,7 @@
 <span class="sd">        - reward_spec (TensorSpec): sampling spec of the rewards;</span>
 <span class="sd">        - batch_size (torch.Size): number of environments contained in the instance;</span>
 <span class="sd">        - device (torch.device): device where the env input and output are expected to live</span>
-<span class="sd">        - run_type_checks (bool): if True, the observation and reward dtypes</span>
+<span class="sd">        - run_type_checks (bool): if ``True``, the observation and reward dtypes</span>
 <span class="sd">            will be compared against their respective spec and an exception</span>
 <span class="sd">            will be raised if they don&#39;t match.</span>
 <span class="sd">            Defaults to False.</span>
@@ -846,6 +846,10 @@
         <span class="k">if</span> <span class="n">tensordict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;_reset&quot;</span> <span class="ow">in</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_assert_tensordict_shape</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
             <span class="n">_reset</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_reset&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_reset</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="p">:]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">done_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;_reset flag in tensordict should follow env.done_spec&quot;</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_reset</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -900,7 +904,7 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            seed (int): seed to be set</span>
-<span class="sd">            static_seed (bool, optional): if True, the seed is not incremented.</span>
+<span class="sd">            static_seed (bool, optional): if ``True``, the seed is not incremented.</span>
 <span class="sd">                Defaults to False</span>
 
 <span class="sd">        Returns:</span>
@@ -1013,11 +1017,11 @@
 <span class="sd">                actions will be called using :obj:`env.rand_step()`</span>
 <span class="sd">                default = None</span>
 <span class="sd">            callback (callable, optional): function to be called at each iteration with the given TensorDict.</span>
-<span class="sd">            auto_reset (bool, optional): if True, resets automatically the environment</span>
+<span class="sd">            auto_reset (bool, optional): if ``True``, resets automatically the environment</span>
 <span class="sd">                if it is in a done state when the rollout is initiated.</span>
 <span class="sd">                Default is :obj:`True`.</span>
-<span class="sd">            auto_cast_to_device (bool, optional): if True, the device of the tensordict is automatically cast to the</span>
-<span class="sd">                policy device before the policy is used. Default is :obj:`False`.</span>
+<span class="sd">            auto_cast_to_device (bool, optional): if ``True``, the device of the tensordict is automatically cast to the</span>
+<span class="sd">                policy device before the policy is used. Default is ``False``.</span>
 <span class="sd">            break_when_any_done (bool): breaks if any of the done state is True. If False, a reset() is</span>
 <span class="sd">                called on the sub-envs that are done. Default is True.</span>
 <span class="sd">            return_contiguous (bool): if False, a LazyStackedTensorDict will be returned. Default is True.</span>
@@ -1074,7 +1078,7 @@
                 <span class="n">exclude_action</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">break_when_any_done</span> <span class="ow">and</span> <span class="n">done</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-                <span class="n">_reset</span> <span class="o">=</span> <span class="n">done</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+                <span class="n">_reset</span> <span class="o">=</span> <span class="n">done</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
                 <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;_reset&quot;</span><span class="p">,</span> <span class="n">_reset</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
 

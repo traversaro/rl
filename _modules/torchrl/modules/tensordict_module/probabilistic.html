@@ -386,7 +386,7 @@
 
 
 <div class="viewcode-block" id="SafeProbabilisticModule"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.SafeProbabilisticModule.html#torchrl.modules.tensordict_module.SafeProbabilisticModule">[docs]</a><span class="k">class</span> <span class="nc">SafeProbabilisticModule</span><span class="p">(</span><span class="n">ProbabilisticTensorDictModule</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :obj:``SafeProbabilisticModule`` is an :obj:``tensordict.nn.ProbabilisticTensorDictModule`` subclass that accepts a :obj:``TensorSpec`` as argument to control the output domain.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;:class:`tensordict.nn.ProbabilisticTensorDictModule` subclass that accepts a :class:`torchrl.envs.TensorSpec` as argument to control the output domain.</span>
 
 <span class="sd">    `SafeProbabilisticModule` is a non-parametric module representing a</span>
 <span class="sd">    probability distribution. It reads the distribution parameters from an input</span>
@@ -425,13 +425,13 @@
 <span class="sd">            sampling step will be skipped.</span>
 <span class="sd">        spec (TensorSpec): specs of the first output tensor. Used when calling</span>
 <span class="sd">            td_module.random() to generate random values in the target space.</span>
-<span class="sd">        safe (bool, optional): if True, the value of the sample is checked against the</span>
+<span class="sd">        safe (bool, optional): if ``True``, the value of the sample is checked against the</span>
 <span class="sd">            input spec. Out-of-domain sampling can occur because of exploration policies</span>
 <span class="sd">            or numerical under/overflow issues. As for the :obj:`spec` argument, this</span>
 <span class="sd">            check will only occur for the distribution sample, but not the other tensors</span>
 <span class="sd">            returned by the input module. If the sample is out of bounds, it is</span>
 <span class="sd">            projected back onto the desired space using the `TensorSpec.project` method.</span>
-<span class="sd">            Default is :obj:`False`.</span>
+<span class="sd">            Default is ``False``.</span>
 <span class="sd">        default_interaction_mode (str, optional): default method to be used to retrieve</span>
 <span class="sd">            the output value. Should be one of: &#39;mode&#39;, &#39;median&#39;, &#39;mean&#39; or &#39;random&#39;</span>
 <span class="sd">            (in which case the value is sampled randomly from the distribution). Default</span>
@@ -445,15 +445,15 @@
 <span class="sd">        distribution_class (Type, optional): a torch.distributions.Distribution class to</span>
 <span class="sd">            be used for sampling. Default is Delta.</span>
 <span class="sd">        distribution_kwargs (dict, optional): kwargs to be passed to the distribution.</span>
-<span class="sd">        return_log_prob (bool, optional): if True, the log-probability of the</span>
+<span class="sd">        return_log_prob (bool, optional): if ``True``, the log-probability of the</span>
 <span class="sd">            distribution sample will be written in the tensordict with the key</span>
-<span class="sd">            `&#39;sample_log_prob&#39;`. Default is `False`.</span>
-<span class="sd">        cache_dist (bool, optional): EXPERIMENTAL: if True, the parameters of the</span>
+<span class="sd">            `&#39;sample_log_prob&#39;`. Default is ``False``.</span>
+<span class="sd">        cache_dist (bool, optional): EXPERIMENTAL: if ``True``, the parameters of the</span>
 <span class="sd">            distribution (i.e. the output of the module) will be written to the</span>
 <span class="sd">            tensordict along with the sample. Those parameters can be used to re-compute</span>
 <span class="sd">            the original distribution later on (e.g. to compute the divergence between</span>
 <span class="sd">            the distribution used to sample the action and the updated distribution in</span>
-<span class="sd">            PPO). Default is `False`.</span>
+<span class="sd">            PPO). Default is ``False``.</span>
 <span class="sd">        n_empirical_estimate (int, optional): number of samples to compute the empirical</span>
 <span class="sd">            mean when it is not available. Default is 1000</span>
 
@@ -555,8 +555,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="SafeProbabilisticSequential"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.SafeProbabilisticSequential.html#torchrl.modules.tensordict_module.SafeProbabilisticSequential">[docs]</a><span class="k">class</span> <span class="nc">SafeProbabilisticSequential</span><span class="p">(</span><span class="n">ProbabilisticTensorDictSequential</span><span class="p">,</span> <span class="n">SafeSequential</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A :obj:``SafeProbabilisticSequential`` is an :obj:``tensordict.nn.ProbabilisticTensorDictSequential`` subclass that accepts a :obj:``TensorSpec`` as argument to control the output domain.</span>
+<div class="viewcode-block" id="SafeProbabilisticTensorDictSequential"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.SafeProbabilisticTensorDictSequential.html#torchrl.modules.tensordict_module.SafeProbabilisticTensorDictSequential">[docs]</a><span class="k">class</span> <span class="nc">SafeProbabilisticTensorDictSequential</span><span class="p">(</span>
+    <span class="n">ProbabilisticTensorDictSequential</span><span class="p">,</span> <span class="n">SafeSequential</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;:class:`tensordict.nn.ProbabilisticTensorDictSequential` subclass that accepts a :class:`torchrl.envs.TensorSpec` as argument to control the output domain.</span>
 
 <span class="sd">    Similarly to :obj:`TensorDictSequential`, but enforces that the final module in the</span>
 <span class="sd">    sequence is an :obj:`ProbabilisticTensorDictModule` and also exposes ``get_dist``</span>
@@ -566,7 +568,7 @@
 <span class="sd">         modules (iterable of TensorDictModules): ordered sequence of TensorDictModule</span>
 <span class="sd">            instances, terminating in ProbabilisticTensorDictModule, to be run</span>
 <span class="sd">            sequentially.</span>
-<span class="sd">         partial_tolerant (bool, optional): if True, the input tensordict can miss some</span>
+<span class="sd">         partial_tolerant (bool, optional): if ``True``, the input tensordict can miss some</span>
 <span class="sd">            of the input keys. If so, the only module that will be executed are those</span>
 <span class="sd">            who can be executed given the keys that are present. Also, if the input</span>
 <span class="sd">            tensordict is a lazy stack of tensordicts AND if partial_tolerant is</span>

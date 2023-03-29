@@ -378,6 +378,12 @@
 
 <span class="kn">import</span> <span class="nn">torch</span>
 
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
+<span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDictBase</span>
+<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+
+<span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="n">CompositeSpec</span><span class="p">,</span> <span class="n">TensorSpec</span>
+
 <span class="kn">from</span> <span class="nn">torchrl.data.utils</span> <span class="kn">import</span> <span class="n">DEVICE_TYPING</span>
 
 <span class="n">_has_functorch</span> <span class="o">=</span> <span class="kc">False</span>
@@ -399,13 +405,6 @@
         <span class="k">pass</span>
 
 
-<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
-<span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDictBase</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
-
-<span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="n">CompositeSpec</span><span class="p">,</span> <span class="n">TensorSpec</span>
-
-
 <span class="k">def</span> <span class="nf">_check_all_str</span><span class="p">(</span><span class="n">list_of_str</span><span class="p">,</span> <span class="n">first_level</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">list_of_str</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">first_level</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
@@ -425,7 +424,7 @@
         <span class="n">spec</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">spec</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">out_keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="s2">&quot;safe SafeModules with multiple out_keys require a CompositeSpec with matching keys. Got &quot;</span>
+                <span class="s2">&quot;safe TensorDictModules with multiple out_keys require a CompositeSpec with matching keys. Got &quot;</span>
                 <span class="sa">f</span><span class="s2">&quot;keys </span><span class="si">{</span><span class="n">module</span><span class="o">.</span><span class="n">out_keys</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
@@ -462,25 +461,34 @@
 
 
 <div class="viewcode-block" id="SafeModule"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule">[docs]</a><span class="k">class</span> <span class="nc">SafeModule</span><span class="p">(</span><span class="n">TensorDictModule</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;An :obj:``SafeModule`` is a :obj:``tensordict.nn.TensorDictModule`` subclass that accepts a :obj:``TensorSpec`` as argument to control the output domain.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;:class:`tensordict.nn.TensorDictModule` subclass that accepts a :class:`torchrl.data.TensorSpec` as argument to control the output domain.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        module (nn.Module): a nn.Module used to map the input to the output parameter space. Can be a functional</span>
-<span class="sd">            module (FunctionalModule or FunctionalModuleWithBuffers), in which case the :obj:`forward` method will expect</span>
+<span class="sd">        module (nn.Module): a nn.Module used to map the input to the output</span>
+<span class="sd">            parameter space. Can be a functional</span>
+<span class="sd">            module (FunctionalModule or FunctionalModuleWithBuffers), in which</span>
+<span class="sd">            case the :obj:`forward` method will expect</span>
 <span class="sd">            the params (and possibly) buffers keyword arguments.</span>
-<span class="sd">        in_keys (iterable of str): keys to be read from input tensordict and passed to the module. If it</span>
-<span class="sd">            contains more than one element, the values will be passed in the order given by the in_keys iterable.</span>
-<span class="sd">        out_keys (iterable of str): keys to be written to the input tensordict. The length of out_keys must match the</span>
-<span class="sd">            number of tensors returned by the embedded module. Using &quot;_&quot; as a key avoid writing tensor to output.</span>
-<span class="sd">        spec (TensorSpec): specs of the output tensor. If the module outputs multiple output tensors,</span>
+<span class="sd">        in_keys (iterable of str): keys to be read from input tensordict and</span>
+<span class="sd">            passed to the module. If it</span>
+<span class="sd">            contains more than one element, the values will be passed in the</span>
+<span class="sd">            order given by the in_keys iterable.</span>
+<span class="sd">        out_keys (iterable of str): keys to be written to the input tensordict.</span>
+<span class="sd">            The length of out_keys must match the</span>
+<span class="sd">            number of tensors returned by the embedded module. Using &quot;_&quot; as a</span>
+<span class="sd">            key avoid writing tensor to output.</span>
+<span class="sd">        spec (TensorSpec, optional): specs of the output tensor. If the module</span>
+<span class="sd">            outputs multiple output tensors,</span>
 <span class="sd">            spec characterize the space of the first output tensor.</span>
-<span class="sd">        safe (bool): if True, the value of the output is checked against the input spec. Out-of-domain sampling can</span>
+<span class="sd">        safe (bool): if ``True``, the value of the output is checked against the</span>
+<span class="sd">            input spec. Out-of-domain sampling can</span>
 <span class="sd">            occur because of exploration policies or numerical under/overflow issues.</span>
-<span class="sd">            If this value is out of bounds, it is projected back onto the desired space using the :obj:`TensorSpec.project`</span>
-<span class="sd">            method. Default is :obj:`False`.</span>
+<span class="sd">            If this value is out of bounds, it is projected back onto the</span>
+<span class="sd">            desired space using the :obj:`TensorSpec.project`</span>
+<span class="sd">            method. Default is ``False``.</span>
 
-<span class="sd">    Embedding a neural network in a SafeModule only requires to specify the input and output keys. The domain spec can</span>
-<span class="sd">        be passed along if needed. SafeModule support functional and regular :obj:`nn.Module` objects. In the functional</span>
+<span class="sd">    Embedding a neural network in a TensorDictModule only requires to specify the input and output keys. The domain spec can</span>
+<span class="sd">        be passed along if needed. TensorDictModule support functional and regular :obj:`nn.Module` objects. In the functional</span>
 <span class="sd">        case, the &#39;params&#39; (and &#39;buffers&#39;) keyword argument must be specified:</span>
 
 <span class="sd">    Examples:</span>
@@ -488,11 +496,11 @@
 <span class="sd">        &gt;&gt;&gt; from tensordict import TensorDict</span>
 <span class="sd">        &gt;&gt;&gt; from tensordict.nn.functional_modules import make_functional</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.data import UnboundedContinuousTensorSpec</span>
-<span class="sd">        &gt;&gt;&gt; from torchrl.modules import SafeModule</span>
+<span class="sd">        &gt;&gt;&gt; from torchrl.modules import TensorDictModule</span>
 <span class="sd">        &gt;&gt;&gt; td = TensorDict({&quot;input&quot;: torch.randn(3, 4), &quot;hidden&quot;: torch.randn(3, 8)}, [3,])</span>
 <span class="sd">        &gt;&gt;&gt; spec = UnboundedContinuousTensorSpec(8)</span>
 <span class="sd">        &gt;&gt;&gt; module = torch.nn.GRUCell(4, 8)</span>
-<span class="sd">        &gt;&gt;&gt; td_fmodule = SafeModule(</span>
+<span class="sd">        &gt;&gt;&gt; td_fmodule = TensorDictModule(</span>
 <span class="sd">        ...    module=module,</span>
 <span class="sd">        ...    spec=spec,</span>
 <span class="sd">        ...    in_keys=[&quot;input&quot;, &quot;hidden&quot;],</span>
@@ -511,7 +519,7 @@
 <span class="sd">            is_shared=False)</span>
 
 <span class="sd">    In the stateful case:</span>
-<span class="sd">        &gt;&gt;&gt; td_module = SafeModule(</span>
+<span class="sd">        &gt;&gt;&gt; td_module = TensorDictModule(</span>
 <span class="sd">        ...    module=torch.nn.GRUCell(4, 8),</span>
 <span class="sd">        ...    spec=spec,</span>
 <span class="sd">        ...    in_keys=[&quot;input&quot;, &quot;hidden&quot;],</span>
@@ -549,7 +557,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">module</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
-            <span class="n">FunctionalModule</span><span class="p">,</span> <span class="n">FunctionalModuleWithBuffers</span><span class="p">,</span> <span class="n">SafeModule</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span>
+            <span class="n">FunctionalModule</span><span class="p">,</span> <span class="n">FunctionalModuleWithBuffers</span><span class="p">,</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span>
         <span class="p">],</span>
         <span class="n">in_keys</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
         <span class="n">out_keys</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
@@ -563,7 +571,7 @@
         <span class="k">elif</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;got more than one out_key for the SafeModule: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">but only one spec. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;got more than one out_key for the TensorDictModule: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">but only one spec. &quot;</span>
                     <span class="s2">&quot;Consider using a CompositeSpec object or no spec at all.&quot;</span>
                 <span class="p">)</span>
             <span class="n">spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">spec</span><span class="p">})</span>
@@ -592,7 +600,7 @@
                 <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">_spec</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">_spec</span> <span class="ow">in</span> <span class="n">spec</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
             <span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="s2">&quot;`SafeModule(spec=None, safe=True)` is not a valid configuration as the tensor &quot;</span>
+                    <span class="s2">&quot;`TensorDictModule(spec=None, safe=True)` is not a valid configuration as the tensor &quot;</span>
                     <span class="s2">&quot;specs are not specified&quot;</span>
                 <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">_forward_hook_safe_action</span><span class="p">)</span>
@@ -626,18 +634,18 @@
         <span class="k">return</span> <span class="n">tensordict</span></div>
 
 <div class="viewcode-block" id="SafeModule.random_sample"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule.random_sample">[docs]</a>    <span class="k">def</span> <span class="nf">random_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;See :obj:`SafeModule.random(...)`.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See :obj:`TensorDictModule.random(...)`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SafeModule.to"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule.to">[docs]</a>    <span class="k">def</span> <span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">DEVICE_TYPING</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">SafeModule</span><span class="p">:</span>
+<div class="viewcode-block" id="SafeModule.to"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule.to">[docs]</a>    <span class="k">def</span> <span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dest</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">DEVICE_TYPING</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TensorDictModule</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
         <span class="n">out</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span></div></div>
 
 
-<div class="viewcode-block" id="is_tensordict_compatible"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.common.is_tensordict_compatible.html#torchrl.modules.tensordict_module.is_tensordict_compatible">[docs]</a><span class="k">def</span> <span class="nf">is_tensordict_compatible</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">SafeModule</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns `True` if a module can be used as a SafeModule, and False if it can&#39;t.</span>
+<div class="viewcode-block" id="is_tensordict_compatible"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.common.is_tensordict_compatible.html#torchrl.modules.tensordict_module.is_tensordict_compatible">[docs]</a><span class="k">def</span> <span class="nf">is_tensordict_compatible</span><span class="p">(</span><span class="n">module</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns `True` if a module can be used as a TensorDictModule, and False if it can&#39;t.</span>
 
 <span class="sd">    If the signature is misleading an error is raised.</span>
 
@@ -675,21 +683,21 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">forward</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">SafeModule</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">TensorDictModule</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
         <span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
         <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;in_keys&quot;</span><span class="p">)</span>
         <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;out_keys&quot;</span><span class="p">)</span>
     <span class="p">):</span>
-        <span class="c1"># if the module is a SafeModule or takes a single argument and defines</span>
+        <span class="c1"># if the module is a TensorDictModule or takes a single argument and defines</span>
         <span class="c1"># in_keys and out_keys then we assume it can already deal with TensorDict input</span>
         <span class="c1"># to forward and we return True</span>
         <span class="k">return</span> <span class="kc">True</span>
     <span class="k">elif</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;in_keys&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;out_keys&quot;</span><span class="p">):</span>
-        <span class="c1"># if it&#39;s not a SafeModule, and in_keys and out_keys are not defined then</span>
+        <span class="c1"># if it&#39;s not a TensorDictModule, and in_keys and out_keys are not defined then</span>
         <span class="c1"># we assume no TensorDict compatibility and will try to wrap it.</span>
         <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="c1"># if in_keys or out_keys were defined but module is not a SafeModule or</span>
+    <span class="c1"># if in_keys or out_keys were defined but module is not a TensorDictModule or</span>
     <span class="c1"># accepts multiple arguments then it&#39;s likely the user is trying to do something</span>
     <span class="c1"># that will have undetermined behaviour, we raise an error</span>
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
@@ -698,16 +706,18 @@
         <span class="s2">&quot;should take a single argument of type TensorDict to module.forward and define &quot;</span>
         <span class="s2">&quot;both in_keys and out_keys. Alternatively, module.forward can accept &quot;</span>
         <span class="s2">&quot;arbitrarily many tensor inputs and leave in_keys and out_keys undefined and &quot;</span>
-        <span class="s2">&quot;TorchRL will attempt to automatically wrap the module with a SafeModule.&quot;</span>
+        <span class="s2">&quot;TorchRL will attempt to automatically wrap the module with a TensorDictModule.&quot;</span>
     <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="ensure_tensordict_compatible"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.common.ensure_tensordict_compatible.html#torchrl.modules.tensordict_module.ensure_tensordict_compatible">[docs]</a><span class="k">def</span> <span class="nf">ensure_tensordict_compatible</span><span class="p">(</span>
-    <span class="n">module</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">FunctionalModule</span><span class="p">,</span> <span class="n">FunctionalModuleWithBuffers</span><span class="p">,</span> <span class="n">SafeModule</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">],</span>
+    <span class="n">module</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span>
+        <span class="n">FunctionalModule</span><span class="p">,</span> <span class="n">FunctionalModuleWithBuffers</span><span class="p">,</span> <span class="n">TensorDictModule</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span>
+    <span class="p">],</span>
     <span class="n">in_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">out_keys</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">safe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">wrapper_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="n">SafeModule</span><span class="p">,</span>
+    <span class="n">wrapper_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="n">TensorDictModule</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks and ensures an object with forward method is TensorDict compatible.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">is_tensordict_compatible</span><span class="p">(</span><span class="n">module</span><span class="p">):</span>
@@ -727,7 +737,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
             <span class="s2">&quot;Argument to ensure_tensordict_compatible should be either &quot;</span>
-            <span class="s2">&quot;a SafeModule or an nn.Module&quot;</span>
+            <span class="s2">&quot;a TensorDictModule or an nn.Module&quot;</span>
         <span class="p">)</span>
 
     <span class="n">sig</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">forward</span><span class="p">)</span>
@@ -735,10 +745,10 @@
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
             <span class="s2">&quot;Arguments to module.forward are incompatible with entries in &quot;</span>
             <span class="s2">&quot;env.observation_spec. If you want TorchRL to automatically &quot;</span>
-            <span class="s2">&quot;wrap your module with a SafeModule then the arguments &quot;</span>
+            <span class="s2">&quot;wrap your module with a TensorDictModule then the arguments &quot;</span>
             <span class="s2">&quot;to module must correspond one-to-one with entries in &quot;</span>
             <span class="s2">&quot;in_keys. For more complex behaviour and more control you can &quot;</span>
-            <span class="s2">&quot;consider writing your own SafeModule.&quot;</span>
+            <span class="s2">&quot;consider writing your own TensorDictModule.&quot;</span>
         <span class="p">)</span>
 
     <span class="c1"># TODO: Check whether out_keys match (at least in number) if they are provided.</span>

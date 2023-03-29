@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="TDLambdaEstimate" href="torchrl.objectives.value.TDLambdaEstimate.html" />
-    <link rel="prev" title="DreamerValueLoss" href="torchrl.objectives.DreamerValueLoss.html" />
+    <link rel="next" title="td0_return_estimate" href="torchrl.objectives.value.functional.td0_return_estimate.html" />
+    <link rel="prev" title="TDLambdaEstimator" href="torchrl.objectives.value.TDLambdaEstimator.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -376,7 +376,7 @@
 <h1>GAE<a class="headerlink" href="#gae" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="torchrl.objectives.value.GAE">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.value.</span></span><span class="sig-name descname"><span class="pre">GAE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmbda</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.common.SafeModule"><span class="pre">SafeModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">average_gae</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">differentiable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advantage_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'advantage'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_target_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'value_target'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'state_value'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/value/advantages.html#GAE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.value.GAE" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.value.</span></span><span class="sig-name descname"><span class="pre">GAE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmbda</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_network</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+24dc5ce ))"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">average_gae</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">differentiable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">advantage_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'advantage'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_target_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'value_target'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'state_value'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/value/advantages.html#GAE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.value.GAE" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class wrapper around the generalized advantage estimate functional.</p>
 <p>Refer to “HIGH-DIMENSIONAL CONTINUOUS CONTROL USING GENERALIZED ADVANTAGE ESTIMATION”
 <a class="reference external" href="https://arxiv.org/pdf/1506.02438.pdf">https://arxiv.org/pdf/1506.02438.pdf</a> for more context.</p>
@@ -385,11 +385,18 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>gamma</strong> (<em>scalar</em>) – exponential mean discount.</p></li>
 <li><p><strong>lmbda</strong> (<em>scalar</em>) – trajectory discount.</p></li>
-<li><p><strong>value_network</strong> (<a class="reference internal" href="torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.SafeModule"><em>SafeModule</em></a>) – value operator used to retrieve the value estimates.</p></li>
-<li><p><strong>average_gae</strong> (<em>bool</em>) – if True, the resulting GAE values will be standardized.
-Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
-<li><p><strong>differentiable</strong> (<em>bool</em><em>, </em><em>optional</em>) – if True, gradients are propagated throught
-the computation of the value function. Default is <code class="xref py py-obj docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>value_network</strong> (<em>TensorDictModule</em>) – value operator used to retrieve the value estimates.</p></li>
+<li><p><strong>average_gae</strong> (<em>bool</em>) – if <code class="docutils literal notranslate"><span class="pre">True</span></code>, the resulting GAE values will be standardized.
+Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>differentiable</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>if <code class="docutils literal notranslate"><span class="pre">True</span></code>, gradients are propagated through
+the computation of the value function. Default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+.. note:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>The proper way to make the function call non-differentiable is to
+decorate it in a `torch.no_grad()` context manager/decorator or
+pass detached parameters for functional modules.
+</pre></div>
+</div>
+</p></li>
 <li><p><strong>advantage_key</strong> (<em>str</em><em> or </em><em>tuple</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – the key of the advantage entry.
 Defaults to “advantage”.</p></li>
 <li><p><strong>value_target_key</strong> (<em>str</em><em> or </em><em>tuple</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – the key of the advantage entry.
@@ -431,7 +438,7 @@ target params to be passed to the functional value network module.</p></li>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">value_net</span> <span class="o">=</span> <span class="n">SafeModule</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">value_net</span> <span class="o">=</span> <span class="n">TensorDictModule</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">],</span> <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;state_value&quot;</span><span class="p">]</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">GAE</span><span class="p">(</span>
@@ -450,7 +457,7 @@ target params to be passed to the functional value network module.</p></li>
 </div>
 <p>The module supports non-tensordict (i.e. unpacked tensordict) inputs too:</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">value_net</span> <span class="o">=</span> <span class="n">SafeModule</span><span class="p">(</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">value_net</span> <span class="o">=</span> <span class="n">TensorDictModule</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;obs&quot;</span><span class="p">],</span> <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;state_value&quot;</span><span class="p">]</span>
 <span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">GAE</span><span class="p">(</span>
@@ -467,6 +474,26 @@ target params to be passed to the functional value network module.</p></li>
 </div>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="torchrl.objectives.value.GAE.value_estimate">
+<span class="sig-name descname"><span class="pre">value_estimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/value/advantages.html#GAE.value_estimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.value.GAE.value_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a value estimate, usually used as a target value for the value network.</p>
+<p>If the state value key is present under <code class="docutils literal notranslate"><span class="pre">tensordict.get((&quot;next&quot;,</span> <span class="pre">self.value_key))</span></code>
+then this value will be used without recurring to the value network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tensordict</strong> (<em>TensorDictBase</em>) – the tensordict containing the data to
+read.</p></li>
+<li><p><strong>target_params</strong> (<em>TensorDictBase</em><em>, </em><em>optional</em>) – A nested TensorDict containing the
+target params to be passed to the functional value network module.</p></li>
+<li><p><strong>**kwargs</strong> – the keyword arguments to be passed to the value network.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Returns: a tensor corresponding to the state value.</p>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -479,10 +506,10 @@ target params to be passed to the functional value network module.</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.objectives.value.TDLambdaEstimate.html" class="btn btn-neutral float-right" title="TDLambdaEstimate" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.objectives.value.functional.td0_return_estimate.html" class="btn btn-neutral float-right" title="td0_return_estimate" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl.objectives.DreamerValueLoss.html" class="btn btn-neutral" title="DreamerValueLoss" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torchrl.objectives.value.TDLambdaEstimator.html" class="btn btn-neutral" title="TDLambdaEstimator" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -517,6 +544,7 @@ target params to be passed to the functional value network module.</p></li>
 <li><a class="reference internal" href="#">GAE</a><ul>
 <li><a class="reference internal" href="#torchrl.objectives.value.GAE"><code class="docutils literal notranslate"><span class="pre">GAE</span></code></a><ul>
 <li><a class="reference internal" href="#torchrl.objectives.value.GAE.forward"><code class="docutils literal notranslate"><span class="pre">GAE.forward()</span></code></a></li>
+<li><a class="reference internal" href="#torchrl.objectives.value.GAE.value_estimate"><code class="docutils literal notranslate"><span class="pre">GAE.value_estimate()</span></code></a></li>
 </ul>
 </li>
 </ul>

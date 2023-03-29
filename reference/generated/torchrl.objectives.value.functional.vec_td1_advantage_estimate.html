@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>td_advantage_estimate &mdash; torchrl main documentation</title>
+  <title>vec_td1_advantage_estimate &mdash; torchrl main documentation</title>
   
 
   
@@ -38,8 +38,8 @@
   <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="distance_loss" href="torchrl.objectives.distance_loss.html" />
-    <link rel="prev" title="td_lambda_advantage_estimate" href="torchrl.objectives.value.functional.td_lambda_advantage_estimate.html" />
+    <link rel="next" title="td_lambda_return_estimate" href="torchrl.objectives.value.functional.td_lambda_return_estimate.html" />
+    <link rel="prev" title="td1_advantage_estimate" href="torchrl.objectives.value.functional.td1_advantage_estimate.html" />
   <!-- Google Analytics -->
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117752657-2"></script>
@@ -319,13 +319,13 @@
         
           <li><a href="../objectives.html">torchrl.objectives package</a> &gt;</li>
         
-      <li>td_advantage_estimate</li>
+      <li>vec_td1_advantage_estimate</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
         
             
-            <a href="../../_sources/reference/generated/torchrl.objectives.value.functional.td_advantage_estimate.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
+            <a href="../../_sources/reference/generated/torchrl.objectives.value.functional.vec_td1_advantage_estimate.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
           
         
       </li>
@@ -346,7 +346,7 @@
 
         
           <div class="pytorch-call-to-action-links">
-            <div id="tutorial-type">reference/generated/torchrl.objectives.value.functional.td_advantage_estimate</div>
+            <div id="tutorial-type">reference/generated/torchrl.objectives.value.functional.vec_td1_advantage_estimate</div>
 
             <div id="google-colab-link">
               <img class="call-to-action-img" src="../../_static/images/pytorch-colab.svg"/>
@@ -372,28 +372,56 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
               
-  <section id="td-advantage-estimate">
-<h1>td_advantage_estimate<a class="headerlink" href="#td-advantage-estimate" title="Permalink to this heading">¶</a></h1>
+  <section id="vec-td1-advantage-estimate">
+<h1>vec_td1_advantage_estimate<a class="headerlink" href="#vec-td1-advantage-estimate" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="torchrl.objectives.value.functional.td_advantage_estimate">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.value.functional.</span></span><span class="sig-name descname"><span class="pre">td_advantage_estimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_state_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">reward</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">done</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="(in PyTorch v2.0)"><span class="pre">Tensor</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/value/functional.html#td_advantage_estimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.value.functional.td_advantage_estimate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get generalized advantage estimate of a trajectory.</p>
-<p>Refer to “HIGH-DIMENSIONAL CONTINUOUS CONTROL USING GENERALIZED ADVANTAGE ESTIMATION”
-<a class="reference external" href="https://arxiv.org/pdf/1506.02438.pdf">https://arxiv.org/pdf/1506.02438.pdf</a> for more context.</p>
+<dt class="sig sig-object py" id="torchrl.objectives.value.functional.vec_td1_advantage_estimate">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">torchrl.objectives.value.functional.</span></span><span class="sig-name descname"><span class="pre">vec_td1_advantage_estimate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_state_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reward</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">done</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rolling_gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/torchrl/objectives/value/functional.html#vec_td1_advantage_estimate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.value.functional.vec_td1_advantage_estimate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vectorized TD(1) advantage estimate.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>gamma</strong> (<em>scalar</em>) – exponential mean discount.</p></li>
-<li><p><strong>state_value</strong> (<em>Tensor</em>) – value function result with old_state input.
-must be a [Batch x TimeSteps x 1] or [Batch x TimeSteps] tensor</p></li>
-<li><p><strong>next_state_value</strong> (<em>Tensor</em>) – value function result with new_state input.
-must be a [Batch x TimeSteps x 1] or [Batch x TimeSteps] tensor</p></li>
-<li><p><strong>reward</strong> (<em>Tensor</em>) – reward of taking actions in the environment.
-must be a [Batch x TimeSteps x 1] or [Batch x TimeSteps] tensor</p></li>
+<li><p><strong>gamma</strong> (<em>scalar</em><em>, </em><em>Tensor</em>) – exponential mean discount. If tensor-valued,</p></li>
+<li><p><strong>state_value</strong> (<em>Tensor</em>) – value function result with old_state input.</p></li>
+<li><p><strong>next_state_value</strong> (<em>Tensor</em>) – value function result with new_state input.</p></li>
+<li><p><strong>reward</strong> (<em>Tensor</em>) – reward of taking actions in the environment.</p></li>
 <li><p><strong>done</strong> (<em>Tensor</em>) – boolean flag for end of episode.</p></li>
+<li><p><strong>rolling_gamma</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>if <code class="docutils literal notranslate"><span class="pre">True</span></code>, it is assumed that each gamma
+if a gamma tensor is tied to a single event:</p>
+<blockquote>
+<div><p>gamma = [g1, g2, g3, g4]
+value = [v1, v2, v3, v4]
+return = [</p>
+<blockquote>
+<div><p>v1 + g1 v2 + g1 g2 v3 + g1 g2 g3 v4,
+v2 + g2 v3 + g2 g3 v4,
+v3 + g3 v4,
+v4,</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>if False, it is assumed that each gamma is tied to the upcoming
+trajectory:</p>
+<blockquote>
+<div><p>gamma = [g1, g2, g3, g4]
+value = [v1, v2, v3, v4]
+return = [</p>
+<blockquote>
+<div><p>v1 + g1 v2 + g1**2 v3 + g**3 v4,
+v2 + g2 v3 + g2**2 v4,
+v3 + g3 v4,
+v4,</p>
+</div></blockquote>
+<p>]</p>
+</div></blockquote>
+<p>Default is True.</p>
+</p></li>
 </ul>
 </dd>
 </dl>
+<p>All tensors (values, reward and done) must have shape
+<code class="docutils literal notranslate"><span class="pre">[*Batch</span> <span class="pre">x</span> <span class="pre">TimeSteps</span> <span class="pre">x</span> <span class="pre">F]</span></code>, with <code class="docutils literal notranslate"><span class="pre">F</span></code> features (for single agent,
+single task, single objective F=1).</p>
 </dd></dl>
 
 </section>
@@ -406,10 +434,10 @@ must be a [Batch x TimeSteps x 1] or [Batch x TimeSteps] tensor</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="torchrl.objectives.distance_loss.html" class="btn btn-neutral float-right" title="distance_loss" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+        <a href="torchrl.objectives.value.functional.td_lambda_return_estimate.html" class="btn btn-neutral float-right" title="td_lambda_return_estimate" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
       
       
-        <a href="torchrl.objectives.value.functional.td_lambda_advantage_estimate.html" class="btn btn-neutral" title="td_lambda_advantage_estimate" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+        <a href="torchrl.objectives.value.functional.td1_advantage_estimate.html" class="btn btn-neutral" title="td1_advantage_estimate" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
       
     </div>
   
@@ -441,8 +469,8 @@ must be a [Batch x TimeSteps x 1] or [Batch x TimeSteps] tensor</p></li>
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">td_advantage_estimate</a><ul>
-<li><a class="reference internal" href="#torchrl.objectives.value.functional.td_advantage_estimate"><code class="docutils literal notranslate"><span class="pre">td_advantage_estimate</span></code></a></li>
+<li><a class="reference internal" href="#">vec_td1_advantage_estimate</a><ul>
+<li><a class="reference internal" href="#torchrl.objectives.value.functional.vec_td1_advantage_estimate"><code class="docutils literal notranslate"><span class="pre">vec_td1_advantage_estimate</span></code></a></li>
 </ul>
 </li>
 </ul>

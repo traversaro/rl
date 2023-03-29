@@ -382,15 +382,6 @@
 <span class="kn">from</span> <span class="nn">torchrl.data.replay_buffers.storages</span> <span class="kn">import</span> <span class="n">LazyMemmapStorage</span>
 <span class="kn">from</span> <span class="nn">torchrl.data.replay_buffers.writers</span> <span class="kn">import</span> <span class="n">Writer</span>
 
-<span class="n">D4RL_ERR</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">d4rl</span><span class="o">,</span> <span class="nn">gym</span>  <span class="c1"># noqa</span>
-
-    <span class="n">_has_d4rl</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-    <span class="n">_has_d4rl</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">D4RL_ERR</span> <span class="o">=</span> <span class="n">err</span>
-
 
 <div class="viewcode-block" id="D4RLExperienceReplay"><a class="viewcode-back" href="../../../../reference/generated/torchrl.data.datasets.D4RLExperienceReplay.html#torchrl.data.datasets.D4RLExperienceReplay">[docs]</a><span class="k">class</span> <span class="nc">D4RLExperienceReplay</span><span class="p">(</span><span class="n">TensorDictReplayBuffer</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An Experience replay class for D4RL.</span>
@@ -422,7 +413,7 @@
 <span class="sd">            using multithreading.</span>
 <span class="sd">        transform (Transform, optional): Transform to be executed when sample() is called.</span>
 <span class="sd">            To chain transforms use the :obj:`Compose` class.</span>
-<span class="sd">        split_trajs (bool, optional): if True, the trajectories will be split</span>
+<span class="sd">        split_trajs (bool, optional): if ``True``, the trajectories will be split</span>
 <span class="sd">            along the first dimension and padded to have a matching shape.</span>
 <span class="sd">            To split the trajectories, the ``&quot;done&quot;`` signal will be used, which</span>
 <span class="sd">            is recovered via ``done = timeout | terminal``. In other words,</span>
@@ -468,6 +459,18 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">D4RL_ERR</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_import_d4rl</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span> <span class="nn">d4rl</span>  <span class="c1"># noqa</span>
+
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_has_d4rl</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">ModuleNotFoundError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_has_d4rl</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">D4RL_ERR</span> <span class="o">=</span> <span class="n">err</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">name</span><span class="p">,</span>
@@ -484,8 +487,10 @@
         <span class="o">**</span><span class="n">env_kwargs</span><span class="p">,</span>
     <span class="p">):</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_d4rl</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Could not import d4rl&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">D4RL_ERR</span>
+        <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_import_d4rl</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_d4rl</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Could not import d4rl&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">self.D4RL_ERR</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">from_env</span> <span class="o">=</span> <span class="n">from_env</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">use_timeout_as_done</span> <span class="o">=</span> <span class="n">use_timeout_as_done</span>
         <span class="k">if</span> <span class="n">from_env</span><span class="p">:</span>
@@ -512,6 +517,13 @@
 
     <span class="k">def</span> <span class="nf">_get_dataset_direct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">env_kwargs</span><span class="p">):</span>
         <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymWrapper</span>
+
+        <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_import_d4rl</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_d4rl</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Could not import d4rl&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">self.D4RL_ERR</span>
+        <span class="kn">import</span> <span class="n">d4rl</span>
+        <span class="kn">import</span> <span class="nn">gym</span>
 
         <span class="n">env</span> <span class="o">=</span> <span class="n">GymWrapper</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">make</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">d4rl</span><span class="o">.</span><span class="n">qlearning_dataset</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">_env</span><span class="p">,</span> <span class="o">**</span><span class="n">env_kwargs</span><span class="p">)</span>
@@ -580,6 +592,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">env_kwargs</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;env_kwargs cannot be passed with using from_env=True&quot;</span><span class="p">)</span>
+        <span class="kn">import</span> <span class="nn">gym</span>
+
         <span class="c1"># we do a local import to avoid circular import issues</span>
         <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">GymWrapper</span>
 

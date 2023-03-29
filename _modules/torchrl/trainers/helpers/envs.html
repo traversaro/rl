@@ -610,7 +610,7 @@
 <span class="sd">        custom_env (EnvBase, optional): if an existing environment needs to be</span>
 <span class="sd">            transformed_in, it can be passed directly to this helper. `custom_env_maker`</span>
 <span class="sd">            and `custom_env` are exclusive features.</span>
-<span class="sd">        return_transformed_envs (bool, optional): if True, a transformed_in environment</span>
+<span class="sd">        return_transformed_envs (bool, optional): if ``True``, a transformed_in environment</span>
 <span class="sd">            is returned.</span>
 <span class="sd">        action_dim_gsde (int, Optional): if gSDE is used, this can present the action dim to initialize the noise.</span>
 <span class="sd">            Make sure this is indicated in environment executed in parallel.</span>
@@ -922,7 +922,7 @@
     <span class="n">max_frames_per_traj</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span>
     <span class="c1"># Number of steps before a reset of the environment is called (if it has not been flagged as done before).</span>
     <span class="n">batch_transform</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="c1"># if True, the transforms will be applied to the parallel env, and not to each individual env.\</span>
+    <span class="c1"># if ``True``, the transforms will be applied to the parallel env, and not to each individual env.\</span>
     <span class="n">image_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">84</span>
     <span class="c1"># if True and environment has discrete action space, then it is encoded as categorical values rather than one-hot.</span>
     <span class="n">categorical_action_encoding</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>

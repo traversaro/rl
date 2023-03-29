@@ -415,9 +415,11 @@
 <span class="sd">        activation_kwargs (dict, optional): kwargs to be used with the activation class;</span>
 <span class="sd">        norm_class (Type, optional): normalization class, if any.</span>
 <span class="sd">        norm_kwargs (dict, optional): kwargs to be used with the normalization layers;</span>
-<span class="sd">        bias_last_layer (bool): if True, the last Linear layer will have a bias parameter.</span>
+<span class="sd">        dropout (float, optional): dropout probability. Defaults to ``None`` (no</span>
+<span class="sd">            dropout);</span>
+<span class="sd">        bias_last_layer (bool): if ``True``, the last Linear layer will have a bias parameter.</span>
 <span class="sd">            default: True;</span>
-<span class="sd">        single_bias_last_layer (bool): if True, the last dimension of the bias of the last layer will be a singleton</span>
+<span class="sd">        single_bias_last_layer (bool): if ``True``, the last dimension of the bias of the last layer will be a singleton</span>
 <span class="sd">            dimension.</span>
 <span class="sd">            default: True;</span>
 <span class="sd">        layer_class (Type[nn.Module]): class to be used for the linear layers;</span>
@@ -513,6 +515,7 @@
         <span class="n">activation_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">norm_class</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">norm_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dropout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">bias_last_layer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
         <span class="n">single_bias_last_layer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">layer_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">,</span>
@@ -544,6 +547,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">norm_class</span> <span class="o">=</span> <span class="n">norm_class</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">norm_kwargs</span> <span class="o">=</span> <span class="n">norm_kwargs</span> <span class="k">if</span> <span class="n">norm_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">dropout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bias_last_layer</span> <span class="o">=</span> <span class="n">bias_last_layer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">single_bias_last_layer</span> <span class="o">=</span> <span class="n">single_bias_last_layer</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">layer_class</span> <span class="o">=</span> <span class="n">layer_class</span>
@@ -601,15 +605,18 @@
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">activate_last_layer</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">create_on_device</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_class</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">create_on_device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_class</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_kwargs</span><span class="p">)</span>
+                    <span class="p">)</span>
                 <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                     <span class="n">create_on_device</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">activation_class</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">activation_kwargs</span>
                     <span class="p">)</span>
                 <span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_class</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="n">create_on_device</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_class</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_kwargs</span><span class="p">)</span>
-                    <span class="p">)</span>
+
         <span class="k">return</span> <span class="n">layers</span>
 
 <div class="viewcode-block" id="MLP.forward"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.MLP.html#torchrl.modules.MLP.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">inputs</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
@@ -645,7 +652,7 @@
 <span class="sd">        activation_kwargs (dict, optional): kwargs to be used with the activation class;</span>
 <span class="sd">        norm_class (Type, optional): normalization class, if any;</span>
 <span class="sd">        norm_kwargs (dict, optional): kwargs to be used with the normalization layers;</span>
-<span class="sd">        bias_last_layer (bool): if True, the last Linear layer will have a bias parameter.</span>
+<span class="sd">        bias_last_layer (bool): if ``True``, the last Linear layer will have a bias parameter.</span>
 <span class="sd">            default: True;</span>
 <span class="sd">        aggregator_class (Type[nn.Module]): aggregator to use at the end of the chain.</span>
 <span class="sd">            default:  SquashDims;</span>
@@ -1082,8 +1089,8 @@
 <span class="sd">            &#39;activation_class&#39;: nn.ELU,</span>
 <span class="sd">            &#39;bias_last_layer&#39;: True,</span>
 <span class="sd">        }</span>
-<span class="sd">        use_avg_pooling (bool, optional): if True, a nn.AvgPooling layer is</span>
-<span class="sd">            used to aggregate the output. Default is :obj:`False`.</span>
+<span class="sd">        use_avg_pooling (bool, optional): if ``True``, a nn.AvgPooling layer is</span>
+<span class="sd">            used to aggregate the output. Default is ``False``.</span>
 <span class="sd">        device (Optional[DEVICE_TYPING]): device to create the module on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1213,7 +1220,7 @@
 <span class="sd">            &#39;activation_class&#39;: nn.ELU,</span>
 <span class="sd">            &#39;bias_last_layer&#39;: True,</span>
 <span class="sd">        }</span>
-<span class="sd">        use_avg_pooling (bool, optional): if True, a nn.AvgPooling layer is</span>
+<span class="sd">        use_avg_pooling (bool, optional): if ``True``, a nn.AvgPooling layer is</span>
 <span class="sd">            used to aggregate the output. Default is :obj:`True`.</span>
 <span class="sd">        device (Optional[DEVICE_TYPING]): device to create the module on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

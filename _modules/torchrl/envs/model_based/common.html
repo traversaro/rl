@@ -376,10 +376,10 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">torch</span>
 <span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
+<span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">TensorDictModule</span>
 
 <span class="kn">from</span> <span class="nn">torchrl.data.utils</span> <span class="kn">import</span> <span class="n">DEVICE_TYPING</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.common</span> <span class="kn">import</span> <span class="n">EnvBase</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module</span> <span class="kn">import</span> <span class="n">SafeModule</span>
 
 
 <div class="viewcode-block" id="ModelBasedEnvBase"><a class="viewcode-back" href="../../../../reference/generated/torchrl.envs.ModelBasedEnvBase.html#torchrl.envs.ModelBasedEnvBase">[docs]</a><span class="k">class</span> <span class="nc">ModelBasedEnvBase</span><span class="p">(</span><span class="n">EnvBase</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
@@ -419,12 +419,12 @@
 <span class="sd">        &gt;&gt;&gt; import torch.nn as nn</span>
 <span class="sd">        &gt;&gt;&gt; from torchrl.modules import MLP, WorldModelWrapper</span>
 <span class="sd">        &gt;&gt;&gt; world_model = WorldModelWrapper(</span>
-<span class="sd">        ...     SafeModule(</span>
+<span class="sd">        ...     TensorDictModule(</span>
 <span class="sd">        ...         MLP(out_features=4, activation_class=nn.ReLU, activate_last_layer=True, depth=0),</span>
 <span class="sd">        ...         in_keys=[&quot;hidden_observation&quot;, &quot;action&quot;],</span>
 <span class="sd">        ...         out_keys=[&quot;hidden_observation&quot;],</span>
 <span class="sd">        ...     ),</span>
-<span class="sd">        ...     SafeModule(</span>
+<span class="sd">        ...     TensorDictModule(</span>
 <span class="sd">        ...         nn.Linear(4, 1),</span>
 <span class="sd">        ...         in_keys=[&quot;hidden_observation&quot;],</span>
 <span class="sd">        ...         out_keys=[&quot;reward&quot;],</span>
@@ -479,7 +479,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">world_model</span><span class="p">:</span> <span class="n">SafeModule</span><span class="p">,</span>
+        <span class="n">world_model</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
         <span class="n">params</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">buffers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">device</span><span class="p">:</span> <span class="n">DEVICE_TYPING</span> <span class="o">=</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
