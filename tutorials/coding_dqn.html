@@ -422,7 +422,7 @@ and how to estimate returns using TD(lambda);</p></li>
 <li><p>and finally how to evaluate your model.</p></li>
 </ul>
 <p>This tutorial assumes the reader is familiar with some of TorchRL
-primitives, such as <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.1.0+bb9c436 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> and
+primitives, such as <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> and
 <code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDictModules</span></code>, although it
 should be sufficiently transparent to be understood without a deep
 understanding of these classes.</p>
@@ -640,19 +640,19 @@ not all dimensions disappear in the process:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">observation_norm_state_dict</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>OrderedDict([(&#39;standard_normal&#39;, tensor(True)), (&#39;loc&#39;, tensor([[[0.9921]],
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>OrderedDict([(&#39;standard_normal&#39;, tensor(True)), (&#39;loc&#39;, tensor([[[0.9920]],
 
-        [[0.9921]],
+        [[0.9920]],
 
-        [[0.9921]],
+        [[0.9920]],
 
-        [[0.9921]]])), (&#39;scale&#39;, tensor([[[0.0788]],
+        [[0.9920]]])), (&#39;scale&#39;, tensor([[[0.0789]],
 
-        [[0.0788]],
+        [[0.0789]],
 
-        [[0.0788]],
+        [[0.0789]],
 
-        [[0.0788]]]))])
+        [[0.0789]]]))])
 </pre></div>
 </div>
 </section>
@@ -669,7 +669,7 @@ computed using</p>
 <span class="math notranslate nohighlight">\(\# obs \rightarrow num_actions\)</span> function.</p>
 <p>Our network is wrapped in a <code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.modules.QValueActor</span></code>, which will read the state-action
 values, pick up the one with the maximum value and write all those results
-in the input <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.1.0+bb9c436 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a>.</p>
+in the input <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a>.</p>
 <section id="target-parameters">
 <h3>Target parameters<a class="headerlink" href="#target-parameters" title="Permalink to this heading">¶</a></h3>
 <p>Many off-policy RL algorithms use the concept of “target parameters” when it
@@ -686,7 +686,7 @@ in similar algorithms.</p>
 same architecture is often used with multiple sets of parameters (e.g.
 trainable and target parameters), we functionalize the modules and isolate
 the various sets of parameters in separate tensordicts.</p>
-<p>To this aim, we use <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.get_functional.html#tensordict.nn.get_functional" title="(in tensordict vmain (0.1.0+bb9c436 ))"><code class="xref py py-func docutils literal notranslate"><span class="pre">tensordict.nn.get_functional()</span></code></a>, which augments
+<p>To this aim, we use <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.get_functional.html#tensordict.nn.get_functional" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><code class="xref py py-func docutils literal notranslate"><span class="pre">tensordict.nn.get_functional()</span></code></a>, which augments
 our modules with some extra feature that make them compatible with parameters
 passed in the <code class="docutils literal notranslate"><span class="pre">TensorDict</span></code> format.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">make_model</span><span class="p">(</span><span class="n">dummy_env</span><span class="p">):</span>
@@ -1364,8 +1364,8 @@ for more information).</p></li>
 (check <code class="docutils literal notranslate"><span class="pre">torchrl.modules.NoisyLinear</span></code>, which is fully compatible with the
 <code class="docutils literal notranslate"><span class="pre">MLP</span></code> class used in our Dueling DQN).</p></li>
 </ul>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  7.347 seconds)</p>
-<p><strong>Estimated memory usage:</strong>  3790 MB</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  6.835 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  3912 MB</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-coding-dqn-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/be66e8850a06844c91f6264538ad69e8/coding_dqn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">coding_dqn.py</span></code></a></p>
