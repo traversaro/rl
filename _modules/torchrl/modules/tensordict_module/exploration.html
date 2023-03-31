@@ -368,7 +368,7 @@
 <span class="c1">#</span>
 <span class="c1"># This source code is licensed under the MIT license found in the</span>
 <span class="c1"># LICENSE file in the root directory of this source tree.</span>
-
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -377,7 +377,11 @@
 <span class="kn">from</span> <span class="nn">tensordict.tensordict</span> <span class="kn">import</span> <span class="n">TensorDictBase</span>
 <span class="kn">from</span> <span class="nn">tensordict.utils</span> <span class="kn">import</span> <span class="n">expand_as_right</span>
 
-<span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="n">CompositeSpec</span><span class="p">,</span> <span class="n">TensorSpec</span>
+<span class="kn">from</span> <span class="nn">torchrl.data.tensor_specs</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">CompositeSpec</span><span class="p">,</span>
+    <span class="n">TensorSpec</span><span class="p">,</span>
+    <span class="n">UnboundedContinuousTensorSpec</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.utils</span> <span class="kn">import</span> <span class="n">exploration_mode</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.common</span> <span class="kn">import</span> <span class="n">_forward_hook_safe_action</span>
 
@@ -420,7 +424,7 @@
 <span class="sd">        &gt;&gt;&gt; print(explorative_policy(td).get(&quot;action&quot;))</span>
 <span class="sd">        tensor([[ 0.0000,  0.0000,  0.0000,  0.0000],</span>
 <span class="sd">                [ 0.0000,  0.0000,  0.0000,  0.0000],</span>
-<span class="sd">                [-0.6986, -0.9366, -0.5837,  0.8596],</span>
+<span class="sd">                [ 0.9055, -0.9277, -0.6295, -0.2532],</span>
 <span class="sd">                [ 0.0000,  0.0000,  0.0000,  0.0000],</span>
 <span class="sd">                [ 0.0000,  0.0000,  0.0000,  0.0000],</span>
 <span class="sd">                [ 0.0000,  0.0000,  0.0000,  0.0000],</span>
@@ -448,13 +452,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">annealing_num_steps</span> <span class="o">=</span> <span class="n">annealing_num_steps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">eps_init</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_key</span> <span class="o">=</span> <span class="n">action_key</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">spec</span>
-            <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="n">policy</span><span class="o">.</span><span class="n">spec</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">)</span>
-            <span class="k">else</span> <span class="kc">None</span>
-        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">({</span><span class="n">action_key</span><span class="p">:</span> <span class="n">spec</span><span class="p">},</span> <span class="n">shape</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="n">spec</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="p">,</span> <span class="s2">&quot;_spec&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">action_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="p">[</span><span class="n">action_key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">action_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="p">[</span><span class="n">action_key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">policy</span><span class="o">.</span><span class="n">out_keys</span><span class="p">})</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">spec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span>
 
 <div class="viewcode-block" id="EGreedyWrapper.step"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.EGreedyWrapper.html#torchrl.modules.tensordict_module.EGreedyWrapper.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A step of epsilon decay.</span>
@@ -525,6 +540,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">policy</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
         <span class="n">sigma_init</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">sigma_end</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
         <span class="n">annealing_num_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
@@ -544,14 +560,33 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">std</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">sigma_init</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">action_key</span> <span class="o">=</span> <span class="n">action_key</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">spec</span>
-            <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="n">policy</span><span class="o">.</span><span class="n">spec</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">policy</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">)</span>
-            <span class="k">else</span> <span class="kc">None</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">out_keys</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">action_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The action key </span><span class="si">{</span><span class="n">action_key</span><span class="si">}</span><span class="s2"> was not found in the td_module out_keys </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">out_keys</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">({</span><span class="n">action_key</span><span class="p">:</span> <span class="n">spec</span><span class="p">},</span> <span class="n">shape</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="n">spec</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="p">,</span> <span class="s2">&quot;_spec&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">action_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="p">[</span><span class="n">action_key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">action_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="p">[</span><span class="n">action_key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">policy</span><span class="o">.</span><span class="n">out_keys</span><span class="p">})</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">safe</span> <span class="o">=</span> <span class="n">safe</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">safe</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">_forward_hook_safe_action</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">spec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span>
 
 <div class="viewcode-block" id="AdditiveGaussianWrapper.step"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.AdditiveGaussianWrapper.html#torchrl.modules.tensordict_module.AdditiveGaussianWrapper.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;A step of sigma decay.</span>
@@ -579,8 +614,7 @@
         <span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         <span class="n">action</span> <span class="o">=</span> <span class="n">action</span> <span class="o">+</span> <span class="n">noise</span> <span class="o">*</span> <span class="n">sigma</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">):</span>
-            <span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">action_key</span><span class="p">]</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">action_key</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">action</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">safe</span><span class="p">:</span>
@@ -640,8 +674,11 @@
 <span class="sd">            default: None</span>
 <span class="sd">        n_steps_annealing (int): number of steps for the sigma annealing.</span>
 <span class="sd">            default: 1000</span>
-<span class="sd">        key (str): key of the action to be modified.</span>
+<span class="sd">        action_key (str): key of the action to be modified.</span>
 <span class="sd">            default: &quot;action&quot;</span>
+<span class="sd">        spec (TensorSpec, optional): if provided, the sampled action will be</span>
+<span class="sd">            projected onto the valid action space once explored. If not provided,</span>
+<span class="sd">            the exploration wrapper will attempt to recover it from the policy.</span>
 <span class="sd">        safe (bool): if ``True``, actions that are out of bounds given the action specs will be projected in the space</span>
 <span class="sd">            given the :obj:`TensorSpec.project` heuristic.</span>
 <span class="sd">            default: True</span>
@@ -672,6 +709,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">policy</span><span class="p">:</span> <span class="n">TensorDictModule</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
         <span class="n">eps_init</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
         <span class="n">eps_end</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
         <span class="n">annealing_num_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
@@ -682,9 +720,16 @@
         <span class="n">x0</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">sigma_min</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_steps_annealing</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
-        <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;action&quot;</span><span class="p">,</span>
+        <span class="n">action_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;action&quot;</span><span class="p">,</span>
+        <span class="n">spec</span><span class="p">:</span> <span class="n">TensorSpec</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">safe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">action_key</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;the &#39;key&#39; keyword argument of </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="si">}</span><span class="s2"> has been renamed &#39;action_key&#39;. The &#39;key&#39; entry will be deprecated soon.&quot;</span>
+            <span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">policy</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ou</span> <span class="o">=</span> <span class="n">_OrnsteinUhlenbeckProcess</span><span class="p">(</span>
             <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span>
@@ -694,7 +739,7 @@
             <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span>
             <span class="n">sigma_min</span><span class="o">=</span><span class="n">sigma_min</span><span class="p">,</span>
             <span class="n">n_steps_annealing</span><span class="o">=</span><span class="n">n_steps_annealing</span><span class="p">,</span>
-            <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
+            <span class="n">key</span><span class="o">=</span><span class="n">action_key</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;eps_init&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">eps_init</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;eps_end&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">eps_end</span><span class="p">]))</span>
@@ -706,14 +751,41 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">annealing_num_steps</span> <span class="o">=</span> <span class="n">annealing_num_steps</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">eps_init</span><span class="p">]))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">out_keys</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">ou</span><span class="o">.</span><span class="n">out_keys</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">(</span>
-            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">_spec</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ou</span><span class="o">.</span><span class="n">out_keys</span><span class="p">}</span>
-        <span class="p">)</span>
+        <span class="n">noise_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ou</span><span class="o">.</span><span class="n">noise_key</span>
+        <span class="n">steps_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ou</span><span class="o">.</span><span class="n">steps_key</span>
+
+        <span class="n">ou_specs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">noise_key</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">steps_key</span><span class="p">:</span> <span class="n">UnboundedContinuousTensorSpec</span><span class="p">(</span>
+                <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">CompositeSpec</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">({</span><span class="n">action_key</span><span class="p">:</span> <span class="n">spec</span><span class="p">},</span> <span class="n">shape</span><span class="o">=</span><span class="n">spec</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="n">spec</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="p">,</span> <span class="s2">&quot;_spec&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">action_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="p">[</span><span class="n">action_key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="p">,</span> <span class="s2">&quot;spec&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">td_module</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">action_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="p">[</span><span class="n">action_key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span> <span class="o">=</span> <span class="n">CompositeSpec</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">policy</span><span class="o">.</span><span class="n">out_keys</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">ou_specs</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got multiple identical output keys: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">out_keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">safe</span> <span class="o">=</span> <span class="n">safe</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">safe</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">register_forward_hook</span><span class="p">(</span><span class="n">_forward_hook_safe_action</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">spec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spec</span>
 
 <div class="viewcode-block" id="OrnsteinUhlenbeckProcessWrapper.step"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper.html#torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frames</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the eps noise factor.</span>
@@ -741,6 +813,17 @@
 <div class="viewcode-block" id="OrnsteinUhlenbeckProcessWrapper.forward"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper.html#torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorDictBase</span><span class="p">:</span>
         <span class="n">tensordict</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">exploration_mode</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span> <span class="ow">or</span> <span class="n">exploration_mode</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;step_count&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;The tensordict passed to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> appears to be &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;missing the &#39;step_count&#39; entry. This entry is used to &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;reset the noise at the beginning of a trajectory, without it &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;the behaviour of this exploration method is undefined. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;This is allowed for BC compatibility purposes but it will be deprecated soon! &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;To create a &#39;step_count&#39; entry, simply append a StepCounter &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;transform to your environment with `env = TransformedEnv(env, StepCounter())`.&quot;</span>
+                <span class="p">)</span>
+                <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;step_count&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
             <span class="n">tensordict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ou</span><span class="o">.</span><span class="n">add_sample</span><span class="p">(</span><span class="n">tensordict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">tensordict</span></div></div>
 
@@ -787,10 +870,13 @@
     <span class="k">def</span> <span class="nf">steps_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_steps_key</span>  <span class="c1"># + str(id(self))</span>
 
-    <span class="k">def</span> <span class="nf">_make_noise_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_make_noise_pair</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">,</span> <span class="n">is_init</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tensordict</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get_sub_tensordict</span><span class="p">(</span><span class="n">is_init</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
         <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">noise_key</span><span class="p">,</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="p">),</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="n">is_init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">tensordict</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">steps_key</span><span class="p">,</span>
@@ -799,6 +885,7 @@
                 <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">,</span>
                 <span class="n">device</span><span class="o">=</span><span class="n">tensordict</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
             <span class="p">),</span>
+            <span class="n">inplace</span><span class="o">=</span><span class="n">is_init</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">add_sample</span><span class="p">(</span>
@@ -807,6 +894,9 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">noise_key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_make_noise_pair</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
+        <span class="n">step_count</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;step_count&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">step_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">step_count</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_make_noise_pair</span><span class="p">(</span><span class="n">tensordict</span><span class="p">,</span> <span class="n">step_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="n">prev_noise</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">noise_key</span><span class="p">)</span>
         <span class="n">prev_noise</span> <span class="o">=</span> <span class="n">prev_noise</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x0</span>

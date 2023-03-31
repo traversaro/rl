@@ -396,7 +396,6 @@
 <span class="kn">from</span> <span class="nn">torchrl.data.utils</span> <span class="kn">import</span> <span class="n">CloudpickleWrapper</span><span class="p">,</span> <span class="n">DEVICE_TYPING</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.common</span> <span class="kn">import</span> <span class="n">_EnvWrapper</span><span class="p">,</span> <span class="n">EnvBase</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.env_creator</span> <span class="kn">import</span> <span class="n">get_env_metadata</span>
-<span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">_gym_to_torchrl_spec_transform</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="c1"># Libraries necessary for MultiThreadedEnv</span>
@@ -1470,6 +1469,9 @@
         <span class="k">return</span> <span class="n">tensordict_out</span><span class="o">.</span><span class="n">select</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="n">tensordict_out</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_input_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorSpec</span><span class="p">:</span>
+        <span class="c1"># local import to avoid importing gym in the script</span>
+        <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">_gym_to_torchrl_spec_transform</span>
+
         <span class="c1"># Envpool provides Gym-compatible specs as env.spec.action_space and</span>
         <span class="c1"># DM_Control-compatible specs as env.spec.action_spec(). We use the Gym ones.</span>
 
@@ -1494,6 +1496,9 @@
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_observation_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TensorSpec</span><span class="p">:</span>
+        <span class="c1"># local import to avoid importing gym in the script</span>
+        <span class="kn">from</span> <span class="nn">torchrl.envs.libs.gym</span> <span class="kn">import</span> <span class="n">_gym_to_torchrl_spec_transform</span>
+
         <span class="c1"># Gym specs produced by EnvPool don&#39;t contain batch_size, we add it to satisfy checks in EnvBase</span>
         <span class="n">observation_spec</span> <span class="o">=</span> <span class="n">_gym_to_torchrl_spec_transform</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_env</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">observation_space</span><span class="p">,</span>

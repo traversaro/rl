@@ -385,24 +385,30 @@ Because actions are integrated later than observations, two networks are created
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mlp_net_kwargs_net1</strong> (<em>dict</em><em>, </em><em>optional</em>) – kwargs for MLP.
-Default: {
-‘in_features’: None,
+<li><p><strong>mlp_net_kwargs_net1</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>kwargs for MLP.
+Default: {</p>
+<blockquote>
+<div><p>’in_features’: None,
 ‘out_features’: 400,
 ‘depth’: 0,
 ‘num_cells’: [],
 ‘activation_class’: nn.ELU,
 ‘bias_last_layer’: True,
-‘activate_last_layer’: True,</p></li>
-<li><p><strong>}</strong> – </p></li>
-<li><p><strong>mlp_net_kwargs_net2</strong> – Default: {
-‘in_features’: None,
+‘activate_last_layer’: True,</p>
+</div></blockquote>
+<p>}</p>
+</p></li>
+<li><p><strong>mlp_net_kwargs_net2</strong> – <dl class="simple">
+<dt>Default: {</dt><dd><p>‘in_features’: None,
 ‘out_features’: 1,
 ‘depth’: 1,
 ‘num_cells’: [300, ],
 ‘activation_class’: nn.ELU,
-‘bias_last_layer’: True,</p></li>
-<li><p><strong>}</strong> – </p></li>
+‘bias_last_layer’: True,</p>
+</dd>
+</dl>
+<p>}</p>
+</p></li>
 <li><p><strong>device</strong> (<em>Optional</em><em>[</em><em>DEVICE_TYPING</em><em>]</em>) – device to create the module on.</p></li>
 </ul>
 </dd>

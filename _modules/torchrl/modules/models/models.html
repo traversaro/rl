@@ -1036,7 +1036,7 @@
 
 
 <span class="k">def</span> <span class="nf">ddpg_init_last_layer</span><span class="p">(</span>
-    <span class="n">last_layer</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span>
+    <span class="n">module</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">,</span>
     <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">6e-4</span><span class="p">,</span>
     <span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DEVICE_TYPING</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1046,6 +1046,12 @@
 <span class="sd">    https://arxiv.org/pdf/1509.02971.pdf</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">last_layer</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">module</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">last_layer</span><span class="p">,</span> <span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">)):</span>
+            <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Could not find a nn.Linear / nn.Conv2d to initialize.&quot;</span><span class="p">)</span>
+
     <span class="n">last_layer</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy_</span><span class="p">(</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">rand_like</span><span class="p">(</span><span class="n">last_layer</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">-</span> <span class="n">scale</span> <span class="o">/</span> <span class="mi">2</span>
     <span class="p">)</span>
@@ -1133,7 +1139,7 @@
         <span class="n">mlp_net_default_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mlp_net_kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">convnet</span> <span class="o">=</span> <span class="n">ConvNet</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="n">conv_net_default_kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="n">mlp_net_default_kwargs</span><span class="p">)</span>
-        <span class="n">ddpg_init_last_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mf">6e-4</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">ddpg_init_last_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">,</span> <span class="mf">6e-4</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DdpgCnnActor.forward"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.DdpgCnnActor.html#torchrl.modules.DdpgCnnActor.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
         <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convnet</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
@@ -1182,7 +1188,7 @@
         <span class="n">mlp_net_kwargs</span> <span class="o">=</span> <span class="n">mlp_net_kwargs</span> <span class="k">if</span> <span class="n">mlp_net_kwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="n">mlp_net_default_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mlp_net_kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="n">mlp_net_default_kwargs</span><span class="p">)</span>
-        <span class="n">ddpg_init_last_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mf">6e-3</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">ddpg_init_last_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">,</span> <span class="mf">6e-3</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DdpgMlpActor.forward"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.DdpgMlpActor.html#torchrl.modules.DdpgMlpActor.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
@@ -1263,7 +1269,7 @@
         <span class="n">mlp_net_default_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mlp_net_kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">convnet</span> <span class="o">=</span> <span class="n">ConvNet</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="n">conv_net_default_kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="n">mlp_net_default_kwargs</span><span class="p">)</span>
-        <span class="n">ddpg_init_last_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mf">6e-4</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">ddpg_init_last_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">,</span> <span class="mf">6e-4</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DdpgCnnQNet.forward"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.DdpgCnnQNet.html#torchrl.modules.DdpgCnnQNet.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">hidden</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">convnet</span><span class="p">(</span><span class="n">observation</span><span class="p">),</span> <span class="n">action</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
@@ -1283,23 +1289,23 @@
 <span class="sd">    Args:</span>
 <span class="sd">        mlp_net_kwargs_net1 (dict, optional): kwargs for MLP.</span>
 <span class="sd">            Default: {</span>
-<span class="sd">            &#39;in_features&#39;: None,</span>
-<span class="sd">            &#39;out_features&#39;: 400,</span>
-<span class="sd">            &#39;depth&#39;: 0,</span>
-<span class="sd">            &#39;num_cells&#39;: [],</span>
-<span class="sd">            &#39;activation_class&#39;: nn.ELU,</span>
-<span class="sd">            &#39;bias_last_layer&#39;: True,</span>
-<span class="sd">            &#39;activate_last_layer&#39;: True,</span>
-<span class="sd">        }</span>
+<span class="sd">                &#39;in_features&#39;: None,</span>
+<span class="sd">                &#39;out_features&#39;: 400,</span>
+<span class="sd">                &#39;depth&#39;: 0,</span>
+<span class="sd">                &#39;num_cells&#39;: [],</span>
+<span class="sd">                &#39;activation_class&#39;: nn.ELU,</span>
+<span class="sd">                &#39;bias_last_layer&#39;: True,</span>
+<span class="sd">                &#39;activate_last_layer&#39;: True,</span>
+<span class="sd">            }</span>
 <span class="sd">        mlp_net_kwargs_net2</span>
 <span class="sd">            Default: {</span>
-<span class="sd">            &#39;in_features&#39;: None,</span>
-<span class="sd">            &#39;out_features&#39;: 1,</span>
-<span class="sd">            &#39;depth&#39;: 1,</span>
-<span class="sd">            &#39;num_cells&#39;: [300, ],</span>
-<span class="sd">            &#39;activation_class&#39;: nn.ELU,</span>
-<span class="sd">            &#39;bias_last_layer&#39;: True,</span>
-<span class="sd">        }</span>
+<span class="sd">                &#39;in_features&#39;: None,</span>
+<span class="sd">                &#39;out_features&#39;: 1,</span>
+<span class="sd">                &#39;depth&#39;: 1,</span>
+<span class="sd">                &#39;num_cells&#39;: [300, ],</span>
+<span class="sd">                &#39;activation_class&#39;: nn.ELU,</span>
+<span class="sd">                &#39;bias_last_layer&#39;: True,</span>
+<span class="sd">            }</span>
 <span class="sd">        device (Optional[DEVICE_TYPING]): device to create the module on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1339,7 +1345,7 @@
         <span class="p">)</span>
         <span class="n">mlp2_net_default_kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mlp_net_kwargs_net2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mlp2</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span> <span class="o">**</span><span class="n">mlp2_net_default_kwargs</span><span class="p">)</span>
-        <span class="n">ddpg_init_last_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mf">6e-3</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">ddpg_init_last_layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp2</span><span class="p">,</span> <span class="mf">6e-3</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DdpgMlpQNet.forward"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.DdpgMlpQNet.html#torchrl.modules.DdpgMlpQNet.forward">[docs]</a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mlp2</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp1</span><span class="p">(</span><span class="n">observation</span><span class="p">),</span> <span class="n">action</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
