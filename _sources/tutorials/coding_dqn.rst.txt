@@ -533,13 +533,13 @@ let's check that normalizing constants have a size of ``[C, 1, 1]`` where
 
             [[0.9920]],
 
-            [[0.9920]]])), ('scale', tensor([[[0.0788]],
+            [[0.9920]]])), ('scale', tensor([[[0.0790]],
 
-            [[0.0788]],
+            [[0.0790]],
 
-            [[0.0788]],
+            [[0.0790]],
 
-            [[0.0788]]]))])
+            [[0.0791]]]))])
 
 
 
@@ -1176,7 +1176,7 @@ There are very few differences with the training loop above:
 - We use :func:`vec_td_lambda_advantage_estimate` to compute the target
   value.
 
-.. GENERATED FROM PYTHON SOURCE LINES 785-882
+.. GENERATED FROM PYTHON SOURCE LINES 785-883
 
 .. code-block:: default
 
@@ -1224,6 +1224,7 @@ There are very few differences with the training loop above:
                     next_value,
                     reward,
                     done,
+                    time_dim=sampled_data_out.ndim - 1,
                 ).pow(2)
                 error = error.mean()
                 error.backward()
@@ -1278,7 +1279,7 @@ There are very few differences with the training loop above:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 883-893
+.. GENERATED FROM PYTHON SOURCE LINES 884-894
 
 TD(:math:`\lambda`) performs significantly better than TD(0) because it
 retrieves a much less biased estimate of the state-action value.
@@ -1291,7 +1292,7 @@ retrieves a much less biased estimate of the state-action value.
    :alt: Cart Pole results with TD(lambda)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 893-899
+.. GENERATED FROM PYTHON SOURCE LINES 894-900
 
 .. code-block:: default
 
@@ -1302,7 +1303,7 @@ retrieves a much less biased estimate of the state-action value.
     del data_collector
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 900-906
+.. GENERATED FROM PYTHON SOURCE LINES 901-907
 
 Let's compare the results on a single plot. Because the TD(lambda) version
 works better, we'll have fewer episodes collected for a given number of
@@ -1311,7 +1312,7 @@ frames (as there are more frames per episode).
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 500000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 906-961
+.. GENERATED FROM PYTHON SOURCE LINES 907-962
 
 .. code-block:: default
 
@@ -1371,7 +1372,7 @@ use a greater value for ``total_frames`` e.g. 500000.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 962-979
+.. GENERATED FROM PYTHON SOURCE LINES 963-980
 
 .. code-block:: python
 
@@ -1391,7 +1392,7 @@ the other transforms that modify this key will update its value in-place in
 the output tensordict.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 979-986
+.. GENERATED FROM PYTHON SOURCE LINES 980-987
 
 .. code-block:: default
 
@@ -1403,7 +1404,7 @@ the output tensordict.
     del test_env
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 992-1001
+.. GENERATED FROM PYTHON SOURCE LINES 993-1002
 
 The video of the rollout can be saved using the imageio package:
 
@@ -1415,7 +1416,7 @@ The video of the rollout can be saved using the imageio package:
 .. figure:: /_static/img/cartpole.gif
    :alt: Cart Pole results from the TD(:math:`\lambda`) trained policy.
 
-.. GENERATED FROM PYTHON SOURCE LINES 1003-1039
+.. GENERATED FROM PYTHON SOURCE LINES 1004-1040
 
 Conclusion and possible improvements
 ------------------------------------
@@ -1457,9 +1458,9 @@ of DQN. Other possible improvements could include:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  11.403 seconds)
+   **Total running time of the script:** ( 1 minutes  3.818 seconds)
 
-**Estimated memory usage:**  5403 MB
+**Estimated memory usage:**  2538 MB
 
 
 .. _sphx_glr_download_tutorials_coding_dqn.py:

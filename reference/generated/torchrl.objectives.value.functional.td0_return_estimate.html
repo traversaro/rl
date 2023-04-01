@@ -388,10 +388,11 @@ must be a [Batch x TimeSteps x 1] or [Batch x TimeSteps] tensor</p></li>
 <li><p><strong>reward</strong> (<em>Tensor</em>) – reward of taking actions in the environment.
 must be a [Batch x TimeSteps x 1] or [Batch x TimeSteps] tensor</p></li>
 <li><p><strong>done</strong> (<em>Tensor</em>) – boolean flag for end of episode.</p></li>
-<li><p><strong>time_dim</strong> (<em>int</em>) – dimension where the time is unrolled. Defaults to -2.</p></li>
 </ul>
 </dd>
 </dl>
+<p>All tensors (values, reward and done) must have shape
+<code class="docutils literal notranslate"><span class="pre">[*Batch</span> <span class="pre">x</span> <span class="pre">TimeSteps</span> <span class="pre">x</span> <span class="pre">*F]</span></code>, with <code class="docutils literal notranslate"><span class="pre">*F</span></code> feature dimensions.</p>
 </dd></dl>
 
 </section>

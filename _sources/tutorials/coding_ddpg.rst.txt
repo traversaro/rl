@@ -1369,7 +1369,7 @@ to compute gradients. This ensures that do not have batches that are
 'too big' but still compute an accurate return.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 1025-1142
+.. GENERATED FROM PYTHON SOURCE LINES 1025-1148
 
 .. code-block:: default
 
@@ -1427,7 +1427,13 @@ to compute gradients. This ensures that do not have batches that are
                     "state_action_value"
                 ]
                 advantage = vec_td_lambda_advantage_estimate(
-                    gamma, lmbda, value, next_value, reward, done
+                    gamma,
+                    lmbda,
+                    value,
+                    next_value,
+                    reward,
+                    done,
+                    time_dim=sampled_tensordict.ndim - 1,
                 )
                 # we sample from the values we have computed
                 rand_idx = torch.randint(0, advantage.numel(), (batch_size,))
@@ -1491,7 +1497,7 @@ to compute gradients. This ensures that do not have batches that are
     del collector
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 1143-1148
+.. GENERATED FROM PYTHON SOURCE LINES 1149-1154
 
 We can observe that using TD(lambda) made our results considerably more
 stable for a similar training speed:
@@ -1499,7 +1505,7 @@ stable for a similar training speed:
 **Note**: As already mentioned above, to get a more reasonable performance,
 use a greater value for ``total_frames`` e.g. 1000000.
 
-.. GENERATED FROM PYTHON SOURCE LINES 1148-1157
+.. GENERATED FROM PYTHON SOURCE LINES 1154-1163
 
 .. code-block:: default
 
@@ -1516,9 +1522,9 @@ use a greater value for ``total_frames`` e.g. 1000000.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  57.831 seconds)
+   **Total running time of the script:** ( 0 minutes  51.732 seconds)
 
-**Estimated memory usage:**  5403 MB
+**Estimated memory usage:**  2539 MB
 
 
 .. _sphx_glr_download_tutorials_coding_ddpg.py:

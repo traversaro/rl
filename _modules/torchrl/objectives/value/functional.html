@@ -409,11 +409,11 @@
         <span class="k">if</span> <span class="n">time_dim</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">2</span><span class="p">:</span>
             <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">transpose_tensor</span><span class="p">(</span><span class="n">arg</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
             <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">transpose_tensor</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">fun</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">time_dim</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">transpose_tensor</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
             <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">transpose_tensor</span><span class="p">(</span><span class="n">_out</span><span class="p">)</span> <span class="k">for</span> <span class="n">_out</span> <span class="ow">in</span> <span class="n">out</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">fun</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fun</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">time_dim</span><span class="o">=</span><span class="n">time_dim</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">transposed_fun</span>
 
@@ -448,8 +448,7 @@
 <span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -506,8 +505,7 @@
 <span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -564,14 +562,12 @@
 <span class="c1"># -----</span>
 
 
-<div class="viewcode-block" id="td0_advantage_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.td0_advantage_estimate.html#torchrl.objectives.value.functional.td0_advantage_estimate">[docs]</a><span class="nd">@_transpose_time</span>
-<span class="k">def</span> <span class="nf">td0_advantage_estimate</span><span class="p">(</span>
+<div class="viewcode-block" id="td0_advantage_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.td0_advantage_estimate.html#torchrl.objectives.value.functional.td0_advantage_estimate">[docs]</a><span class="k">def</span> <span class="nf">td0_advantage_estimate</span><span class="p">(</span>
     <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">state_value</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">next_state_value</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">reward</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">done</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
-    <span class="n">time_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;TD(0) advantage estimate of a trajectory.</span>
 
@@ -583,24 +579,21 @@
 <span class="sd">        next_state_value (Tensor): value function result with new_state input.</span>
 <span class="sd">        reward (Tensor): reward of taking actions in the environment.</span>
 <span class="sd">        done (Tensor): boolean flag for end of episode.</span>
-<span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
             <span class="s2">&quot;All input tensors (value, reward and done states) must share a unique shape.&quot;</span>
         <span class="p">)</span>
-    <span class="n">not_done</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">done</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-    <span class="n">advantage</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">+</span> <span class="n">gamma</span> <span class="o">*</span> <span class="n">not_done</span> <span class="o">*</span> <span class="n">next_state_value</span> <span class="o">-</span> <span class="n">state_value</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="n">td0_return_estimate</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">next_state_value</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">)</span>
+    <span class="n">advantage</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">-</span> <span class="n">state_value</span>
     <span class="k">return</span> <span class="n">advantage</span></div>
 
 
-<div class="viewcode-block" id="td0_return_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.td0_return_estimate.html#torchrl.objectives.value.functional.td0_return_estimate">[docs]</a><span class="nd">@_transpose_time</span>
-<span class="k">def</span> <span class="nf">td0_return_estimate</span><span class="p">(</span>
+<div class="viewcode-block" id="td0_return_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.td0_return_estimate.html#torchrl.objectives.value.functional.td0_return_estimate">[docs]</a><span class="k">def</span> <span class="nf">td0_return_estimate</span><span class="p">(</span>
     <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">next_state_value</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">reward</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -617,7 +610,9 @@
 <span class="sd">        reward (Tensor): reward of taking actions in the environment.</span>
 <span class="sd">            must be a [Batch x TimeSteps x 1] or [Batch x TimeSteps] tensor</span>
 <span class="sd">        done (Tensor): boolean flag for end of episode.</span>
-<span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
+
+<span class="sd">    All tensors (values, reward and done) must have shape</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -674,8 +669,7 @@
 <span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -717,8 +711,7 @@
     <span class="k">return</span> <span class="n">returns</span></div>
 
 
-<div class="viewcode-block" id="td1_advantage_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.td1_advantage_estimate.html#torchrl.objectives.value.functional.td1_advantage_estimate">[docs]</a><span class="nd">@_transpose_time</span>
-<span class="k">def</span> <span class="nf">td1_advantage_estimate</span><span class="p">(</span>
+<div class="viewcode-block" id="td1_advantage_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.td1_advantage_estimate.html#torchrl.objectives.value.functional.td1_advantage_estimate">[docs]</a><span class="k">def</span> <span class="nf">td1_advantage_estimate</span><span class="p">(</span>
     <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">state_value</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
     <span class="n">next_state_value</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -759,8 +752,7 @@
 <span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -769,7 +761,9 @@
         <span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;shape of state_value and next_state_value must match&quot;</span><span class="p">)</span>
-    <span class="n">returns</span> <span class="o">=</span> <span class="n">td1_return_estimate</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">next_state_value</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">rolling_gamma</span><span class="p">)</span>
+    <span class="n">returns</span> <span class="o">=</span> <span class="n">td1_return_estimate</span><span class="p">(</span>
+        <span class="n">gamma</span><span class="p">,</span> <span class="n">next_state_value</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">rolling_gamma</span><span class="p">,</span> <span class="n">time_dim</span><span class="o">=</span><span class="n">time_dim</span>
+    <span class="p">)</span>
     <span class="n">advantage</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">-</span> <span class="n">state_value</span>
     <span class="k">return</span> <span class="n">advantage</span></div>
 
@@ -814,8 +808,7 @@
 <span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">vec_td_lambda_return_estimate</span><span class="p">(</span>
@@ -825,11 +818,11 @@
         <span class="n">done</span><span class="o">=</span><span class="n">done</span><span class="p">,</span>
         <span class="n">rolling_gamma</span><span class="o">=</span><span class="n">rolling_gamma</span><span class="p">,</span>
         <span class="n">lmbda</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">time_dim</span><span class="o">=</span><span class="n">time_dim</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vec_td1_advantage_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.vec_td1_advantage_estimate.html#torchrl.objectives.value.functional.vec_td1_advantage_estimate">[docs]</a><span class="nd">@_transpose_time</span>
-<span class="k">def</span> <span class="nf">vec_td1_advantage_estimate</span><span class="p">(</span>
+<div class="viewcode-block" id="vec_td1_advantage_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.vec_td1_advantage_estimate.html#torchrl.objectives.value.functional.vec_td1_advantage_estimate">[docs]</a><span class="k">def</span> <span class="nf">vec_td1_advantage_estimate</span><span class="p">(</span>
     <span class="n">gamma</span><span class="p">,</span>
     <span class="n">state_value</span><span class="p">,</span>
     <span class="n">next_state_value</span><span class="p">,</span>
@@ -870,8 +863,7 @@
 <span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -879,7 +871,9 @@
             <span class="s2">&quot;All input tensors (value, reward and done states) must share a unique shape.&quot;</span>
         <span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span>
-        <span class="n">vec_td1_return_estimate</span><span class="p">(</span><span class="n">gamma</span><span class="p">,</span> <span class="n">next_state_value</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">rolling_gamma</span><span class="p">)</span>
+        <span class="n">vec_td1_return_estimate</span><span class="p">(</span>
+            <span class="n">gamma</span><span class="p">,</span> <span class="n">next_state_value</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">rolling_gamma</span><span class="p">,</span> <span class="n">time_dim</span><span class="o">=</span><span class="n">time_dim</span>
+        <span class="p">)</span>
         <span class="o">-</span> <span class="n">state_value</span>
     <span class="p">)</span></div>
 
@@ -931,8 +925,7 @@
 <span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -988,8 +981,7 @@
     <span class="k">return</span> <span class="n">returns</span></div>
 
 
-<div class="viewcode-block" id="td_lambda_advantage_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.td_lambda_advantage_estimate.html#torchrl.objectives.value.functional.td_lambda_advantage_estimate">[docs]</a><span class="nd">@_transpose_time</span>
-<span class="k">def</span> <span class="nf">td_lambda_advantage_estimate</span><span class="p">(</span>
+<div class="viewcode-block" id="td_lambda_advantage_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.td_lambda_advantage_estimate.html#torchrl.objectives.value.functional.td_lambda_advantage_estimate">[docs]</a><span class="k">def</span> <span class="nf">td_lambda_advantage_estimate</span><span class="p">(</span>
     <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">lmbda</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="n">state_value</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>
@@ -1032,8 +1024,7 @@
 <span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -1043,7 +1034,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;shape of state_value and next_state_value must match&quot;</span><span class="p">)</span>
     <span class="n">returns</span> <span class="o">=</span> <span class="n">td_lambda_return_estimate</span><span class="p">(</span>
-        <span class="n">gamma</span><span class="p">,</span> <span class="n">lmbda</span><span class="p">,</span> <span class="n">next_state_value</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">rolling_gamma</span>
+        <span class="n">gamma</span><span class="p">,</span> <span class="n">lmbda</span><span class="p">,</span> <span class="n">next_state_value</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">rolling_gamma</span><span class="p">,</span> <span class="n">time_dim</span><span class="o">=</span><span class="n">time_dim</span>
     <span class="p">)</span>
     <span class="n">advantage</span> <span class="o">=</span> <span class="n">returns</span> <span class="o">-</span> <span class="n">state_value</span>
     <span class="k">return</span> <span class="n">advantage</span></div>
@@ -1094,8 +1085,7 @@
 <span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -1207,8 +1197,7 @@
         <span class="k">return</span> <span class="p">(</span><span class="n">v1</span> <span class="o">+</span> <span class="n">v2</span> <span class="o">+</span> <span class="n">v3</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">*</span><span class="n">batch</span><span class="p">,</span> <span class="n">lastdim</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="vec_td_lambda_advantage_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.vec_td_lambda_advantage_estimate.html#torchrl.objectives.value.functional.vec_td_lambda_advantage_estimate">[docs]</a><span class="nd">@_transpose_time</span>
-<span class="k">def</span> <span class="nf">vec_td_lambda_advantage_estimate</span><span class="p">(</span>
+<div class="viewcode-block" id="vec_td_lambda_advantage_estimate"><a class="viewcode-back" href="../../../../reference/generated/torchrl.objectives.value.functional.vec_td_lambda_advantage_estimate.html#torchrl.objectives.value.functional.vec_td_lambda_advantage_estimate">[docs]</a><span class="k">def</span> <span class="nf">vec_td_lambda_advantage_estimate</span><span class="p">(</span>
     <span class="n">gamma</span><span class="p">,</span>
     <span class="n">lmbda</span><span class="p">,</span>
     <span class="n">state_value</span><span class="p">,</span>
@@ -1251,8 +1240,7 @@
 <span class="sd">        time_dim (int): dimension where the time is unrolled. Defaults to -2.</span>
 
 <span class="sd">    All tensors (values, reward and done) must have shape</span>
-<span class="sd">    ``[*Batch x TimeSteps x F]``, with ``F`` features (for single agent,</span>
-<span class="sd">    single task, single objective F=1).</span>
+<span class="sd">    ``[*Batch x TimeSteps x *F]``, with ``*F`` feature dimensions.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">next_state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">state_value</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">reward</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">done</span><span class="o">.</span><span class="n">shape</span><span class="p">):</span>
@@ -1261,7 +1249,13 @@
         <span class="p">)</span>
     <span class="k">return</span> <span class="p">(</span>
         <span class="n">vec_td_lambda_return_estimate</span><span class="p">(</span>
-            <span class="n">gamma</span><span class="p">,</span> <span class="n">lmbda</span><span class="p">,</span> <span class="n">next_state_value</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">rolling_gamma</span>
+            <span class="n">gamma</span><span class="p">,</span>
+            <span class="n">lmbda</span><span class="p">,</span>
+            <span class="n">next_state_value</span><span class="p">,</span>
+            <span class="n">reward</span><span class="p">,</span>
+            <span class="n">done</span><span class="p">,</span>
+            <span class="n">rolling_gamma</span><span class="p">,</span>
+            <span class="n">time_dim</span><span class="o">=</span><span class="n">time_dim</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="o">-</span> <span class="n">state_value</span>
     <span class="p">)</span></div>
