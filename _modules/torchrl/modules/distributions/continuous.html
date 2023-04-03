@@ -381,7 +381,10 @@
 <span class="kn">from</span> <span class="nn">torchrl.modules.distributions.truncated_normal</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">TruncatedNormal</span> <span class="k">as</span> <span class="n">_TruncatedNormal</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">torchrl.modules.distributions.utils</span> <span class="kn">import</span> <span class="n">_cast_device</span>
+<span class="kn">from</span> <span class="nn">torchrl.modules.distributions.utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_cast_device</span><span class="p">,</span>
+    <span class="n">FasterTransformedDistribution</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">torchrl.modules.utils</span> <span class="kn">import</span> <span class="n">mappings</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
@@ -639,7 +642,7 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 
 
-<div class="viewcode-block" id="TanhNormal"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.TanhNormal.html#torchrl.modules.TanhNormal">[docs]</a><span class="k">class</span> <span class="nc">TanhNormal</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">TransformedDistribution</span><span class="p">):</span>
+<div class="viewcode-block" id="TanhNormal"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.TanhNormal.html#torchrl.modules.TanhNormal">[docs]</a><span class="k">class</span> <span class="nc">TanhNormal</span><span class="p">(</span><span class="n">FasterTransformedDistribution</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements a TanhNormal distribution with location scaling.</span>
 
 <span class="sd">    Location scaling prevents the location to be &quot;too far&quot; from 0 when a TanhTransform is applied, which ultimately</span>
@@ -851,7 +854,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">param</span></div>
 
 
-<div class="viewcode-block" id="TanhDelta"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.TanhDelta.html#torchrl.modules.TanhDelta">[docs]</a><span class="k">class</span> <span class="nc">TanhDelta</span><span class="p">(</span><span class="n">D</span><span class="o">.</span><span class="n">TransformedDistribution</span><span class="p">):</span>
+<div class="viewcode-block" id="TanhDelta"><a class="viewcode-back" href="../../../../reference/generated/torchrl.modules.TanhDelta.html#torchrl.modules.TanhDelta">[docs]</a><span class="k">class</span> <span class="nc">TanhDelta</span><span class="p">(</span><span class="n">FasterTransformedDistribution</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Implements a Tanh transformed_in Delta distribution.</span>
 
 <span class="sd">    Args:</span>
