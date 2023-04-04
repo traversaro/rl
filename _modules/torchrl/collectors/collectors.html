@@ -900,6 +900,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">:</span> <span class="n">EnvBase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_frames_per_traj</span> <span class="o">=</span> <span class="n">max_frames_per_traj</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_frames_per_traj</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># let&#39;s check that there is no StepCounter yet</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">output_spec</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">,)</span>
+                <span class="k">if</span> <span class="s2">&quot;truncated&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;A &#39;truncated&#39; key is already present in the environment &quot;</span>
+                        <span class="s2">&quot;and the &#39;max_frames_per_traj&#39; argument may conflict with &quot;</span>
+                        <span class="s2">&quot;a &#39;StepCounter&#39; that has already been set. &quot;</span>
+                        <span class="s2">&quot;Possible solutions: Set max_frames_per_traj to 0 or &quot;</span>
+                        <span class="s2">&quot;remove the StepCounter limit from the environment transforms.&quot;</span>
+                    <span class="p">)</span>
             <span class="n">env</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">TransformedEnv</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">,</span> <span class="n">StepCounter</span><span class="p">(</span><span class="n">max_steps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_frames_per_traj</span><span class="p">)</span>
             <span class="p">)</span>
@@ -1125,18 +1137,22 @@
                 <span class="n">_reset</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">td_reset</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">td_reset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="n">td_reset</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">td_reset</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="n">done</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">_reset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">done</span><span class="o">.</span><span class="n">any</span><span class="p">())</span> <span class="ow">or</span> <span class="p">(</span>
-                <span class="n">_reset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">done</span><span class="p">[</span><span class="n">_reset</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">()</span>
-            <span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Env </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="si">}</span><span class="s2"> was done after reset on specified &#39;_reset&#39; dimensions. This is (currently) not allowed.&quot;</span>
-                <span class="p">)</span>
             <span class="n">traj_done_or_terminated</span> <span class="o">=</span> <span class="n">done_or_terminated</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
                 <span class="nb">tuple</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">batch_dims</span><span class="p">,</span> <span class="n">done_or_terminated</span><span class="o">.</span><span class="n">ndim</span><span class="p">)),</span>
                 <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">bool</span><span class="p">,</span>
             <span class="p">)</span>
+            <span class="k">if</span> <span class="n">td_reset</span><span class="o">.</span><span class="n">batch_dims</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get_sub_tensordict</span><span class="p">(</span><span class="n">traj_done_or_terminated</span><span class="p">)</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="n">td_reset</span><span class="p">[</span><span class="n">traj_done_or_terminated</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">td_reset</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">done</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;done&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">done</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Env </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="si">}</span><span class="s2"> was done after reset on specified &#39;_reset&#39; dimensions. This is (currently) not allowed.&quot;</span>
+                <span class="p">)</span>
             <span class="n">traj_ids</span><span class="p">[</span><span class="n">traj_done_or_terminated</span><span class="p">]</span> <span class="o">=</span> <span class="n">traj_ids</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
                 <span class="mi">1</span><span class="p">,</span> <span class="n">traj_done_or_terminated</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">traj_ids</span><span class="o">.</span><span class="n">device</span>
             <span class="p">)</span>
