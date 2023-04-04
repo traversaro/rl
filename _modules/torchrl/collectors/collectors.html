@@ -1029,7 +1029,6 @@
                 <span class="s2">&quot;Cannot split trajectories when reset_when_done is False.&quot;</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">split_trajs</span> <span class="o">=</span> <span class="n">split_trajs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_private_keys</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interruptor</span> <span class="o">=</span> <span class="n">interruptor</span>
 
@@ -1113,20 +1112,17 @@
     <span class="k">def</span> <span class="nf">_step_and_maybe_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">done</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;done&quot;</span><span class="p">))</span>
         <span class="n">truncated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;next&quot;</span><span class="p">,</span> <span class="s2">&quot;truncated&quot;</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">truncated</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">truncated</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>
-        <span class="n">traj_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;traj_ids&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="n">traj_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="s2">&quot;collector&quot;</span><span class="p">,</span> <span class="s2">&quot;traj_ids&quot;</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span> <span class="o">=</span> <span class="n">step_mdp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tensordict</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reset_when_done</span><span class="p">:</span>
-            <span class="n">done</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">done</span><span class="p">)</span>
-        <span class="n">done_or_terminated</span> <span class="o">=</span> <span class="n">done</span> <span class="o">|</span> <span class="n">truncated</span>
-        <span class="c1"># keep track of envs that have been done at least once</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span> <span class="o">=</span> <span class="n">done_or_terminated</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_been_done</span> <span class="o">|</span> <span class="n">done_or_terminated</span>
+            <span class="k">return</span>
+
+        <span class="n">done_or_terminated</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">done</span> <span class="o">|</span> <span class="n">truncated</span><span class="p">)</span> <span class="k">if</span> <span class="n">truncated</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">done</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+        <span class="p">)</span>
+
         <span class="k">if</span> <span class="n">done_or_terminated</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="c1"># collectors do not support passing other tensors than `&quot;_reset&quot;`</span>
             <span class="c1"># to `reset()`.</span>
