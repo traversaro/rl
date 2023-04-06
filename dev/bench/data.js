@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1680781943512,
+  "lastUpdate": 1680782235648,
   "repoUrl": "https://github.com/pytorch/rl",
   "entries": {
     "CPU Benchmark Results": [
@@ -138,6 +138,77 @@ window.BENCHMARK_DATA = {
             "unit": "iter/sec",
             "range": "stddev: 0.040845341922585474",
             "extra": "mean: 1.9274266705999934 sec\nrounds: 5"
+          }
+        ]
+      }
+    ],
+    "GPU Benchmark Results": [
+      {
+        "commit": {
+          "author": {
+            "name": "pytorch",
+            "username": "pytorch"
+          },
+          "committer": {
+            "name": "pytorch",
+            "username": "pytorch"
+          },
+          "id": "8369529f2252cec33d478833725e2186e6ce9e7e",
+          "message": "[Feature] Benchmarking worflow",
+          "timestamp": "2023-04-06T03:37:24Z",
+          "url": "https://github.com/pytorch/rl/pull/1028/commits/8369529f2252cec33d478833725e2186e6ce9e7e"
+        },
+        "date": 1680782187411,
+        "tool": "pytest",
+        "benches": [
+          {
+            "name": "benchmarks/test_collectors_benchmark.py::test_single",
+            "value": 0.064365434947643,
+            "unit": "iter/sec",
+            "range": "stddev: 0.0477750507523919",
+            "extra": "mean: 15.536289016199976 sec\nrounds: 5"
+          },
+          {
+            "name": "benchmarks/test_collectors_benchmark.py::test_sync",
+            "value": 0.11550249703940477,
+            "unit": "iter/sec",
+            "range": "stddev: 0.16091739688269713",
+            "extra": "mean: 8.657821481200017 sec\nrounds: 5"
+          },
+          {
+            "name": "benchmarks/test_collectors_benchmark.py::test_async",
+            "value": 0.11572351415181738,
+            "unit": "iter/sec",
+            "range": "stddev: 0.0933422615550355",
+            "extra": "mean: 8.641286149400049 sec\nrounds: 5"
+          },
+          {
+            "name": "benchmarks/test_envs_benchmark.py::test_simple",
+            "value": 1.096228118897574,
+            "unit": "iter/sec",
+            "range": "stddev: 0.04545821616088068",
+            "extra": "mean: 912.2188920000099 msec\nrounds: 5"
+          },
+          {
+            "name": "benchmarks/test_envs_benchmark.py::test_transformed",
+            "value": 0.6281607025444749,
+            "unit": "iter/sec",
+            "range": "stddev: 0.051272135857849455",
+            "extra": "mean: 1.5919493148000583 sec\nrounds: 5"
+          },
+          {
+            "name": "benchmarks/test_envs_benchmark.py::test_serial",
+            "value": 0.41870551892702,
+            "unit": "iter/sec",
+            "range": "stddev: 0.04382916499032428",
+            "extra": "mean: 2.3883133963999628 sec\nrounds: 5"
+          },
+          {
+            "name": "benchmarks/test_envs_benchmark.py::test_parallel",
+            "value": 0.4866801440448889,
+            "unit": "iter/sec",
+            "range": "stddev: 0.06431393243374091",
+            "extra": "mean: 2.0547376181999426 sec\nrounds: 5"
           }
         ]
       }
