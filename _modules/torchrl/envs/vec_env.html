@@ -371,6 +371,7 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span> <span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
@@ -397,17 +398,10 @@
 <span class="kn">from</span> <span class="nn">torchrl.envs.common</span> <span class="kn">import</span> <span class="n">_EnvWrapper</span><span class="p">,</span> <span class="n">EnvBase</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.env_creator</span> <span class="kn">import</span> <span class="n">get_env_metadata</span>
 
-<span class="k">try</span><span class="p">:</span>
-    <span class="c1"># Libraries necessary for MultiThreadedEnv</span>
-    <span class="kn">import</span> <span class="nn">envpool</span>
-
-    <span class="kn">import</span> <span class="nn">treevalue</span>
-
-    <span class="n">_has_envpool</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-    <span class="n">_has_envpool</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">IMPORT_ERR_ENVPOOL</span> <span class="o">=</span> <span class="n">err</span>
 <span class="kn">from</span> <span class="nn">torchrl.envs.utils</span> <span class="kn">import</span> <span class="n">_sort_keys</span>
+
+
+<span class="n">_has_envpool</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s2">&quot;envpool&quot;</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_check_start</span><span class="p">(</span><span class="n">fun</span><span class="p">):</span>
@@ -1409,13 +1403,13 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;envpool.python.envpool.EnvPoolMixin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">env</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;envpool.python.envpool.EnvPoolMixin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># noqa: F821</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_has_envpool</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
                 <span class="s2">&quot;envpool python package or one of its dependencies (gym, treevalue) were not found. Please install these dependencies.&quot;</span>
-            <span class="p">)</span> <span class="kn">from</span> <span class="nn">IMPORT_ERR_ENVPOOL</span>
+            <span class="p">)</span>
         <span class="k">if</span> <span class="n">env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;env&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;num_envs&quot;</span><span class="p">]</span>
@@ -1431,14 +1425,16 @@
         <span class="k">if</span> <span class="s2">&quot;env&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Could not find environment key &#39;env&#39; in kwargs.&quot;</span><span class="p">)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;env&quot;</span><span class="p">]</span>
+        <span class="kn">import</span> <span class="nn">envpool</span>
+
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">env</span><span class="p">,</span> <span class="p">(</span><span class="n">envpool</span><span class="o">.</span><span class="n">python</span><span class="o">.</span><span class="n">envpool</span><span class="o">.</span><span class="n">EnvPoolMixin</span><span class="p">,)):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;env is not of type &#39;envpool.python.envpool.EnvPoolMixin&#39;.&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_build_env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="s2">&quot;envpool.python.envpool.EnvPoolMixin&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_build_env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="s2">&quot;envpool.python.envpool.EnvPoolMixin&quot;</span><span class="p">):</span>  <span class="c1"># noqa: F821</span>
         <span class="k">return</span> <span class="n">env</span>
 
     <span class="k">def</span> <span class="nf">_make_specs</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="s2">&quot;envpool.python.envpool.EnvPoolMixin&quot;</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">env</span><span class="p">:</span> <span class="s2">&quot;envpool.python.envpool.EnvPoolMixin&quot;</span>  <span class="c1"># noqa: F821</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: F821</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">input_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_input_spec</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">output_spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_output_spec</span><span class="p">()</span>
@@ -1535,10 +1531,14 @@
 
     <span class="k">def</span> <span class="nf">_transform_reset_output</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">envpool_output</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="s2">&quot;treevalue.TreeValue&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">envpool_output</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span>
+            <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;treevalue.TreeValue&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Any</span>  <span class="c1"># noqa: F821</span>
+        <span class="p">],</span>
         <span class="n">reset_workers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">],</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Process output of envpool env.reset.&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">treevalue</span>
+
         <span class="n">observation</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">envpool_output</span>
         <span class="k">if</span> <span class="n">reset_workers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Only specified workers were reset - need to set observation buffer values only for them</span>
@@ -1575,7 +1575,7 @@
         <span class="k">return</span> <span class="n">tensordict_out</span>
 
     <span class="k">def</span> <span class="nf">_treevalue_or_numpy_to_tensor_or_dict</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;treevalue.TreeValue&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="s2">&quot;treevalue.TreeValue&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span>  <span class="c1"># noqa: F821</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts observation returned by EnvPool.</span>
 
@@ -1583,17 +1583,23 @@
 <span class="sd">        to a tensor or a dictionary of tensors. Currently only supports depth 1 trees, but can easily be extended to</span>
 <span class="sd">        arbitrary depth if necessary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">treevalue</span>
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">treevalue</span><span class="o">.</span><span class="n">TreeValue</span><span class="p">):</span>
             <span class="n">ret</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_treevalue_to_dict</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">ret</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;observation&quot;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">x</span><span class="p">)}</span>
         <span class="k">return</span> <span class="n">ret</span>
 
-    <span class="k">def</span> <span class="nf">_treevalue_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tv</span><span class="p">:</span> <span class="s2">&quot;treevalue.TreeValue&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_treevalue_to_dict</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">tv</span><span class="p">:</span> <span class="s2">&quot;treevalue.TreeValue&quot;</span>  <span class="c1"># noqa: F821</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts TreeValue to a dictionary.</span>
 
 <span class="sd">        Currently only supports depth 1 trees, but can easily be extended to arbitrary depth if necessary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">treevalue</span>
+
         <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">treevalue</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">tv</span><span class="p">)}</span>
 
     <span class="k">def</span> <span class="nf">_set_seed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]):</span>
@@ -1647,6 +1653,8 @@
         <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">create_env_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">envpool</span>
+
         <span class="n">create_env_kwargs</span> <span class="o">=</span> <span class="n">create_env_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="n">env</span> <span class="o">=</span> <span class="n">envpool</span><span class="o">.</span><span class="n">make</span><span class="p">(</span>
             <span class="n">task_id</span><span class="o">=</span><span class="n">env_name</span><span class="p">,</span>
