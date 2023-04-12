@@ -454,7 +454,54 @@
         <span class="n">compare_against</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Parameter</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">funs_to_decorate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a module to functional to be used in the loss.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a module to functional to be used in the loss.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            module (TensorDictModule or compatible): a stateful tensordict module.</span>
+<span class="sd">                This module will be made functional, yet still stateful, meaning</span>
+<span class="sd">                that it will be callable with the following alternative signatures:</span>
+
+<span class="sd">                &gt;&gt;&gt; module(tensordict)</span>
+<span class="sd">                &gt;&gt;&gt; module(tensordict, params=params)</span>
+
+<span class="sd">                ``params`` is a :class:`tensordict.TensorDict` instance with parameters</span>
+<span class="sd">                stuctured as the output of :func:`tensordict.nn.make_functional`</span>
+<span class="sd">                is.</span>
+<span class="sd">            module_name (str): name where the module will be found.</span>
+<span class="sd">                The parameters of the module will be found under ``loss_module.&lt;module_name&gt;_params``</span>
+<span class="sd">                whereas the module will be found under ``loss_module.&lt;module_name&gt;``.</span>
+<span class="sd">            expand_dim (int, optional): if provided, the parameters of the module</span>
+<span class="sd">                will be expanded ``N`` times, where ``N = expand_dim`` along the</span>
+<span class="sd">                first dimension. This option is to be used whenever a target</span>
+<span class="sd">                network with more than one configuration is to be used.</span>
+
+<span class="sd">                .. note::</span>
+<span class="sd">                  If a ``compare_against`` list of values is provided, the</span>
+<span class="sd">                  resulting parameters will simply be a detached expansion</span>
+<span class="sd">                  of the original parameters. If ``compare_against`` is not</span>
+<span class="sd">                  provided, the value of the parameters will be resampled uniformly</span>
+<span class="sd">                  between the minimum and maximum value of the parameter content.</span>
+
+<span class="sd">             create_target_params (bool, optional): if ``True``, a detached</span>
+<span class="sd">                copy of the parameter will be available to feed a target network</span>
+<span class="sd">                under the name ``loss_module.&lt;module_name&gt;_target_params``.</span>
+<span class="sd">                If ``False`` (default), this attribute will still be available</span>
+<span class="sd">                but it will be a detached instance of the parameters, not a copy.</span>
+<span class="sd">                In other words, any modification of the parameter value</span>
+<span class="sd">                will directly be reflected in the target parameters.</span>
+<span class="sd">            compare_against (iterable of parameters, optional): if provided,</span>
+<span class="sd">                this list of parameters will be used as a comparison set for</span>
+<span class="sd">                the parameters of the module. If the parameters are expanded</span>
+<span class="sd">                (``expand_dim &gt; 0``), the resulting parameters for the module</span>
+<span class="sd">                will be a simple expansion of the original parameter. Otherwise,</span>
+<span class="sd">                the resulting parameters will be a detached version of the</span>
+<span class="sd">                original parameters. If ``None``, the resulting parameters</span>
+<span class="sd">                will carry gradients as expected.</span>
+<span class="sd">            funs_to_decorate (list of str, optional): if provided, the list of</span>
+<span class="sd">                methods of ``module`` to make functional, ie the list of</span>
+<span class="sd">                methods that will accept the ``params`` keyword argument.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">funs_to_decorate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">funs_to_decorate</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;forward&quot;</span><span class="p">]</span>
         <span class="c1"># To make it robust to device casting, we must register list of</span>
@@ -468,10 +515,6 @@
         <span class="n">params</span> <span class="o">=</span> <span class="n">make_functional</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">funs_to_decorate</span><span class="o">=</span><span class="n">funs_to_decorate</span><span class="p">)</span>
         <span class="n">functional_module</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
         <span class="n">repopulate_module</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-        <span class="c1"># params = make_functional(</span>
-        <span class="c1">#     module, funs_to_decorate=funs_to_decorate, keep_params=True</span>
-        <span class="c1"># )</span>
-        <span class="c1"># functional_module = module</span>
 
         <span class="n">params_and_buffers</span> <span class="o">=</span> <span class="n">params</span>
         <span class="c1"># we transform the buffers in params to make sure they follow the device</span>
@@ -501,15 +544,15 @@
                 <span class="s2">&quot;expanding params is only possible when functorch is installed,&quot;</span>
                 <span class="s2">&quot;as this feature requires calls to the vmap operator.&quot;</span>
             <span class="p">)</span>
+        <span class="k">if</span> <span class="n">compare_against</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">compare_against</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">compare_against</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">compare_against</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">expand_dim</span><span class="p">:</span>
             <span class="c1"># Expands the dims of params and buffers.</span>
             <span class="c1"># If the param already exist in the module, we return a simple expansion of the</span>
             <span class="c1"># original one. Otherwise, we expand and resample it.</span>
             <span class="c1"># For buffers, a cloned expansion (or equivalently a repeat) is returned.</span>
-            <span class="k">if</span> <span class="n">compare_against</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">compare_against</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">compare_against</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">compare_against</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
             <span class="k">def</span> <span class="nf">_compare_and_expand</span><span class="p">(</span><span class="n">param</span><span class="p">):</span>
 
@@ -552,11 +595,16 @@
             <span class="k">if</span> <span class="n">parameter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prev_set_params</span><span class="p">:</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="n">key</span><span class="p">]),</span> <span class="n">parameter</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># if the parameter is already present, we register a string pointing</span>
+                <span class="c1"># to is instead. If the string ends with a &#39;_detached&#39; suffix, the</span>
+                <span class="c1"># value will be detached</span>
                 <span class="k">for</span> <span class="n">_param_name</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">():</span>
                     <span class="k">if</span> <span class="n">parameter</span> <span class="ow">is</span> <span class="n">p</span><span class="p">:</span>
                         <span class="k">break</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;parameter not found&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">compare_against</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">compare_against</span><span class="p">:</span>
+                    <span class="n">_param_name</span> <span class="o">=</span> <span class="n">_param_name</span> <span class="o">+</span> <span class="s2">&quot;_detached&quot;</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="n">key</span><span class="p">]),</span> <span class="n">_param_name</span><span class="p">)</span>
         <span class="n">prev_set_buffers</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffers</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">buffer</span> <span class="ow">in</span> <span class="n">buffers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -625,8 +673,12 @@
                         <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">,)</span>
                     <span class="n">value_to_set</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">network_name</span><span class="p">,</span> <span class="o">*</span><span class="n">key</span><span class="p">]))</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value_to_set</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                        <span class="n">value_to_set</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_to_set</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
-                    <span class="n">params</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value_to_set</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">value_to_set</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_detached&quot;</span><span class="p">):</span>
+                            <span class="n">value_to_set</span> <span class="o">=</span> <span class="n">value_to_set</span><span class="p">[:</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span>
+                            <span class="n">value_to_set</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_to_set</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">value_to_set</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value_to_set</span><span class="p">)</span>
+                    <span class="n">params</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value_to_set</span><span class="p">)</span>
                 <span class="k">return</span> <span class="n">params</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">params</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_name</span><span class="p">)</span>

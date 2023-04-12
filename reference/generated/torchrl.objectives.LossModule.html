@@ -397,6 +397,59 @@ The value estimator can be changed using the <a class="reference internal" href=
 <dt class="sig sig-object py" id="torchrl.objectives.LossModule.convert_to_functional">
 <span class="sig-name descname"><span class="pre">convert_to_functional</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><span class="pre">TensorDictModule</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expand_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create_target_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare_against</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://pytorch.org/docs/stable/generated/torch.nn.parameter.Parameter.html#torch.nn.parameter.Parameter" title="(in PyTorch v2.0)"><span class="pre">Parameter</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">funs_to_decorate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/torchrl/objectives/common.html#LossModule.convert_to_functional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.LossModule.convert_to_functional" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a module to functional to be used in the loss.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> (<em>TensorDictModule</em><em> or </em><em>compatible</em>) – <p>a stateful tensordict module.
+This module will be made functional, yet still stateful, meaning
+that it will be callable with the following alternative signatures:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">module</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module</span><span class="p">(</span><span class="n">tensordict</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">params</span></code> is a <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.TensorDict.html#tensordict.TensorDict" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.TensorDict</span></code></a> instance with parameters
+stuctured as the output of <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.make_functional.html#tensordict.nn.make_functional" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><code class="xref py py-func docutils literal notranslate"><span class="pre">tensordict.nn.make_functional()</span></code></a>
+is.</p>
+</p></li>
+<li><p><strong>module_name</strong> (<em>str</em>) – name where the module will be found.
+The parameters of the module will be found under <code class="docutils literal notranslate"><span class="pre">loss_module.&lt;module_name&gt;_params</span></code>
+whereas the module will be found under <code class="docutils literal notranslate"><span class="pre">loss_module.&lt;module_name&gt;</span></code>.</p></li>
+<li><p><strong>expand_dim</strong> (<em>int</em><em>, </em><em>optional</em>) – <dl>
+<dt>if provided, the parameters of the module</dt><dd><p>will be expanded <code class="docutils literal notranslate"><span class="pre">N</span></code> times, where <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">=</span> <span class="pre">expand_dim</span></code> along the
+first dimension. This option is to be used whenever a target
+network with more than one configuration is to be used.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If a <code class="docutils literal notranslate"><span class="pre">compare_against</span></code> list of values is provided, the
+resulting parameters will simply be a detached expansion
+of the original parameters. If <code class="docutils literal notranslate"><span class="pre">compare_against</span></code> is not
+provided, the value of the parameters will be resampled uniformly
+between the minimum and maximum value of the parameter content.</p>
+</div>
+</dd>
+<dt>create_target_params (bool, optional): if <code class="docutils literal notranslate"><span class="pre">True</span></code>, a detached</dt><dd><p>copy of the parameter will be available to feed a target network
+under the name <code class="docutils literal notranslate"><span class="pre">loss_module.&lt;module_name&gt;_target_params</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code> (default), this attribute will still be available
+but it will be a detached instance of the parameters, not a copy.
+In other words, any modification of the parameter value
+will directly be reflected in the target parameters.</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>compare_against</strong> (<em>iterable</em><em> of </em><em>parameters</em><em>, </em><em>optional</em>) – if provided,
+this list of parameters will be used as a comparison set for
+the parameters of the module. If the parameters are expanded
+(<code class="docutils literal notranslate"><span class="pre">expand_dim</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>), the resulting parameters for the module
+will be a simple expansion of the original parameter. Otherwise,
+the resulting parameters will be a detached version of the
+original parameters. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the resulting parameters
+will carry gradients as expected.</p></li>
+<li><p><strong>funs_to_decorate</strong> (<em>list</em><em> of </em><em>str</em><em>, </em><em>optional</em>) – if provided, the list of
+methods of <code class="docutils literal notranslate"><span class="pre">module</span></code> to make functional, ie the list of
+methods that will accept the <code class="docutils literal notranslate"><span class="pre">params</span></code> keyword argument.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
