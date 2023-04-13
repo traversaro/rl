@@ -372,69 +372,240 @@
               
   <section id="torchrl-modules-package">
 <h1>torchrl.modules package<a class="headerlink" href="#torchrl-modules-package" title="Permalink to this heading">¶</a></h1>
-<section id="tensordict-modules">
-<h2>TensorDict modules<a class="headerlink" href="#tensordict-modules" title="Permalink to this heading">¶</a></h2>
+<section id="tensordict-modules-actors-exploration-value-models-and-generative-models">
+<h2>TensorDict modules: Actors, exploration, value models and generative models<a class="headerlink" href="#tensordict-modules-actors-exploration-value-models-and-generative-models" title="Permalink to this heading">¶</a></h2>
+<p>TorchRL offers a series of module wrappers aimed at making it easy to build
+RL models from the ground up. These wrappers are exclusively based on
+<a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.nn.TensorDictModule</span></code></a> and <a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictSequential.html#tensordict.nn.TensorDictSequential" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.nn.TensorDictSequential</span></code></a>.
+They can loosely be split in three categories:
+policies (actors), including exploration strategies,
+value model and simulation models (in model-based contexts).</p>
+<p>The main features are:</p>
+<ul class="simple">
+<li><p>Integration of the specs in your model to ensure that the model output matches
+what your environment expects as input;</p></li>
+<li><p>Probabilistic modules that can automatically sample from a chosen distribution
+and/or return the distribution of interest;</p></li>
+<li><p>Custom containers for Q-Value learning, model-based agents and others.</p></li>
+</ul>
+<section id="safemodules">
+<h3>SafeModules<a class="headerlink" href="#safemodules" title="Permalink to this heading">¶</a></h3>
+<p>TorchRL <a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.SafeModule"><code class="xref py py-class docutils literal notranslate"><span class="pre">SafeModule</span></code></a> allows you to
+check the you model output matches what is to be expected for the environment.
+This should be used whenever your model is to be recycled across multiple
+environments for instance, and when you want to make sure that the outputs
+(e.g. the action) always satisfies the bounds imposed by the environment.
+Here is an example of how to use that feature with the
+<a class="reference internal" href="generated/torchrl.modules.tensordict_module.Actor.html#torchrl.modules.tensordict_module.Actor" title="torchrl.modules.tensordict_module.Actor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Actor</span></code></a> class:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">GymEnv</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">action_spec</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_spec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LazyLinear</span><span class="p">(</span><span class="n">action_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">policy</span> <span class="o">=</span> <span class="n">Actor</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="n">spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">,</span> <span class="n">safe</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">safe</span></code> flag ensures that the output is always within the bounds of the
+<code class="docutils literal notranslate"><span class="pre">action_spec</span></code> domain: if the network output violates these bounds it will be
+projected (in a L1-manner) into the desired domain.</p>
 <table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.Actor.html#torchrl.modules.tensordict_module.Actor" title="torchrl.modules.tensordict_module.Actor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Actor</span></code></a>(module[, in_keys, out_keys, spec])</p></td>
 <td><p>General class for deterministic actors in RL.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.ActorCriticOperator.html#torchrl.modules.tensordict_module.ActorCriticOperator" title="torchrl.modules.tensordict_module.ActorCriticOperator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActorCriticOperator</span></code></a>(common_operator, ...)</p></td>
-<td><p>Actor-critic operator.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.ActorCriticWrapper.html#torchrl.modules.tensordict_module.ActorCriticWrapper" title="torchrl.modules.tensordict_module.ActorCriticWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActorCriticWrapper</span></code></a>(policy_operator, ...)</p></td>
-<td><p>Actor-value operator without common module.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.ActorValueOperator.html#torchrl.modules.tensordict_module.ActorValueOperator" title="torchrl.modules.tensordict_module.ActorValueOperator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActorValueOperator</span></code></a>(common_operator, ...)</p></td>
-<td><p>Actor-value operator.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.DistributionalQValueActor.html#torchrl.modules.tensordict_module.DistributionalQValueActor" title="torchrl.modules.tensordict_module.DistributionalQValueActor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistributionalQValueActor</span></code></a>(*args, support[, ...])</p></td>
-<td><p>Distributional DQN Actor subclass.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.ProbabilisticActor.html#torchrl.modules.tensordict_module.ProbabilisticActor" title="torchrl.modules.tensordict_module.ProbabilisticActor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProbabilisticActor</span></code></a>(module, in_keys[, ...])</p></td>
-<td><p>General class for probabilistic actors in RL.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.QValueActor.html#torchrl.modules.tensordict_module.QValueActor" title="torchrl.modules.tensordict_module.QValueActor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QValueActor</span></code></a>(*args[, action_space])</p></td>
-<td><p>DQN Actor subclass.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.ValueOperator.html#torchrl.modules.tensordict_module.ValueOperator" title="torchrl.modules.tensordict_module.ValueOperator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ValueOperator</span></code></a>(module[, in_keys, out_keys])</p></td>
-<td><p>General class for value functions in RL.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.SafeModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeModule</span></code></a>(module, in_keys, out_keys[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeModule.html#torchrl.modules.tensordict_module.SafeModule" title="torchrl.modules.tensordict_module.SafeModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeModule</span></code></a>(module, in_keys, out_keys[, ...])</p></td>
 <td><p><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.TensorDictModule.html#tensordict.nn.TensorDictModule" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.nn.TensorDictModule</span></code></a> subclass that accepts a <a class="reference internal" href="generated/torchrl.data.TensorSpec.html#torchrl.data.TensorSpec" title="torchrl.data.TensorSpec"><code class="xref py py-class docutils literal notranslate"><span class="pre">TensorSpec</span></code></a> as argument to control the output domain.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.AdditiveGaussianWrapper.html#torchrl.modules.tensordict_module.AdditiveGaussianWrapper" title="torchrl.modules.tensordict_module.AdditiveGaussianWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AdditiveGaussianWrapper</span></code></a>(policy, *[, ...])</p></td>
-<td><p>Additive Gaussian PO wrapper.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.EGreedyWrapper.html#torchrl.modules.tensordict_module.EGreedyWrapper" title="torchrl.modules.tensordict_module.EGreedyWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EGreedyWrapper</span></code></a>(policy[, eps_init, eps_end, ...])</p></td>
-<td><p>Epsilon-Greedy PO wrapper.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper.html#torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper" title="torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OrnsteinUhlenbeckProcessWrapper</span></code></a>(policy, *[, ...])</p></td>
-<td><p>Ornstein-Uhlenbeck exploration policy wrapper.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeProbabilisticModule.html#torchrl.modules.tensordict_module.SafeProbabilisticModule" title="torchrl.modules.tensordict_module.SafeProbabilisticModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeProbabilisticModule</span></code></a>(in_keys, out_keys, ...)</p></td>
-<td><p><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.ProbabilisticTensorDictModule.html#tensordict.nn.ProbabilisticTensorDictModule" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.nn.ProbabilisticTensorDictModule</span></code></a> subclass that accepts a <code class="xref py py-class docutils literal notranslate"><span class="pre">TensorSpec</span></code> as argument to control the output domain.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeProbabilisticTensorDictSequential.html#torchrl.modules.tensordict_module.SafeProbabilisticTensorDictSequential" title="torchrl.modules.tensordict_module.SafeProbabilisticTensorDictSequential"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeProbabilisticTensorDictSequential</span></code></a>(*modules)</p></td>
-<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.nn.ProbabilisticTensorDictSequential</span></code> subclass that accepts a <code class="xref py py-class docutils literal notranslate"><span class="pre">TensorSpec</span></code> as argument to control the output domain.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeSequential.html#torchrl.modules.tensordict_module.SafeSequential" title="torchrl.modules.tensordict_module.SafeSequential"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeSequential</span></code></a>(*modules[, partial_tolerant])</p></td>
 <td><p>A safe sequence of TensorDictModules.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.WorldModelWrapper.html#torchrl.modules.tensordict_module.WorldModelWrapper" title="torchrl.modules.tensordict_module.WorldModelWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WorldModelWrapper</span></code></a>(transition_model, reward_model)</p></td>
-<td><p>World model wrapper.</p></td>
+</tbody>
+</table>
+</section>
+<section id="exploration-wrappers">
+<h3>Exploration wrappers<a class="headerlink" href="#exploration-wrappers" title="Permalink to this heading">¶</a></h3>
+<p>To efficiently explore the environment, TorchRL proposes a series of wrappers
+that will override the action sampled by the policy by a noisier version.
+Their behaviour is controlled by <a class="reference internal" href="generated/torchrl.envs.utils.exploration_mode.html#torchrl.envs.utils.exploration_mode" title="torchrl.envs.utils.exploration_mode"><code class="xref py py-func docutils literal notranslate"><span class="pre">exploration_mode()</span></code></a>:
+if the exploration is set to <code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code>, the exploration is active. In all
+other cases, the action written in the tensordict is simply the network output.</p>
+<table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.AdditiveGaussianWrapper.html#torchrl.modules.tensordict_module.AdditiveGaussianWrapper" title="torchrl.modules.tensordict_module.AdditiveGaussianWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AdditiveGaussianWrapper</span></code></a>(policy, *[, ...])</p></td>
+<td><p>Additive Gaussian PO wrapper.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.common.is_tensordict_compatible.html#torchrl.modules.tensordict_module.common.is_tensordict_compatible" title="torchrl.modules.tensordict_module.common.is_tensordict_compatible"><code class="xref py py-obj docutils literal notranslate"><span class="pre">common.is_tensordict_compatible</span></code></a>(module)</p></td>
-<td><p>Returns <cite>True</cite> if a module can be used as a TensorDictModule, and False if it can't.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.EGreedyWrapper.html#torchrl.modules.tensordict_module.EGreedyWrapper" title="torchrl.modules.tensordict_module.EGreedyWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EGreedyWrapper</span></code></a>(policy[, eps_init, eps_end, ...])</p></td>
+<td><p>Epsilon-Greedy PO wrapper.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.common.ensure_tensordict_compatible.html#torchrl.modules.tensordict_module.common.ensure_tensordict_compatible" title="torchrl.modules.tensordict_module.common.ensure_tensordict_compatible"><code class="xref py py-obj docutils literal notranslate"><span class="pre">common.ensure_tensordict_compatible</span></code></a>(module)</p></td>
-<td><p>Checks and ensures an object with forward method is TensorDict compatible.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper.html#torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper" title="torchrl.modules.tensordict_module.OrnsteinUhlenbeckProcessWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OrnsteinUhlenbeckProcessWrapper</span></code></a>(policy, *[, ...])</p></td>
+<td><p>Ornstein-Uhlenbeck exploration policy wrapper.</p></td>
 </tr>
 </tbody>
 </table>
 </section>
+<section id="probabilistic-actors">
+<h3>Probabilistic actors<a class="headerlink" href="#probabilistic-actors" title="Permalink to this heading">¶</a></h3>
+<p>Some algorithms such as PPO require a probabilistic policy to be implemented.
+In TorchRL, these policies take the form of a model, followed by a distribution
+constructor.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The choice of a probabilistic or regular actor class depends on the algorithm
+that is being implemented. On-policy algorithms usually require a probabilistic
+actor, off-policy usually have a deterministic actor with an extra exploration
+strategy. There are, however, many exceptions to this rule.</p>
+</div>
+</div></blockquote>
+<p>The model reads an input (typically some observation from the environment)
+and outputs the parameters of a distribution, while the distribution constructor
+reads these parameters and gets a random sample from the distribution and/or
+provides a <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.distributions.Distribution</span></code> object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict.nn</span> <span class="kn">import</span> <span class="n">NormalParamExtractor</span><span class="p">,</span> <span class="n">TensorDictSequential</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch.distributions</span> <span class="kn">import</span> <span class="n">Normal</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span> <span class="o">=</span> <span class="n">GymEnv</span><span class="p">(</span><span class="s2">&quot;Pendulum-v1&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">action_spec</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">action_spec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">LazyLinear</span><span class="p">(</span><span class="n">action_spec</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span> <span class="n">NormalParamExtractor</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># build the first module, which maps the observation on the mean and sd of the normal distribution</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">TensorDictModule</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># build the distribution constructor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prob_module</span> <span class="o">=</span> <span class="n">SafeProbabilisticModule</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">distribution_class</span><span class="o">=</span><span class="n">Normal</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">return_log_prob</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">policy</span> <span class="o">=</span> <span class="n">TensorDictSequential</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">prob_module</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># execute a rollout</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">env</span><span class="o">.</span><span class="n">rollout</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">policy</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To facilitate the construction of probabilistic policies, we provide a dedicated
+<a class="reference internal" href="generated/torchrl.modules.tensordict_module.ProbabilisticActor.html#torchrl.modules.tensordict_module.ProbabilisticActor" title="torchrl.modules.tensordict_module.ProbabilisticActor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProbabilisticActor</span></code></a>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">policy</span> <span class="o">=</span> <span class="n">ProbabilisticActor</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">model</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">,</span> <span class="s2">&quot;scale&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">distribution_class</span><span class="o">=</span><span class="n">Normal</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">return_log_prob</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which alleviates the need to specify a constructor and putting it with the
+module in a sequence.</p>
+<p>Outputs of this policy will contain a <code class="docutils literal notranslate"><span class="pre">&quot;loc&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;scale&quot;</span></code> entries, an
+<code class="docutils literal notranslate"><span class="pre">&quot;action&quot;</span></code> sampled according to the normal distribution and the log-probability
+of this action.</p>
+<table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.ProbabilisticActor.html#torchrl.modules.tensordict_module.ProbabilisticActor" title="torchrl.modules.tensordict_module.ProbabilisticActor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProbabilisticActor</span></code></a>(module, in_keys[, ...])</p></td>
+<td><p>General class for probabilistic actors in RL.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeProbabilisticModule.html#torchrl.modules.tensordict_module.SafeProbabilisticModule" title="torchrl.modules.tensordict_module.SafeProbabilisticModule"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeProbabilisticModule</span></code></a>(in_keys, out_keys, ...)</p></td>
+<td><p><a class="reference external" href="https://pytorch-labs.github.io/tensordict/reference/generated/tensordict.nn.ProbabilisticTensorDictModule.html#tensordict.nn.ProbabilisticTensorDictModule" title="(in tensordict vmain (0.1.0+a25f5d7 ))"><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.nn.ProbabilisticTensorDictModule</span></code></a> subclass that accepts a <code class="xref py py-class docutils literal notranslate"><span class="pre">TensorSpec</span></code> as argument to control the output domain.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.SafeProbabilisticTensorDictSequential.html#torchrl.modules.tensordict_module.SafeProbabilisticTensorDictSequential" title="torchrl.modules.tensordict_module.SafeProbabilisticTensorDictSequential"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SafeProbabilisticTensorDictSequential</span></code></a>(*modules)</p></td>
+<td><p><code class="xref py py-class docutils literal notranslate"><span class="pre">tensordict.nn.ProbabilisticTensorDictSequential</span></code> subclass that accepts a <code class="xref py py-class docutils literal notranslate"><span class="pre">TensorSpec</span></code> as argument to control the output domain.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="q-value-actors">
+<h3>Q-Value actors<a class="headerlink" href="#q-value-actors" title="Permalink to this heading">¶</a></h3>
+<p>Q-Value actors are a special type of policy that does not directly predict an action
+from an observation, but picks the action that maximised the value (or <em>quality</em>)
+of a (s,a) -&gt; v map. This map can be a table or a function.
+For discrete action spaces with continuous (or near-continuous such as pixels)
+states, it is customary to use a non-linear model such as a neural network for
+the map.
+The semantic of the Q-Value network is hopefully quite simple: we just need to
+feed a tensor-to-tensor map that given a certain state (the input tensor),
+outputs a list of action values to choose from. The wrapper will write the
+resulting action in the input tensordict along with the list of action values.</p>
+<p>Distributional Q-learning is slightly different: in this case, the value network
+does not output a scalar value for each state-action value.
+Instead, the value space is divided in a an arbitrary number of “bins”. The
+value network outputs a probability that the state-action value belongs to one bin
+or another.
+Hence, for a state space of dimension M, an action space of dimension N and a number of bins B,
+the value network encodes a <span class="math notranslate nohighlight">\(\mathbb{R}^{M} \rightarrow \mathbb{R}^{N \times B}\)</span>
+map. The following example shows how this works in TorchRL with the <a class="reference internal" href="generated/torchrl.modules.tensordict_module.DistributionalQValueActor.html#torchrl.modules.tensordict_module.DistributionalQValueActor" title="torchrl.modules.tensordict_module.DistributionalQValueActor"><code class="xref py py-class docutils literal notranslate"><span class="pre">DistributionalQValueActor</span></code></a>
+class:</p>
+<table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.QValueActor.html#torchrl.modules.tensordict_module.QValueActor" title="torchrl.modules.tensordict_module.QValueActor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QValueActor</span></code></a>(*args[, action_space])</p></td>
+<td><p>DQN Actor subclass.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.DistributionalQValueActor.html#torchrl.modules.tensordict_module.DistributionalQValueActor" title="torchrl.modules.tensordict_module.DistributionalQValueActor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistributionalQValueActor</span></code></a>(*args, support[, ...])</p></td>
+<td><p>Distributional DQN Actor subclass.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="value-operators-and-joined-models">
+<h3>Value operators and joined models<a class="headerlink" href="#value-operators-and-joined-models" title="Permalink to this heading">¶</a></h3>
+<p>TorchRL provides a series of value operators that wrap value networks to
+soften the interface with the rest of the library.
+The basic building block is <a class="reference internal" href="generated/torchrl.modules.tensordict_module.ValueOperator.html#torchrl.modules.tensordict_module.ValueOperator" title="torchrl.modules.tensordict_module.ValueOperator"><code class="xref py py-class docutils literal notranslate"><span class="pre">torchrl.modules.tensordict_module.ValueOperator</span></code></a>:
+given an input state (and possibly action), it will automatically write a <code class="docutils literal notranslate"><span class="pre">&quot;state_value&quot;</span></code>
+(or <code class="docutils literal notranslate"><span class="pre">&quot;state_action_value&quot;</span></code>) in the tensordict, depending on what the input is.
+As such, this class accounts for both value and quality networks.
+Three classes are also proposed to group together a policy and a value network.
+The <a class="reference internal" href="generated/torchrl.modules.tensordict_module.ActorCriticOperator.html#torchrl.modules.tensordict_module.ActorCriticOperator" title="torchrl.modules.tensordict_module.ActorCriticOperator"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActorCriticOperator</span></code></a> is an joined actor-quality network with shared parameters:
+it reads an observation, pass it through a
+common backbone, writes a hidden state, feeds this hidden state to the policy,
+then takes the hidden state and the action and provides the quality of the state-action
+pair.
+The <a class="reference internal" href="generated/torchrl.modules.tensordict_module.ActorValueOperator.html#torchrl.modules.tensordict_module.ActorValueOperator" title="torchrl.modules.tensordict_module.ActorValueOperator"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActorValueOperator</span></code></a> is a joined actor-value network with shared parameters:
+it reads an observation, pass it through a
+common backbone, writes a hidden state, feeds this hidden state to the policy
+and value modules to output an action and a state value.
+Finally, the <a class="reference internal" href="generated/torchrl.modules.tensordict_module.ActorCriticWrapper.html#torchrl.modules.tensordict_module.ActorCriticWrapper" title="torchrl.modules.tensordict_module.ActorCriticWrapper"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActorCriticWrapper</span></code></a> is a joined actor and value network
+without shared parameters. It is mainly intended as a replacement for
+<a class="reference internal" href="generated/torchrl.modules.tensordict_module.ActorValueOperator.html#torchrl.modules.tensordict_module.ActorValueOperator" title="torchrl.modules.tensordict_module.ActorValueOperator"><code class="xref py py-class docutils literal notranslate"><span class="pre">ActorValueOperator</span></code></a> when a script needs to account for both options.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">actor</span> <span class="o">=</span> <span class="n">make_actor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">value</span> <span class="o">=</span> <span class="n">make_value</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">shared_params</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">common</span> <span class="o">=</span> <span class="n">make_common</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">model</span> <span class="o">=</span> <span class="n">ActorValueOperator</span><span class="p">(</span><span class="n">common</span><span class="p">,</span> <span class="n">actor</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">model</span> <span class="o">=</span> <span class="n">ActorValueOperator</span><span class="p">(</span><span class="n">actor</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">policy</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_policy_operator</span><span class="p">()</span>  <span class="c1"># will work in both cases</span>
+</pre></div>
+</div>
+<table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.ActorCriticOperator.html#torchrl.modules.tensordict_module.ActorCriticOperator" title="torchrl.modules.tensordict_module.ActorCriticOperator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActorCriticOperator</span></code></a>(common_operator, ...)</p></td>
+<td><p>Actor-critic operator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.ActorCriticWrapper.html#torchrl.modules.tensordict_module.ActorCriticWrapper" title="torchrl.modules.tensordict_module.ActorCriticWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActorCriticWrapper</span></code></a>(policy_operator, ...)</p></td>
+<td><p>Actor-value operator without common module.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.ActorValueOperator.html#torchrl.modules.tensordict_module.ActorValueOperator" title="torchrl.modules.tensordict_module.ActorValueOperator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActorValueOperator</span></code></a>(common_operator, ...)</p></td>
+<td><p>Actor-value operator.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.ValueOperator.html#torchrl.modules.tensordict_module.ValueOperator" title="torchrl.modules.tensordict_module.ValueOperator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ValueOperator</span></code></a>(module[, in_keys, out_keys])</p></td>
+<td><p>General class for value functions in RL.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="other-modules">
+<h3>Other modules<a class="headerlink" href="#other-modules" title="Permalink to this heading">¶</a></h3>
+<table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.WorldModelWrapper.html#torchrl.modules.tensordict_module.WorldModelWrapper" title="torchrl.modules.tensordict_module.WorldModelWrapper"><code class="xref py py-obj docutils literal notranslate"><span class="pre">WorldModelWrapper</span></code></a>(transition_model, reward_model)</p></td>
+<td><p>World model wrapper.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
 <section id="hooks">
 <h2>Hooks<a class="headerlink" href="#hooks" title="Permalink to this heading">¶</a></h2>
+<p>The Q-value hooks are used by the <a class="reference internal" href="generated/torchrl.modules.tensordict_module.QValueActor.html#torchrl.modules.tensordict_module.QValueActor" title="torchrl.modules.tensordict_module.QValueActor"><code class="xref py py-class docutils literal notranslate"><span class="pre">QValueActor</span></code></a> and <a class="reference internal" href="generated/torchrl.modules.tensordict_module.DistributionalQValueActor.html#torchrl.modules.tensordict_module.DistributionalQValueActor" title="torchrl.modules.tensordict_module.DistributionalQValueActor"><code class="xref py py-class docutils literal notranslate"><span class="pre">DistributionalQValueActor</span></code></a>
+modules and those should be preferred in general as they are easier to create
+and use.</p>
 <table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.QValueHook.html#torchrl.modules.QValueHook" title="torchrl.modules.QValueHook"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QValueHook</span></code></a>(action_space[, var_nums])</p></td>
@@ -617,7 +788,15 @@
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
 <li><a class="reference internal" href="#">torchrl.modules package</a><ul>
-<li><a class="reference internal" href="#tensordict-modules">TensorDict modules</a></li>
+<li><a class="reference internal" href="#tensordict-modules-actors-exploration-value-models-and-generative-models">TensorDict modules: Actors, exploration, value models and generative models</a><ul>
+<li><a class="reference internal" href="#safemodules">SafeModules</a></li>
+<li><a class="reference internal" href="#exploration-wrappers">Exploration wrappers</a></li>
+<li><a class="reference internal" href="#probabilistic-actors">Probabilistic actors</a></li>
+<li><a class="reference internal" href="#q-value-actors">Q-Value actors</a></li>
+<li><a class="reference internal" href="#value-operators-and-joined-models">Value operators and joined models</a></li>
+<li><a class="reference internal" href="#other-modules">Other modules</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#hooks">Hooks</a></li>
 <li><a class="reference internal" href="#models">Models</a></li>
 <li><a class="reference internal" href="#exploration">Exploration</a></li>
@@ -644,6 +823,7 @@
          <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
          <script src="../_static/doctools.js"></script>
          <script src="../_static/sphinx_highlight.js"></script>
+         <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
      
 
   
