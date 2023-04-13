@@ -522,6 +522,31 @@ The semantic of the Q-Value network is hopefully quite simple: we just need to
 feed a tensor-to-tensor map that given a certain state (the input tensor),
 outputs a list of action values to choose from. The wrapper will write the
 resulting action in the input tensordict along with the list of action values.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict.nn.functional_modules</span> <span class="kn">import</span> <span class="n">make_functional</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">OneHotDiscreteTensorSpec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules.tensordict_module.actors</span> <span class="kn">import</span> <span class="n">QValueActor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">td</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s1">&#39;observation&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">)},</span> <span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># we have 4 actions to choose from</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">action_spec</span> <span class="o">=</span> <span class="n">OneHotDiscreteTensorSpec</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># the model reads a state of dimension 3 and outputs 4 values, one for each action available</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qvalue_actor</span> <span class="o">=</span> <span class="n">QValueActor</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qvalue_actor</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
+<span class="go">TensorDict(</span>
+<span class="go">    fields={</span>
+<span class="go">        action: Tensor(shape=torch.Size([5, 4]), device=cpu, dtype=torch.int64, is_shared=False),</span>
+<span class="go">        action_value: Tensor(shape=torch.Size([5, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        chosen_action_value: Tensor(shape=torch.Size([5, 1]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        observation: Tensor(shape=torch.Size([5, 3]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
+<span class="go">    batch_size=torch.Size([5]),</span>
+<span class="go">    device=None,</span>
+<span class="go">    is_shared=False)</span>
+</pre></div>
+</div>
 <p>Distributional Q-learning is slightly different: in this case, the value network
 does not output a scalar value for each state-action value.
 Instead, the value space is divided in a an arbitrary number of “bins”. The
@@ -531,6 +556,29 @@ Hence, for a state space of dimension M, an action space of dimension N and a nu
 the value network encodes a <span class="math notranslate nohighlight">\(\mathbb{R}^{M} \rightarrow \mathbb{R}^{N \times B}\)</span>
 map. The following example shows how this works in TorchRL with the <a class="reference internal" href="generated/torchrl.modules.tensordict_module.DistributionalQValueActor.html#torchrl.modules.tensordict_module.DistributionalQValueActor" title="torchrl.modules.tensordict_module.DistributionalQValueActor"><code class="xref py py-class docutils literal notranslate"><span class="pre">DistributionalQValueActor</span></code></a>
 class:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.data</span> <span class="kn">import</span> <span class="n">OneHotDiscreteTensorSpec</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">torchrl.modules</span> <span class="kn">import</span> <span class="n">DistributionalQValueActor</span><span class="p">,</span> <span class="n">MLP</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">td</span> <span class="o">=</span> <span class="n">TensorDict</span><span class="p">({</span><span class="s1">&#39;observation&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">)},</span> <span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nbins</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># our model reads the observation and outputs a stack of 4 logits (one for each action) of size nbins=3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">module</span> <span class="o">=</span> <span class="n">MLP</span><span class="p">(</span><span class="n">out_features</span><span class="o">=</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">action_spec</span> <span class="o">=</span> <span class="n">OneHotDiscreteTensorSpec</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">qvalue_actor</span> <span class="o">=</span> <span class="n">DistributionalQValueActor</span><span class="p">(</span><span class="n">module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span> <span class="n">spec</span><span class="o">=</span><span class="n">action_spec</span><span class="p">,</span> <span class="n">support</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">td</span> <span class="o">=</span> <span class="n">qvalue_actor</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
+<span class="go">TensorDict(</span>
+<span class="go">    fields={</span>
+<span class="go">        action: Tensor(shape=torch.Size([5, 4]), device=cpu, dtype=torch.int64, is_shared=False),</span>
+<span class="go">        action_value: Tensor(shape=torch.Size([5, 3, 4]), device=cpu, dtype=torch.float32, is_shared=False),</span>
+<span class="go">        observation: Tensor(shape=torch.Size([5, 4]), device=cpu, dtype=torch.float32, is_shared=False)},</span>
+<span class="go">    batch_size=torch.Size([5]),</span>
+<span class="go">    device=None,</span>
+<span class="go">    is_shared=False)</span>
+</pre></div>
+</div>
 <table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.tensordict_module.QValueActor.html#torchrl.modules.tensordict_module.QValueActor" title="torchrl.modules.tensordict_module.QValueActor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QValueActor</span></code></a>(*args[, action_space])</p></td>
@@ -619,6 +667,10 @@ and use.</p>
 </section>
 <section id="models">
 <h2>Models<a class="headerlink" href="#models" title="Permalink to this heading">¶</a></h2>
+<p>TorchRL provides a series of useful “regular” (ie non-tensordict) nn.Module
+classes for RL usage.</p>
+<section id="regular-modules">
+<h3>Regular modules<a class="headerlink" href="#regular-modules" title="Permalink to this heading">¶</a></h3>
 <table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.MLP.html#torchrl.modules.MLP" title="torchrl.modules.MLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MLP</span></code></a>(in_features, out_features, depth, ...)</p></td>
@@ -627,6 +679,18 @@ and use.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.ConvNet.html#torchrl.modules.ConvNet" title="torchrl.modules.ConvNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConvNet</span></code></a>(in_features, depth, num_cells, ...)</p></td>
 <td><p>A convolutional neural network.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.LSTMNet.html#torchrl.modules.LSTMNet" title="torchrl.modules.LSTMNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LSTMNet</span></code></a>(out_features, lstm_kwargs, mlp_kwargs)</p></td>
+<td><p>An embedder for an LSTM preceded by an MLP.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="algorithm-specific-modules">
+<h3>Algorithm-specific modules<a class="headerlink" href="#algorithm-specific-modules" title="Permalink to this heading">¶</a></h3>
+<p>These networks implement sub-networks that have shown to be useful for specific
+algorithms, such as DQN, DDPG or Dreamer.</p>
+<table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
+<tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.DuelingCnnDQNet.html#torchrl.modules.DuelingCnnDQNet" title="torchrl.modules.DuelingCnnDQNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DuelingCnnDQNet</span></code></a>(out_features[, ...])</p></td>
 <td><p>Dueling CNN Q-network.</p></td>
 </tr>
@@ -645,29 +709,30 @@ and use.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.DdpgMlpQNet.html#torchrl.modules.DdpgMlpQNet" title="torchrl.modules.DdpgMlpQNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DdpgMlpQNet</span></code></a>([mlp_net_kwargs_net1, ...])</p></td>
 <td><p>DDPG Q-value MLP class.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.LSTMNet.html#torchrl.modules.LSTMNet" title="torchrl.modules.LSTMNet"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LSTMNet</span></code></a>(out_features, lstm_kwargs, mlp_kwargs)</p></td>
-<td><p>An embedder for an LSTM preceded by an MLP.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.DreamerActor.html#torchrl.modules.DreamerActor" title="torchrl.modules.DreamerActor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DreamerActor</span></code></a>(out_features[, depth, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.DreamerActor.html#torchrl.modules.DreamerActor" title="torchrl.modules.DreamerActor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DreamerActor</span></code></a>(out_features[, depth, ...])</p></td>
 <td><p>Dreamer actor network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.ObsEncoder.html#torchrl.modules.ObsEncoder" title="torchrl.modules.ObsEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ObsEncoder</span></code></a>([depth])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.ObsEncoder.html#torchrl.modules.ObsEncoder" title="torchrl.modules.ObsEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ObsEncoder</span></code></a>([depth])</p></td>
 <td><p>Observation encoder network.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.ObsDecoder.html#torchrl.modules.ObsDecoder" title="torchrl.modules.ObsDecoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ObsDecoder</span></code></a>([depth])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.ObsDecoder.html#torchrl.modules.ObsDecoder" title="torchrl.modules.ObsDecoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ObsDecoder</span></code></a>([depth])</p></td>
 <td><p>Observation decoder network.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.RSSMPrior.html#torchrl.modules.RSSMPrior" title="torchrl.modules.RSSMPrior"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RSSMPrior</span></code></a>(action_spec[, hidden_dim, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.RSSMPrior.html#torchrl.modules.RSSMPrior" title="torchrl.modules.RSSMPrior"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RSSMPrior</span></code></a>(action_spec[, hidden_dim, ...])</p></td>
 <td><p>The prior network of the RSSM.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/torchrl.modules.RSSMPosterior.html#torchrl.modules.RSSMPosterior" title="torchrl.modules.RSSMPosterior"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RSSMPosterior</span></code></a>([hidden_dim, state_dim, scale_lb])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.RSSMPosterior.html#torchrl.modules.RSSMPosterior" title="torchrl.modules.RSSMPosterior"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RSSMPosterior</span></code></a>([hidden_dim, state_dim, scale_lb])</p></td>
 <td><p>The posterior network of the RSSM.</p></td>
 </tr>
 </tbody>
 </table>
 </section>
+</section>
 <section id="exploration">
 <h2>Exploration<a class="headerlink" href="#exploration" title="Permalink to this heading">¶</a></h2>
+<p>Noisy linear layers are a popular way of exploring the environment without
+altering the actions, but by integrating the stochasticity in the weight
+configuration.</p>
 <table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.NoisyLinear.html#torchrl.modules.NoisyLinear" title="torchrl.modules.NoisyLinear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NoisyLinear</span></code></a>(in_features, out_features[, ...])</p></td>
@@ -700,6 +765,7 @@ and use.</p>
 </section>
 <section id="distributions">
 <h2>Distributions<a class="headerlink" href="#distributions" title="Permalink to this heading">¶</a></h2>
+<p>Some distributions are typically used in RL scripts.</p>
 <table class="autosummary longtable docutils # Necessary for the table generated by autosummary to look decent align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/torchrl.modules.Delta.html#torchrl.modules.Delta" title="torchrl.modules.Delta"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Delta</span></code></a>(param[, atol, rtol, batch_shape, ...])</p></td>
@@ -798,7 +864,11 @@ and use.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#hooks">Hooks</a></li>
-<li><a class="reference internal" href="#models">Models</a></li>
+<li><a class="reference internal" href="#models">Models</a><ul>
+<li><a class="reference internal" href="#regular-modules">Regular modules</a></li>
+<li><a class="reference internal" href="#algorithm-specific-modules">Algorithm-specific modules</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#exploration">Exploration</a></li>
 <li><a class="reference internal" href="#planners">Planners</a></li>
 <li><a class="reference internal" href="#distributions">Distributions</a></li>
