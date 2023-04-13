@@ -434,7 +434,7 @@
 <span class="sd">            Defaults to ``False``, ie. gradients are propagated to shared</span>
 <span class="sd">            parameters for both policy and critic losses.</span>
 
-<span class="sd">    .. note:</span>
+<span class="sd">    .. note::</span>
 <span class="sd">      The advantage (typically GAE) can be computed by the loss function or</span>
 <span class="sd">      in the training loop. The latter option is usually preferred, but this is</span>
 <span class="sd">      up to the user to choose which option is to be preferred.</span>
@@ -458,6 +458,22 @@
 <span class="sd">        &gt;&gt;&gt; ppo_loss.make_value_estimator(ValueEstimators.TDLambda)</span>
 <span class="sd">        &gt;&gt;&gt; data = next(datacollector)</span>
 <span class="sd">        &gt;&gt;&gt; losses = ppo_loss(data)</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">      If the actor and the value function share parameters, one can avoid</span>
+<span class="sd">      calling the common module multiple times by passing only the head of the</span>
+<span class="sd">      value network to the PPO loss module:</span>
+
+<span class="sd">        &gt;&gt;&gt; common = SomeModule(in_keys=[&quot;observation&quot;], out_keys=[&quot;hidden&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; actor_head = SomeActor(in_keys=[&quot;hidden&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; value_head = SomeValue(in_keys=[&quot;hidden&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; # first option, with 2 calls on the common module</span>
+<span class="sd">        &gt;&gt;&gt; model = ActorCriticOperator(common, actor_head, value_head)</span>
+<span class="sd">        &gt;&gt;&gt; loss_module = PPOLoss(model.get_policy_operator(), model.get_value_operator())</span>
+<span class="sd">        &gt;&gt;&gt; # second option, with a single call to the common module</span>
+<span class="sd">        &gt;&gt;&gt; loss_module = PPOLoss(ProbabilisticTensorDictSequential(model, actor_head), value_head)</span>
+
+<span class="sd">      This will work regardless of whether separate_losses is activated or not.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -494,6 +510,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">value_target_key</span> <span class="o">=</span> <span class="n">value_target_key</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">samples_mc_entropy</span> <span class="o">=</span> <span class="n">samples_mc_entropy</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">entropy_bonus</span> <span class="o">=</span> <span class="n">entropy_bonus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">separate_losses</span> <span class="o">=</span> <span class="n">separate_losses</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span>
             <span class="s2">&quot;entropy_coef&quot;</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">entropy_coef</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         <span class="p">)</span>
@@ -524,9 +541,8 @@
         <span class="n">action</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">action</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;tensordict stored action requires grad.&quot;</span><span class="p">)</span>
-        <span class="n">tensordict_clone</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">in_keys</span><span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
 
-        <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span><span class="n">tensordict_clone</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">)</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span><span class="n">tensordict</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">)</span>
         <span class="n">log_prob</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
 
         <span class="n">prev_log_prob</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;sample_log_prob&quot;</span><span class="p">)</span>
@@ -539,11 +555,12 @@
     <span class="k">def</span> <span class="nf">loss_critic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tensordict</span><span class="p">:</span> <span class="n">TensorDictBase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
         <span class="c1"># TODO: if the advantage is gathered by forward, this introduces an</span>
         <span class="c1"># overhead that we could easily reduce.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">separate_losses</span><span class="p">:</span>
+            <span class="n">tensordict</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">target_return</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_target_key</span><span class="p">)</span>
-            <span class="n">tensordict_select</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="o">.</span><span class="n">in_keys</span><span class="p">)</span>
             <span class="n">state_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span>
-                <span class="n">tensordict_select</span><span class="p">,</span>
+                <span class="n">tensordict</span><span class="p">,</span>
                 <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">critic_params</span><span class="p">,</span>
             <span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;state_value&quot;</span><span class="p">)</span>
             <span class="n">loss_value</span> <span class="o">=</span> <span class="n">distance_loss</span><span class="p">(</span>
@@ -674,6 +691,22 @@
 <span class="sd">        &gt;&gt;&gt; ppo_loss.make_value_estimator(ValueEstimators.TDLambda)</span>
 <span class="sd">        &gt;&gt;&gt; data = next(datacollector)</span>
 <span class="sd">        &gt;&gt;&gt; losses = ppo_loss(data)</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">      If the actor and the value function share parameters, one can avoid</span>
+<span class="sd">      calling the common module multiple times by passing only the head of the</span>
+<span class="sd">      value network to the PPO loss module:</span>
+
+<span class="sd">        &gt;&gt;&gt; common = SomeModule(in_keys=[&quot;observation&quot;], out_keys=[&quot;hidden&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; actor_head = SomeActor(in_keys=[&quot;hidden&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; value_head = SomeValue(in_keys=[&quot;hidden&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; # first option, with 2 calls on the common module</span>
+<span class="sd">        &gt;&gt;&gt; model = ActorCriticOperator(common, actor_head, value_head)</span>
+<span class="sd">        &gt;&gt;&gt; loss_module = PPOLoss(model.get_policy_operator(), model.get_value_operator())</span>
+<span class="sd">        &gt;&gt;&gt; # second option, with a single call to the common module</span>
+<span class="sd">        &gt;&gt;&gt; loss_module = PPOLoss(ProbabilisticTensorDictSequential(model, actor_head), value_head)</span>
+
+<span class="sd">      This will work regardless of whether separate_losses is activated or not.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -837,6 +870,22 @@
 <span class="sd">        &gt;&gt;&gt; data = next(datacollector)</span>
 <span class="sd">        &gt;&gt;&gt; losses = ppo_loss(data)</span>
 
+<span class="sd">    .. note::</span>
+<span class="sd">      If the actor and the value function share parameters, one can avoid</span>
+<span class="sd">      calling the common module multiple times by passing only the head of the</span>
+<span class="sd">      value network to the PPO loss module:</span>
+
+<span class="sd">        &gt;&gt;&gt; common = SomeModule(in_keys=[&quot;observation&quot;], out_keys=[&quot;hidden&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; actor_head = SomeActor(in_keys=[&quot;hidden&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; value_head = SomeValue(in_keys=[&quot;hidden&quot;])</span>
+<span class="sd">        &gt;&gt;&gt; # first option, with 2 calls on the common module</span>
+<span class="sd">        &gt;&gt;&gt; model = ActorCriticOperator(common, actor_head, value_head)</span>
+<span class="sd">        &gt;&gt;&gt; loss_module = PPOLoss(model.get_policy_operator(), model.get_value_operator())</span>
+<span class="sd">        &gt;&gt;&gt; # second option, with a single call to the common module</span>
+<span class="sd">        &gt;&gt;&gt; loss_module = PPOLoss(ProbabilisticTensorDictSequential(model, actor_head), value_head)</span>
+
+<span class="sd">      This will work regardless of whether separate_losses is activated or not.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
@@ -908,12 +957,8 @@
         <span class="n">log_weight</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_weight</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
         <span class="n">neg_loss</span> <span class="o">=</span> <span class="n">log_weight</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span> <span class="o">*</span> <span class="n">advantage</span>
 
-        <span class="n">tensordict_clone</span> <span class="o">=</span> <span class="n">tensordict</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
-            <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">in_keys</span><span class="p">,</span> <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">out_keys</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
-
-        <span class="n">previous_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">build_dist_from_params</span><span class="p">(</span><span class="n">tensordict_clone</span><span class="p">)</span>
-        <span class="n">current_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span><span class="n">tensordict_clone</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">)</span>
+        <span class="n">previous_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">build_dist_from_params</span><span class="p">(</span><span class="n">tensordict</span><span class="p">)</span>
+        <span class="n">current_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actor</span><span class="o">.</span><span class="n">get_dist</span><span class="p">(</span><span class="n">tensordict</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">actor_params</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">kl</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">kl</span><span class="o">.</span><span class="n">kl_divergence</span><span class="p">(</span><span class="n">previous_dist</span><span class="p">,</span> <span class="n">current_dist</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>

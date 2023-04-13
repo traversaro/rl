@@ -416,6 +416,23 @@ parameters for both policy and critic losses.</p></li>
 </ul>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the actor and the value function share parameters, one can avoid
+calling the common module multiple times by passing only the head of the
+value network to the PPO loss module:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">common</span> <span class="o">=</span> <span class="n">SomeModule</span><span class="p">(</span><span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;observation&quot;</span><span class="p">],</span> <span class="n">out_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hidden&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">actor_head</span> <span class="o">=</span> <span class="n">SomeActor</span><span class="p">(</span><span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hidden&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">value_head</span> <span class="o">=</span> <span class="n">SomeValue</span><span class="p">(</span><span class="n">in_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hidden&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># first option, with 2 calls on the common module</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ActorCriticOperator</span><span class="p">(</span><span class="n">common</span><span class="p">,</span> <span class="n">actor_head</span><span class="p">,</span> <span class="n">value_head</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss_module</span> <span class="o">=</span> <span class="n">PPOLoss</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">get_policy_operator</span><span class="p">(),</span> <span class="n">model</span><span class="o">.</span><span class="n">get_value_operator</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># second option, with a single call to the common module</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">loss_module</span> <span class="o">=</span> <span class="n">PPOLoss</span><span class="p">(</span><span class="n">ProbabilisticTensorDictSequential</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">actor_head</span><span class="p">),</span> <span class="n">value_head</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This will work regardless of whether separate_losses is activated or not.</p>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="torchrl.objectives.ClipPPOLoss.forward">
 <span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tensordict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TensorDictBase</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TensorDictBase</span></span></span><a class="reference internal" href="../../_modules/torchrl/objectives/ppo.html#ClipPPOLoss.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#torchrl.objectives.ClipPPOLoss.forward" title="Permalink to this definition">¶</a></dt>
