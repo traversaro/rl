@@ -382,6 +382,7 @@
 <span class="kn">from</span> <span class="nn">tensordict</span> <span class="kn">import</span> <span class="n">TensorDict</span>
 <span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">multiprocessing</span> <span class="k">as</span> <span class="n">mp</span><span class="p">,</span> <span class="n">nn</span>
 
+<span class="kn">from</span> <span class="nn">torchrl._utils</span> <span class="kn">import</span> <span class="n">VERBOSE</span>
 <span class="kn">from</span> <span class="nn">torchrl.collectors</span> <span class="kn">import</span> <span class="n">MultiaSyncDataCollector</span>
 <span class="kn">from</span> <span class="nn">torchrl.collectors.collectors</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">DataCollectorBase</span><span class="p">,</span>
@@ -413,14 +414,18 @@
     <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MASTER_PORT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">tcpport</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rank0 IP address:&quot;</span><span class="p">,</span> <span class="n">rank0_ip</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">tcp port:&quot;</span><span class="p">,</span> <span class="n">tcpport</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;node with rank </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2"> -- launching distributed&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Rank0 IP address: &#39;</span><span class="si">{</span><span class="n">rank0_ip</span><span class="si">}</span><span class="s2">&#39; </span><span class="se">\t</span><span class="s2">tcp port: &#39;</span><span class="si">{</span><span class="n">tcpport</span><span class="si">}</span><span class="s2">&#39;, backend=</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;node with rank </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2"> with world_size </span><span class="si">{</span><span class="n">world_size</span><span class="si">}</span><span class="s2"> -- launching distributed&quot;</span>
+        <span class="p">)</span>
     <span class="n">torch</span><span class="o">.</span><span class="n">distributed</span><span class="o">.</span><span class="n">init_process_group</span><span class="p">(</span>
         <span class="n">backend</span><span class="p">,</span>
         <span class="n">rank</span><span class="o">=</span><span class="n">rank</span><span class="p">,</span>
         <span class="n">world_size</span><span class="o">=</span><span class="n">world_size</span><span class="p">,</span>
         <span class="n">timeout</span><span class="o">=</span><span class="n">timedelta</span><span class="p">(</span><span class="n">MAX_TIME_TO_CONNECT</span><span class="p">),</span>
-        <span class="c1"># init_method=f&quot;tcp://{rank0_ip}:{tcpport}&quot;,</span>
+        <span class="n">init_method</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;tcp://</span><span class="si">{</span><span class="n">rank0_ip</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">tcpport</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connected!</span><span class="se">\n</span><span class="s2">Node with rank </span><span class="si">{</span><span class="n">rank</span><span class="si">}</span><span class="s2"> -- creating store&quot;</span><span class="p">)</span>
@@ -716,7 +721,7 @@
 <span class="sd">        tcp_port (int, optional): the TCP port to be used. Defaults to 10003.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_VERBOSE</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># for debugging</span>
+    <span class="n">_VERBOSE</span> <span class="o">=</span> <span class="n">VERBOSE</span>  <span class="c1"># for debugging</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -838,9 +843,12 @@
     <span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_VERBOSE</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;launching main node with tcp port </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tcp_port</span><span class="si">}</span><span class="s2"> and &quot;</span>
-                <span class="sa">f</span><span class="s2">&quot;IP </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">IPAddr</span><span class="si">}</span><span class="s2">.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;launching main node with tcp port &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tcp_port</span><span class="si">}</span><span class="s2">&#39; and &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;IP &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">IPAddr</span><span class="si">}</span><span class="s2">&#39;. rank: 0, world_size: </span><span class="si">{</span><span class="n">world_size</span><span class="si">}</span><span class="s2">, backend=</span><span class="si">{</span><span class="n">backend</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MASTER_ADDR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">IPAddr</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;MASTER_PORT&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tcp_port</span><span class="p">)</span>
+
         <span class="n">TCP_PORT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tcp_port</span>
         <span class="n">torch</span><span class="o">.</span><span class="n">distributed</span><span class="o">.</span><span class="n">init_process_group</span><span class="p">(</span>
             <span class="n">backend</span><span class="p">,</span>
@@ -985,8 +993,8 @@
 
     <span class="k">def</span> <span class="nf">_init_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-        <span class="n">hostname</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">launcher</span> <span class="o">!=</span> <span class="s2">&quot;mp&quot;</span><span class="p">:</span>
+            <span class="n">hostname</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span>
             <span class="n">IPAddr</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">hostname</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">IPAddr</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span>

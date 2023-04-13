@@ -392,7 +392,9 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;rpc&quot;<
 collector whereas <code class="docutils literal notranslate"><span class="pre">&quot;rpc&quot;</span></code> requires a <a class="reference internal" href="torchrl.collectors.distributed.RPCDataCollector.html#torchrl.collectors.distributed.RPCDataCollector" title="torchrl.collectors.distributed.RPCDataCollector"><code class="xref py py-class docutils literal notranslate"><span class="pre">RPCDataCollector</span></code></a>.
 Defaults to <code class="docutils literal notranslate"><span class="pre">&quot;distributed&quot;</span></code>.</p></li>
 <li><p><strong>backend</strong> (<em>str</em><em>, </em><em>optional</em>) – torch.distributed backend in case <code class="docutils literal notranslate"><span class="pre">framework</span></code>
-points to <code class="docutils literal notranslate"><span class="pre">&quot;distributed&quot;</span></code>.
+points to <code class="docutils literal notranslate"><span class="pre">&quot;distributed&quot;</span></code>. This value must match the one passed to
+the collector, otherwise main and satellite nodes will fail to
+reach the rendezvous and hang forever (ie no exception will be raised!)
 Defaults to <code class="docutils literal notranslate"><span class="pre">'gloo'</span></code>.</p></li>
 <li><p><strong>tcpport</strong> (<em>int</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – the TCP port to use.
 Defaults to <code class="xref py py-obj docutils literal notranslate"><span class="pre">torchrl.collectors.distributed.default_configs.TCP_PORT</span></code></p></li>

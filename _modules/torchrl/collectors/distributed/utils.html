@@ -367,6 +367,7 @@
 <span></span><span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">time</span>
 
+<span class="kn">from</span> <span class="nn">torchrl._utils</span> <span class="kn">import</span> <span class="n">VERBOSE</span>
 <span class="kn">from</span> <span class="nn">torchrl.collectors.distributed.default_configs</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">DEFAULT_SLURM_CONF</span><span class="p">,</span>
     <span class="n">DEFAULT_SLURM_CONF_MAIN</span><span class="p">,</span>
@@ -401,7 +402,9 @@
 <span class="sd">            collector whereas ``&quot;rpc&quot;`` requires a :class:`RPCDataCollector`.</span>
 <span class="sd">            Defaults to ``&quot;distributed&quot;``.</span>
 <span class="sd">        backend (str, optional): torch.distributed backend in case ``framework``</span>
-<span class="sd">            points to ``&quot;distributed&quot;``.</span>
+<span class="sd">            points to ``&quot;distributed&quot;``. This value must match the one passed to</span>
+<span class="sd">            the collector, otherwise main and satellite nodes will fail to</span>
+<span class="sd">            reach the rendezvous and hang forever (ie no exception will be raised!)</span>
 <span class="sd">            Defaults to ``&#39;gloo&#39;``.</span>
 <span class="sd">        tcpport (int or str, optional): the TCP port to use.</span>
 <span class="sd">            Defaults to :obj:`torchrl.collectors.distributed.default_configs.TCP_PORT`</span>
@@ -430,7 +433,7 @@
 <span class="sd">        ...</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">_VERBOSE</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># for debugging</span>
+    <span class="n">_VERBOSE</span> <span class="o">=</span> <span class="n">VERBOSE</span>  <span class="c1"># for debugging</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
