@@ -371,7 +371,6 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -421,6 +420,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">default_value_estimator</span><span class="p">:</span> <span class="n">ValueEstimators</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">SEP</span> <span class="o">=</span> <span class="s2">&quot;_sep_&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -508,11 +508,16 @@
         <span class="c1"># tensors as lazy calls to `getattr(self, name_of_tensor)`.</span>
         <span class="c1"># Otherwise, casting the module to a device will keep old references</span>
         <span class="c1"># to uncast tensors</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">buffer_names</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">islice</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">module</span><span class="o">.</span><span class="n">named_buffers</span><span class="p">()),</span> <span class="mi">1</span><span class="p">))</span>
-        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
-            <span class="n">buffer_names</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="n">sep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEP</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">make_functional</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">funs_to_decorate</span><span class="o">=</span><span class="n">funs_to_decorate</span><span class="p">)</span>
+        <span class="c1"># buffer_names = next(itertools.islice(zip(*module.named_buffers()), 1))</span>
+        <span class="n">buffer_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="c1"># we just consider all that is not param as a buffer, but if the module has been made</span>
+            <span class="c1"># functional and the params have been replaced this may break</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">):</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">key</span>
+                <span class="n">buffer_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
         <span class="n">functional_module</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
         <span class="n">repopulate_module</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 
@@ -531,14 +536,13 @@
         <span class="c1"># separate params and buffers</span>
         <span class="n">params_and_buffers</span> <span class="o">=</span> <span class="n">params_and_buffers</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">create_buffers</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">params_and_buffers</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="kc">True</span><span class="p">):</span>
-            <span class="k">if</span> <span class="s2">&quot;_sep_&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sep</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
                     <span class="sa">f</span><span class="s2">&quot;The key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> contains the &#39;_sep_&#39; pattern which is prohibited. Consider renaming the parameter / buffer.&quot;</span>
                 <span class="p">)</span>
-        <span class="n">params_and_buffers_flat</span> <span class="o">=</span> <span class="n">params_and_buffers</span><span class="o">.</span><span class="n">flatten_keys</span><span class="p">(</span><span class="s2">&quot;_sep_&quot;</span><span class="p">)</span>
+        <span class="n">params_and_buffers_flat</span> <span class="o">=</span> <span class="n">params_and_buffers</span><span class="o">.</span><span class="n">flatten_keys</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
         <span class="n">buffers</span> <span class="o">=</span> <span class="n">params_and_buffers_flat</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">buffer_names</span><span class="p">)</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">params_and_buffers_flat</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="o">*</span><span class="n">buffer_names</span><span class="p">)</span>
-
         <span class="k">if</span> <span class="n">expand_dim</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_has_functorch</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
                 <span class="s2">&quot;expanding params is only possible when functorch is installed,&quot;</span>
@@ -580,8 +584,8 @@
                 <span class="n">batch_size</span><span class="o">=</span><span class="p">[</span><span class="n">expand_dim</span><span class="p">,</span> <span class="o">*</span><span class="n">buffers</span><span class="o">.</span><span class="n">shape</span><span class="p">],</span>
             <span class="p">)</span>
 
-            <span class="n">params_and_buffers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">unflatten_keys</span><span class="p">(</span><span class="s2">&quot;_sep_&quot;</span><span class="p">))</span>
-            <span class="n">params_and_buffers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">buffers</span><span class="o">.</span><span class="n">unflatten_keys</span><span class="p">(</span><span class="s2">&quot;_sep_&quot;</span><span class="p">))</span>
+            <span class="n">params_and_buffers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">unflatten_keys</span><span class="p">(</span><span class="n">sep</span><span class="p">))</span>
+            <span class="n">params_and_buffers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">buffers</span><span class="o">.</span><span class="n">unflatten_keys</span><span class="p">(</span><span class="n">sep</span><span class="p">))</span>
             <span class="n">params_and_buffers</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">batch_size</span>
 
             <span class="c1"># self.params_to_map = params_to_map</span>
@@ -593,7 +597,7 @@
         <span class="c1"># register parameters and buffers</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">parameter</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prev_set_params</span><span class="p">:</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="n">key</span><span class="p">]),</span> <span class="n">parameter</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="n">key</span><span class="p">]),</span> <span class="n">parameter</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="c1"># if the parameter is already present, we register a string pointing</span>
                 <span class="c1"># to is instead. If the string ends with a &#39;_detached&#39; suffix, the</span>
@@ -605,18 +609,18 @@
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;parameter not found&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">compare_against</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">compare_against</span><span class="p">:</span>
                     <span class="n">_param_name</span> <span class="o">=</span> <span class="n">_param_name</span> <span class="o">+</span> <span class="s2">&quot;_detached&quot;</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="n">key</span><span class="p">]),</span> <span class="n">_param_name</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="n">key</span><span class="p">]),</span> <span class="n">_param_name</span><span class="p">)</span>
         <span class="n">prev_set_buffers</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffers</span><span class="p">())</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">buffer</span> <span class="ow">in</span> <span class="n">buffers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">buffer</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">prev_set_buffers</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="n">key</span><span class="p">]),</span> <span class="n">buffer</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="n">key</span><span class="p">]),</span> <span class="n">buffer</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">_buffer_name</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_buffers</span><span class="p">():</span>
                     <span class="k">if</span> <span class="n">buffer</span> <span class="ow">is</span> <span class="n">b</span><span class="p">:</span>
                         <span class="k">break</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;buffer not found&quot;</span><span class="p">)</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="n">key</span><span class="p">]),</span> <span class="n">_buffer_name</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="n">key</span><span class="p">]),</span> <span class="n">_buffer_name</span><span class="p">)</span>
 
         <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">params_and_buffers</span><span class="p">)</span>
         <span class="nb">setattr</span><span class="p">(</span>
@@ -636,10 +640,10 @@
                 <span class="c1"># find the param name</span>
                 <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">named_parameters</span><span class="p">():</span>
                     <span class="k">if</span> <span class="n">param</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">data_ptr</span><span class="p">()</span> <span class="o">==</span> <span class="n">value</span><span class="o">.</span><span class="n">data_ptr</span><span class="p">()</span> <span class="ow">and</span> <span class="n">param</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_param_maps</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="o">*</span><span class="n">key</span><span class="p">])</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_param_maps</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">module_name</span><span class="p">,</span> <span class="o">*</span><span class="n">key</span><span class="p">])</span>
                         <span class="k">break</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;did not find matching param.&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;key </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> did not find matching param.&quot;</span><span class="p">)</span>
 
         <span class="n">name_params_target</span> <span class="o">=</span> <span class="s2">&quot;_target_&quot;</span> <span class="o">+</span> <span class="n">module_name</span>
         <span class="k">if</span> <span class="n">create_target_params</span><span class="p">:</span>
@@ -649,7 +653,7 @@
             <span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span> <span class="ow">in</span> <span class="n">target_params_items</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
                     <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">,)</span>
-                <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">name_params_target</span><span class="p">,</span> <span class="o">*</span><span class="n">key</span><span class="p">])</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">name_params_target</span><span class="p">,</span> <span class="o">*</span><span class="n">key</span><span class="p">])</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">Buffer</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
                 <span class="n">target_params_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name_params_target</span> <span class="o">+</span> <span class="s2">&quot;_params&quot;</span><span class="p">,</span> <span class="n">target_params</span><span class="p">)</span>
@@ -671,7 +675,7 @@
                 <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">keys</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
                         <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">,)</span>
-                    <span class="n">value_to_set</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">network_name</span><span class="p">,</span> <span class="o">*</span><span class="n">key</span><span class="p">]))</span>
+                    <span class="n">value_to_set</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEP</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">network_name</span><span class="p">,</span> <span class="o">*</span><span class="n">key</span><span class="p">]))</span>
                     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value_to_set</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                         <span class="k">if</span> <span class="n">value_to_set</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_detached&quot;</span><span class="p">):</span>
                             <span class="n">value_to_set</span> <span class="o">=</span> <span class="n">value_to_set</span><span class="p">[:</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span>
@@ -700,7 +704,7 @@
                     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
                         <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">key</span><span class="p">,)</span>
                     <span class="n">value_to_set</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_sep_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;_target_&quot;</span> <span class="o">+</span> <span class="n">network_name</span><span class="p">,</span> <span class="o">*</span><span class="n">key</span><span class="p">])</span>
+                        <span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEP</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;_target_&quot;</span> <span class="o">+</span> <span class="n">network_name</span><span class="p">,</span> <span class="o">*</span><span class="n">key</span><span class="p">])</span>
                     <span class="p">)</span>
                     <span class="c1"># _set is faster bc is bypasses the checks</span>
                     <span class="n">target_params</span><span class="o">.</span><span class="n">_set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value_to_set</span><span class="p">)</span>

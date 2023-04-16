@@ -1654,9 +1654,9 @@ modules we need.
         return _swap_state(module, params, make_stateless, return_old_tensordict)
       File "/usr/local/lib/python3.8/dist-packages/tensordict/nn/functional_modules.py", line 307, in _swap_state
         old_attr = getattr(model, key)
-      File "/usr/local/lib/python3.8/dist-packages/tensordict/nn/common.py", line 461, in __getattr__
+      File "/usr/local/lib/python3.8/dist-packages/tensordict/nn/common.py", line 560, in __getattr__
         raise err2 from err1
-      File "/usr/local/lib/python3.8/dist-packages/tensordict/nn/common.py", line 459, in __getattr__
+      File "/usr/local/lib/python3.8/dist-packages/tensordict/nn/common.py", line 558, in __getattr__
         return getattr(super().__getattr__("module"), name)
       File "/usr/local/lib/python3.8/dist-packages/torch/nn/modules/module.py", line 1614, in __getattr__
         raise AttributeError("'{}' object has no attribute '{}'".format(
@@ -1712,9 +1712,9 @@ The key takeaways are:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  1.671 seconds)
+   **Total running time of the script:** ( 1 minutes  55.391 seconds)
 
-**Estimated memory usage:**  5527 MB
+**Estimated memory usage:**  4262 MB
 
 
 .. _sphx_glr_download_tutorials_coding_ddpg.py:
